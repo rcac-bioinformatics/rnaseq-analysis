@@ -2,28 +2,81 @@
 title: Setup
 ---
 
-FIXME: Setup instructions live in this document. Please specify the tools and
-the data sets the Learner needs to have installed.
+## Instructors
 
-## Data Sets
+1. **Arun Seetharam, Ph.D.**: Arun is a lead bioinformatics scientist at Purdue University’s Rosen Center for Advanced Computing. With extensive expertise in comparative genomics, genome assembly, annotation, single-cell genomics,  NGS data analysis, metagenomics, proteomics, and metabolomics. Arun supports a diverse range of bioinformatics projects across various organisms, including human model systems.
 
-<!--
-FIXME: place any data you want learners to use in `episodes/data` and then use
-       a relative link ( [data zip file](data/lesson-data.zip) ) to provide a
-       link to it, replacing the example.com link.
--->
-Download the [data zip file](https://example.com/FIXME) and unzip it to your Desktop
+2. **Michael Allan Carlson, Ph.D.**: Michael is a Senior Computational Scientist at Purdue University’s Rosen Center for Advanced Computing. <need to add more details>.
 
-## Software Setup
+## Schedule
+
+| **Time**  | **Session**  |
+|:---|-------------|
+| **8:30 AM** | Arrival & Setup |
+| **9:00 AM** | **Introduction to RNA-seq Analysis** – Overview of experimental design, biological replicates, sequencing depth, and workflow overview (QC → alignment → quantification → differential expression → visualization) |
+| **9:45 AM** | **Data Preparation & Quality Control** – Exploring raw FASTQ files, running FastQC and MultiQC, trimming low-quality reads with fastp |
+| **10:30 AM** | **Break** |
+| **10:45 AM** | **Read Alignment & Quantification** – Mapping reads with STAR, building genome indices, generating gene-level counts with featureCounts and Salmon |
+| **12:00 PM** | **Lunch Break** |
+| **1:00 PM** | **Differential Expression Analysis (DESeq2)** – Importing count data into R, data normalization, exploring variance, identifying significantly expressed genes |
+| **2:15 PM** | **Break** |
+| **2:30 PM** | **Functional Interpretation & Visualization** – Gene ontology enrichment, pathway analysis, and visualizing results (volcano plots, heatmaps, PCA) |
+| **3:30 PM** | **Integration & Reproducibility** – Creating reproducible pipelines with Snakemake/Nextflow templates, managing metadata and documentation |
+| **4:00 PM** | **Wrap-Up & Discussion** – Troubleshooting, best practices, and Q&A |
+
+
+## What is not covered
+
+1. Raw data generation, library preparation, or experimental design optimization
+2. De novo transcriptome assembly (e.g., Trinity) or genome-guided transcript reconstruction
+3. Single-cell RNA-seq or spatial transcriptomics analysis
+4. Alternative splicing, isoform quantification, or long-read transcript analysis
+5. Advanced visualization dashboards or interactive analysis tools (e.g., Shiny, iDEP)
+
+---
+
+## Pre-requisites
+
+1. Basic understanding of genomics concepts (genes, transcripts, and genome structure)
+2. Familiarity with the command line interface (Linux/Unix shell)
+3. Prior exposure to basic bioinformatics tools and file formats (FASTA, GFF, FASTQ)
+
+---
+
+## Data sets
+
+To copy only the training data:
+
+```bash
+rsync -avP /depot/workshop/data/rnaseq_workshop ${RCAC_SCRATCH}/
+```
+
+A completed version of the workshop data is available at:
+
+```
+/depot/workshop/data/rnaseq_workshop-results
+```
+
+You can copy it to your scratch space using:
+
+```bash
+rsync -avP /depot/workshop/data/rnaseq_workshop-results ${RCAC_SCRATCH}/
+```
+
+Use this folder **only if you are unable to complete the exercises during the workshop**.
+You will only need one directory on the Gilbreth cluster. See below for details.
+
+
+---
+
+## Software setup
 
 ::::::::::::::::::::::::::::::::::::::: discussion
 
 ### Details
 
-Setup for different systems can be presented in dropdown menus via a `solution`
-tag. They will join to this discussion block, so you can give a general overview
-of the software used in this lesson here and fill out the individual operating
-systems (and potentially add more, e.g. online setup) in the solutions blocks.
+SSH key setup for different systems is provided in the expandable sections below.
+Follow the instructions for your operating system to configure passwordless access.
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -31,24 +84,37 @@ systems (and potentially add more, e.g. online setup) in the solutions blocks.
 
 ### Windows
 
-Use PuTTY
+Open **PowerShell** or **Git Bash** and run:
+
+```bash
+ssh-keygen -b 4096 -t rsa
+type .ssh\id_rsa.pub | ssh trainXX@scholar.rcac.purdue.edu "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
+```
 
 :::::::::::::::::::::::::
 
 :::::::::::::::: solution
 
-### MacOS
+### macOS
 
-Use Terminal.app
+Open **Terminal** and run:
+
+```bash
+ssh-keygen -b 4096 -t rsa
+cat .ssh/id_rsa.pub | ssh trainXX@scholar.rcac.purdue.edu "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
+```
 
 :::::::::::::::::::::::::
-
 
 :::::::::::::::: solution
 
 ### Linux
 
-Use Terminal
+Open a terminal and run:
+
+```bash
+ssh-keygen -b 4096 -t rsa
+cat .ssh/id_rsa.pub | ssh trainXX@scholar.rcac.purdue.edu "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
+```
 
 :::::::::::::::::::::::::
-
