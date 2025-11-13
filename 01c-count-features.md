@@ -60,7 +60,7 @@ ln -s ../mapping/*.bam counts/
 
 ## Counting reads with `featureCounts`
 
-`featureCounts` is a widely used tool for counting reads mapped to genomic features, such as genes, exons, or transcripts. It is part of the [Subread](http://subread.sourceforge.net/) package and provides a fast and efficient way to quantify gene expression from RNA-seq data. Genomic features are defined in a GTF (Gene Transfer Format) file, which contains the genomic coordinates of genes, exons, and other features. `bam` files provide the read alignments to the reference genome. Using the location information from the GTF file, `featureCounts` assigns read counts to features and generates count matrices for downstream analyses.
+`featureCounts` is a widely used tool for counting reads mapped to genomic features, such as genes, exons, or transcripts. It is part of the [Subread](https://subread.sourceforge.net/) package and provides a fast and efficient way to quantify gene expression from RNA-seq data. Genomic features are defined in a GTF (Gene Transfer Format) file, which contains the genomic coordinates of genes, exons, and other features. `bam` files provide the read alignments to the reference genome. Using the location information from the GTF file, `featureCounts` assigns read counts to features and generates count matrices for downstream analyses.
 
 :::::::::::::::::::::::::::::::::::::::  prereq
 
