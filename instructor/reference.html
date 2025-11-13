@@ -365,97 +365,244 @@
 
         
 
-<section><h2 class="section-heading" id="additional-reading">Additional Reading<a class="anchor" aria-label="anchor" href="#additional-reading"></a></h2>
-<hr class="half-width"><p>For those interested in further exploring RNA-seq analysis and
-workflows, here are some recommended resources:</p>
+<p>Here are selected method-specific references covering the major
+components of RNA-seq analysis, including alignment, quantification,
+quality control, differential expression, functional interpretation, and
+batch correction. These papers represent widely used tools and
+foundational methods in the field.</p>
+<div class="section level3">
+<h3 id="general-rna-seq-references">General RNA-seq references<a class="anchor" aria-label="anchor" href="#general-rna-seq-references"></a></h3>
 <ol style="list-style-type: decimal"><li>
-<strong><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6096346/" class="external-link">A beginner’s
-guide to analysis of RNA sequencing data</a></strong> – K. M. Koch et
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6096346/" class="external-link">A
+beginner’s guide to analysis of RNA sequencing data</a> : K. M. Koch et
 al. A practical overview of the key steps in a typical RNA-seq analysis:
 library preparation, QC, alignment, counting, differential expression,
-and pitfalls. ([PMC][1])</li>
+and pitfalls.</li>
 <li>
-<strong><a href="https://www.illumina.com/techniques/sequencing/rna-sequencing.html" class="external-link">RNA
-sequencing (RNA-seq) methods &amp; workflows</a></strong> – Illumina A
+<a href="https://www.illumina.com/techniques/sequencing/rna-sequencing.html" class="external-link">RNA
+sequencing (RNA-seq) methods &amp; workflows</a> : Illumina A
 vendor-agnostic guide describing different RNA-seq workflows, including
 bulk mRNA-seq, total RNA-seq, strand specificity, and exploratory
-considerations for experimental design. ([Illumina][2])</li>
+considerations for experimental design.</li>
 <li>
-<strong><a href="https://www.annualreviews.org/content/journals/10.1146/annurev-biodatasci-072018-021255" class="external-link">RNA
+<a href="https://www.annualreviews.org/content/journals/10.1146/annurev-biodatasci-072018-021255" class="external-link">RNA
 sequencing data: Hitchhiker’s guide to expression, interpretation and
-beyond</a></strong> – K. Van den Berge et al. A detailed review covering
-design, quantification, differential expression, and emerging types of
-RNA-seq (e.g., long-read, single-cell). ([Annual Reviews][3])</li>
-</ol></section><section><h2 class="section-heading" id="glossary">Glossary<a class="anchor" aria-label="anchor" href="#glossary"></a></h2>
-<hr class="half-width"><p><strong>adapter trimming</strong> The process of removing
-sequencing-adapter sequences (and optionally low-quality bases) from raw
-reads prior to alignment.</p>
-<p><strong>alignment (read mapping)</strong> Placing sequencing reads
-against a reference genome or transcriptome to determine their origin
-and count them.</p>
-<p><strong>biological replicate</strong> Independent experimental
-samples from the same condition, used to estimate biological
-variability.</p>
-<p><strong>bulk RNA-Seq</strong> Standard RNA-seq in which RNA is
-extracted from a population of cells or tissue, as opposed to
-single-cell or spatial methods.</p>
-<p><strong>cDNA</strong> Complementary DNA synthesised from RNA (often
-via reverse transcription) for sequencing.</p>
-<p><strong>counts table</strong> A matrix of read counts (rows = genes
-or transcripts, columns = samples) used for downstream differential
-expression analysis.</p>
-<p><strong>differential expression (DE)</strong> Identifying genes or
-transcripts that change in expression levels between conditions,
-typically with statistical testing.</p>
-<p><strong>FASTQ</strong> A file format containing sequencing reads and
-their associated quality scores.</p>
-<p><strong>featureCounts</strong> A software tool for summarising reads
-mapped to genomic features (genes, exons) to produce count data.</p>
-<p><strong>FPKM / TPM</strong> Normalization units for RNA-seq: FPKM
-(Fragments Per Kilobase of transcript per Million mapped reads), TPM
-(Transcripts Per Million). Note: TPM is preferred for comparisons
-<em>within</em> samples, but care is needed when comparing
-<em>between</em> samples. ([galaxyproject.org][4])</p>
-<p><strong>library preparation</strong> The experimental steps that
-convert RNA into a ready-to-sequence format (e.g., reverse
-transcription, fragmentation, adapter ligation, amplification).</p>
+beyond</a> : K. Van den Berge et al. A detailed review covering design,
+quantification, differential expression, and emerging types of RNA-seq
+(e.g., long-read, single-cell).</li>
+</ol><hr></div>
+<div class="section level3">
+<h3 id="core-differential-expression-methods">Core differential expression methods<a class="anchor" aria-label="anchor" href="#core-differential-expression-methods"></a></h3>
+<ol style="list-style-type: decimal"><li><p><strong>DESeq2</strong> Love MI, Huber W, Anders S. <em>Moderated
+estimation of fold change and dispersion for RNA-seq data with
+DESeq2.</em> Genome Biology, 2014. <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8" class="external-link">https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8</a></p></li>
+<li><p><strong>edgeR</strong> Robinson MD, McCarthy DJ, Smyth GK.
+<em>edgeR: a Bioconductor package for differential expression analysis
+of digital gene expression data.</em> Bioinformatics, 2010. <a href="https://academic.oup.com/bioinformatics/article/26/1/139/182458" class="external-link">https://academic.oup.com/bioinformatics/article/26/1/139/182458</a></p></li>
+<li><p><strong>limma-voom</strong> Law CW, Chen Y, Shi W, Smyth GK.
+<em>voom: precision weights unlock linear model analysis tools for
+RNA-seq read counts.</em> Genome Biology, 2014. <a href="https://genomebiology.biomedcentral.com/articles/10.1186/gb-2014-15-2-r29" class="external-link">https://genomebiology.biomedcentral.com/articles/10.1186/gb-2014-15-2-r29</a></p></li>
+<li><p><strong>Sleuth (for Salmon/Kallisto quantification)</strong>
+Pimentel H, Bray NL, Puente S, Melsted P, Pachter L. <em>Differential
+analysis of RNA-seq incorporating quantification uncertainty.</em>
+Nature Methods, 2017. <a href="https://www.nature.com/articles/nmeth.4324" class="external-link">https://www.nature.com/articles/nmeth.4324</a></p></li>
+</ol><hr></div>
+<div class="section level3">
+<h3 id="alignment-methods">Alignment methods<a class="anchor" aria-label="anchor" href="#alignment-methods"></a></h3>
+<ol style="list-style-type: decimal"><li><p><strong>STAR aligner</strong> Dobin A et al. <em>STAR: ultrafast
+universal RNA-seq aligner.</em> Bioinformatics, 2013. <a href="https://academic.oup.com/bioinformatics/article/29/1/15/272537" class="external-link">https://academic.oup.com/bioinformatics/article/29/1/15/272537</a></p></li>
+<li><p><strong>HISAT2</strong> Kim D, Langmead B, Salzberg SL.
+<em>HISAT: a fast spliced aligner with low memory requirements.</em>
+Nature Methods, 2015. <a href="https://www.nature.com/articles/nmeth.3317" class="external-link">https://www.nature.com/articles/nmeth.3317</a></p></li>
+<li><p><strong>TopHat2 (historical, not recommended now but still
+cited)</strong> Kim D et al. <em>TopHat2: accurate alignment of
+transcriptomes in the presence of insertions, deletions and gene
+fusions.</em> Genome Biology, 2013. <a href="https://genomebiology.biomedcentral.com/articles/10.1186/gb-2013-14-4-r36" class="external-link">https://genomebiology.biomedcentral.com/articles/10.1186/gb-2013-14-4-r36</a></p></li>
+</ol><hr></div>
+<div class="section level3">
+<h3 id="quantification-methods">Quantification methods<a class="anchor" aria-label="anchor" href="#quantification-methods"></a></h3>
+<ol style="list-style-type: decimal"><li><p><strong>Salmon (quasi-mapping and lightweight alignment)</strong>
+Patro R, Duggal G, Love MI, Irizarry RA, Kingsford C. <em>Salmon
+provides fast and bias-aware quantification of transcript
+expression.</em> Nature Methods, 2017. <a href="https://www.nature.com/articles/nmeth.4197" class="external-link">https://www.nature.com/articles/nmeth.4197</a></p></li>
+<li><p><strong>Kallisto (pseudo-alignment)</strong> Bray NL, Pimentel H,
+Melsted P, Pachter L. <em>Near-optimal probabilistic RNA-seq
+quantification.</em> Nature Biotechnology, 2016. <a href="https://www.nature.com/articles/nbt.3519" class="external-link">https://www.nature.com/articles/nbt.3519</a></p></li>
+<li><p><strong>RSEM (alignment-based quantification)</strong> Li B,
+Dewey CN. <em>RSEM: accurate transcript quantification from RNA-seq data
+with or without a reference genome.</em> BMC Bioinformatics, 2011. <a href="https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-12-323" class="external-link">https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-12-323</a></p></li>
+</ol><hr></div>
+<div class="section level3">
+<h3 id="quality-control-and-preprocessing">Quality control and preprocessing<a class="anchor" aria-label="anchor" href="#quality-control-and-preprocessing"></a></h3>
+<ol style="list-style-type: decimal"><li><p><strong>FastQC</strong> Andrews S. <em>FastQC: A quality control
+tool for high throughput sequence data.</em> Babraham Institute, 2010.
+<a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/" class="external-link">https://www.bioinformatics.babraham.ac.uk/projects/fastqc/</a></p></li>
+<li><p><strong>Trim Galore</strong> (cutadapt + FastQC wrapper) Krueger
+F. <em>Trim Galore.</em> Babraham Institute. <a href="https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/" class="external-link">https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/</a></p></li>
+<li><p><strong>cutadapt</strong> Martin M. <em>Cutadapt removes adapter
+sequences from high-throughput sequencing reads.</em> EMBnet Journal,
+2011. <a href="https://journal.embnet.org/index.php/embnetjournal/article/view/200" class="external-link">https://journal.embnet.org/index.php/embnetjournal/article/view/200</a></p></li>
+<li><p><strong>MultiQC</strong> Ewels P, Magnusson M, Lundin S, Käller
+M. <em>MultiQC: summarize analysis results for multiple tools and
+samples in a single report.</em> Bioinformatics, 2016. <a href="https://academic.oup.com/bioinformatics/article/32/19/3047/2196507" class="external-link">https://academic.oup.com/bioinformatics/article/32/19/3047/2196507</a>
+—</p></li>
+</ol></div>
+<div class="section level3">
+<h3 id="functional-analysis-and-interpretation">Functional analysis and interpretation<a class="anchor" aria-label="anchor" href="#functional-analysis-and-interpretation"></a></h3>
+<ol style="list-style-type: decimal"><li><p><strong>GOseq (for GO analysis accounting for transcript length
+bias)</strong> Young MD, Wakefield MJ, Smyth GK, Oshlack A. <em>Gene
+ontology analysis for RNA-seq: accounting for selection bias.</em>
+Genome Biology, 2010. <a href="https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-2-r14" class="external-link">https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-2-r14</a></p></li>
+<li><p><strong>clusterProfiler (widely used for GO/KEGG)</strong> Yu G,
+Wang LG, Han Y, He QY. <em>clusterProfiler: an R package for comparing
+biological themes among gene clusters.</em> OMICS, 2012. <a href="https://www.liebertpub.com/doi/10.1089/omi.2011.0118" class="external-link">https://www.liebertpub.com/doi/10.1089/omi.2011.0118</a></p></li>
+<li><p><strong>fgsea (fast GSEA)</strong> Korotkevich G, Sukhov V,
+Sergushichev A. <em>Fast gene set enrichment analysis.</em> bioRxiv,
+2016. <a href="https://www.biorxiv.org/content/10.1101/060012v3" class="external-link">https://www.biorxiv.org/content/10.1101/060012v3</a></p></li>
+<li><p><strong>KEGG</strong> Kanehisa M, Goto S. <em>KEGG: Kyoto
+Encyclopedia of Genes and Genomes.</em> Nucleic Acids Research, 2000. <a href="https://academic.oup.com/nar/article/28/1/27/2384398" class="external-link">https://academic.oup.com/nar/article/28/1/27/2384398</a></p></li>
+</ol><hr></div>
+<div class="section level3">
+<h3 id="splicing-and-isoform-analysis-if-you-want-to-include-optional-advanced-topics">Splicing and isoform analysis (if you want to include optional
+advanced topics)<a class="anchor" aria-label="anchor" href="#splicing-and-isoform-analysis-if-you-want-to-include-optional-advanced-topics"></a></h3>
+<ol style="list-style-type: decimal"><li><p><strong>DEXSeq (differential exon usage)</strong> Anders S, Reyes
+A, Huber W. <em>Detecting differential usage of exons from RNA-seq
+data.</em> Genome Research, 2012. <a href="https://genome.cshlp.org/content/22/10/2008" class="external-link">https://genome.cshlp.org/content/22/10/2008</a></p></li>
+<li><p><strong>SUPPA2 (isoform-level splicing changes)</strong> Trincado
+JL et al. <em>SUPPA2 provides fast, accurate, and uncertainty-aware
+differential splicing analysis.</em> Genome Biology, 2018. <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1417-1" class="external-link">https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1417-1</a></p></li>
+<li><p><strong>StringTie2 (transcript assembly and
+quantification)</strong> Kovaka S et al. <em>Transcriptome assembly from
+long-read RNA-seq alignments with StringTie2.</em> Genome Biology, 2019.
+<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1910-1" class="external-link">https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1910-1</a></p></li>
+</ol><hr></div>
+<div class="section level3">
+<h3 id="batch-correction-and-confounder-modeling">Batch correction and confounder modeling<a class="anchor" aria-label="anchor" href="#batch-correction-and-confounder-modeling"></a></h3>
+<ol style="list-style-type: decimal"><li>
+<p><strong>ComBat</strong> Johnson WE, Li C, Rabinovic A.
+<em>Adjusting batch effects in microarray expression data using
+empirical Bayes methods.</em> Biostatistics, 2007. <a href="https://academic.oup.com/biostatistics/article/8/1/118/252073" class="external-link">https://academic.oup.com/biostatistics/article/8/1/118/252073</a></p>
+<p>(Still widely used for RNA-seq after variance stabilizing
+transformation.)</p>
+</li>
+<li><p><strong>RUVSeq</strong> Risso D, Ngai J, Speed TP, Dudoit S.
+<em>Normalization of RNA-seq data using factor analysis of control genes
+or samples.</em> Nature Biotechnology, 2014. <a href="https://www.nature.com/articles/nbt.2931" class="external-link">https://www.nature.com/articles/nbt.2931</a>
+—</p></li>
+</ol></div>
+<section><h2 class="section-heading" id="glossary">Glossary<a class="anchor" aria-label="anchor" href="#glossary"></a></h2>
+<hr class="half-width"><div class="section level3">
+<h3 id="experimental-concepts">Experimental concepts<a class="anchor" aria-label="anchor" href="#experimental-concepts"></a></h3>
+<p><strong>adapter trimming</strong> Removal of sequencing adapters and
+low-quality bases from raw reads before alignment, typically using tools
+such as <code>fastp</code> or <code>Trim Galore</code>.</p>
+<p><strong>alignment (read mapping)</strong> Assigning sequencing reads
+to a reference genome or transcriptome using aligners like HISAT2 or
+STAR.</p>
+<p><strong>biological replicate</strong> Independent samples from the
+same biological condition, used to estimate natural biological
+variation.</p>
+<p><strong>batch effects</strong> Confounding technical variation
+introduced by differences in library prep, sequencing runs, or
+operators; must be accounted for in experimental design and statistical
+models.</p>
+<p><strong>bulk RNA-seq</strong> Conventional RNA-seq performed on
+pooled cells or tissues, as opposed to single-cell or spatial
+RNA-seq.</p>
+<p><strong>cDNA</strong> Complementary DNA synthesized from RNA
+templates during library preparation.</p>
+<p><strong>library preparation</strong> Experimental conversion of RNA
+into a sequencing-ready library, including fragmentation, adapter
+ligation, and amplification.</p>
 <p><strong>paired-end sequencing</strong> Sequencing both ends of
-DNA/cDNA fragments, allowing improved mapping and detection of splice
-junctions or structural events.</p>
-<p><strong>pseudo-alignment</strong> A lightweight read-mapping approach
-(e.g., with kallisto or Salmon) that assigns reads to transcripts
-without full alignment.</p>
-<p><strong>quality control (QC)</strong> Diagnostic checks on raw or
-mapped sequencing data (e.g., base quality, GC content, duplication,
-adapter contamination) to identify potential problems early.</p>
-<p><strong>reference-based RNA-Seq</strong> An RNA-seq workflow that
-aligns reads against a known reference genome or transcriptome.
-([galaxyproject.org][4])</p>
-<p><strong>replicate variability</strong> Biological or technical
-variability between replicates; important to model for robust
+DNA/cDNA fragments to improve mapping accuracy and detection of splice
+junctions.</p>
+<p><strong>read depth / sequencing depth</strong> The total number of
+reads generated per sample; higher depth increases power to detect lowly
+expressed or differentially expressed genes.</p>
+<p><strong>stranded library / strand specificity</strong> Preservation
+of the transcriptional strand of origin during library prep, allowing
+direction-specific quantification.</p>
+<hr></div>
+<div class="section level3">
+<h3 id="file-formats-and-data-organization">File formats and data organization<a class="anchor" aria-label="anchor" href="#file-formats-and-data-organization"></a></h3>
+<p><strong>FASTQ</strong> A text format containing raw sequencing reads
+with per-base quality scores.</p>
+<p><strong>GTF / GFF</strong> Annotation file formats describing gene
+and transcript coordinates, essential for read counting and feature
+quantification.</p>
+<p><strong>counts table</strong> A matrix of raw read counts (rows =
+genes or transcripts, columns = samples) used for downstream
 differential expression analysis.</p>
-<p><strong>single-cell RNA-Seq (scRNA-Seq)</strong> High-throughput
-sequencing of individual cells to assess transcriptomic heterogeneity at
-single-cell resolution.</p>
-<p><strong>stranded library / strand specificity</strong> Library
-preparation preserving the information about which DNA strand the RNA
-originated from, enabling better transcript annotation and expression
-quantification. ([galaxyproject.org][4])</p>
-<p><strong>transcriptome</strong> The complete set of RNA transcripts
-(coding and non-coding) present in a cell or tissue at a given time.</p>
-<p><strong>transcriptome assembly</strong> Reconstructing RNA
-transcripts from reads, typically when no good reference genome exists
-(de novo), or optionally guided by a genome.</p>
-<p><strong>upstream splice junction</strong> The boundary upstream of an
-intron/exon junction; identifying these is critical for correct
-transcript model assignment.</p>
-<p><strong>workflow reproducibility</strong> Use of documented,
-automated pipelines (e.g., with Snakemake, Nextflow, containers) to
-ensure RNA-seq analyses can be repeated by others.</p>
+<hr></div>
+<div class="section level3">
+<h3 id="quantification-and-normalization">Quantification and normalization<a class="anchor" aria-label="anchor" href="#quantification-and-normalization"></a></h3>
+<p><strong>featureCounts</strong> A program that summarizes aligned
+reads to annotated genomic features, producing a counts table for DE
+analysis.</p>
+<p><strong>gene-level vs. transcript-level quantification</strong>
+Gene-level quantification collapses isoforms into a single total count
+per gene; transcript-level quantification measures individual isoform
+expression, critical for splicing or isoform-specific analyses.</p>
+<p><strong>normalization</strong> Adjusting for library size and
+composition so samples are comparable. Common methods include TMM
+(edgeR), median-ratio (DESeq2), and TPM for within-sample comparisons.
+Use <strong>raw counts</strong> with DESeq2/edgeR for statistical
+modeling—FPKM and TPM are not appropriate for DE testing.</p>
+<p><strong>FPKM / TPM</strong> FPKM = Fragments Per Kilobase per
+Million; TPM = Transcripts Per Million. TPM normalizes read counts
+across transcript lengths and library size and is preferred for
+<em>within-sample</em> comparisons, but <strong>not</strong> for
+differential expression across samples.</p>
+<p><strong>pseudo-alignment</strong> Lightweight transcript
+quantification without full alignment, used by tools such as Salmon or
+Kallisto.</p>
+<p><strong>reference-based vs. de novo RNA-seq</strong> Reference-based
+workflows align reads to a known genome or transcriptome. De novo
+workflows assemble transcripts directly from reads when no reference
+exists.</p>
+<p><strong>transcriptome assembly</strong> Reconstruction of transcripts
+from RNA-seq reads, either de novo or guided by a reference.</p>
+<hr></div>
+<div class="section level3">
+<h3 id="differential-expression-and-statistics">Differential expression and statistics<a class="anchor" aria-label="anchor" href="#differential-expression-and-statistics"></a></h3>
+<p><strong>differential expression (DE)</strong> Statistical
+identification of genes or transcripts with significant changes in
+expression between experimental conditions.</p>
+<p><strong>dispersion</strong> A parameter in negative-binomial count
+models representing variability beyond Poisson noise; estimated in
+DESeq2 and edgeR.</p>
+<p><strong>log₂ fold change (LFC)</strong> A measure of change in
+expression between two conditions on a log₂ scale; values &gt; 1 or &lt;
+–1 typically indicate meaningful differences.</p>
+<p><strong>FDR / adjusted p-value</strong> The false discovery rate
+controls for multiple testing (Benjamini–Hochberg correction). Genes are
+typically considered significant at FDR &lt; 0.05.</p>
+<p><strong>normalization factor</strong> Scaling coefficient applied
+during model fitting to account for library size or composition bias
+(internally computed by DESeq2/edgeR).</p>
+<hr></div>
+<div class="section level3">
+<h3 id="interpretation-and-downstream-analysis">Interpretation and downstream analysis<a class="anchor" aria-label="anchor" href="#interpretation-and-downstream-analysis"></a></h3>
+<p><strong>functional enrichment analysis</strong> Identification of
+Gene Ontology (GO) terms, pathways, or functional categories
+overrepresented among differentially expressed genes.</p>
+<p><strong>gene ontology (GO)</strong> A controlled vocabulary
+describing gene functions in three domains: biological process,
+molecular function, and cellular component.</p>
+<p><strong>KEGG</strong> The Kyoto Encyclopedia of Genes and Genomes;
+maps genes to metabolic and signaling pathways.</p>
+<p><strong>visualization</strong> Graphical summaries such as PCA plots,
+volcano plots, or heatmaps used to assess overall patterns and highlight
+DE genes.</p>
+<p><strong>workflow reproducibility</strong> Ensuring analyses can be
+replicated by others using automated, version-controlled workflows
+(e.g., Snakemake, Nextflow, Apptainer).</p>
 <!--
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
+</div>
 </section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="../instructor/index.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
