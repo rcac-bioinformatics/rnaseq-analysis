@@ -81,8 +81,3 @@ The boundary upstream of an intron/exon junction; identifying these is critical 
 **workflow reproducibility**
 Use of documented, automated pipelines (e.g., with Snakemake, Nextflow, containers) to ensure RNA-seq analyses can be repeated by others.
 
-
-[1]: https://pmc.ncbi.nlm.nih.gov/articles/PMC6096346/?utm_source=chatgpt.com "A Beginner's Guide to Analysis of RNA Sequencing Data"
-[2]: https://www.illumina.com/techniques/sequencing/rna-sequencing.html?utm_source=chatgpt.com "RNA Sequencing | RNA-Seq methods & workflows"
-[3]: https://www.annualreviews.org/content/journals/10.1146/annurev-biodatasci-072018-021255?utm_source=chatgpt.com "RNA Sequencing Data: Hitchhiker's Guide to Expression ..."
-[4]: https://galaxyproject.org/tutorials/rb-rnaseq/?utm_source=chatgpt.com "RNAseq - an introduction"
