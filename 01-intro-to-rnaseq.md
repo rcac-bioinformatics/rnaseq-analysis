@@ -142,8 +142,8 @@ The choice of an appropriate RNA-seq quantification depends on the quality of th
 the quality of the RNA-seq library preparation, the presence of contaminating sequences, among many factors.
 Often, it can be informative to compare the quantification results of multiple approaches. 
 
-Because the best quantification method is species- and experiment-dependent, and often requires large amounts of computing resources, this workshop will not cover any specifics of how to generate the counts. 
-Instead, we recommend checking out the references above and consulting with a local bioinformatics expert if you need help.
+The quantification method is species- and experiment-dependent, and often requires large amounts of computing resources, so we will give you a overview of how to perform quantification, and scripts to run the quantification. We will use pre-computed quantifications for the exercises in this workshop.
+
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
