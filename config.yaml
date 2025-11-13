@@ -67,16 +67,16 @@ contact: 'aseethar@purdue.edu'
 # Order of episodes in your lesson
 episodes: 
 - 01-intro-to-rnaseq.Rmd
-#- 01a-from-reads-to-counts.Rmd
-#- 01b-mapping-reads.Rmd
-#- 01c-count-features.Rmd
-#- 02-setup.Rmd
-#- 03-import-annotate.Rmd
-#- 04-exploratory-qc.Rmd
-#- 05-differential-expression.Rmd
-#- 06-extra-design.Rmd
-#- 07-gene-set-analysis.Rmd
-#- 08-next-steps.Rmd
+- 01a-from-reads-to-counts.Rmd
+- 01b-mapping-reads.Rmd
+- 01c-count-features.Rmd
+- 02-setup.Rmd
+- 03-import-annotate.Rmd
+- 04-exploratory-qc.Rmd
+- 05-differential-expression.Rmd
+- 06-extra-design.Rmd
+- 07-gene-set-analysis.Rmd
+- 08-next-steps.Rmd
 
 
 # Information for Learners
