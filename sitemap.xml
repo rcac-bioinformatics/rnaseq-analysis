@@ -4,6 +4,36 @@
     <loc>https://rcac_rnaseq_workshop.github.io/NA/01-intro-to-rnaseq.html</loc>
   </url>
   <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/01a-from-reads-to-counts.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/01b-mapping-reads.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/01c-count-features.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/02-setup.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/03-import-annotate.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/04-exploratory-qc.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/05-differential-expression.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/06-extra-design.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/07-gene-set-analysis.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/08-next-steps.html</loc>
+  </url>
+  <url>
     <loc>https://rcac_rnaseq_workshop.github.io/NA/404.html</loc>
   </url>
   <url>
@@ -23,6 +53,36 @@
   </url>
   <url>
     <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/01-intro-to-rnaseq.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/01a-from-reads-to-counts.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/01b-mapping-reads.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/01c-count-features.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/02-setup.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/03-import-annotate.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/04-exploratory-qc.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/05-differential-expression.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/06-extra-design.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/07-gene-set-analysis.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/08-next-steps.html</loc>
   </url>
   <url>
     <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/404.html</loc>

@@ -242,6 +242,126 @@
 </div>
 <!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush3">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading3">
+        <a href="01a-from-reads-to-counts.html">2. Downloading and organizing files</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush4">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading4">
+        <a href="01b-mapping-reads.html">3. Mapping reads to a reference genome</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush5">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading5">
+        <a href="01c-count-features.html">4. Quantifying Gene Expression</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush6">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading6">
+        <a href="02-setup.html">5. RStudio Project and Experimental Data</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush7">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading7">
+        <a href="03-import-annotate.html">6. Importing and annotating quantified data into R</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush8">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading8">
+        <a href="04-exploratory-qc.html">7. Exploratory analysis and quality control</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="05-differential-expression.html">8. Differential expression analysis</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush10">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading10">
+        <a href="06-extra-design.html">9. Extra exploration of design matrices</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush11">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading11">
+        <a href="07-gene-set-analysis.html">10. Gene set enrichment analysis</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush12">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading12">
+        <a href="08-next-steps.html">11. Next steps</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -314,6 +434,115 @@ use a probabilistic approach to estimate the abundance of each gene or
 transcript.</li>
 <li>Information about annotated genes can be accessed via several
 sources, including Ensembl, UCSC and GENCODE.</li>
+</ul></section><section id="01a-from-reads-to-counts"><h2 class="section-heading"><a href="01a-from-reads-to-counts.html">Downloading and organizing files</a></h2>
+<hr class="half-width">
+<ul>
+<li>Raw reads are typically provided in FASTQ format, which contains the
+nucleotide sequences and quality scores of the reads.</li>
+<li>Reference genome and annotation files are essential for mapping and
+quantification of RNAseq data.</li>
+<li>Organizing data files in a structured manner facilitates efficient
+data handling and analysis.</li>
+<li>Tools such as <code>wget</code> and <code>fasterq-dump</code> can be
+used to download data files from public repositories.</li>
+</ul></section><section id="01b-mapping-reads"><h2 class="section-heading"><a href="01b-mapping-reads.html">Mapping reads to a reference genome</a></h2>
+<hr class="half-width">
+<ul>
+<li><p>Mapping Raw Reads: The process of mapping involves aligning short
+reads from sequencing data to a reference genome to determine their
+locations. STAR, a splice-aware RNA-seq aligner, is commonly used due to
+its speed and accuracy in handling exon-exon junctions.</p></li>
+<li><p>Impact of Read Quality: Poor read quality, such as
+over-represented sequences or low-quality bases, can lead to unmapped or
+multi-mapped reads. It is important to check the quality of reads before
+mapping and review alignment statistics after mapping to ensure data
+quality.</p></li>
+<li><p>Reference Genome Indexing: Before mapping, the reference genome
+needs to be indexed using tools like STAR. Indexing creates a data
+structure to facilitate rapid alignment, and additional files like
+GTF/GFF annotations can improve alignment accuracy.</p></li>
+<li><p>Optimizing Mapping: Fine-tuning mapping parameters (e.g.,
+handling multi-mapped reads, controlling sensitivity) based on the
+dataset is essential. The STAR aligner offers numerous options that
+allow adjustment for specific genome types and read qualities.</p></li>
+</ul></section><section id="01c-count-features"><h2 class="section-heading"><a href="01c-count-features.html">Quantifying Gene Expression</a></h2>
+<hr class="half-width">
+<ul>
+<li><p>Quantifying gene expression involves counting the number of reads
+mapped to genomic features like genes or exons, which provides data for
+downstream analyses, such as differential gene expression.</p></li>
+<li><p>Tools like <code>featureCounts</code>, <code>RSEM</code>,
+<code>HTSeq-count</code>, <code>Salmon</code>, and <code>Kallisto</code>
+are commonly used for counting reads, each offering different advantages
+based on feature type and data structure.</p></li>
+<li><p>Depending on the research question, reads can be counted at
+various feature levels, such as genes, exons, or transcripts, to capture
+overall gene expression or more granular details like splicing
+events.</p></li>
+<li><p>The output of a read counting tool typically includes read counts
+for each feature across all samples, serving as input for further
+analysis, such as identifying differentially expressed genes.</p></li>
+</ul></section><section id="02-setup"><h2 class="section-heading"><a href="02-setup.html">RStudio Project and Experimental Data</a></h2>
+<hr class="half-width">
+<ul>
+<li>Proper organisation of the files required for your project in a
+working directory is crucial for maintaining order and ensuring easy
+access in the future.</li>
+<li>RStudio project serves as a valuable tool for managing your
+project’s working directory and facilitating analysis.</li>
+<li>The <code>download.file</code> function in R can be used for
+downloading datasets from the internet.</li>
+</ul></section><section id="03-import-annotate"><h2 class="section-heading"><a href="03-import-annotate.html">Importing and annotating quantified data into R</a></h2>
+<hr class="half-width">
+<ul>
+<li>Depending on the gene expression quantification tool used, there are
+different ways (often distributed in Bioconductor packages) to read the
+output into a <code>SummarizedExperiment</code> or <code>DGEList</code>
+object for further processing in R.</li>
+<li>Stable gene identifiers such as Ensembl or Entrez IDs should
+preferably be used as the main identifiers throughout an RNA-seq
+analysis, with gene symbols added for easier interpretation.</li>
+</ul></section><section id="04-exploratory-qc"><h2 class="section-heading"><a href="04-exploratory-qc.html">Exploratory analysis and quality control</a></h2>
+<hr class="half-width">
+<ul>
+<li>Exploratory analysis is essential for quality control and to detect
+potential problems with a data set.</li>
+<li>Different classes of exploratory analysis methods expect differently
+preprocessed data. The most commonly used methods expect counts to be
+normalized and log-transformed (or similar- more
+sensitive/sophisticated), to be closer to homoskedastic. Other methods
+work directly on the raw counts.</li>
+</ul></section><section id="05-differential-expression"><h2 class="section-heading"><a href="05-differential-expression.html">Differential expression analysis</a></h2>
+<hr class="half-width">
+<ul>
+<li>With DESeq2, the main steps of a differential expression analysis
+(size factor estimation, dispersion estimation, calculation of test
+statistics) are wrapped in a single function: DESeq().</li>
+<li>Independent filtering of lowly expressed genes is often
+beneficial.</li>
+</ul></section><section id="06-extra-design"><h2 class="section-heading"><a href="06-extra-design.html">Extra exploration of design matrices</a></h2>
+<hr class="half-width">
+<ul>
+<li>The formula framework in R allows creation of design matrices, which
+details the variables expected to be associated with systematic
+differences in gene expression levels.</li>
+<li>Comparisons of interest can be defined using contrasts, which are
+linear combinations of the model coefficients.</li>
+</ul></section><section id="07-gene-set-analysis"><h2 class="section-heading"><a href="07-gene-set-analysis.html">Gene set enrichment analysis</a></h2>
+<hr class="half-width">
+<ul>
+<li>ORA analysis is based on the gene counts and it is based on Fisher’s
+exact test or the hypergeometric distribution.</li>
+<li>In R, it is easy to obtain gene sets from a large number of
+sources.</li>
+</ul></section><section id="08-next-steps"><h2 class="section-heading"><a href="08-next-steps.html">Next steps</a></h2>
+<hr class="half-width">
+<ul>
+<li>RNA-seq data is very versatile and can be used for a number of
+different purposes. It is important, however, to carefully plan one’s
+analyses, to make sure that enough data is available and that abundances
+for appropriate features (e.g., genes, transcripts, or exons) are
+quantified.</li>
 </ul></section>
 </div>
     </main>
