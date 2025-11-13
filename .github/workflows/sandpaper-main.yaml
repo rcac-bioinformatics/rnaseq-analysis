@@ -18,6 +18,7 @@ on:
         required: false
         default: false
         type: boolean
+
 jobs:
   full-build:
     name: "Build Full Site"
@@ -36,6 +37,29 @@ jobs:
 
       - name: "Checkout Lesson"
         uses: actions/checkout@v4
+
+      # -------------------------------
+      # Install system dependencies
+      # -------------------------------
+      - name: "Install system libraries"
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libcurl4-openssl-dev \
+            libxml2-dev \
+            libssl-dev \
+            libfontconfig1-dev \
+            libfreetype6-dev \
+            libharfbuzz-dev \
+            libfribidi-dev \
+            libpng-dev \
+            libtiff5-dev \
+            libjpeg-dev \
+            libglpk-dev \
+            libudunits2-dev \
+            libgdal-dev \
+            libgeos-dev \
+            libproj-dev
 
       - name: "Set up R"
         uses: r-lib/actions/setup-r@v2
