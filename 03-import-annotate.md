@@ -785,7 +785,7 @@ other attached packages:
 
 loaded via a namespace (and not attached):
  [1] Matrix_1.7-4        bit_4.6.0           crayon_1.5.3       
- [4] compiler_4.5.2      BiocManager_1.30.26 renv_1.1.5         
+ [4] compiler_4.5.2      BiocManager_1.30.27 renv_1.1.5         
  [7] blob_1.2.4          Biostrings_2.78.0   png_0.1-8          
 [10] yaml_2.3.10         fastmap_1.2.0       lattice_0.22-5     
 [13] R6_2.6.1            XVector_0.50.0      S4Arrays_1.10.0    

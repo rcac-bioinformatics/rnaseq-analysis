@@ -461,8 +461,8 @@ attached base packages:
 other attached packages:
  [1] iSEE_2.22.0                 SingleCellExperiment_1.32.0
  [3] hexbin_1.28.5               RColorBrewer_1.1-3         
- [5] ComplexHeatmap_2.26.0       ggplot2_4.0.0              
- [7] vsn_3.78.0                  DESeq2_1.50.1              
+ [5] ComplexHeatmap_2.26.0       ggplot2_4.0.1              
+ [7] vsn_3.78.0                  DESeq2_1.50.2              
  [9] SummarizedExperiment_1.40.0 Biobase_2.70.0             
 [11] MatrixGenerics_1.22.0       matrixStats_1.5.0          
 [13] GenomicRanges_1.62.0        Seqinfo_1.0.0              
@@ -486,9 +486,9 @@ loaded via a namespace (and not attached):
 [40] tidyselect_1.2.1      abind_1.4-8           yaml_2.3.10          
 [43] doParallel_1.0.17     codetools_0.2-19      affy_1.88.0          
 [46] miniUI_0.1.2          lattice_0.22-5        tibble_3.3.0         
-[49] shiny_1.11.1          withr_3.0.2           S7_0.2.0             
+[49] shiny_1.11.1          withr_3.0.2           S7_0.2.1             
 [52] evaluate_1.0.5        circlize_0.4.16       pillar_1.11.1        
-[55] affyio_1.80.0         BiocManager_1.30.26   renv_1.1.5           
+[55] affyio_1.80.0         BiocManager_1.30.27   renv_1.1.5           
 [58] DT_0.34.0             foreach_1.5.2         shinyjs_2.1.0        
 [61] scales_1.4.0          xtable_1.8-4          glue_1.8.0           
 [64] tools_4.5.2           colourpicker_1.3.0    locfit_1.5-9.12      
