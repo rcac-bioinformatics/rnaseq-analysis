@@ -248,7 +248,7 @@
 <div class="accordion accordion-flush" id="accordionFlush3">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading3">
-        <a href="01a-from-reads-to-counts.html">2. Downloading and organizing files</a>
+        <a href="02-downloading-and-organizing-files.html">2. Downloading and organizing files</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -260,7 +260,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="01b-mapping-reads.html">3. Mapping reads to a reference genome</a>
+        <a href="03-qc-and-trimming.html">3. Quality control of RNA-seq reads</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -272,7 +272,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="01c-count-features.html">4. Quantifying Gene Expression</a>
+        <a href="04a-genome-based-quantification.html">4. A. Genome-based quantification (STAR + featureCounts)</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -284,7 +284,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="02-setup.html">5. RStudio Project and Experimental Data</a>
+        <a href="04b-transcript-based-quantification.html">5. B. Transcript-based quantification (Salmon)</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -296,7 +296,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="03-import-annotate.html">6. Importing and annotating quantified data into R</a>
+        <a href="05-deseq2-expression-analyses.html">6. Gene-level QC and differential expression (DESeq2)</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -308,55 +308,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="04-exploratory-qc.html">7. Exploratory analysis and quality control</a>
-    </div>
-<!--/div.accordion-header-->
-
-  </div>
-<!--/div.accordion-item-->
-</div>
-<!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush9">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading9">
-        <a href="05-differential-expression.html">8. Differential expression analysis</a>
-    </div>
-<!--/div.accordion-header-->
-
-  </div>
-<!--/div.accordion-item-->
-</div>
-<!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush10">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading10">
-        <a href="06-extra-design.html">9. Extra exploration of design matrices</a>
-    </div>
-<!--/div.accordion-header-->
-
-  </div>
-<!--/div.accordion-item-->
-</div>
-<!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush11">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading11">
-        <a href="07-gene-set-analysis.html">10. Gene set enrichment analysis</a>
-    </div>
-<!--/div.accordion-header-->
-
-  </div>
-<!--/div.accordion-item-->
-</div>
-<!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush12">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading12">
-        <a href="08-next-steps.html">11. Next steps</a>
+        <a href="06-gene-set-enrichment-analyses.html">7. Gene set enrichment analysis</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -429,61 +381,12 @@ any links that you are not going to use.
 
 
       <section id="aggregate-instructor-notes"><section id="01-intro-to-rnaseq"><h2 class="section-heading"><a href="01-intro-to-rnaseq.html">Introduction to RNA-seqWhere are we heading towards in this workshop?<a class="anchor" aria-label="anchor" href="#where-are-we-heading-towards-in-this-workshop"></a></a></h2>
-<hr class="half-width"></section><section id="01a-from-reads-to-counts"><h2 class="section-heading"><a href="01a-from-reads-to-counts.html">Downloading and organizing files</a></h2>
-<hr class="half-width"></section><section id="01b-mapping-reads"><h2 class="section-heading"><a href="01b-mapping-reads.html">Mapping reads to a reference genome</a></h2>
-<hr class="half-width"></section><section id="01c-count-features"><h2 class="section-heading"><a href="01c-count-features.html">Quantifying Gene Expression</a></h2>
-<hr class="half-width"></section><section id="02-setup"><h2 class="section-heading"><a href="02-setup.html">RStudio Project and Experimental Data</a></h2>
-<hr class="half-width"></section><section id="03-import-annotate"><h2 class="section-heading"><a href="03-import-annotate.html">Importing and annotating quantified data into R</a></h2>
-<hr class="half-width"></section><section id="04-exploratory-qc"><h2 class="section-heading"><a href="04-exploratory-qc.html">Exploratory analysis and quality control</a></h2>
-<hr class="half-width"></section><section id="05-differential-expression"><h2 class="section-heading"><a href="05-differential-expression.html">Differential expression analysis</a></h2>
-<hr class="half-width">
-<h3 id="05-differential-expression-headingInstructor1">
-<a href="05-differential-expression.html#headingInstructor1">Instructor Note</a><a class="anchor" aria-label="anchor" href="#05-differential-expression-headingInstructor1"></a>
-</h3>
-<p>The function to generate a <code>DESeqDataSet</code> needs to be
-adapted depending on the input type, e.g,</p>
-<div class="codewrapper sourceCode" id="cb5">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#From SummarizedExperiment object</span></span>
-<span><span class="va">ddsSE</span> <span class="op">&lt;-</span> <span class="fu">DESeqDataSet</span><span class="op">(</span><span class="va">se</span>, design <span class="op">=</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">time</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#From count matrix</span></span>
-<span><span class="va">dds</span> <span class="op">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span><span class="op">(</span>countData <span class="op">=</span> <span class="fu">assays</span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">$</span><span class="va">counts</span>,</span>
-<span>                              colData <span class="op">=</span> <span class="fu">colData</span><span class="op">(</span><span class="va">se</span><span class="op">)</span>,</span>
-<span>                              design <span class="op">=</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">time</span><span class="op">)</span></span></code></pre>
-</div>
-<hr>
-<br><h3 id="05-differential-expression-headingInstructor2">
-<a href="05-differential-expression.html#headingInstructor2">Instructor Note</a><a class="anchor" aria-label="anchor" href="#05-differential-expression-headingInstructor2"></a>
-</h3>
-<p><em>DESeq2</em> uses the <strong>“Relative Log Expression”
-(RLE)</strong> method to calculate sample-wise <em>size factors</em>
-tĥat account for read depth and library composition. <em>edgeR</em> uses
-the <strong>“Trimmed Mean of M-Values” (TMM)</strong> method to account
-for library size differences and compositional effects. <em>edgeR</em>’s
-<em>normalization factors</em> and <em>DESeq2</em>’s <em>size
-factors</em> yield similar results, but are not equivalent theoretical
-parameters.</p>
-<hr>
-<br><h3 id="05-differential-expression-headingInstructor3">
-<a href="05-differential-expression.html#headingInstructor3">Instructor Note</a><a class="anchor" aria-label="anchor" href="#05-differential-expression-headingInstructor3"></a>
-</h3>
-<p>Both of the below ways of specifying the contrast are essentially
-equivalent. The <code>name</code> parameter can be accessed using
-<code>resultsNames()</code>.</p>
-<div class="codewrapper sourceCode" id="cb21">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">resTime</span> <span class="op">&lt;-</span> <span class="fu">results</span><span class="op">(</span><span class="va">dds</span>, contrast <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"Day8"</span>, <span class="st">"Day0"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">resTime</span> <span class="op">&lt;-</span> <span class="fu">results</span><span class="op">(</span><span class="va">dds</span>, name <span class="op">=</span> <span class="st">"time_Day8_vs_Day0"</span><span class="op">)</span></span></code></pre>
-</div>
-<hr>
-<br></section><section id="06-extra-design"><h2 class="section-heading"><a href="06-extra-design.html">Extra exploration of design matrices</a></h2>
-<hr class="half-width"></section><section id="07-gene-set-analysis"><h2 class="section-heading"><a href="07-gene-set-analysis.html">Gene set enrichment analysis</a></h2>
-<hr class="half-width"></section><section id="08-next-steps"><h2 class="section-heading"><a href="08-next-steps.html">Next steps</a></h2>
+<hr class="half-width"></section><section id="02-downloading-and-organizing-files"><h2 class="section-heading"><a href="02-downloading-and-organizing-files.html">Downloading and organizing files</a></h2>
+<hr class="half-width"></section><section id="03-qc-and-trimming"><h2 class="section-heading"><a href="03-qc-and-trimming.html">Quality control of RNA-seq reads</a></h2>
+<hr class="half-width"></section><section id="04a-genome-based-quantification"><h2 class="section-heading"><a href="04a-genome-based-quantification.html">A. Genome-based quantification (STAR + featureCounts)</a></h2>
+<hr class="half-width"></section><section id="04b-transcript-based-quantification"><h2 class="section-heading"><a href="04b-transcript-based-quantification.html">B. Transcript-based quantification (Salmon)</a></h2>
+<hr class="half-width"></section><section id="05-deseq2-expression-analyses"><h2 class="section-heading"><a href="05-deseq2-expression-analyses.html">Gene-level QC and differential expression (DESeq2)</a></h2>
+<hr class="half-width"></section><section id="06-gene-set-enrichment-analyses"><h2 class="section-heading"><a href="06-gene-set-enrichment-analyses.html">Gene set enrichment analysis</a></h2>
 <hr class="half-width"></section></section>
 </div>
     </main>

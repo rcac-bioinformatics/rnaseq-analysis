@@ -247,7 +247,7 @@
 <div class="accordion accordion-flush" id="accordionFlush3">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading3">
-        <a href="01a-from-reads-to-counts.html">2. Downloading and organizing files</a>
+        <a href="02-downloading-and-organizing-files.html">2. Downloading and organizing files</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -259,7 +259,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="01b-mapping-reads.html">3. Mapping reads to a reference genome</a>
+        <a href="03-qc-and-trimming.html">3. Quality control of RNA-seq reads</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -271,7 +271,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="01c-count-features.html">4. Quantifying Gene Expression</a>
+        <a href="04a-genome-based-quantification.html">4. A. Genome-based quantification (STAR + featureCounts)</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -283,7 +283,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="02-setup.html">5. RStudio Project and Experimental Data</a>
+        <a href="04b-transcript-based-quantification.html">5. B. Transcript-based quantification (Salmon)</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -295,7 +295,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="03-import-annotate.html">6. Importing and annotating quantified data into R</a>
+        <a href="05-deseq2-expression-analyses.html">6. Gene-level QC and differential expression (DESeq2)</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -307,55 +307,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="04-exploratory-qc.html">7. Exploratory analysis and quality control</a>
-    </div>
-<!--/div.accordion-header-->
-
-  </div>
-<!--/div.accordion-item-->
-</div>
-<!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush9">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading9">
-        <a href="05-differential-expression.html">8. Differential expression analysis</a>
-    </div>
-<!--/div.accordion-header-->
-
-  </div>
-<!--/div.accordion-item-->
-</div>
-<!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush10">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading10">
-        <a href="06-extra-design.html">9. Extra exploration of design matrices</a>
-    </div>
-<!--/div.accordion-header-->
-
-  </div>
-<!--/div.accordion-item-->
-</div>
-<!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush11">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading11">
-        <a href="07-gene-set-analysis.html">10. Gene set enrichment analysis</a>
-    </div>
-<!--/div.accordion-header-->
-
-  </div>
-<!--/div.accordion-item-->
-</div>
-<!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush12">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading12">
-        <a href="08-next-steps.html">11. Next steps</a>
+        <a href="06-gene-set-enrichment-analyses.html">7. Gene set enrichment analysis</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -436,159 +388,92 @@
 <p aria-hidden="true">Image 1 of 2: ‘An example MA plot’</p>
 <p aria-hidden="true">Image 2 of 2: ‘An example heatmap’</p>
 <p><img src="fig/maPlot-example.png" alt="An example MA plot" class="figure"><img src="fig/heatmap-example.png" alt="An example heatmap" class="figure"></p>
-<hr></section><section id="01a-from-reads-to-counts"><h2 class="section-heading"><a href="01a-from-reads-to-counts.html">Downloading and organizing files</a></h2>
+<hr></section><section id="02-downloading-and-organizing-files"><h2 class="section-heading"><a href="02-downloading-and-organizing-files.html">Downloading and organizing files</a></h2>
 <hr class="half-width">
-<h3 id="01a-from-reads-to-counts-figure-1">Figure 1</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Your working directory should look like this’</p>
-<figure style="text-align: center"><img src="fig/01_fq2counts/dir_org.png" alt="Your working directory should look like this" width="1163" class="figure mx-auto d-block"><figcaption>
-Your working directory should look like this
-</figcaption></figure><hr>
-<h3 id="01a-from-reads-to-counts-figure-2">Figure 2</h3>
+<h3 id="02-downloading-and-organizing-files-figure-1">Figure 1</h3>
 <p aria-hidden="true">Image 1 of 1: ‘Basic gene annotation in GTF format’</p>
-<figure style="text-align: center"><img src="fig/01_fq2counts/gencode-gtf.png" alt="Basic gene annotation in GTF format" width="2615" class="figure mx-auto d-block"><figcaption>
+<figure style="text-align: center"><img src="fig/01_fq2counts/gencode-gtf.png" alt="Basic gene annotation in GTF format" class="figure mx-auto d-block"><figcaption>
 Basic gene annotation in GTF format
 </figcaption></figure><hr>
-<h3 id="01a-from-reads-to-counts-figure-3">Figure 3</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Reference genome file in fasta format’</p>
-<figure style="text-align: center"><img src="fig/01_fq2counts/gencode-genome.png" alt="Reference genome file in fasta format" width="2224" class="figure mx-auto d-block"><figcaption>
-Reference genome file in fasta format
+<h3 id="02-downloading-and-organizing-files-figure-2">Figure 2</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Reference genome file in FASTA format’</p>
+<figure style="text-align: center"><img src="fig/01_fq2counts/gencode-genome.png" alt="Reference genome file in FASTA format" class="figure mx-auto d-block"><figcaption>
+Reference genome file in FASTA format
 </figcaption></figure><hr>
-<h3 id="01a-from-reads-to-counts-figure-4">Figure 4</h3>
+<h3 id="02-downloading-and-organizing-files-figure-3">Figure 3</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Transcript sequences file in FASTA format’</p>
+<figure style="text-align: center"><img src="fig/01_fq2counts/gencode-transcripts.png" alt="Transcript sequences file in FASTA format" class="figure mx-auto d-block"><figcaption>
+Transcript sequences file in FASTA format
+</figcaption></figure><hr>
+<h3 id="02-downloading-and-organizing-files-figure-4">Figure 4</h3>
 <p aria-hidden="true">Image 1 of 1: ‘FASTQ files from GEO’</p>
-<figure style="text-align: center"><img src="fig/01_fq2counts/geo-db.png" alt="FASTQ files from GEO" width="1637" class="figure mx-auto d-block"><figcaption>
+<figure style="text-align: center"><img src="fig/01_fq2counts/geo-db.png" alt="FASTQ files from GEO" class="figure mx-auto d-block"><figcaption>
 FASTQ files from GEO
 </figcaption></figure><hr>
-<h3 id="01a-from-reads-to-counts-figure-5">Figure 5</h3>
-<p aria-hidden="true">Image 1 of 1: ‘FASTQ files from GEO’</p>
-<figure style="text-align: center"><img src="fig/01_fq2counts/srr-runs.png" alt="FASTQ files from GEO" width="2753" class="figure mx-auto d-block"><figcaption>
-FASTQ files from GEO
-</figcaption></figure><hr></section><section id="01b-mapping-reads"><h2 class="section-heading"><a href="01b-mapping-reads.html">Mapping reads to a reference genome</a></h2>
-<hr class="half-width"></section><section id="01c-count-features"><h2 class="section-heading"><a href="01c-count-features.html">Quantifying Gene Expression</a></h2>
-<hr class="half-width"></section><section id="02-setup"><h2 class="section-heading"><a href="02-setup.html">RStudio Project and Experimental Data</a></h2>
+<h3 id="02-downloading-and-organizing-files-figure-5">Figure 5</h3>
+<p aria-hidden="true">Image 1 of 1: ‘FASTQ files from SRA Run Selector’</p>
+<figure style="text-align: center"><img src="fig/01_fq2counts/srr-runs.png" alt="FASTQ files from SRA Run Selector" class="figure mx-auto d-block"><figcaption>
+FASTQ files from SRA Run Selector
+</figcaption></figure><hr></section><section id="03-qc-and-trimming"><h2 class="section-heading"><a href="03-qc-and-trimming.html">Quality control of RNA-seq reads</a></h2>
 <hr class="half-width">
-<h3 id="02-setup-figure-1">Figure 1</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Your working directory should look like this’</p>
-<figure style="text-align: center"><img src="fig/02_setup/folders_working_dir.png" alt="Your working directory should look like this" width="1221" class="figure mx-auto d-block"><figcaption>
-Your working directory should look like this
+<h3 id="03-qc-and-trimming-figure-1">Figure 1</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Per base sequence quality for a typical RNA-seq dataset’</p>
+<figure style="text-align: center"><img src="fig/02_qc/fastqc_sequence_quality_histogram.png" alt="Per base sequence quality for a typical RNA-seq dataset" class="figure mx-auto d-block"><figcaption>
+Per base sequence quality for a typical RNA-seq dataset
 </figcaption></figure><hr>
-<h3 id="02-setup-figure-2">Figure 2</h3>
-<p aria-hidden="true">Image 1 of 1: ‘A new .Rproj file should be created in your chosen working directory.’</p>
-<figure style="text-align: center"><img src="fig/02_setup/rstudio_project.png" alt="A new .Rproj file should be created in your chosen working directory." width="1621" class="figure mx-auto d-block"><figcaption>
-A new .Rproj file should be created in your chosen working directory.
+<h3 id="03-qc-and-trimming-figure-2">Figure 2</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Per tile sequence quality plot’</p>
+<figure style="text-align: center"><img src="fig/02_qc/fastqc_per_base_sequence_content.png" alt="Per tile sequence quality plot" class="figure mx-auto d-block"><figcaption>
+Per tile sequence quality plot
 </figcaption></figure><hr>
-<h3 id="02-setup-figure-3">Figure 3</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Your R working directory should now be set to where the .Rproj file resides.’</p>
-<figure style="text-align: center"><img src="fig/02_setup/rstudio_console.png" alt="Your R working directory should now be set to where the .Rproj file resides." width="1211" class="figure mx-auto d-block"><figcaption>
-Your R working directory should now be set to where the .Rproj file
-resides.
+<h3 id="03-qc-and-trimming-figure-3">Figure 3</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Distribution of per sequence quality scores’</p>
+<figure style="text-align: center"><img src="fig/02_qc/fastqc_per_sequence_quality_score.png" alt="Distribution of per sequence quality scores" class="figure mx-auto d-block"><figcaption>
+Distribution of per sequence quality scores
 </figcaption></figure><hr>
-<h3 id="02-setup-figure-4">Figure 4</h3>
-<p aria-hidden="true">Image 1 of 1: ‘A file named GSE96870_counts_cerebellum.csv should now reside in the data folder.’</p>
-<figure style="text-align: center"><img src="fig/02_setup/data_folder.png" alt="A file named GSE96870_counts_cerebellum.csv should now reside in the data folder." width="1632" class="figure mx-auto d-block"><figcaption>
-A file named GSE96870_counts_cerebellum.csv should now reside in the
-data folder.
-</figcaption></figure><hr></section><section id="03-import-annotate"><h2 class="section-heading"><a href="03-import-annotate.html">Importing and annotating quantified data into R</a></h2>
+<h3 id="03-qc-and-trimming-figure-4">Figure 4</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Per base sequence content for RNA-seq reads’</p>
+<figure style="text-align: center"><img src="fig/02_qc/fastqc_per_base_atgc_content.png" alt="Per base sequence content for RNA-seq reads" class="figure mx-auto d-block"><figcaption>
+Per base sequence content for RNA-seq reads
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-5">Figure 5</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Per sequence GC content distribution’</p>
+<figure style="text-align: center"><img src="fig/02_qc/fastqc_per_sequence_GC_content.png" alt="Per sequence GC content distribution" class="figure mx-auto d-block"><figcaption>
+Per sequence GC content distribution
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-6">Figure 6</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Per base N content plot’</p>
+<figure style="text-align: center"><img src="fig/02_qc/fastqc_per_base_n_content.png" alt="Per base N content plot" class="figure mx-auto d-block"><figcaption>
+Per base N content plot
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-7">Figure 7</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Sequence length distribution for RNA-seq data’</p>
+<figure style="text-align: center"><img src="fig/02_qc/fastqc_length_distribution.png" alt="Sequence length distribution for RNA-seq data" class="figure mx-auto d-block"><figcaption>
+Sequence length distribution for RNA-seq data
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-8">Figure 8</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Sequence duplication levels’</p>
+<figure style="text-align: center"><img src="fig/02_qc/fastqc_sequence_duplication_level.png" alt="Sequence duplication levels" class="figure mx-auto d-block"><figcaption>
+Sequence duplication levels
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-9">Figure 9</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Adapter content across the read’</p>
+<figure style="text-align: center"><img src="fig/02_qc/fastqc_adapter_content.png" alt="Adapter content across the read" class="figure mx-auto d-block"><figcaption>
+Adapter content across the read
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-10">Figure 10</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Example MultiQC summary across all samples’</p>
+<figure style="text-align: center"><img src="fig/02_qc/multiqc-summary.png" alt="Example MultiQC summary across all samples" class="figure mx-auto d-block"><figcaption>
+Example MultiQC summary across all samples
+</figcaption></figure><hr></section><section id="04a-genome-based-quantification"><h2 class="section-heading"><a href="04a-genome-based-quantification.html">A. Genome-based quantification (STAR + featureCounts)</a></h2>
+<hr class="half-width"></section><section id="04b-transcript-based-quantification"><h2 class="section-heading"><a href="04b-transcript-based-quantification.html">B. Transcript-based quantification (Salmon)</a></h2>
+<hr class="half-width"></section><section id="05-deseq2-expression-analyses"><h2 class="section-heading"><a href="05-deseq2-expression-analyses.html">Gene-level QC and differential expression (DESeq2)</a></h2>
 <hr class="half-width">
-<h3 id="03-import-annotate-figure-1">Figure 1</h3>
-<figure><img src="https://uclouvain-cbio.github.io/WSBIM1322/figs/SE.svg" width="80%" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="04-exploratory-qc"><h2 class="section-heading"><a href="04-exploratory-qc.html">Exploratory analysis and quality control</a></h2>
-<hr class="half-width">
-<h3 id="04-exploratory-qc-figure-1">Figure 1</h3>
-<figure><img src="fig/04-exploratory-qc-rendered-lib-size-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="04-exploratory-qc-figure-2">Figure 2</h3>
-<figure><img src="fig/04-exploratory-qc-rendered-est-size-factors-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="04-exploratory-qc-figure-3">Figure 3</h3>
-<figure><img src="fig/04-exploratory-qc-rendered-mean-sd-plot-raw-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="04-exploratory-qc-figure-4">Figure 4</h3>
-<figure><img src="fig/04-exploratory-qc-rendered-mean-sd-plot-vst-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="04-exploratory-qc-figure-5">Figure 5</h3>
-<figure><img src="fig/04-exploratory-qc-rendered-heatmap-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="04-exploratory-qc-figure-6">Figure 6</h3>
-<figure><img src="fig/04-exploratory-qc-rendered-pca-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="04-exploratory-qc-figure-7">Figure 7</h3>
-<figure><img src="fig/04-exploratory-qc-rendered-pca-exercise-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="04-exploratory-qc-figure-8">Figure 8</h3>
-<figure><img src="fig/04-exploratory-qc-rendered-pca-lib-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="04-exploratory-qc-figure-9">Figure 9</h3>
-<figure><img src="fig/04-exploratory-qc-rendered-pca-lib-vst-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="05-differential-expression"><h2 class="section-heading"><a href="05-differential-expression.html">Differential expression analysis</a></h2>
-<hr class="half-width">
-<h3 id="05-differential-expression-figure-1">Figure 1</h3>
-<figure><img src="fig/05-differential-expression-rendered-estimate-dispersions-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="05-differential-expression-figure-2">Figure 2</h3>
-<figure><img src="fig/05-differential-expression-rendered-plot-ma-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="05-differential-expression-figure-3">Figure 3</h3>
-<p><img src="fig/05-differential-expression-rendered-res-time-lfc-1.png" style="display: block; margin: auto;" class="figure">
-Shrinkage of log fold changes is useful for visualization and ranking of
-genes, but for result exploration typically the
-<code>independentFiltering</code> argument is used to remove lowly
-expressed genes.</p>
-<hr>
-<h3 id="05-differential-expression-figure-4">Figure 4</h3>
-<figure><img src="fig/05-differential-expression-rendered-heatmap-time-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="06-extra-design"><h2 class="section-heading"><a href="06-extra-design.html">Extra exploration of design matrices</a></h2>
-<hr class="half-width">
-<h3 id="06-extra-design-figure-1">Figure 1</h3>
-<figure><img src="fig/06-extra-design-rendered-cooccplots-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-2">Figure 2</h3>
-<figure><img src="fig/06-extra-design-rendered-cooccplots-2.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-3">Figure 3</h3>
-<figure><img src="fig/06-extra-design-rendered-male-vs-female-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-4">Figure 4</h3>
-<figure><img src="fig/06-extra-design-rendered-male-vs-female-noint-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-5">Figure 5</h3>
-<figure><img src="fig/06-extra-design-rendered-all-times-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-6">Figure 6</h3>
-<figure><img src="fig/06-extra-design-rendered-factorial-noint-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-7">Figure 7</h3>
-<figure><img src="fig/06-extra-design-rendered-factorial-withint-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-8">Figure 8</h3>
-<figure><img src="fig/06-extra-design-rendered-factorial-combine-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-9">Figure 9</h3>
-<figure><img src="fig/06-extra-design-rendered-paired-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-10">Figure 10</h3>
-<figure><img src="fig/06-extra-design-rendered-within-and-between-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-11">Figure 11</h3>
-<figure><img src="fig/06-extra-design-rendered-within-and-between-2.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-12">Figure 12</h3>
-<figure><img src="fig/06-extra-design-rendered-vis-sex-time-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-13">Figure 13</h3>
-<figure><img src="fig/06-extra-design-rendered-compare-tests-sex-time-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-14">Figure 14</h3>
-<figure><img src="fig/06-extra-design-rendered-compare-tests-sex-time-2.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-15">Figure 15</h3>
-<figure><img src="fig/06-extra-design-rendered-vis-sex-time-int-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-16">Figure 16</h3>
-<figure><img src="fig/06-extra-design-rendered-vis-sex-time-int-single-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-17">Figure 17</h3>
-<figure><img src="fig/06-extra-design-rendered-compare-sex-time-int-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="06-extra-design-figure-18">Figure 18</h3>
-<figure><img src="fig/06-extra-design-rendered-compare-sex-time-int-2.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="07-gene-set-analysis"><h2 class="section-heading"><a href="07-gene-set-analysis.html">Gene set enrichment analysis</a></h2>
-<hr class="half-width">
-<h3 id="07-gene-set-analysis-figure-1">Figure 1</h3>
-<figure><img src="fig/07-gene-set-analysis-rendered-venn-diagram-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="07-gene-set-analysis-figure-2">Figure 2</h3>
-<figure><img src="fig/07-gene-set-analysis-rendered-hypergeom-1.png" width="80%" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="07-gene-set-analysis-figure-3">Figure 3</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Gene set, biological term and GO gene set’</p>
-<figure><img src="fig/geneset.svg" alt="Gene set, biological term and GO gene set" class="figure mx-auto d-block"></figure><hr>
-<h3 id="07-gene-set-analysis-figure-4">Figure 4</h3>
-<p aria-hidden="true">Image 1 of 1: ‘MSigDB gene sets collections’</p>
-<figure><img src="fig/msigdb.png" alt="MSigDB gene sets collections" class="figure mx-auto d-block"></figure><hr>
-<h3 id="07-gene-set-analysis-figure-5">Figure 5</h3>
-<figure><img src="fig/07-gene-set-analysis-rendered-compare-universe-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="07-gene-set-analysis-figure-6">Figure 6</h3>
-<figure><img src="fig/07-gene-set-analysis-rendered-more-enrichplots-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="07-gene-set-analysis-figure-7">Figure 7</h3>
-<figure><img src="fig/07-gene-set-analysis-rendered-more-enrichplots-2.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="07-gene-set-analysis-figure-8">Figure 8</h3>
-<figure><img src="fig/07-gene-set-analysis-rendered-plot-enrichment-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="07-gene-set-analysis-figure-9">Figure 9</h3>
-<figure><img src="fig/07-gene-set-analysis-rendered-plot-z-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="07-gene-set-analysis-figure-10">Figure 10</h3>
-<figure><img src="fig/07-gene-set-analysis-rendered-plot-enrichment-padj-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="07-gene-set-analysis-figure-11">Figure 11</h3>
-<figure><img src="fig/07-gene-set-analysis-rendered-plot-up-down-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="07-gene-set-analysis-figure-12">Figure 12</h3>
-<p aria-hidden="true">Image 1 of 1: ‘simplifyEnrichment’</p>
-<figure><img src="fig/simplifyEnrichment.png" alt="simplifyEnrichment" width="600" class="figure mx-auto d-block"></figure><hr></section><section id="08-next-steps"><h2 class="section-heading"><a href="08-next-steps.html">Next steps</a></h2>
+<h3 id="05-deseq2-expression-analyses-figure-1">Figure 1</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Open OnDemand interface’</p>
+<figure style="text-align: center"><img src="fig/05_deseq/open-on-demand.png" alt="Open OnDemand interface" class="figure mx-auto d-block"><figcaption>
+Open OnDemand interface
+</figcaption></figure><hr></section><section id="06-gene-set-enrichment-analyses"><h2 class="section-heading"><a href="06-gene-set-enrichment-analyses.html">Gene set enrichment analysis</a></h2>
 <hr class="half-width"></section>
 </div>
     </main>

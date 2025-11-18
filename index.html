@@ -222,7 +222,7 @@
 <div class="accordion accordion-flush" id="accordionFlush3">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading3">
-        <a href="01a-from-reads-to-counts.html">2. Downloading and organizing files</a>
+        <a href="02-downloading-and-organizing-files.html">2. Downloading and organizing files</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -231,7 +231,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="01b-mapping-reads.html">3. Mapping reads to a reference genome</a>
+        <a href="03-qc-and-trimming.html">3. Quality control of RNA-seq reads</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -240,7 +240,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="01c-count-features.html">4. Quantifying Gene Expression</a>
+        <a href="04a-genome-based-quantification.html">4. A. Genome-based quantification (STAR + featureCounts)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -249,7 +249,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="02-setup.html">5. RStudio Project and Experimental Data</a>
+        <a href="04b-transcript-based-quantification.html">5. B. Transcript-based quantification (Salmon)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -258,7 +258,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="03-import-annotate.html">6. Importing and annotating quantified data into R</a>
+        <a href="05-deseq2-expression-analyses.html">6. Gene-level QC and differential expression (DESeq2)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -267,43 +267,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="04-exploratory-qc.html">7. Exploratory analysis and quality control</a>
-    </div><!--/div.accordion-header-->
-
-  </div><!--/div.accordion-item-->
-</div><!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush9">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading9">
-        <a href="05-differential-expression.html">8. Differential expression analysis</a>
-    </div><!--/div.accordion-header-->
-
-  </div><!--/div.accordion-item-->
-</div><!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush10">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading10">
-        <a href="06-extra-design.html">9. Extra exploration of design matrices</a>
-    </div><!--/div.accordion-header-->
-
-  </div><!--/div.accordion-item-->
-</div><!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush11">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading11">
-        <a href="07-gene-set-analysis.html">10. Gene set enrichment analysis</a>
-    </div><!--/div.accordion-header-->
-
-  </div><!--/div.accordion-item-->
-</div><!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush12">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading12">
-        <a href="08-next-steps.html">11. Next steps</a>
+        <a href="06-gene-set-enrichment-analyses.html">7. Gene set enrichment analysis</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -376,9 +340,10 @@ genome assembly, annotation, single-cell genomics, NGS data analysis,
 metagenomics, proteomics, and metabolomics. Arun supports a diverse
 range of bioinformatics projects across various organisms, including
 human model systems.</p></li>
-<li><p><strong>Michael Allan Carlson, Ph.D.</strong>: Michael is a
-Senior Computational Scientist at Purdue University’s Rosen Center for
-Advanced Computing. <need to add more details>.</need></p></li>
+<li><p><strong>Michael Carlson, Ph.D.</strong>: Michael has a background
+in computational physics, specifically hypersonic materials. He also
+leads many introductory workshops in the High-Performance Computing
+domain.</p></li>
 </ol></section><section><h2 class="section-heading" id="schedule">Schedule<a class="anchor" aria-label="anchor" href="#schedule"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="23%"><col width="76%"></colgroup><thead><tr class="header"><th align="left"><strong>Time</strong></th>
 <th><strong>Session</strong></th>
@@ -386,44 +351,44 @@ Advanced Computing. <need to add more details>.</need></p></li>
 <td>Arrival &amp; Setup</td>
 </tr><tr class="even"><td align="left"><strong>9:00 AM</strong></td>
 <td>
-<strong>Introduction to RNA-seq Analysis</strong> – Overview of
+<strong>Introduction to RNA-seq Analysis:</strong> Overview of
 experimental design, biological replicates, sequencing depth, and
 workflow overview (QC → alignment → quantification → differential
 expression → visualization)</td>
 </tr><tr class="odd"><td align="left"><strong>9:45 AM</strong></td>
 <td>
-<strong>Data Preparation &amp; Quality Control</strong> – Exploring
+<strong>Data Preparation &amp; Quality Control:</strong> Exploring
 raw FASTQ files, running FastQC and MultiQC, trimming low-quality reads
 with fastp</td>
 </tr><tr class="even"><td align="left"><strong>10:30 AM</strong></td>
 <td><strong>Break</strong></td>
 </tr><tr class="odd"><td align="left"><strong>10:45 AM</strong></td>
 <td>
-<strong>Read Alignment &amp; Quantification</strong> – Mapping reads
+<strong>Read Alignment &amp; Quantification:</strong> Mapping reads
 with STAR, building genome indices, generating gene-level counts with
 featureCounts and Salmon</td>
 </tr><tr class="even"><td align="left"><strong>12:00 PM</strong></td>
 <td><strong>Lunch Break</strong></td>
 </tr><tr class="odd"><td align="left"><strong>1:00 PM</strong></td>
 <td>
-<strong>Differential Expression Analysis (DESeq2)</strong> –
+<strong>Differential Expression Analysis (DESeq2):</strong>
 Importing count data into R, data normalization, exploring variance,
 identifying significantly expressed genes</td>
 </tr><tr class="even"><td align="left"><strong>2:15 PM</strong></td>
 <td><strong>Break</strong></td>
 </tr><tr class="odd"><td align="left"><strong>2:30 PM</strong></td>
 <td>
-<strong>Functional Interpretation &amp; Visualization</strong> –
-Gene ontology enrichment, pathway analysis, and visualizing results
-(volcano plots, heatmaps, PCA)</td>
+<strong>Functional Interpretation &amp; Visualization:</strong> Gene
+ontology enrichment, pathway analysis, and visualizing results (volcano
+plots, heatmaps, PCA)</td>
 </tr><tr class="even"><td align="left"><strong>3:30 PM</strong></td>
 <td>
-<strong>Integration &amp; Reproducibility</strong> – Creating
+<strong>Integration &amp; Reproducibility:</strong> Creating
 reproducible pipelines with Snakemake/Nextflow templates, managing
 metadata and documentation</td>
 </tr><tr class="odd"><td align="left"><strong>4:00 PM</strong></td>
 <td>
-<strong>Wrap-Up &amp; Discussion</strong> – Troubleshooting, best
+<strong>Wrap-Up &amp; Discussion:</strong> Troubleshooting, best
 practices, and Q&amp;A</td>
 </tr></tbody></table></section><section><h2 class="section-heading" id="what-is-not-covered">What is not covered<a class="anchor" aria-label="anchor" href="#what-is-not-covered"></a></h2>
 <hr class="half-width"><ol style="list-style-type: decimal"><li>Raw data generation, library preparation, or experimental design
@@ -481,7 +446,7 @@ configure passwordless access.</p>
   Windows
   </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Open <strong>PowerShell</strong> or <strong>Git Bash</strong> and
 run:</p>
@@ -502,7 +467,7 @@ run:</p>
   macOS
   </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Open <strong>Terminal</strong> and run:</p>
 <div class="codewrapper sourceCode" id="cb5">
@@ -522,7 +487,7 @@ run:</p>
   Linux
   </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>Open a terminal and run:</p>
 <div class="codewrapper sourceCode" id="cb6">
