@@ -6,23 +6,24 @@ title: Setup
 
 1. **Arun Seetharam, Ph.D.**: Arun is a lead bioinformatics scientist at Purdue University’s Rosen Center for Advanced Computing. With extensive expertise in comparative genomics, genome assembly, annotation, single-cell genomics,  NGS data analysis, metagenomics, proteomics, and metabolomics. Arun supports a diverse range of bioinformatics projects across various organisms, including human model systems.
 
-2. **Michael Allan Carlson, Ph.D.**: Michael is a Senior Computational Scientist at Purdue University’s Rosen Center for Advanced Computing. <need to add more details>.
+2. **Michael Carlson, Ph.D.**: Michael has a background in computational physics, specifically hypersonic materials. He also leads many introductory workshops in the High-Performance Computing domain.
+
 
 ## Schedule
 
 | **Time**  | **Session**  |
 |:---|-------------|
 | **8:30 AM** | Arrival & Setup |
-| **9:00 AM** | **Introduction to RNA-seq Analysis** – Overview of experimental design, biological replicates, sequencing depth, and workflow overview (QC → alignment → quantification → differential expression → visualization) |
-| **9:45 AM** | **Data Preparation & Quality Control** – Exploring raw FASTQ files, running FastQC and MultiQC, trimming low-quality reads with fastp |
+| **9:00 AM** | **Introduction to RNA-seq Analysis:** Overview of experimental design, biological replicates, sequencing depth, and workflow overview (QC → alignment → quantification → differential expression → visualization) |
+| **9:45 AM** | **Data Preparation & Quality Control:** Exploring raw FASTQ files, running FastQC and MultiQC, trimming low-quality reads with fastp |
 | **10:30 AM** | **Break** |
-| **10:45 AM** | **Read Alignment & Quantification** – Mapping reads with STAR, building genome indices, generating gene-level counts with featureCounts and Salmon |
+| **10:45 AM** | **Read Alignment & Quantification:**  Mapping reads with STAR, building genome indices, generating gene-level counts with featureCounts and Salmon |
 | **12:00 PM** | **Lunch Break** |
-| **1:00 PM** | **Differential Expression Analysis (DESeq2)** – Importing count data into R, data normalization, exploring variance, identifying significantly expressed genes |
+| **1:00 PM** | **Differential Expression Analysis (DESeq2):** Importing count data into R, data normalization, exploring variance, identifying significantly expressed genes |
 | **2:15 PM** | **Break** |
-| **2:30 PM** | **Functional Interpretation & Visualization** – Gene ontology enrichment, pathway analysis, and visualizing results (volcano plots, heatmaps, PCA) |
-| **3:30 PM** | **Integration & Reproducibility** – Creating reproducible pipelines with Snakemake/Nextflow templates, managing metadata and documentation |
-| **4:00 PM** | **Wrap-Up & Discussion** – Troubleshooting, best practices, and Q&A |
+| **2:30 PM** | **Functional Interpretation & Visualization:** Gene ontology enrichment, pathway analysis, and visualizing results (volcano plots, heatmaps, PCA) |
+| **3:30 PM** | **Integration & Reproducibility:** Creating reproducible pipelines with Snakemake/Nextflow templates, managing metadata and documentation |
+| **4:00 PM** | **Wrap-Up & Discussion:** Troubleshooting, best practices, and Q&A |
 
 
 ## What is not covered

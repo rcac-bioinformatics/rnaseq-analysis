@@ -49,7 +49,9 @@ contact: 'aseethar@purdue.edu'
 # include all pages in the folder.
 #
 # Example -------------
-#
+chapter_numbers: false
+#auto_number_chapters: false
+#numbered_chapters: false
 # episodes:
 # - introduction.md
 # - first-steps.md
@@ -67,16 +69,14 @@ contact: 'aseethar@purdue.edu'
 # Order of episodes in your lesson
 episodes: 
 - 01-intro-to-rnaseq.Rmd
-- 01a-from-reads-to-counts.Rmd
-- 01b-mapping-reads.Rmd
-- 01c-count-features.Rmd
-- 02-setup.Rmd
-- 03-import-annotate.Rmd
-- 04-exploratory-qc.Rmd
-- 05-differential-expression.Rmd
-- 06-extra-design.Rmd
-- 07-gene-set-analysis.Rmd
-- 08-next-steps.Rmd
+- 02-downloading-and-organizing-files.Rmd
+- 03-qc-and-trimming.Rmd
+- 04a-genome-based-quantification.Rmd
+- 04b-transcript-based-quantification.Rmd
+- 05-deseq2-expression-analyses.Rmd
+- 06-gene-set-enrichment-analyses.Rmd
+
+
 
 
 # Information for Learners
