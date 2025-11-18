@@ -178,8 +178,8 @@ Download the latest mouse transcriptome fasta file from GENCODE. What do the ent
 
 # Where are we heading towards in this workshop? 
 
-During the coming two days, we will discuss and practice how to perform differential expression analysis with Bioconductor, and how to interpret the results. 
-We will start from a count matrix, and thus assume that the initial quality assessment and quantification of gene expression have already been done. 
+In this workshop, we will discuss and practice: downloading publicly available RNA-seq data, performing quality assessment of the raw data, quantifying gene expression, and performing differential expression analysis to identify genes that are expressed at different levels between two or more conditions. We will also cover some aspects of data visualization and interpretation of the results.
+
 The outcome of a differential expression analysis is often represented using graphical representations, such as MA plots and heatmaps (see below for examples). 
 
 <img src="fig/maPlot-example.png" alt="An example MA plot"/>
