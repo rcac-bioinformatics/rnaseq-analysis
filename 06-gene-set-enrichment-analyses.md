@@ -5,6 +5,8 @@ teaching: 35
 exercises: 45
 ---
 
+
+
 :::::::::::::::::::::::::::::::::::::: questions
 
 - How do we identify functional pathways and biological themes from DE genes.
