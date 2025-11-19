@@ -49,19 +49,19 @@ title: Setup
 To copy only the training data:
 
 ```bash
-rsync -avP /depot/workshop/data/rnaseq_workshop ${RCAC_SCRATCH}/
+rsync -avP /depot/workshop/data/rnaseq-workshop ${RCAC_SCRATCH}/
 ```
 
 A completed version of the workshop data is available at:
 
 ```
-/depot/workshop/data/rnaseq_workshop-results
+/depot/workshop/data/rnaseq-workshop-results
 ```
 
 You can copy it to your scratch space using:
 
 ```bash
-rsync -avP /depot/workshop/data/rnaseq_workshop-results ${RCAC_SCRATCH}/
+rsync -avP /depot/workshop/data/rnaseq-workshop_results ${RCAC_SCRATCH}/
 ```
 
 Use this folder **only if you are unable to complete the exercises during the workshop**.

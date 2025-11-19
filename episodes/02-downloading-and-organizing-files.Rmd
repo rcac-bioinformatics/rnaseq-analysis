@@ -65,8 +65,7 @@ Create a working directory for the workshop (e.g., `rnaseq-workshop`). Inside it
 
 - `data` : raw FASTQ files, reference genome, annotation  
 - `scripts` : custom scripts, SLURM job files  
-- `mapping` : alignment outputs  
-- `counts` : quantification outputs  
+- `results` : alignment, counts and various other outputs  
 
 
 ::::::::::::::::::::::::::::::::::: solution
@@ -74,7 +73,7 @@ Create a working directory for the workshop (e.g., `rnaseq-workshop`). Inside it
 
 ```bash
 cd $RCAC_SCRATCH
-mkdir -p rnaseq-workshop/{data,scripts,mapping,counts}
+mkdir -p rnaseq-workshop/{data,scripts,results}
 ```
 
 The resulting directory structure should look like this:
@@ -84,9 +83,8 @@ aseethar@scholar-fe03:[aseethar] $ pwd
 /scratch/scholar/aseethar
 aseethar@scholar-fe03:[aseethar] $ tree rnaseq-workshop/
 rnaseq-workshop/
-├── counts
+├── results
 ├── data
-├── mapping
 └── scripts
 ```
 :::::::::::::::::::::::::::::::::::
@@ -276,10 +274,12 @@ done<SRR_Acc_List.txt
 Since downloading may take a long time, we provide a pre-downloaded copy of all FASTQ files. The directory, after downloading, should look like this:
 
 ```bash
-data/
+data
+├── annot.tsv
 ├── gencode.vM38.primary_assembly.basic.annotation.gtf
 ├── gencode.vM38.transcripts.fa
 ├── GRCm39.primary_assembly.genome.fa
+├── mart.tsv
 ├── SRR33253285_1.fastq.gz
 ├── SRR33253285_2.fastq.gz
 ├── SRR33253286_1.fastq.gz
