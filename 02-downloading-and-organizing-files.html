@@ -452,9 +452,8 @@ annotation<br></li>
 <li>
 <code>scripts</code> : custom scripts, SLURM job files<br></li>
 <li>
-<code>mapping</code> : alignment outputs<br></li>
-<li>
-<code>counts</code> : quantification outputs</li>
+<code>results</code> : alignment, counts and various other
+outputs</li>
 </ul></div>
 </div>
 </div>
@@ -463,13 +462,13 @@ annotation<br></li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$RCAC_SCRATCH</span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> rnaseq-workshop/<span class="dt">{data</span><span class="op">,</span><span class="dt">scripts</span><span class="op">,</span><span class="dt">mapping</span><span class="op">,</span><span class="dt">counts}</span></span></code></pre>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> rnaseq-workshop/<span class="dt">{data</span><span class="op">,</span><span class="dt">scripts</span><span class="op">,</span><span class="dt">results}</span></span></code></pre>
 </div>
 <p>The resulting directory structure should look like this:</p>
 <div class="codewrapper sourceCode" id="cb2">
@@ -479,10 +478,9 @@ annotation<br></li>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="ex">/scratch/scholar/aseethar</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="ex">aseethar@scholar-fe03:[aseethar]</span> $ tree rnaseq-workshop/</span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="ex">rnaseq-workshop/</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="ex">├──</span> counts</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="ex">├──</span> results</span>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="ex">├──</span> data</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="ex">├──</span> mapping</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="ex">└──</span> scripts</span></code></pre>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="ex">└──</span> scripts</span></code></pre>
 </div>
 </div>
 </div>
@@ -550,7 +548,7 @@ why?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Use the <strong>basic gene annotation in GTF format</strong> (e.g.,
 <code>gencode.vM38.primary_assembly.basic.annotation.gtf.gz</code>).<br>
@@ -581,7 +579,7 @@ FASTA</strong> (e.g.,
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <figure style="text-align: center"><img src="fig/01_fq2counts/gencode-genome.png" alt="Reference genome file in FASTA format" class="figure mx-auto d-block"><figcaption>
 Reference genome file in FASTA format
@@ -613,7 +611,7 @@ for all transcripts in GRCm39
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <p>The transcript FASTA file is available in the same release directory
 as the genome and annotation files (under FASTA files). It is named
@@ -687,7 +685,7 @@ of sequencing runs?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
 <div class="accordion-body">
 <p>Navigate to the SRA page for the BioProject and use <strong>Run
 Selector</strong> to list runs.<br>
@@ -720,23 +718,25 @@ like this:</p>
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">data/</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="ex">├──</span> gencode.vM38.primary_assembly.basic.annotation.gtf</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="ex">├──</span> gencode.vM38.transcripts.fa</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="ex">├──</span> GRCm39.primary_assembly.genome.fa</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_1.fastq.gz</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_2.fastq.gz</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_1.fastq.gz</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_2.fastq.gz</span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_1.fastq.gz</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_2.fastq.gz</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_1.fastq.gz</span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_2.fastq.gz</span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_1.fastq.gz</span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_2.fastq.gz</span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="ex">├──</span> SRR33253290_1.fastq.gz</span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="ex">├──</span> SRR33253290_2.fastq.gz</span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="ex">└──</span> SRR_Acc_List.txt</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">data</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="ex">├──</span> annot.tsv</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="ex">├──</span> gencode.vM38.primary_assembly.basic.annotation.gtf</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="ex">├──</span> gencode.vM38.transcripts.fa</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="ex">├──</span> GRCm39.primary_assembly.genome.fa</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="ex">├──</span> mart.tsv</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_1.fastq.gz</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_2.fastq.gz</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_1.fastq.gz</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_2.fastq.gz</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_1.fastq.gz</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_2.fastq.gz</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_1.fastq.gz</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_2.fastq.gz</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_1.fastq.gz</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_2.fastq.gz</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="ex">├──</span> SRR33253290_1.fastq.gz</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="ex">├──</span> SRR33253290_2.fastq.gz</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="ex">└──</span> SRR_Acc_List.txt</span></code></pre>
 </div>
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
