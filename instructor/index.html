@@ -395,10 +395,11 @@ using tximport?
 differential expression (DESeq2)</a>
 </td>
 <td>
-How do we import a featureCounts matrix into R.<br>How do we attach
-sample metadata.<br>How do we perform basic QC such as library size
-checks and PCA.<br>How do we construct and run a DESeq2 model.<br>How
-do we extract and visualize differential expression results.
+How do we explore RNA seq count data before running DESeq2.<br>How do
+we restrict analysis to protein coding genes.<br>How do we perform
+differential expression with DESeq2.<br>How do we visualize sample
+relationships and DE genes.<br>How do we save a useful DE results table
+with annotation and expression values.
 </td>
 </tr><tr><td>
 <span class="visually-hidden">Duration: </span>06h 35m
@@ -447,45 +448,42 @@ domain.</p></li>
 <td>Arrival &amp; Setup</td>
 </tr><tr class="even"><td align="left"><strong>9:00 AM</strong></td>
 <td>
-<strong>Introduction to RNA-seq Analysis:</strong> Overview of
-experimental design, biological replicates, sequencing depth, and
-workflow overview (QC → alignment → quantification → differential
-expression → visualization)</td>
+<strong>Introduction to RNA-seq Analysis:</strong> Experimental
+design, biological replicates, sequencing depth, and overview of the
+analysis workflow (QC → alignment → quantification → DE)</td>
 </tr><tr class="odd"><td align="left"><strong>9:45 AM</strong></td>
 <td>
-<strong>Data Preparation &amp; Quality Control:</strong> Exploring
-raw FASTQ files, running FastQC and MultiQC, trimming low-quality reads
-with fastp</td>
+<strong>Data Preparation &amp; Quality Control:</strong> Inspecting
+raw FASTQ files, running FastQC and MultiQC, trimming with fastp</td>
 </tr><tr class="even"><td align="left"><strong>10:30 AM</strong></td>
 <td><strong>Break</strong></td>
 </tr><tr class="odd"><td align="left"><strong>10:45 AM</strong></td>
 <td>
-<strong>Read Alignment &amp; Quantification:</strong> Mapping reads
-with STAR, building genome indices, generating gene-level counts with
-featureCounts and Salmon</td>
+<strong>Read Alignment &amp; Quantification:</strong> Mapping with
+STAR, building indices, generating gene-level counts with featureCounts
+(Salmon covered conceptually only)</td>
 </tr><tr class="even"><td align="left"><strong>12:00 PM</strong></td>
 <td><strong>Lunch Break</strong></td>
 </tr><tr class="odd"><td align="left"><strong>1:00 PM</strong></td>
 <td>
 <strong>Differential Expression Analysis (DESeq2):</strong>
-Importing count data into R, data normalization, exploring variance,
-identifying significantly expressed genes</td>
+Importing counts into R, normalization, exploratory plots (VST, distance
+heatmaps, PCA), and identifying significantly differentially expressed
+genes</td>
 </tr><tr class="even"><td align="left"><strong>2:15 PM</strong></td>
 <td><strong>Break</strong></td>
 </tr><tr class="odd"><td align="left"><strong>2:30 PM</strong></td>
 <td>
-<strong>Functional Interpretation &amp; Visualization:</strong> Gene
-ontology enrichment, pathway analysis, and visualizing results (volcano
-plots, heatmaps, PCA)</td>
+<strong>Visualization &amp; Interpretation:</strong> Volcano plots,
+heatmaps, PCA review, summary tables. Introduction to gene set
+enrichment methods (ORA/GSEA) with pointers to explore
+independently.</td>
 </tr><tr class="even"><td align="left"><strong>3:30 PM</strong></td>
 <td>
-<strong>Integration &amp; Reproducibility:</strong> Creating
-reproducible pipelines with Snakemake/Nextflow templates, managing
-metadata and documentation</td>
+<strong>Wrap-Up &amp; Discussion:</strong> Review of workflow,
+troubleshooting common issues, recommended next steps</td>
 </tr><tr class="odd"><td align="left"><strong>4:00 PM</strong></td>
-<td>
-<strong>Wrap-Up &amp; Discussion:</strong> Troubleshooting, best
-practices, and Q&amp;A</td>
+<td>End of Workshop</td>
 </tr></tbody></table></section><section><h2 class="section-heading" id="what-is-not-covered">What is not covered<a class="anchor" aria-label="anchor" href="#what-is-not-covered"></a></h2>
 <hr class="half-width"><ol style="list-style-type: decimal"><li>Raw data generation, library preparation, or experimental design
 optimization</li>
@@ -542,7 +540,7 @@ configure passwordless access.</p>
   Windows
   </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Open <strong>PowerShell</strong> or <strong>Git Bash</strong> and
 run:</p>
@@ -563,7 +561,7 @@ run:</p>
   macOS
   </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Open <strong>Terminal</strong> and run:</p>
 <div class="codewrapper sourceCode" id="cb5">
@@ -583,7 +581,7 @@ run:</p>
   Linux
   </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>Open a terminal and run:</p>
 <div class="codewrapper sourceCode" id="cb6">
@@ -651,8 +649,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/index.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/index.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2025-11-18",
-  "datePublished": "2025-11-18"
+  "dateModified": "2025-11-19",
+  "datePublished": "2025-11-19"
 }
 
   </script><script>

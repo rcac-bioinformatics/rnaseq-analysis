@@ -448,17 +448,18 @@ counts.</li>
 </ul></section><section id="05-deseq2-expression-analyses"><h2 class="section-heading"><a href="05-deseq2-expression-analyses.html">Gene-level QC and differential expression (DESeq2)</a></h2>
 <hr class="half-width">
 <ul>
-<li>Use featureCounts output as input for DESeq2.<br>
-</li>
-<li>Attach metadata before creating the DESeq2 dataset.<br>
-</li>
-<li>Perform QC using library sizes, PCA, and sample distances.<br>
-</li>
-<li>Run the DESeq2 model and extract contrasts.<br>
-</li>
-<li>Apply LFC shrinkage for stable effect size estimates.<br>
-</li>
-<li>Visualize results using MA plots, volcano plots, and heatmaps.</li>
+<li>Counts and sample metadata must be aligned before building DESeq2
+objects.</li>
+<li>Biotype annotation allows restriction to protein coding genes for
+exploratory QC.</li>
+<li>Variance stabilizing transform, distance heatmaps, and PCA help
+detect outliers and batch effects.</li>
+<li>DESeq2 provides a complete pipeline from raw counts to differential
+expression.</li>
+<li>Joining DE results with normalized counts and gene annotation yields
+a useful final table.</li>
+<li>Volcano plots summarize differential expression using fold change
+and adjusted p values.</li>
 </ul></section><section id="06-gene-set-enrichment-analyses"><h2 class="section-heading"><a href="06-gene-set-enrichment-analyses.html">Gene set enrichment analysis</a></h2>
 <hr class="half-width">
 <ul>
@@ -523,8 +524,8 @@ results.</li>
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/key-points.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/key-points.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2025-11-18",
-  "datePublished": "2025-11-18"
+  "dateModified": "2025-11-19",
+  "datePublished": "2025-11-19"
 }
 
   </script><script>
