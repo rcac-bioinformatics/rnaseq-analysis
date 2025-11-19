@@ -7,47 +7,39 @@ exercises: 45
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- How do we import a featureCounts matrix into R.
-- How do we attach sample metadata.
-- How do we perform basic QC such as library size checks and PCA.
-- How do we construct and run a DESeq2 model.
-- How do we extract and visualize differential expression results.
+- How do we explore RNA seq count data before running DESeq2.
+- How do we restrict analysis to protein coding genes.
+- How do we perform differential expression with DESeq2.
+- How do we visualize sample relationships and DE genes.
+- How do we save a useful DE results table with annotation and expression values.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Load a cleaned gene count matrix from featureCounts.
-- Add sample information and prepare a DESeq2 dataset.
-- Perform QC using variance stabilizing transforms, PCA, and clustering.
-- Run a simple two-group differential expression analysis.
-- Create standard output plots such as MA, volcano, and heatmap.
+- Import count and sample metadata into R.
+- Attach biotype and gene symbol annotation to Ensembl gene IDs.
+- Explore library sizes, variance stabilizing transforms, distances, and PCA.
+- Run DESeq2 for a two group comparison.
+- Create a volcano plot with gene symbols.
+- Export joined DE results including normalized counts and annotation.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Introduction
 
-In the previous episode, we mapped reads using STAR and counted reads per gene using featureCounts.  
-In this episode, we take the resulting **gene-level count matrix** and perform:
+In this episode we move from **count matrices** to **differential expression analysis** and **visualization**.
 
-1. Import and metadata setup  
-2. Quality control  
-3. Differential expression with DESeq2  
-4. Visualization and reporting
+The workflow has four parts:
 
-This workflow is the standard entry point for downstream RNA-seq interpretation.
+1. Import counts and sample metadata.
+2. Exploratory analysis on protein coding genes (quality checks).
+3. Differential expression analysis with DESeq2.
+4. Visualization and export of annotated DE results.
 
-::::::::::::::::::::::::::::::::::::::: callout
+All analyses are performed in R through Open OnDemand
 
-## What you need for this episode
-
-- `gene_counts_clean.txt` generated from featureCounts  
-- a `samples.csv` file describing the experimental groups  
-- the `r-rnaseq` module on RCAC
-
-:::::::::::::::::::::::::::::::::::::::
-
-## Step 1: Start Open OnDemand R session
+## Step 1: Start Open OnDemand R session and prepare data
 
 
 We will be using the OOD to start an interactive session on Scholar:
@@ -63,244 +55,722 @@ We will be using the OOD to start an interactive session on Scholar:
 5. Once the session starts, you'll will be able to click on "Connect to RStudio server" which will open the RStudio interface.
 
 
-
-
 ```{r, fig.cap="Open OnDemand interface", echo=FALSE, message=FALSE}
 knitr::include_graphics("fig/05_deseq/open-on-demand.png")
 ```
 
+Once in RStudio, load the necessary libraries:
 
-In R, load the required packages:
+### Setup: load packages and data
 
 ```r
-.localPaths()
+library(RColorBrewer)
+library(EnsDb.Mmusculus.v79)
+library(ensembldb)
+library(tidyverse)
 library(DESeq2)
 library(ggplot2)
 library(pheatmap)
 library(readr)
 library(dplyr)
-```
-
-## Step 2: Import gene-level counts
-
-Load the cleaned featureCounts matrix:
-
-```r
+library(ComplexHeatmap)
+library(ggrepel)
+library(vsn)
+# Modify the path as needed
 setwd("/scratch/negishi/aseethar/rnaseq-workshop")
-counts_file <- "results/counts/gene_counts_clean.txt"
-counts <- read_tsv(counts_file)
+
+countsFile <- "results/counts/gene_counts_clean.txt"
+groupFile  <- "results/counts/samples.csv"
+
+coldata <-
+  read.csv(
+    groupFile,
+    row.names = 1,
+    header = TRUE,
+    stringsAsFactors = TRUE
+  )
+coldata$condition <- as.factor(coldata$condition)
+
+cts <- as.matrix(read.delim(countsFile, row.names = 1, header = TRUE))
 ```
 
-Check the first few rows:
+We also load gene level annotation tables prepared earlier.
 
 ```r
-head(counts)
+mart <-
+  read.csv(
+    "data/mart.tsv",
+    sep = "\t",
+    header = TRUE
+  )
+
+annot <-
+  read.csv(
+    "data/annot.tsv",
+    sep = "\t",
+    header = TRUE
+  )
 ```
 
-Extract gene IDs and numeric count matrix:
+::::::::::::::::::::::::::::::::::::::: spoiler
+
+## How were these data prepared?
 
 ```r
-gene_ids <- counts$Geneid
-count_matrix <- counts[, -1]
-count_matrix <- as.matrix(count_matrix)
-rownames(count_matrix) <- gene_ids
-```
-
-## Step 3: Load sample metadata
-
-Assume you prepared a file `samples.csv` containing:
-
-```
-sample,condition
-SRR33253285,Nat10-CKO
-SRR33253286,Nat10-CKO
-SRR33253287,Nat10-CKO
-SRR33253288,Nat10flox/flox
-SRR33253289,Nat10flox/flox
-SRR33253290,Nat10flox/flox
-```
-
-Load it:
+Since the gene IDs in the count matrix are Ensembl IDs, it will be hard to interpret the results without annotation. We will need to use the `org.Mm.eg.db` package for attaching gene symbols, so we can interpret the results better.0
 
 ```r
-samples <- read_csv("samples.csv", show_col_types = FALSE)
-samples
+library(biomaRt)
+library(tidyverse)
+# select Mart
+ensembl = useMart("ENSEMBL_MART_ENSEMBL")
+# we need to use the correct dataset for mouse
+# we will query the available datasets and filter for mouse (GRCm39)
+listDatasets(ensembl) %>%
+  filter(str_detect(description, "GRCm39"))
+# we can use the dataset name to set the dataset
+ensembl = useDataset("mmusculus_gene_ensembl", mart = ensembl)
+# our counts have Ensembl gene IDs with version numbers
+# lets find how it is referred in biomaRt
+listFilters(ensembl) %>%
+  filter(str_detect(name, "ensembl"))
+# so we will now set the filter type accordingly
+filterType <- "ensembl_gene_id_version"
+# from our counts data, get the list of gene IDs
+filterValues <- rownames(counts)
+# take a look at the available attributes (first 20)
+listAttributes(ensembl) %>%
+     head(20)
+# we will retrieve ensembl gene id, ensembl gene id with version and external gene name
+attributeNames <- c('ensembl_gene_id',
+                    'ensembl_gene_id_version',
+                    'external_gene_name',
+                    'gene_biotype',
+                    'description')
+# get the annotation
+annot <- getBM(
+  attributes = attributeNames,
+  filters = filterType,
+  values = filterValues,
+  mart = ensembl
+)
+saveRDS(annot, file = "results/counts/gene_annotation.rds")
+# also save as tsv for future use
+write.table(
+  annot,
+  file = "data/mart.tsv",
+  sep = "\t",
+  quote = FALSE,
+  row.names = FALSE
+)
+# save a simplified annotation file with only essential columns
+mart %>% 
+select(ensembl_gene_id, ensembl_gene_id_version, external_gene_name) %>%
+  write.table(
+    file = "data/annot.tsv",
+    sep = "\t",
+    quote = FALSE,
+    row.names = FALSE
+```
+
+:::::::::::::::::::::::::::::::::::::::
+
+
+
+
+The objects loaded here form the foundation for the entire workflow.
+`cts` contains raw gene counts from featureCounts.
+`coldata` contains the metadata that describes each sample and defines the comparison groups.
+`mart` and `annot` contain functional information for each gene so we can attach gene symbols and biotypes later in the analysis.
+
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Sample metadata and design
+
+`coldata` must have row names that match the count matrix column names.
+The `condition` column defines the groups for DESeq2 (`Nat10-CKO` vs `Nat10flox/flox`).
+
+:::::::::::::::::::::::::::::::::::::::
+
+## Exploratory analysis
+
+### Attach annotation and filter to protein coding genes
+
+We first join counts with biotype information from `mart` and filter to protein coding genes.
+
+```r
+cts_tbl <- cts %>%
+  as.data.frame() %>%
+  rownames_to_column("ensembl_gene_id_version")
+
+cts_annot <- cts_tbl %>%
+  left_join(mart, by = "ensembl_gene_id_version")
+
+sum(is.na(cts_annot$gene_biotype))
+```
+
+Joining annotation allows us to move beyond raw Ensembl IDs.
+This step attaches gene symbols, biotypes, and descriptions so that later plots and tables are interpretable.
+At this point the dataset is still large and includes many noncoding genes, pseudogenes, and biotypes we won't analyze further.
+
+
+
+
+Summarize gene biotypes:
+
+```r
+biotype_df <- cts_annot %>%
+  dplyr::count(gene_biotype, name = "n") %>%
+  arrange(desc(n))
+
+ggplot(biotype_df, aes(x = reorder(gene_biotype, n), y = n)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    x = "Gene biotype",
+    y = "Number of genes",
+    title = "Distribution of gene biotypes in annotation"
+  )
+```
+
+```{r, fig.cap="Distribution of gene biotypes in annotation", echo=FALSE, message=FALSE}
+knitr::include_graphics("fig/05_deseq/gene-biotypes.png")
+```
+
+Visualizing biotype composition gives a sense of how many genes belong to each functional class.
+RNA-seq quantifies all transcribed loci, but many biotypes (snRNA, TEC, pseudogenes) are not suitable for differential expression with DESeq2 because they tend to be lowly expressed or unstable.
+This motivates filtering to protein-coding genes for QC and visualization.
+
+
+
+Filter to protein coding genes and lowly expressed genes:
+
+```r
+
+cts_coding <- cts_annot %>%
+    filter(gene_biotype == "protein_coding") %>%
+    filter(rowSums(across(all_of(rownames(coldata)))) > 5) %>%
+    select(ensembl_gene_id_version, all_of(rownames(coldata))) %>%
+    column_to_rownames("ensembl_gene_id_version")
+
+dim(cts_coding)
+```
+```
+[1] 15839     6
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
-## Sample order must match the columns of the count matrix
+## Why filter protein coding genes and low expression
 
-If the metadata rows are not in the same order as the columns in the matrix,  
-your model will be incorrect. Always verify column names.
+Noncoding biotypes (lncRNA, pseudogene, etc.) can be biologically important.
+Filtering lowly expressed genes reduces noise in exploratory analyses.
+Genes with near-zero counts across all samples inflate variance estimates and obscure real biological structure.
+The threshold of 5 total counts is a conservative filter that keeps genes with minimal but genuine expression while removing background noise.
 
 :::::::::::::::::::::::::::::::::::::::
 
-Check consistency:
+### Library size differences
+
+We summarize total counts per sample for protein coding genes.
 
 ```r
-colnames(count_matrix)
-samples$sample
+libSize <- colSums(cts_coding) %>%
+  as.data.frame() %>%
+  rownames_to_column("sample") %>%
+  rename(total_counts = 2) %>%
+  mutate(total_millions = total_counts / 1e6)
+
+ggplot(libSize, aes(x = sample, y = total_counts)) +
+  geom_col(fill = "steelblue") +
+  theme_minimal() +
+  labs(
+    x = "Sample",
+    y = "Total assigned reads",
+    title = "Total reads per sample"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
 ```
 
-If mismatch occurs, reorder:
+```{r, fig.cap="Total assigned reads per sample", echo=FALSE, message=FALSE}
+knitr::include_graphics("fig/05_deseq/libsize-difference.png")
+```
+
+Library size differences affect normalization.
+Although DESeq2 corrects for this through size factors, inspecting raw library sizes ensures no sample has abnormally low sequencing depth, which could compromise downstream analyses.
+
+
+### Create DESeq2 object for exploratory plots
 
 ```r
-count_matrix <- count_matrix[, samples$sample]
+dds <- DESeqDataSetFromMatrix(
+  countData = cts_coding,
+  colData   = coldata,
+  design    = ~ condition
+)
+
+dds <- estimateSizeFactors(dds)
 ```
 
-Convert condition to a factor and set the reference level:
+Inspect size factors vs library size:
 
 ```r
-samples$condition <- factor(samples$condition)
-samples$condition <- relevel(samples$condition, ref = "Nat10flox/flox")
+ggplot(
+  data.frame(
+    libSize    = colSums(assay(dds)),
+    sizeFactor = sizeFactors(dds),
+    Group      = dds$condition
+  ),
+  aes(x = libSize, y = sizeFactor, col = Group)
+) +
+  geom_point(size = 5) +
+  theme_bw() +
+  labs(x = "Library size", y = "Size factor")
 ```
 
-## Step 4: Create DESeq2 dataset
+```{r, fig.cap="Size factors vs library size", echo=FALSE, message=FALSE}
+knitr::include_graphics("fig/05_deseq/size-factors-vs-lib-size.png")
+```
+
+
+### Variance stabilization and mean SD plots
+
+
+Raw count data have a strong mean–variance dependency:
+low count genes have high variance, and high count genes show lower relative variability.
+This makes Euclidean distance and PCA misleading on raw counts.
+VST removes this dependency so that downstream clustering is biologically meaningful rather than driven by count scale.
+
+Inspect mean vs standard deviation plot before transformation:
+
 
 ```r
-dds <- DESeqDataSetFromMatrix(countData = count_matrix,
-                              colData = samples,
-                              design = ~ condition)
+meanSdPlot(assay(dds), ranks = FALSE)
 ```
 
-Filter low-count genes:
+```{r, fig.cap="average counts vs variance", echo=FALSE, message=FALSE}
+knitr::include_graphics("fig/05_deseq/before-vsd.png")
+```
+
+Apply variance stabilizing transform (VST):
 
 ```r
-keep <- rowSums(counts(dds) >= 10) >= 2
-dds <- dds[keep, ]
+vsd <- DESeq2::vst(dds, blind = TRUE)
+meanSdPlot(assay(vsd), ranks = FALSE)
 ```
 
-## Step 5: Variance stabilizing transform and QC
+```{r, fig.cap="average counts vs variance after transformation", echo=FALSE, message=FALSE}
+knitr::include_graphics("fig/05_deseq/after-vsd.png")
+```
 
-Transform:
+
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Why use VST
+
+Counts have mean dependent variance.
+Variance stabilizing transform (VST) makes the variance roughly constant across the range, which improves distance based methods and PCA.
+
+:::::::::::::::::::::::::::::::::::::::
+
+### Sample to sample distances
+
+The distance heatmap helps answer a key question:
+Do samples group by biological condition or by an unwanted variable (batch, sequencing run, contamination)?
+This is one of the fastest ways to detect outliers.
 
 ```r
-vsd <- vst(dds, blind = FALSE)
+sampleDists       <- dist(t(assay(vsd)))
+sampleDistMatrix  <- as.matrix(sampleDists)
+rownames(sampleDistMatrix) <- colnames(vsd)
+colnames(sampleDistMatrix) <- NULL
+colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255)
+
+pheatmap(
+  sampleDistMatrix,
+  clustering_distance_rows = sampleDists,
+  clustering_distance_cols = sampleDists,
+  col                      = colors
+)
 ```
 
-### Library size plot
+```{r, fig.cap="Eucledean distance heatmap", echo=FALSE, message=FALSE}
+knitr::include_graphics("fig/05_deseq/clustering.png")
+```
+
+
+### PCA on top variable genes
+
+PCA projects samples into low-dimensional space and reveals dominant sources of variation.
+Ideally, samples separate by biological condition along one of the top PCs.
+If not, the signal from the condition may be weak or confounded by other factors.
 
 ```r
-lib_sizes <- colSums(counts(dds))
-barplot(lib_sizes,
-        las = 2,
-        main = "Library sizes",
-        ylab = "Total counts")
+rv <- rowVars(assay(vsd))
+select <- order(rv, decreasing = TRUE)[seq_len(min(500, length(rv)))]
+
+pca <- prcomp(t(assay(vsd)[select, ]))
+percentVar <- pca$sdev ^ 2 / sum(pca$sdev ^ 2)
+
+intgroup    <- "condition"
+intgroup.df <- as.data.frame(colData(vsd)[, intgroup, drop = FALSE])
+
+group <- if (length(intgroup) == 1) {
+  factor(apply(intgroup.df, 1, paste, collapse = " : "))
+}
+
+d <- data.frame(
+  PC1 = pca$x[, 1],
+  PC2 = pca$x[, 2],
+  intgroup.df,
+  name = colnames(vsd)
+)
+
+ggplot(d, aes(PC1, PC2, color = condition)) +
+  scale_shape_manual(values = 1:12) +
+  scale_color_manual(values = c(
+    "Nat10-CKO"       = "#00b462",
+    "Nat10flox/flox"  = "#980c80"
+  )) +
+  theme_bw() +
+  theme(legend.title = element_blank()) +
+  geom_point(size = 2, stroke = 2) +
+  geom_text_repel(aes(label = name)) +
+  xlab(paste("PC1", round(percentVar[1] * 100, 2), "% variance")) +
+  ylab(paste("PC2", round(percentVar[2] * 100, 2), "% variance"))
 ```
 
-### PCA
-
-```r
-p <- plotPCA(vsd, intgroup = "condition")
-p + ggplot2::ggtitle("PCA of variance stabilized data")
+```{r, fig.cap="PCA plot showing sample clustering", echo=FALSE, message=FALSE}
+knitr::include_graphics("fig/05_deseq/pca-plot.png")
 ```
 
-### Sample distance heatmap
 
-```r
-sample_dists <- dist(t(assay(vsd)))
-pheatmap(as.matrix(sample_dists),
-         clustering_distance_rows = sample_dists,
-         clustering_distance_cols = sample_dists,
-         main = "Sample distance heatmap")
-```
 
 ::::::::::::::::::::::::::::::::::::::: challenge
 
-## Exercise: examine QC plots
+## Exercise: interpret exploratory plots
 
-Using the PCA and distance heatmap:
+Using the library size, distance heatmap, and PCA:
 
-1. Which samples cluster together.
-2. Are the two conditions separated.
-3. Is any sample unusually distant from its group.
+1. Are there any obvious outlier samples.
+2. Do replicates from the same condition cluster together.
+3. Does any sample look inconsistent with its metadata label.
 
 ::::::::::::::::::::::::::::::::::: solution
 
-- Nat10-CKO replicates cluster together.  
-- Nat10flox/flox replicates cluster together.  
-- No sample appears as an outlier.  
+Example interpretation:
+
+1. Library sizes are comparable across samples and fall within a narrow range.
+2. Samples cluster by condition in both distance heatmaps and PCA.
+3. No sample appears as a clear outlier relative to its group.
 
 :::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::
 
 
-## Step 6: Differential expression analysis
+## Differential gene expression analysis
 
-Run DESeq2:
+For DE testing we use the **full count matrix** (`cts`) without filtering by biotype.
+This preserves all features counted by featureCounts.
+
+```r
+dds <- DESeqDataSetFromMatrix(
+  countData = cts_coding,
+  colData   = coldata,
+  design    = ~ condition
+)
+```
+
+You can either run the individual DESeq2 steps:
+
+```r
+dds <- estimateSizeFactors(dds)
+dds <- estimateDispersions(dds)
+dds <- nbinomWaldTest(dds)
+```
+
+::::::::::::::::::::::::::::::::::: spoiler
+
+## Single command to run the DESeq2 pipeline
+
+Above three steps can be run together using the `DESeq` function:
 
 ```r
 dds <- DESeq(dds)
 ```
 
-Extract results comparing Nat10-CKO vs Nat10flox/flox:
+```text
+estimating size factors
+  Note: levels of factors in the design contain characters other than
+  letters, numbers, '_' and '.'. It is recommended (but not required) to use
+  only letters, numbers, and delimiters '_' or '.', as these are safe characters
+  for column names in R. [This is a message, not a warning or an error]
+estimating dispersions
+gene-wise dispersion estimates
+mean-dispersion relationship
+  Note: levels of factors in the design contain characters other than
+  letters, numbers, '_' and '.'. It is recommended (but not required) to use
+  only letters, numbers, and delimiters '_' or '.', as these are safe characters
+  for column names in R. [This is a message, not a warning or an error]
+final dispersion estimates
+fitting model and testing
+```
+:::::::::::::::::::::::::::::::::::
+
+
+
+Inspect dispersion estimates:
+```r
+plotDispEsts(dds)
+```
+
+```{r, fig.cap="Dispersion estimates from DESeq2", echo=FALSE, message=FALSE}
+knitr::include_graphics("fig/05_deseq/dispersion-plot.png")
+```
+
+
+
+Obtain results for the contrast of interest (`Nat10flox/flox` vs `Nat10-CKO`):
 
 ```r
-res <- results(dds, contrast = c("condition", "Nat10-CKO", "Nat10flox/flox"))
+res <-
+  results(
+    dds,
+    contrast = c(
+      "condition",
+      "Nat10flox/flox",
+      "Nat10-CKO"
+    )
+  )
+
 summary(res)
 ```
 
-Save results:
-
-```r
-res_tbl <- as.data.frame(res)
-write_csv(res_tbl, "DESeq2_results_raw.csv")
+```txt
+out of 15839 with nonzero total read count
+adjusted p-value < 0.1
+LFC > 0 (up)       : 3195, 20%
+LFC < 0 (down)     : 3398, 21%
+outliers [1]       : 362, 2.3%
+low counts [2]     : 308, 1.9%
+(mean count < 1)
+[1] see 'cooksCutoff' argument of ?results
+[2] see 'independentFiltering' argument of ?results
 ```
 
-## Step 7: Shrink log fold changes
-
-Shrink LFC values:
+Order the results by p value to see the top DE genes:
 
 ```r
-res_shrink <- lfcShrink(dds,
-                        coef = "condition_Nat10.CKO_vs_Nat10flox.flox",
-                        type = "apeglm")
+head(res[order(res$pvalue), ])
 ```
 
-Save:
+```text
+log2 fold change (MLE): condition Nat10flox/flox vs Nat10-CKO 
+Wald test p-value: condition Nat10flox.flox vs Nat10.CKO 
+DataFrame with 6 rows and 6 columns
+       baseMean log2FoldChange     lfcSE      stat       pvalue         padj
+      <numeric>      <numeric> <numeric> <numeric>    <numeric>    <numeric>
+18512   4645.33       -5.17453 0.1335387  -38.7493  0.00000e+00  0.00000e+00
+940     5041.68       -2.88015 0.1039939  -27.6953 7.94364e-169 6.02485e-165
+13789  14362.27       -2.40229 0.0951377  -25.2506 1.11514e-140 5.63852e-137
+16183  42766.77       -4.68585 0.1923780  -24.3575 4.82857e-131 1.83111e-127
+18278   7055.06       -3.48409 0.1535305  -22.6932 5.23170e-114 1.58719e-110
+270     1469.83       -2.87951 0.1298316  -22.1788 5.50606e-109 1.39202e-105
+```
+
+Each row represents one gene.
+Key columns:
+`baseMean`: average normalized count across all samples
+`log2FoldChange`: direction and magnitude of change between groups
+`pvalue` / `padj`: statistical significance after multiple testing correction
+Genes with `NA` values often have too few reads to estimate dispersion and should not be interpreted.
+
+
+Create a summary table:
 
 ```r
-write_csv(as.data.frame(res_shrink), "DESeq2_results_shrunken.csv")
+log2fc_cut <- log2(1.5)
+
+res_df <- as.data.frame(res)
+
+summary_table <- tibble(
+    total_genes = nrow(res_df),
+    sig = sum(res_df$padj < 0.05, na.rm = TRUE),
+    up  = sum(res_df$padj < 0.05 & res_df$log2FoldChange >  log2fc_cut, na.rm = TRUE),
+    down= sum(res_df$padj < 0.05 & res_df$log2FoldChange < -log2fc_cut, na.rm = TRUE)
+)
+print(summary_table)
 ```
 
-## Step 8: Visualization
+```text
+# A tibble: 1 × 4
+  total_genes   sig    up  down
+        <int> <int> <int> <int>
+1       15839  5658  2180  2363
+```
 
-### MA plot
+
+Keep gene IDs:
 
 ```r
-plotMA(res_shrink, main = "MA plot (shrunken LFC)")
+res_df <- as.data.frame(res)
+res_df$ensembl_gene_id_version <- rownames(res_df)
 ```
 
-### Volcano plot
+## Joining results with expression and annotation
+
+Get normalized counts:
 
 ```r
-res_df <- as.data.frame(res_shrink) %>% mutate(gene = rownames(res_shrink))
-
-ggplot(res_df, aes(x = log2FoldChange, y = -log10(padj))) +
-    geom_point(alpha = 0.5) +
-    geom_hline(yintercept = -log10(0.05), color = "red") +
-    ggtitle("Volcano plot")
+norm_counts    <- counts(dds, normalized = TRUE)
+norm_counts_df <- as.data.frame(norm_counts)
+norm_counts_df$ensembl_gene_id_version <- rownames(norm_counts_df)
 ```
 
-### Heatmap of top DEGs
+Join DE results, normalized counts, and annotation:
 
 ```r
-top_genes <- head(order(res_shrink$padj), 40)
-mat <- assay(vsd)[top_genes, ]
-pheatmap(mat,
-         scale = "row",
-         main = "Top 40 DE genes")
+res_annot <- res_df %>%
+  dplyr::left_join(norm_counts_df,
+                   by = "ensembl_gene_id_version") %>%
+  dplyr::left_join(mart,
+                   by = "ensembl_gene_id_version")
 ```
+
+
+Joining normalized counts and annotation makes the output biologically interpretable.
+The final table becomes a comprehensive results object containing:
+- `gene identifiers`
+- `gene symbols`
+- `functional descriptions`
+- `differential expression statistics`
+- `normalized expression values`
+This is the format most researchers expect when examining results or importing them into downstream tools.
+
+
+Define significance labels for plotting:
+
+```r
+log2fc_cut <- log2(1.5)
+
+res_annot <- res_annot %>%
+  dplyr::mutate(
+    label = dplyr::coalesce(external_gene_name, ensembl_gene_id_version),
+    sig = dplyr::case_when(
+      padj <= 0.05 & log2FoldChange >=  log2fc_cut ~ "up",
+      padj <= 0.05 & log2FoldChange <= -log2fc_cut ~ "down",
+      TRUE ~ "ns"
+    )
+  )
+```
+
+## Visualization: volcano plot
+
+The volcano plot summarizes statistical significance (`padj`) and effect size (`log2FoldChange`) simultaneously.
+Genes far left or right show strong expression differences.
+Genes high on the plot pass stringent significance thresholds.
+Labels help identify the most biologically meaningful genes.
+
+
+```r
+ggplot(
+  res_annot,
+  aes(
+    x     = log2FoldChange,
+    y     = -log10(padj),
+    col   = sig,
+    label = label
+  )
+) +
+  geom_point(alpha = 0.6) +
+  scale_color_manual(values = c(
+    "up"   = "firebrick",
+    "down" = "dodgerblue3",
+    "ns"   = "grey70"
+  )) +
+  geom_text_repel(
+    data = dplyr::filter(res_annot, sig != "ns"),
+    max.overlaps       = 12,
+    min.segment.length = Inf,
+    box.padding        = 0.3,
+    seed               = 42,
+    show.legend        = FALSE
+  ) +
+  theme_classic() +
+  xlab("log2 fold change") +
+  ylab("-log10 adjusted p value") +
+  ggtitle("Volcano plot: Nat10-CKO vs Nat10flox/flox")
+```
+
+
+```{r, fig.cap="Volcano plot of differential expression results", echo=FALSE, message=FALSE}
+knitr::include_graphics("fig/05_deseq/volcano-plot.png")
+```
+
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
-## Interpretation reminder
+## Interpreting the volcano
 
-- Use padj < 0.05 and a meaningful LFC threshold.  
-- Shrunken LFC values are more stable for visualization.  
-- Always verify sample QC before interpreting DE results.
+Points to the right are higher in `Nat10flox/flox`, to the left are higher in `Nat10-CKO`.
+Points near the top have stronger statistical support (small adjusted p values).
+Colored points mark genes that pass both fold change and padj thresholds.
+
+:::::::::::::::::::::::::::::::::::::::
+
+## Saving results
+
+Saving both the full table and the significant subset allows flexibility:
+- The full table is needed for pathway analyses and reproducibility.
+- The subset table focuses on interpretable and biologically meaningful DE genes.
+
+```r
+readr::write_tsv(
+  res_annot,
+  "results/counts/DESeq2_results_joined.tsv"
+)
+```
+
+Filter to significant genes (padj ≤ 0.05 and fold change ≥ 1.5):
+
+```r
+sig_res <- res_annot %>%
+  dplyr::filter(
+    padj <= 0.05,
+    abs(log2FoldChange) >= log2fc_cut
+  )
+
+readr::write_tsv(
+  sig_res,
+  "results/counts/DESeq2_results_sig.tsv"
+)
+```
+
+::::::::::::::::::::::::::::::::::::::: challenge
+
+## Exercise: explore top DE genes
+
+Using `sig_res`:
+
+1. Which genes have the largest positive log2 fold change.
+2. Which genes have the largest negative log2 fold change.
+3. Are any of the top genes known to be related to Nat10 function or the studied phenotype.
+
+::::::::::::::::::::::::::::::::::: solution
+
+Example interpretation:
+
+* Several strongly up regulated genes are involved in cell cycle and RNA processing.
+* Strongly down regulated genes may include transcription factors and signaling components.
+* Cross referencing top hits with prior literature or databases can reveal mechanistic hypotheses.
+
+:::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -308,12 +778,12 @@ pheatmap(mat,
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
-- Use featureCounts output as input for DESeq2.  
-- Attach metadata before creating the DESeq2 dataset.  
-- Perform QC using library sizes, PCA, and sample distances.  
-- Run the DESeq2 model and extract contrasts.  
-- Apply LFC shrinkage for stable effect size estimates.  
-- Visualize results using MA plots, volcano plots, and heatmaps.
+* Counts and sample metadata must be aligned before building DESeq2 objects.
+* Biotype annotation allows restriction to protein coding genes for exploratory QC.
+* Variance stabilizing transform, distance heatmaps, and PCA help detect outliers and batch effects.
+* DESeq2 provides a complete pipeline from raw counts to differential expression.
+* Joining DE results with normalized counts and gene annotation yields a useful final table.
+* Volcano plots summarize differential expression using fold change and adjusted p values.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 

@@ -11,19 +11,19 @@ title: Setup
 
 ## Schedule
 
-| **Time**  | **Session**  |
+| **Time**     | **Session**                                                                                                                                                                                          |
 |:---|-------------|
-| **8:30 AM** | Arrival & Setup |
-| **9:00 AM** | **Introduction to RNA-seq Analysis:** Overview of experimental design, biological replicates, sequencing depth, and workflow overview (QC → alignment → quantification → differential expression → visualization) |
-| **9:45 AM** | **Data Preparation & Quality Control:** Exploring raw FASTQ files, running FastQC and MultiQC, trimming low-quality reads with fastp |
-| **10:30 AM** | **Break** |
-| **10:45 AM** | **Read Alignment & Quantification:**  Mapping reads with STAR, building genome indices, generating gene-level counts with featureCounts and Salmon |
-| **12:00 PM** | **Lunch Break** |
-| **1:00 PM** | **Differential Expression Analysis (DESeq2):** Importing count data into R, data normalization, exploring variance, identifying significantly expressed genes |
-| **2:15 PM** | **Break** |
-| **2:30 PM** | **Functional Interpretation & Visualization:** Gene ontology enrichment, pathway analysis, and visualizing results (volcano plots, heatmaps, PCA) |
-| **3:30 PM** | **Integration & Reproducibility:** Creating reproducible pipelines with Snakemake/Nextflow templates, managing metadata and documentation |
-| **4:00 PM** | **Wrap-Up & Discussion:** Troubleshooting, best practices, and Q&A |
+| **8:30 AM**  | Arrival & Setup                                                                                                                                                                                      |
+| **9:00 AM**  | **Introduction to RNA-seq Analysis:** Experimental design, biological replicates, sequencing depth, and overview of the analysis workflow (QC → alignment → quantification → DE)                     |
+| **9:45 AM**  | **Data Preparation & Quality Control:** Inspecting raw FASTQ files, running FastQC and MultiQC, trimming with fastp                                                                                  |
+| **10:30 AM** | **Break**                                                                                                                                                                                            |
+| **10:45 AM** | **Read Alignment & Quantification:** Mapping with STAR, building indices, generating gene-level counts with featureCounts (Salmon covered conceptually only)                                         |
+| **12:00 PM** | **Lunch Break**                                                                                                                                                                                      |
+| **1:00 PM**  | **Differential Expression Analysis (DESeq2):** Importing counts into R, normalization, exploratory plots (VST, distance heatmaps, PCA), and identifying significantly differentially expressed genes |
+| **2:15 PM**  | **Break**                                                                                                                                                                                            |
+| **2:30 PM**  | **Visualization & Interpretation:** Volcano plots, heatmaps, PCA review, summary tables. Introduction to gene set enrichment methods (ORA/GSEA) with pointers to explore independently.              |
+| **3:30 PM**  | **Wrap-Up & Discussion:** Review of workflow, troubleshooting common issues, recommended next steps                                                                                                  |
+| **4:00 PM**  | End of Workshop                                                                                                                                                                                      |
 
 
 ## What is not covered
