@@ -37,18 +37,46 @@ The workflow has four parts:
 3. Differential expression analysis with DESeq2.
 4. Visualization and export of annotated DE results.
 
+
+::::::::::::::::::::::::::::::::::::::: prereq
+
+## What you need for this episode
+
+- `gene_counts_clean.txt` generated from featureCounts  
+- a `samples.csv` file describing the experimental groups  
+- RStudio session on Scholar using Open OnDemand
+
+While we created the count matrix in the previous episode, we still need to create a sample metadata file. This file should contain at least two columns: sample names matching the count matrix column names, and the experimental condition (e.g., control vs treatment). Simply copy/paste the following into a text file and save it in your `scripts` directory as `samples.csv`:
+
+```
+sample,condition
+SRR33253285,Nat10-CKO
+SRR33253286,Nat10-CKO
+SRR33253287,Nat10-CKO
+SRR33253288,Nat10floxflox
+SRR33253289,Nat10flox/flox
+SRR33253290,Nat10flox/flox
+```
+Also, create a direcotry for DESeq2 results:
+
+```bash
+mkdir -p results/deseq2
+```
+
+:::::::::::::::::::::::::::::::::::::::
+
 All analyses are performed in R through Open OnDemand
 
 ## Step 1: Start Open OnDemand R session and prepare data
 
 
 We will be using the OOD to start an interactive session on Scholar:
-[https://gateway.scholar.rcac.purdue.edu](https://gateway.scholar.rcac.purdue.edu/)
+[https://gateway.negishi.rcac.purdue.edu](https://gateway.negishi.rcac.purdue.edu/)
 
 1. Login using your Purdue credentials after clicking the above link
 2. Click on "Interactive Apps" in the top menu, and select "RStudio (Bioconductor)"
 3. Fill the job submission form as follows:
-   - queue: `scholar`
+   - queue: `workshop`
    - Walltime: `4`
    - Number of cores: `4`
 4. Click "Launch" and wait for the RStudio session to start
@@ -81,7 +109,8 @@ library(vsn)
 setwd("/scratch/negishi/aseethar/rnaseq-workshop")
 
 countsFile <- "results/counts/gene_counts_clean.txt"
-groupFile  <- "results/counts/samples.csv"
+# prepare this file first!
+groupFile  <- "scripts/samples.csv"
 
 coldata <-
   read.csv(
@@ -117,7 +146,7 @@ annot <-
 
 ## How were these data prepared?
 
-```r
+
 Since the gene IDs in the count matrix are Ensembl IDs, it will be hard to interpret the results without annotation. We will need to use the `org.Mm.eg.db` package for attaching gene symbols, so we can interpret the results better.0
 
 ```r
@@ -743,7 +772,7 @@ Saving both the full table and the significant subset allows flexibility:
 ```r
 readr::write_tsv(
   res_annot,
-  "results/counts/DESeq2_results_joined.tsv"
+  "results/deseq2/DESeq2_results_joined.tsv"
 )
 ```
 
@@ -758,7 +787,7 @@ sig_res <- res_annot %>%
 
 readr::write_tsv(
   sig_res,
-  "results/counts/DESeq2_results_sig.tsv"
+  "results/deseq2/DESeq2_results_sig.tsv"
 )
 ```
 

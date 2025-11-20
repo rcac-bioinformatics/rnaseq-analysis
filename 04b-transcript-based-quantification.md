@@ -72,7 +72,7 @@ Missing or incorrect transcripts → biased TPM estimates.
 A Salmon index is lightweight and quick to build. _You may have already built this in Episode 4A._
 
 ```bash
-sinteractive -A rcac -p cpu -N 1 -n 4 --time=1:00:00
+sinteractive -A workshop -p cpu -N 1 -n 4 --time=1:00:00
 
 cd $SCRATCH/rnaseq-workshop
 mkdir -p data/salmon_index
@@ -171,7 +171,7 @@ Array job:
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
-#SBATCH --account=rcac
+#SBATCH --account=workshop
 #SBATCH --partition=cpu
 #SBATCH --time=4:00:00
 #SBATCH --job-name=salmon_quant
@@ -366,16 +366,16 @@ This method leverages Salmon's bias correction while generating stable counts fo
 
 :::::::::::::::::::::::::::::::::::::::
 
-## [optional] Step 5: QC of quantification metrics
+## Step 5: QC of quantification metrics
 
 Use MultiQC to verify:
 
 ```bash
-cd $SCRATCH/rnaseq-workshop/results
+cd $SCRATCH/rnaseq-workshop
 module load biocontainers
 module load multiqc
 
-multiqc salmon_quant -o qc_salmon
+multiqc results/salmon_quant -o results/qc_salmon
 ```
 
 Inspect:

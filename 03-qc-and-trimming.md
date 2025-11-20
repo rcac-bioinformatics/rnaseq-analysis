@@ -61,13 +61,13 @@ Use the commands below to run FastQC on all reads in the `data` directory.
 
 ```bash
 cd $SCRATCH/rnaseq-workshop
-mkdir -p results/qc
+mkdir -p results/qc_fastq/
 
-sinteractive -A rcac -p cpu -N 1 -n 4 --time=1:00:00
+sinteractive -A workshop -p cpu -N 1 -n 4 --time=1:00:00
 module load biocontainers
 module load fastqc
 
-fastqc data/*.fastq.gz --outdir qc --threads 4
+fastqc data/*.fastq.gz --outdir results/qc_fastq/ --threads 4
 ````
 
 ```bash
@@ -238,7 +238,8 @@ cd rnaseq-workshop
 module load biocontainers
 module load multiqc
 
-multiqc qc -o qc
+cd $SCRATCH/rnaseq-workshop
+multiqc results/qc_fastq/ -o results/qc_fastq/
 ```
 
 <div class="figure" style="text-align: center">

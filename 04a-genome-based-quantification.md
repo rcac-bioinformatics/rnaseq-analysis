@@ -77,10 +77,10 @@ salmon quant --index data/salmon_index \
              --libType A \
              --mates1 data/SRR33253286_1.fastq.gz \
              --mates2 data/SRR33253286_2.fastq.gz \
-             --output results/strand_check/salmon_check \
-             --threads 16
+             --output results/strand_check \
+             --threads 4
 ```
-The important output is in `results/strand_check/salmon_check/lib_format_counts.json`:
+The important output is in `results/strand_check/lib_format_counts.json`:
 
 ::::::::::::::::::::::::::::::::::::: spoiler
 
@@ -88,55 +88,28 @@ The important output is in `results/strand_check/salmon_check/lib_format_counts.
 
 ```json
 {
-    "salmon_version": "1.10.1",
-    "samp_type": "none",
-    "opt_type": "vb",
-    "quant_errors": [],
-    "num_libraries": 1,
-    "library_types": [
-        "IU"
-    ],
-    "frag_dist_length": 1001,
-    "frag_length_mean": 301.0497371910241,
-    "frag_length_sd": 65.1805858346556,
-    "seq_bias_correct": false,
-    "gc_bias_correct": false,
-    "num_bias_bins": 4096,
-    "mapping_type": "mapping",
-    "keep_duplicates": false,
-    "num_valid_targets": 276707,
-    "num_decoy_targets": 0,
-    "num_eq_classes": 492177,
-    "serialized_eq_classes": false,
-    "eq_class_properties": [
-        "range_factorized",
-        "gzipped"
-    ],
-    "length_classes": [
-        492,
-        696,
-        973,
-        1748,
-        107355
-    ],
-    "index_seq_hash": "3bc0e6db891288d55dd3128db9425d1ae29c26d15645663756c2aa3b232e01e1",
-    "index_name_hash": "7909efeef011d8da4b9a05d2e9cf15d89d4ddf5603daf0f3d7e11c09d2075c99",
-    "index_seq_hash512": "34607fab99e0eaf152370b868bda41699514450cc5b878025fd1bc1097ae0a44fc9f3246c17373e693fb16a9a6a30a7060755b49a387b2f4a4eb95d27b024d1c",
-    "index_name_hash512": "a31d50a1887049bd78606c298b460010e7e20afbf721a79555d2ef1493dbc41bc758e66df34e1b8d58f4b1cad96e8c0767bdb1457771fa7e0e2ef2cf841363c2",
-    "index_decoy_seq_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "index_decoy_name_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "num_bootstraps": 0,
-    "num_processed": 23218158,
-    "num_mapped": 21088696,
-    "num_decoy_fragments": 0,
-    "num_dovetail_fragments": 1067054,
-    "num_fragments_filtered_vm": 1661744,
-    "num_alignments_below_threshold_for_mapped_fragments_vm": 12511709,
-    "percent_mapped": 90.82846279192346,
-    "call": "quant",
-    "start_time": "Mon Nov 17 20:02:43 2025",
-    "end_time": "Mon Nov 17 20:04:11 2025"
+    "read_files": "[ data/SRR33253286_1.fastq.gz, data/SRR33253286_2.fastq.gz]",
+    "expected_format": "IU",
+    "compatible_fragment_ratio": 1.0,
+    "num_compatible_fragments": 21088696,
+    "num_assigned_fragments": 21088696,
+    "num_frags_with_concordant_consistent_mappings": 19116702,
+    "num_frags_with_inconsistent_or_orphan_mappings": 2510542,
+    "strand_mapping_bias": 0.5117980078362889,
+    "MSF": 0,
+    "OSF": 0,
+    "ISF": 9783890,
+    "MSR": 0,
+    "OSR": 0,
+    "ISR": 9332812,
+    "SF": 1234245,
+    "SR": 1276297,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
 }
+
 ```
 
 
@@ -224,7 +197,7 @@ Below is a minimal SLURM job script for building the STAR genome index. Create a
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --account=rcac
+#SBATCH --account=workshop
 #SBATCH --partition=cpu
 #SBATCH --time=1:00:00
 #SBATCH --job-name=star_index
@@ -353,7 +326,7 @@ ls *_1.fastq.gz | sed 's/_1.fastq.gz//' > ${SCRATCH}/rnaseq-workshop/scripts/sam
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --account=rcac
+#SBATCH --account=workshop
 #SBATCH --partition=cpu
 #SBATCH --time=8:00:00
 #SBATCH --job-name=read_mapping
@@ -433,11 +406,11 @@ STAR produces several useful files, particularly:
 To summarize alignment statistics across samples, we use MultiQC:
 
 ```bash
-cd $SCRATCH/rnaseq-workshop/mapping
+cd $SCRATCH/rnaseq-workshop
 module load biocontainers
 module load multiqc
 
-multiqc . -o qc_alignment
+multiqc results/mapping -o results/qc_alignment
 ```
 
 ### Key metrics to review
@@ -512,7 +485,7 @@ Below is an example SLURM script to count all BAM files at once.
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
-#SBATCH --account=rcac
+#SBATCH --account=workshop
 #SBATCH --partition=cpu
 #SBATCH --time=1:00:00
 #SBATCH --job-name=featurecounts
@@ -547,18 +520,30 @@ sbatch count_features.sh
 
 - one row per gene
 - one column per sample
-- counts that can be used directly in DESeq2
 
-## [optional] Step 6: QC on counts
+::::::::::::::::::::::::::::::::::::::: callout
+## Generate a clean count matrix
+
+```bash
+cd $SCRATCH/rnaseq-workshop/results/counts
+cut -f 1,7- gene_counts.txt |\
+  sed 's+/scratch/negishi/'$USER'/rnaseq-workshop/results/mapping/++g' |\
+  grep -v "^#" |\
+  sed 's/Aligned.sortedByCoord.out.bam//g' \
+  > gene_counts_clean.txt
+```
+:::::::::::::::::::::::::::::::::::::::
+
+## Step 6: QC on counts
 
 Before proceeding to differential expression, it is good practice to perform some QC on the count data. We can again use MultiQC to summarize featureCounts statistics:
 
 ```bash
-cd $SCRATCH/rnaseq-workshop/results
-mkdir -p qc_counts
+cd $SCRATCH/rnaseq-workshop
+mkdir -p results/qc_counts
 module load biocontainers
 module load multiqc
-multiqc counts -o qc_counts
+multiqc results/counts -o results/qc_counts
 ```
 
 ::::::::::::::::::::::::::::::::::::::: challenge
