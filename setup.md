@@ -55,7 +55,7 @@ rsync -avP /depot/workshop/data/rnaseq-workshop ${RCAC_SCRATCH}/
 A completed version of the workshop data is available at:
 
 ```
-/depot/workshop/data/rnaseq-workshop-results
+/depot/workshop/data/rnaseq-workshop_results
 ```
 
 You can copy it to your scratch space using:
@@ -65,7 +65,7 @@ rsync -avP /depot/workshop/data/rnaseq-workshop_results ${RCAC_SCRATCH}/
 ```
 
 Use this folder **only if you are unable to complete the exercises during the workshop**.
-You will only need one directory on the Gilbreth cluster. See below for details.
+
 
 
 ---
@@ -74,7 +74,8 @@ You will only need one directory on the Gilbreth cluster. See below for details.
 
 ::::::::::::::::::::::::::::::::::::::: discussion
 
-### Details
+## Details
+
 
 SSH key setup for different systems is provided in the expandable sections below.
 Follow the instructions for your operating system to configure passwordless access.
@@ -89,7 +90,7 @@ Open **PowerShell** or **Git Bash** and run:
 
 ```bash
 ssh-keygen -b 4096 -t rsa
-type .ssh\id_rsa.pub | ssh trainXX@scholar.rcac.purdue.edu "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
+type .ssh\id_rsa.pub | ssh boiler@scholar.rcac.purdue.edu "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
 ```
 
 :::::::::::::::::::::::::
@@ -102,7 +103,7 @@ Open **Terminal** and run:
 
 ```bash
 ssh-keygen -b 4096 -t rsa
-cat .ssh/id_rsa.pub | ssh trainXX@scholar.rcac.purdue.edu "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
+cat .ssh/id_rsa.pub | ssh boiler@scholar.rcac.purdue.edu "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
 ```
 
 :::::::::::::::::::::::::
@@ -115,7 +116,7 @@ Open a terminal and run:
 
 ```bash
 ssh-keygen -b 4096 -t rsa
-cat .ssh/id_rsa.pub | ssh trainXX@scholar.rcac.purdue.edu "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
+cat .ssh/id_rsa.pub | ssh boiler@scholar.rcac.purdue.edu "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
 ```
 
 :::::::::::::::::::::::::
