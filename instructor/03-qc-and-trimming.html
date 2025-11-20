@@ -333,7 +333,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Quality control of RNA-seq reads</h1>
-        <p>Last updated on 2025-11-19 |
+        <p>Last updated on 2025-11-20 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/03-qc-and-trimming.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -418,13 +418,13 @@ FASTQ files.</p>
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/qc</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/qc_fastq/</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="ex">sinteractive</span> <span class="at">-A</span> rcac <span class="at">-p</span> cpu <span class="at">-N</span> 1 <span class="at">-n</span> 4 <span class="at">--time</span><span class="op">=</span>1:00:00</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="ex">sinteractive</span> <span class="at">-A</span> workshop <span class="at">-p</span> cpu <span class="at">-N</span> 1 <span class="at">-n</span> 4 <span class="at">--time</span><span class="op">=</span>1:00:00</span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="ex">module</span> load fastqc</span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="ex">fastqc</span> data/<span class="pp">*</span>.fastq.gz <span class="at">--outdir</span> qc <span class="at">--threads</span> 4</span></code></pre>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="ex">fastqc</span> data/<span class="pp">*</span>.fastq.gz <span class="at">--outdir</span> results/qc_fastq/ <span class="at">--threads</span> 4</span></code></pre>
 </div>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -588,7 +588,8 @@ consolidates all reports and allows easy comparison of replicates.</p>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="ex">module</span> load multiqc</span>
 <span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="ex">multiqc</span> qc <span class="at">-o</span> qc</span></code></pre>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="ex">multiqc</span> results/qc_fastq/ <span class="at">-o</span> results/qc_fastq/</span></code></pre>
 </div>
 <figure style="text-align: center"><img src="../fig/02_qc/multiqc-summary.png" alt="Example MultiQC summary across all samples" class="figure mx-auto d-block"><figcaption>
 Example MultiQC summary across all samples
@@ -814,8 +815,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/03-qc-and-trimming.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/03-qc-and-trimming.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2025-11-19",
-  "datePublished": "2025-11-19"
+  "dateModified": "2025-11-20",
+  "datePublished": "2025-11-20"
 }
 
   </script><script>

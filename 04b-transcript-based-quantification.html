@@ -249,7 +249,7 @@
 <li><a href="#step-3-running-salmon-for-many-samples">Step 3: Running Salmon for many samples</a></li>
 <li><a href="#step-4-summarizing-to-gene-level-counts-tximport">Step 4: Summarizing to gene-level counts
 (<code>tximport</code>)</a></li>
-<li><a href="#optional-step-5-qc-of-quantification-metrics">[optional] Step 5: QC of quantification metrics</a></li>
+<li><a href="#step-5-qc-of-quantification-metrics">Step 5: QC of quantification metrics</a></li>
 <li><a href="#summary">Summary</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
@@ -333,7 +333,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>B. Transcript-based quantification (Salmon)</h1>
-        <p>Last updated on 2025-11-19 |
+        <p>Last updated on 2025-11-20 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04b-transcript-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -431,7 +431,7 @@ already built this in Episode 4A.</em></p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">sinteractive</span> <span class="at">-A</span> rcac <span class="at">-p</span> cpu <span class="at">-N</span> 1 <span class="at">-n</span> 4 <span class="at">--time</span><span class="op">=</span>1:00:00</span>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">sinteractive</span> <span class="at">-A</span> workshop <span class="at">-p</span> cpu <span class="at">-N</span> 1 <span class="at">-n</span> 4 <span class="at">--time</span><span class="op">=</span>1:00:00</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> data/salmon_index</span>
@@ -451,7 +451,7 @@ transcripts.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What will the index contain? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <pre><code>salmon_index/
 ├── complete_ref_lens.bin        # IMPORTANT: full transcript lengths used in TPM/effLength calculations
@@ -538,7 +538,7 @@ if unsure.</p>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#SBATCH --nodes=1</span></span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=16</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#SBATCH --account=rcac</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#SBATCH --account=workshop</span></span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#SBATCH --partition=cpu</span></span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#SBATCH --time=4:00:00</span></span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#SBATCH --job-name=salmon_quant</span></span>
@@ -755,16 +755,16 @@ stable counts for statistical modeling.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="optional-step-5-qc-of-quantification-metrics">[optional] Step 5: QC of quantification metrics<a class="anchor" aria-label="anchor" href="#optional-step-5-qc-of-quantification-metrics"></a></h2>
+</section><section><h2 class="section-heading" id="step-5-qc-of-quantification-metrics">Step 5: QC of quantification metrics<a class="anchor" aria-label="anchor" href="#step-5-qc-of-quantification-metrics"></a></h2>
 <hr class="half-width"><p>Use MultiQC to verify:</p>
 <div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/results</span>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
 <span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="ex">module</span> load multiqc</span>
 <span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="ex">multiqc</span> salmon_quant <span class="at">-o</span> qc_salmon</span></code></pre>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="ex">multiqc</span> results/salmon_quant <span class="at">-o</span> results/qc_salmon</span></code></pre>
 </div>
 <p>Inspect:</p>
 <ul><li>mapping rates</li>
@@ -795,7 +795,7 @@ multimodality?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Example interpretation for this dataset:</p>
 <ol style="list-style-type: decimal"><li>All samples show about 89 to 91 percent aligned. No sample is an
@@ -898,8 +898,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/04b-transcript-based-quantification.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/04b-transcript-based-quantification.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2025-11-19",
-  "datePublished": "2025-11-19"
+  "dateModified": "2025-11-20",
+  "datePublished": "2025-11-20"
 }
 
   </script><script>

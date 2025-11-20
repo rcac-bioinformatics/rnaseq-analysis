@@ -240,7 +240,7 @@
 <li><a href="#step-3-mapping-reads-with-star">Step 3: Mapping reads with STAR</a></li>
 <li><a href="#step-4-assessing-alignment-quality">Step 4: Assessing alignment quality</a></li>
 <li><a href="#step-5-quantifying-gene-counts-with-featurecounts">Step 5: Quantifying gene counts with featureCounts</a></li>
-<li><a href="#optional-step-6-qc-on-counts">[optional] Step 6: QC on counts</a></li>
+<li><a href="#step-6-qc-on-counts">Step 6: QC on counts</a></li>
 <li><a href="#summary">Summary</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
@@ -333,7 +333,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>A. Genome-based quantification (STAR + featureCounts)</h1>
-        <p>Last updated on 2025-11-19 |
+        <p>Last updated on 2025-11-20 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04a-genome-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -437,11 +437,11 @@ library types.</p>
 <span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>             <span class="at">--libType</span> A <span class="dt">\</span></span>
 <span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>             <span class="at">--mates1</span> data/SRR33253286_1.fastq.gz <span class="dt">\</span></span>
 <span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>             <span class="at">--mates2</span> data/SRR33253286_2.fastq.gz <span class="dt">\</span></span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>             <span class="at">--output</span> results/strand_check/salmon_check <span class="dt">\</span></span>
-<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>             <span class="at">--threads</span> 16</span></code></pre>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>             <span class="at">--output</span> results/strand_check <span class="dt">\</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>             <span class="at">--threads</span> 4</span></code></pre>
 </div>
 <p>The important output is in
-<code>results/strand_check/salmon_check/lib_format_counts.json</code>:</p>
+<code>results/strand_check/lib_format_counts.json</code>:</p>
 <div id="accordionSpoiler1" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
@@ -453,55 +453,27 @@ library types.</p>
 <h3 class="code-label">JSON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode json" tabindex="0"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="dt">"salmon_version"</span><span class="fu">:</span> <span class="st">"1.10.1"</span><span class="fu">,</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="dt">"samp_type"</span><span class="fu">:</span> <span class="st">"none"</span><span class="fu">,</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="dt">"opt_type"</span><span class="fu">:</span> <span class="st">"vb"</span><span class="fu">,</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="dt">"quant_errors"</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="dt">"num_libraries"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="dt">"library_types"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>        <span class="st">"IU"</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="dt">"frag_dist_length"</span><span class="fu">:</span> <span class="dv">1001</span><span class="fu">,</span></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="dt">"frag_length_mean"</span><span class="fu">:</span> <span class="fl">301.0497371910241</span><span class="fu">,</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>    <span class="dt">"frag_length_sd"</span><span class="fu">:</span> <span class="fl">65.1805858346556</span><span class="fu">,</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>    <span class="dt">"seq_bias_correct"</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    <span class="dt">"gc_bias_correct"</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="dt">"num_bias_bins"</span><span class="fu">:</span> <span class="dv">4096</span><span class="fu">,</span></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>    <span class="dt">"mapping_type"</span><span class="fu">:</span> <span class="st">"mapping"</span><span class="fu">,</span></span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>    <span class="dt">"keep_duplicates"</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>    <span class="dt">"num_valid_targets"</span><span class="fu">:</span> <span class="dv">276707</span><span class="fu">,</span></span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>    <span class="dt">"num_decoy_targets"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>    <span class="dt">"num_eq_classes"</span><span class="fu">:</span> <span class="dv">492177</span><span class="fu">,</span></span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>    <span class="dt">"serialized_eq_classes"</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>    <span class="dt">"eq_class_properties"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>        <span class="st">"range_factorized"</span><span class="ot">,</span></span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>        <span class="st">"gzipped"</span></span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>    <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>    <span class="dt">"length_classes"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>        <span class="dv">492</span><span class="ot">,</span></span>
-<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>        <span class="dv">696</span><span class="ot">,</span></span>
-<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a>        <span class="dv">973</span><span class="ot">,</span></span>
-<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>        <span class="dv">1748</span><span class="ot">,</span></span>
-<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a>        <span class="dv">107355</span></span>
-<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a>    <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a>    <span class="dt">"index_seq_hash"</span><span class="fu">:</span> <span class="st">"3bc0e6db891288d55dd3128db9425d1ae29c26d15645663756c2aa3b232e01e1"</span><span class="fu">,</span></span>
-<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a>    <span class="dt">"index_name_hash"</span><span class="fu">:</span> <span class="st">"7909efeef011d8da4b9a05d2e9cf15d89d4ddf5603daf0f3d7e11c09d2075c99"</span><span class="fu">,</span></span>
-<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a>    <span class="dt">"index_seq_hash512"</span><span class="fu">:</span> <span class="st">"34607fab99e0eaf152370b868bda41699514450cc5b878025fd1bc1097ae0a44fc9f3246c17373e693fb16a9a6a30a7060755b49a387b2f4a4eb95d27b024d1c"</span><span class="fu">,</span></span>
-<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>    <span class="dt">"index_name_hash512"</span><span class="fu">:</span> <span class="st">"a31d50a1887049bd78606c298b460010e7e20afbf721a79555d2ef1493dbc41bc758e66df34e1b8d58f4b1cad96e8c0767bdb1457771fa7e0e2ef2cf841363c2"</span><span class="fu">,</span></span>
-<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a>    <span class="dt">"index_decoy_seq_hash"</span><span class="fu">:</span> <span class="st">"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"</span><span class="fu">,</span></span>
-<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a>    <span class="dt">"index_decoy_name_hash"</span><span class="fu">:</span> <span class="st">"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"</span><span class="fu">,</span></span>
-<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a>    <span class="dt">"num_bootstraps"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
-<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a>    <span class="dt">"num_processed"</span><span class="fu">:</span> <span class="dv">23218158</span><span class="fu">,</span></span>
-<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a>    <span class="dt">"num_mapped"</span><span class="fu">:</span> <span class="dv">21088696</span><span class="fu">,</span></span>
-<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a>    <span class="dt">"num_decoy_fragments"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
-<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a>    <span class="dt">"num_dovetail_fragments"</span><span class="fu">:</span> <span class="dv">1067054</span><span class="fu">,</span></span>
-<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a>    <span class="dt">"num_fragments_filtered_vm"</span><span class="fu">:</span> <span class="dv">1661744</span><span class="fu">,</span></span>
-<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a>    <span class="dt">"num_alignments_below_threshold_for_mapped_fragments_vm"</span><span class="fu">:</span> <span class="dv">12511709</span><span class="fu">,</span></span>
-<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a>    <span class="dt">"percent_mapped"</span><span class="fu">:</span> <span class="fl">90.82846279192346</span><span class="fu">,</span></span>
-<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a>    <span class="dt">"call"</span><span class="fu">:</span> <span class="st">"quant"</span><span class="fu">,</span></span>
-<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a>    <span class="dt">"start_time"</span><span class="fu">:</span> <span class="st">"Mon Nov 17 20:02:43 2025"</span><span class="fu">,</span></span>
-<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a>    <span class="dt">"end_time"</span><span class="fu">:</span> <span class="st">"Mon Nov 17 20:04:11 2025"</span></span>
-<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a><span class="fu">}</span></span></code></pre>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="dt">"read_files"</span><span class="fu">:</span> <span class="st">"[ data/SRR33253286_1.fastq.gz, data/SRR33253286_2.fastq.gz]"</span><span class="fu">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="dt">"expected_format"</span><span class="fu">:</span> <span class="st">"IU"</span><span class="fu">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="dt">"compatible_fragment_ratio"</span><span class="fu">:</span> <span class="fl">1.0</span><span class="fu">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="dt">"num_compatible_fragments"</span><span class="fu">:</span> <span class="dv">21088696</span><span class="fu">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="dt">"num_assigned_fragments"</span><span class="fu">:</span> <span class="dv">21088696</span><span class="fu">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="dt">"num_frags_with_concordant_consistent_mappings"</span><span class="fu">:</span> <span class="dv">19116702</span><span class="fu">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="dt">"num_frags_with_inconsistent_or_orphan_mappings"</span><span class="fu">:</span> <span class="dv">2510542</span><span class="fu">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="dt">"strand_mapping_bias"</span><span class="fu">:</span> <span class="dv">0</span><span class="er">.</span><span class="dv">5117980078362889</span><span class="fu">,</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="dt">"MSF"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="dt">"OSF"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>    <span class="dt">"ISF"</span><span class="fu">:</span> <span class="dv">9783890</span><span class="fu">,</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>    <span class="dt">"MSR"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    <span class="dt">"OSR"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="dt">"ISR"</span><span class="fu">:</span> <span class="dv">9332812</span><span class="fu">,</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>    <span class="dt">"SF"</span><span class="fu">:</span> <span class="dv">1234245</span><span class="fu">,</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>    <span class="dt">"SR"</span><span class="fu">:</span> <span class="dv">1276297</span><span class="fu">,</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>    <span class="dt">"MU"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>    <span class="dt">"OU"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>    <span class="dt">"IU"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>    <span class="dt">"U"</span><span class="fu">:</span> <span class="dv">0</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="fu">}</span></span></code></pre>
 </div>
 <blockquote>
 <h3 id="interpreting-lib_format_counts.json">Interpreting
@@ -624,7 +596,7 @@ index. Create a file named <code>index_genome.sh</code> in
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#SBATCH --nodes=1</span></span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
 <span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=20</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#SBATCH --account=rcac</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#SBATCH --account=workshop</span></span>
 <span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#SBATCH --partition=cpu</span></span>
 <span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#SBATCH --time=1:00:00</span></span>
 <span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#SBATCH --job-name=star_index</span></span>
@@ -770,7 +742,7 @@ sample names</p>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#SBATCH --nodes=1</span></span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=20</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#SBATCH --account=rcac</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#SBATCH --account=workshop</span></span>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#SBATCH --partition=cpu</span></span>
 <span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#SBATCH --time=8:00:00</span></span>
 <span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#SBATCH --job-name=read_mapping</span></span>
@@ -845,11 +817,11 @@ Ready for downstream quantification.</p></li>
 <div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/mapping</span>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
 <span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="ex">module</span> load multiqc</span>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="ex">multiqc</span> . <span class="at">-o</span> qc_alignment</span></code></pre>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="ex">multiqc</span> results/mapping <span class="at">-o</span> results/qc_alignment</span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="key-metrics-to-review">Key metrics to review<a class="anchor" aria-label="anchor" href="#key-metrics-to-review"></a></h3>
@@ -945,7 +917,7 @@ stranded.</p>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#SBATCH --nodes=1</span></span>
 <span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
 <span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=16</span></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#SBATCH --account=rcac</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#SBATCH --account=workshop</span></span>
 <span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#SBATCH --partition=cpu</span></span>
 <span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#SBATCH --time=1:00:00</span></span>
 <span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#SBATCH --job-name=featurecounts</span></span>
@@ -978,20 +950,40 @@ stranded.</p>
 <p><code>gene_counts.txt</code> will contain:</p>
 <ul><li>one row per gene</li>
 <li>one column per sample</li>
-<li>counts that can be used directly in DESeq2</li>
-</ul></div>
-</section><section><h2 class="section-heading" id="optional-step-6-qc-on-counts">[optional] Step 6: QC on counts<a class="anchor" aria-label="anchor" href="#optional-step-6-qc-on-counts"></a></h2>
-<hr class="half-width"><p>Before proceeding to differential expression, it is good practice to
-perform some QC on the count data. We can again use MultiQC to summarize
-featureCounts statistics:</p>
+</ul><div id="generate-a-clean-count-matrix" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="generate-a-clean-count-matrix" class="callout-inner">
+<h3 class="callout-title">Generate a clean count matrix</h3>
+<div class="callout-content">
 <div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/results</span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> qc_counts</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="ex">module</span> load multiqc</span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="ex">multiqc</span> counts <span class="at">-o</span> qc_counts</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/results/counts</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 1,7- gene_counts.txt <span class="kw">|</span><span class="dt">\</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  <span class="fu">sed</span> <span class="st">'s+/scratch/negishi/'</span><span class="va">$USER</span><span class="st">'/rnaseq-workshop/results/mapping/++g'</span> <span class="kw">|</span><span class="dt">\</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="fu">grep</span> <span class="at">-v</span> <span class="st">"^#"</span> <span class="kw">|</span><span class="dt">\</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>  <span class="fu">sed</span> <span class="st">'s/Aligned.sortedByCoord.out.bam//g'</span> <span class="dt">\</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  <span class="op">&gt;</span> gene_counts_clean.txt</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="step-6-qc-on-counts">Step 6: QC on counts<a class="anchor" aria-label="anchor" href="#step-6-qc-on-counts"></a></h2>
+<hr class="half-width"><p>Before proceeding to differential expression, it is good practice to
+perform some QC on the count data. We can again use MultiQC to summarize
+featureCounts statistics:</p>
+<div class="codewrapper sourceCode" id="cb15">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/qc_counts</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="ex">module</span> load multiqc</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="ex">multiqc</span> results/counts <span class="at">-o</span> results/qc_counts</span></code></pre>
 </div>
 <div id="exercise-examine-your-counting-metrics" class="callout challenge">
 <div class="callout-square">
@@ -1126,8 +1118,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/04a-genome-based-quantification.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/04a-genome-based-quantification.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2025-11-19",
-  "datePublished": "2025-11-19"
+  "dateModified": "2025-11-20",
+  "datePublished": "2025-11-20"
 }
 
   </script><script>
