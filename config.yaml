@@ -49,7 +49,7 @@ contact: 'aseethar@purdue.edu'
 # include all pages in the folder.
 #
 # Example -------------
-chapter_numbers: false
+# chapter_numbers: false
 #auto_number_chapters: false
 #numbered_chapters: false
 # episodes:
