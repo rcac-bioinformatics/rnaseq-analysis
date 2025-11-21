@@ -61,7 +61,7 @@ Salmon can infer strandness directly from raw FASTQ files without any alignment.
 We run Salmon with `-l A`, which tells it to explore all library types.
 
 ```bash
-sinteractive -A rcac -p cpu -N 1 -n 4 --time=1:00:00
+sinteractive -A workshop -q standby -p cpu -N 1 -n 4 --time=1:00:00
 
 cd $SCRATCH/rnaseq-workshop
 mkdir -p results/strand_check

@@ -30,7 +30,7 @@ exercises: 45
 
 Differential expression gives a list of up regulated and down regulated genes.  
 To understand the underlying biology, we examine which **functional gene sets** are enriched.  
-This process is called **over representation analysis** (ORA).  
+This process is called **over representation analysis** (ORA).
 ORA identifies pathways or gene sets that contain more DE genes than expected by chance.
 
 Here we will use **clusterProfiler**, **org.Mm.eg.db**, and **msigdbr** to run GO, KEGG, and Hallmark analyses on mouse data.
