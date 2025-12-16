@@ -74,6 +74,7 @@ episodes:
 - 04a-genome-based-quantification.Rmd
 - 04b-transcript-based-quantification.Rmd
 - 05-deseq2-expression-analyses.Rmd
+- 05b-deseq2-expression-analyses-kallisto.Rmd
 - 06-gene-set-enrichment-analyses.Rmd
 
 
