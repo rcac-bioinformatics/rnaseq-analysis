@@ -308,7 +308,19 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="06-gene-set-enrichment-analyses.html">7. Gene set enrichment analysis</a>
+        <a href="05b-deseq2-expression-analyses-kallisto.html">7. Differential expression using DESeq2</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="06-gene-set-enrichment-analyses.html">8. Gene set enrichment analysis</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -861,7 +873,7 @@ outputs</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -969,7 +981,7 @@ why?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Use the <strong>basic gene annotation in GTF format</strong> (e.g.,
 <code>gencode.vM38.primary_assembly.basic.annotation.gtf.gz</code>).<br>
@@ -1001,7 +1013,7 @@ FASTA</strong> (e.g.,
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <figure style="text-align: center"><img src="../fig/01_fq2counts/gencode-genome.png" alt="Reference genome file in FASTA format" class="figure mx-auto d-block"><figcaption>
 Reference genome file in FASTA format
@@ -1035,7 +1047,7 @@ for all transcripts in GRCm39
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <p>The transcript FASTA file is available in the same release directory
 as the genome and annotation files (under FASTA files). It is named
@@ -1113,7 +1125,7 @@ of sequencing runs?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
 <div class="accordion-body">
 <p>Navigate to the SRA page for the BioProject and use <strong>Run
 Selector</strong> to list runs.<br>
@@ -1574,7 +1586,7 @@ number of reads, quality, duplication, or GC percentage?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Typical interpretation for this dataset (students should compare with
 their own):</p>
@@ -1594,7 +1606,7 @@ selected samples and is less than 4 percent.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What if trimming is required? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p><em>Optional reference: how to trim adapters with <code>fastp</code>
 (not part of the hands-on)</em></p>
@@ -3994,6 +4006,434 @@ and adjusted p values.</li>
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
+</section></section><section id="aio-05b-deseq2-expression-analyses-kallisto"><p>Content from <a href="05b-deseq2-expression-analyses-kallisto.html">Differential expression using DESeq2</a></p>
+<hr>
+<p>Last updated on 2025-12-16 |
+
+        <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/05b-deseq2-expression-analyses-kallisto.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+<p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 85 minutes</p>
+<div class="text-end">
+          <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
+        </div>
+<div class="overview card">
+<h2 class="card-header">Overview</h2>
+<div class="row g-0">
+<div class="col-md-4">
+<div class="card-body">
+<div class="inner">
+<h3 class="card-title">Questions</h3>
+</div>
+</div>
+</div>
+<div class="col-md-8">
+<div class="card-body">
+<div class="inner bordered">
+<h3 class="card-title">Objectives</h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<hr class="half-width">
+<p>This script should work for many simple designs ranging from two
+samples (i.e., control/treatment) to designs with large numbers of
+samples, for instance a time course. The first sample group is used as
+the denominator in the fold-change calculations. This version is set up
+for the simple two sample case, but you can switch to the code in
+comments for more complicated setups.</p>
+<p>Required packages: DESeq2 (bioconductor) ggplot2 reshape2 ashr or
+apelgm (for shrunken LFC calculation) scales (volcano plot)</p>
+<p>For bioconductor packages such as DESeq2, you need to load using
+BiocManager.</p>
+</section><section><h2 class="section-heading" id="attribution">Attribution<a class="anchor" aria-label="anchor" href="#attribution"></a>
+</h2>
+<hr class="half-width">
+<p>This section is adapted from materials developed by <strong>Michael
+Gribskov</strong>, Professor of Computational Genomics &amp; Systems
+Biology at Purdue University.</p>
+<p>Original and related materials are available via the <strong>CGSB
+Wiki</strong>: <a href="https://cgsb.miraheze.org/wiki/Main_Page" class="external-link uri">https://cgsb.miraheze.org/wiki/Main_Page</a></p>
+<p>Michael Gribskov v 2.4 updated: 2025 December 12</p>
+<div id="what-you-need-for-this-episode" class="callout prereq">
+<div class="callout-square">
+<i class="callout-icon" data-feather="check"></i>
+</div>
+<span class="callout-header">Prerequisite</span>
+<div id="what-you-need-for-this-episode" class="callout-inner">
+<h3 class="callout-title">What you need for this episode</h3>
+<div class="callout-content">
+
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="working-directory-and-setup">Working directory and setup<a class="anchor" aria-label="anchor" href="#working-directory-and-setup"></a>
+</h2>
+<hr class="half-width">
+<p>It’s easiest to work in the directory where your data is.</p>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">getwd</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">setwd</span><span class="op">(</span><span class="st">"A:/mrg/Dropbox/projects/25plantago"</span><span class="op">)</span></span>
+<span><span class="fu">dir</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="package-installation-and-loading">Package installation and loading<a class="anchor" aria-label="anchor" href="#package-installation-and-loading"></a>
+</h2>
+<hr class="half-width">
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw">require</span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu">install.packages</span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"DESeq2"</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">DESeq2</span><span class="op">)</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="reading-raw-read-count-data">Reading raw read count data<a class="anchor" aria-label="anchor" href="#reading-raw-read-count-data"></a>
+</h2>
+<hr class="half-width">
+<p>Read in raw read count data from merged salmon output (NumReads
+column). You may want to adjust row and column labels to be shorter or
+more informative. It will be convenient if you make the first sample
+group the one that will be the denominator in the log fold change
+calculation.</p>
+<p>Normally this will correctly read the rownames and column names from
+the counts file.</p>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">salmon</span> <span class="op">&lt;-</span> <span class="fu">read.delim</span><span class="op">(</span><span class="st">"JM13_18_2.numreads.out"</span>, row.names<span class="op">=</span><span class="fl">1</span>, header<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">row.names</span><span class="op">(</span><span class="va">salmon</span><span class="op">)</span></span>
+<span><span class="fu">colnames</span><span class="op">(</span><span class="va">salmon</span><span class="op">)</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">salmon</span><span class="op">)</span></span></code></pre>
+</div>
+<p>If the rownames and colnames are OK, skip ahead to raw counts.</p>
+<p>Possible adjustments to rows and columns include reordering columns,
+selecting subsets, manually moving row or column names, and editing
+names to remove redundant strings.</p>
+<p>Remove suffix <code>.salmon2</code> from column names.</p>
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">names</span>  <span class="op">&lt;-</span> <span class="fu">colnames</span><span class="op">(</span><span class="va">salmon</span><span class="op">)</span></span>
+<span><span class="va">names</span> <span class="op">&lt;-</span> <span class="fu">sub</span><span class="op">(</span><span class="st">".salmon2"</span>,<span class="st">""</span>,<span class="va">names</span><span class="op">)</span></span>
+<span><span class="fu">colnames</span><span class="op">(</span><span class="va">salmon</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">names</span></span>
+<span></span>
+<span><span class="fu">head</span><span class="op">(</span><span class="va">salmon</span><span class="op">)</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="raw-counts-quality-control">Raw counts quality control<a class="anchor" aria-label="anchor" href="#raw-counts-quality-control"></a>
+</h2>
+<hr class="half-width">
+<p>The count matrix from the previous section is named
+<code>salmon</code>.</p>
+<p>Total counts per sample can be checked to verify agreement with read
+counts and expected dimensions.</p>
+<div class="codewrapper sourceCode" id="cb5">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">head</span><span class="op">(</span><span class="va">salmon</span><span class="op">)</span></span>
+<span><span class="fu">colSums</span><span class="op">(</span><span class="va">salmon</span><span class="op">)</span></span>
+<span><span class="fu">dim</span><span class="op">(</span><span class="va">salmon</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Boxplot and density plots of raw counts provide a visual summary of
+count distributions.</p>
+<div class="codewrapper sourceCode" id="cb6">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">melted</span> <span class="op">&lt;-</span> <span class="fu">melt</span><span class="op">(</span><span class="fu">round</span><span class="op">(</span><span class="va">salmon</span><span class="op">)</span>, value.name<span class="op">=</span><span class="st">"count"</span>, variable<span class="op">=</span><span class="st">"sample"</span><span class="op">)</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">melted</span>,<span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">sample</span>, y<span class="op">=</span><span class="va">count</span>, fill<span class="op">=</span><span class="va">sample</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">geom_boxplot</span><span class="op">(</span>show.legend<span class="op">=</span><span class="cn">F</span> <span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">scale_y_continuous</span><span class="op">(</span>trans<span class="op">=</span><span class="st">'log10'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Un-normalized Counts"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"log( Count )"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">xlab</span><span class="op">(</span><span class="st">"Sample"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme</span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">1</span>, hjust<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb7">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">melted</span>, <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">count</span>,fill<span class="op">=</span><span class="va">sample</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_density</span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_x_continuous</span><span class="op">(</span>trans<span class="op">=</span><span class="st">'log10'</span>, limits<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">100000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">annotation_logticks</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Un-normalized Counts"</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">melted</span>, <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">count</span>,fill<span class="op">=</span><span class="va">sample</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_density</span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.3</span>, show.legend<span class="op">=</span><span class="cn">F</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">scale_x_continuous</span><span class="op">(</span>trans<span class="op">=</span><span class="st">'log10'</span>, limits<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">100000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Un-normalized Counts"</span><span class="op">)</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="optional-low-count-filtering">Optional low-count filtering<a class="anchor" aria-label="anchor" href="#optional-low-count-filtering"></a>
+</h2>
+<hr class="half-width">
+<p>Optional removal of very low count transcripts. A threshold of
+approximately 5 reads per sample is typical, but this is experiment
+specific. Be careful not to remove genes expressed in only one
+group.</p>
+<div class="codewrapper sourceCode" id="cb9">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cutoff</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
+<span><span class="fu">table</span><span class="op">(</span> <span class="fu">rowSums</span><span class="op">(</span><span class="va">salmon</span><span class="op">[</span>,<span class="op">]</span><span class="op">)</span> <span class="op">&gt;</span> <span class="va">cutoff</span> <span class="op">)</span></span>
+<span><span class="va">cut</span> <span class="op">&lt;-</span> <span class="va">salmon</span><span class="op">[</span><span class="fu">rowSums</span><span class="op">(</span><span class="va">salmon</span><span class="op">[</span>,<span class="op">]</span><span class="op">)</span> <span class="op">&gt;</span> <span class="va">cutoff</span>,<span class="op">]</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb10">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">melted</span>  <span class="op">&lt;-</span> <span class="fu">melt</span><span class="op">(</span><span class="va">cut</span>, variable<span class="op">=</span><span class="st">"sample"</span><span class="op">)</span></span>
+<span><span class="va">title</span> <span class="op">&lt;-</span> <span class="fu">sprintf</span><span class="op">(</span><span class="st">"Totals counts &gt; %d"</span>, <span class="va">cutoff</span><span class="op">)</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">melted</span>, <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">value</span>,fill<span class="op">=</span><span class="va">sample</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_density</span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">scale_x_continuous</span><span class="op">(</span>trans<span class="op">=</span><span class="st">'log10'</span>, limits<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">0.01</span>,<span class="fl">100000000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">annotation_logticks</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="va">title</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Rename filtered data for downstream analysis.</p>
+<div class="codewrapper sourceCode" id="cb11">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">salmon</span> <span class="op">&lt;-</span> <span class="va">cut</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="preliminary-normalization-with-deseq2">Preliminary normalization with DESeq2<a class="anchor" aria-label="anchor" href="#preliminary-normalization-with-deseq2"></a>
+</h2>
+<hr class="half-width">
+<p>Preliminary normalization uses one pass of DESeq2 to estimate size
+factors and enable prefiltering.</p>
+<div class="codewrapper sourceCode" id="cb12">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">replicates</span> <span class="op">&lt;-</span> <span class="fu">as.factor</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="fu">rep</span><span class="op">(</span><span class="st">"Sminus"</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu">rep</span><span class="op">(</span><span class="st">"Splus"</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu">data.frame</span><span class="op">(</span>sampleNames<span class="op">=</span><span class="fu">colnames</span><span class="op">(</span><span class="va">salmon</span><span class="op">)</span>, sample<span class="op">=</span><span class="va">replicates</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">count_init</span> <span class="op">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span><span class="op">(</span> <span class="fu">round</span><span class="op">(</span><span class="va">salmon</span><span class="op">)</span>, colData<span class="op">=</span><span class="va">metadata</span>, design<span class="op">=</span><span class="op">~</span><span class="va">sample</span> <span class="op">)</span></span>
+<span><span class="va">init</span> <span class="op">&lt;-</span> <span class="fu">DESeq</span><span class="op">(</span><span class="va">count_init</span><span class="op">)</span></span>
+<span><span class="fu">plotDispEsts</span><span class="op">(</span><span class="va">init</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb13">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">summary</span><span class="op">(</span><span class="fu">counts</span><span class="op">(</span><span class="va">init</span>,normalized<span class="op">=</span><span class="cn">T</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb14">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">melted</span> <span class="op">&lt;-</span> <span class="fu">melt</span><span class="op">(</span><span class="fu">round</span><span class="op">(</span><span class="fu">counts</span><span class="op">(</span><span class="va">init</span>,normalized<span class="op">=</span><span class="cn">T</span><span class="op">)</span><span class="op">)</span>, variable<span class="op">=</span><span class="st">"sample"</span><span class="op">)</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">melted</span>, <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">value</span>,fill<span class="op">=</span><span class="va">Var2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_density</span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_x_continuous</span><span class="op">(</span>trans<span class="op">=</span><span class="st">'log10'</span>, limits<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">100000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">annotation_logticks</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Preliminary normalization"</span><span class="op">)</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="pre-filtering-based-on-normalized-counts">Pre-filtering based on normalized counts<a class="anchor" aria-label="anchor" href="#pre-filtering-based-on-normalized-counts"></a>
+</h2>
+<hr class="half-width">
+<p>Prefiltering removes poorly measured genes unlikely to show
+significant differential expression. Multiple cutoffs are evaluated to
+guide selection.</p>
+<div class="codewrapper sourceCode" id="cb15">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">trial</span> <span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">svector</span> <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">cutoff</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">60</span>, <span class="fl">70</span>, <span class="fl">80</span>, <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">min_over</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
+<span><span class="va">nrep</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
+<span><span class="va">nsample</span> <span class="op">&lt;-</span> <span class="fu">length</span><span class="op">(</span><span class="fu">levels</span><span class="op">(</span><span class="va">replicates</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="kw">for</span><span class="op">(</span> <span class="va">mincount</span> <span class="kw">in</span> <span class="va">cutoff</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">select</span> <span class="op">&lt;-</span> <span class="fu">rowSums</span><span class="op">(</span><span class="fu">counts</span><span class="op">(</span><span class="va">init</span>,normalized<span class="op">=</span><span class="cn">T</span><span class="op">)</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="va">nrep</span><span class="op">]</span> <span class="op">&gt;=</span> <span class="va">mincount</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">min_over</span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">c</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="va">nsample</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="va">first</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">c</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="va">nrep</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span>        <span class="va">last</span> <span class="op">&lt;-</span> <span class="va">first</span> <span class="op">+</span> <span class="va">nrep</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span>        <span class="va">select</span> <span class="op">&lt;-</span> <span class="va">select</span> <span class="op">|</span> <span class="fu">rowSums</span><span class="op">(</span><span class="fu">counts</span><span class="op">(</span><span class="va">init</span>,normalized<span class="op">=</span><span class="cn">T</span><span class="op">)</span><span class="op">[</span>,<span class="va">first</span><span class="op">:</span><span class="va">last</span><span class="op">]</span> <span class="op">&gt;=</span> <span class="va">mincount</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">min_over</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="va">trial</span><span class="op">[</span><span class="fu">sprintf</span><span class="op">(</span><span class="st">"%d"</span>,<span class="va">mincount</span><span class="op">)</span><span class="op">]</span><span class="op">=</span><span class="fu">list</span><span class="op">(</span><span class="fu">table</span><span class="op">(</span><span class="va">select</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">svector</span><span class="op">[</span><span class="fu">sprintf</span><span class="op">(</span><span class="st">"%d"</span>,<span class="va">mincount</span><span class="op">)</span><span class="op">]</span><span class="op">=</span><span class="fu">list</span><span class="op">(</span><span class="va">select</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb16">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">cutoff</span> <span class="kw">in</span> <span class="fu">names</span><span class="op">(</span><span class="va">trial</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">sprintf</span><span class="op">(</span><span class="st">"cutoff:%4s     discard:%6d   keep:%6d"</span>, <span class="va">cutoff</span>, <span class="va">trial</span><span class="op">[[</span><span class="va">cutoff</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="st">"FALSE"</span><span class="op">]</span>, <span class="va">trial</span><span class="op">[[</span><span class="va">cutoff</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="st">"TRUE"</span><span class="op">]</span><span class="op">)</span></span>
+<span>    <span class="fu">print</span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb17">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cutoff_selected</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
+<span><span class="va">min_selected</span> <span class="op">=</span> <span class="va">svector</span><span class="op">[[</span><span class="fu">sprintf</span><span class="op">(</span><span class="st">"%d"</span>,<span class="va">cutoff_selected</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="fu">table</span><span class="op">(</span><span class="va">min_selected</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb18">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">melted</span> <span class="op">&lt;-</span> <span class="fu">melt</span><span class="op">(</span><span class="fu">round</span><span class="op">(</span><span class="fu">counts</span><span class="op">(</span><span class="va">init</span>,normalized<span class="op">=</span><span class="cn">T</span><span class="op">)</span><span class="op">[</span><span class="va">min_selected</span>,<span class="op">]</span><span class="op">)</span>, variable<span class="op">=</span><span class="st">"sample"</span>, varnames<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="st">"gene"</span>, <span class="st">"sample"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">title</span> <span class="op">&lt;-</span> <span class="fu">sprintf</span><span class="op">(</span><span class="st">"Normalized counts selected for %d samples over %d counts"</span>, <span class="va">min_over</span>, <span class="va">cutoff_selected</span><span class="op">)</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">melted</span>, <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">value</span>,fill<span class="op">=</span><span class="va">sample</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_density</span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_x_continuous</span><span class="op">(</span>trans<span class="op">=</span><span class="st">'log10'</span>, limits<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">100000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">annotation_logticks</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="va">title</span><span class="op">)</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="final-differential-expression-analysis">Final differential expression analysis<a class="anchor" aria-label="anchor" href="#final-differential-expression-analysis"></a>
+</h2>
+<hr class="half-width">
+<p>Final DESeq2 analysis is performed using the prefiltered counts.</p>
+<div class="codewrapper sourceCode" id="cb19">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">selected</span> <span class="op">&lt;-</span> <span class="va">salmon</span><span class="op">[</span><span class="va">min_selected</span>,<span class="op">]</span></span>
+<span></span>
+<span><span class="va">count_filtered</span> <span class="op">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span><span class="op">(</span> <span class="fu">round</span><span class="op">(</span><span class="va">selected</span><span class="op">)</span>, colData<span class="op">=</span><span class="va">metadata</span>, design<span class="op">=</span><span class="op">~</span><span class="va">sample</span> <span class="op">)</span></span>
+<span><span class="va">filtered</span> <span class="op">&lt;-</span> <span class="fu">DESeq</span><span class="op">(</span><span class="va">count_filtered</span><span class="op">)</span></span>
+<span><span class="fu">plotDispEsts</span><span class="op">(</span><span class="va">filtered</span><span class="op">)</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="fu">counts</span><span class="op">(</span><span class="va">filtered</span>,normalized<span class="op">=</span><span class="cn">T</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="pca-with-variance-stabilization">PCA with variance stabilization<a class="anchor" aria-label="anchor" href="#pca-with-variance-stabilization"></a>
+</h2>
+<hr class="half-width">
+<p>Variance stabilized PCA provides improved separation of biological
+signal.</p>
+<div class="codewrapper sourceCode" id="cb20">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu">SummarizedExperiment</span><span class="op">(</span><span class="fu">vst</span><span class="op">(</span><span class="fu">round</span><span class="op">(</span><span class="fu">counts</span><span class="op">(</span><span class="va">filtered</span>, normalized<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                           colData<span class="op">=</span><span class="fu">colData</span><span class="op">(</span><span class="va">filtered</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">se</span><span class="op">$</span><span class="va">sampleNames</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="fu">rep</span><span class="op">(</span><span class="st">"C16"</span>,<span class="fl">12</span><span class="op">)</span>, <span class="fu">rep</span><span class="op">(</span><span class="st">"C31"</span>,<span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">times</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="fu">rep</span><span class="op">(</span><span class="st">"T00"</span>,<span class="fl">3</span><span class="op">)</span>,<span class="fu">rep</span><span class="op">(</span><span class="st">"T48"</span>,<span class="fl">3</span><span class="op">)</span>,<span class="fu">rep</span><span class="op">(</span><span class="st">"T06"</span>,<span class="fl">3</span><span class="op">)</span>,<span class="fu">rep</span><span class="op">(</span><span class="st">"T72"</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">se</span><span class="op">$</span><span class="va">time</span> <span class="op">&lt;-</span>  <span class="fu">c</span><span class="op">(</span><span class="fu">rep</span><span class="op">(</span><span class="va">times</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pcaData</span> <span class="op">&lt;-</span> <span class="fu">plotPCA</span><span class="op">(</span><span class="fu">DESeqTransform</span><span class="op">(</span><span class="va">se</span><span class="op">)</span>, intgroup<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="st">"sampleNames"</span>, <span class="st">"time"</span><span class="op">)</span>, returnData<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">percentVar</span> <span class="op">&lt;-</span> <span class="fu">round</span><span class="op">(</span><span class="fl">100</span> <span class="op">*</span> <span class="fu">attr</span><span class="op">(</span><span class="va">pcaData</span>, <span class="st">"percentVar"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">pcaData</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">PC1</span>, <span class="va">PC2</span>, color<span class="op">=</span><span class="va">se</span><span class="op">$</span><span class="va">sampleNames</span>, shape<span class="op">=</span><span class="va">se</span><span class="op">$</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Normalized/Filtered Counts - variance stabilizing transform"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">scale_shape_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">15</span>,<span class="fl">16</span>,<span class="fl">17</span>,<span class="fl">18</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span>size<span class="op">=</span><span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">xlab</span><span class="op">(</span><span class="fu">paste0</span><span class="op">(</span><span class="st">"PC1: "</span>,<span class="va">percentVar</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="st">"% variance"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ylab</span><span class="op">(</span><span class="fu">paste0</span><span class="op">(</span><span class="st">"PC2: "</span>,<span class="va">percentVar</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,<span class="st">"% variance"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">coord_fixed</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="differential-expression-contrasts">Differential expression contrasts<a class="anchor" aria-label="anchor" href="#differential-expression-contrasts"></a>
+</h2>
+<hr class="half-width">
+<div class="codewrapper sourceCode" id="cb21">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nrep</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
+<span><span class="va">foreground</span> <span class="op">&lt;-</span> <span class="fu">levels</span><span class="op">(</span><span class="va">filtered</span><span class="op">$</span><span class="va">sample</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb22">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">background</span> <span class="op">=</span> <span class="va">foreground</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">f</span> <span class="kw">in</span> <span class="va">foreground</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">contrast_name</span> <span class="op">&lt;-</span> <span class="fu">paste</span><span class="op">(</span><span class="va">f</span>, <span class="va">background</span>, sep<span class="op">=</span><span class="st">"_vs_"</span><span class="op">)</span></span>
+<span>    <span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="va">contrasts</span>, <span class="va">contrast_name</span><span class="op">)</span></span>
+<span>    <span class="va">contrast</span> <span class="op">&lt;-</span> <span class="fu">results</span><span class="op">(</span><span class="va">filtered</span>, contrast<span class="op">=</span><span class="fu">c</span><span class="op">(</span><span class="st">"sample"</span>, <span class="va">f</span>, <span class="va">background</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu">assign</span><span class="op">(</span><span class="va">contrast_name</span>,<span class="va">contrast</span><span class="op">)</span></span>
+<span>    <span class="fu">volcano</span><span class="op">(</span><span class="va">contrast</span>, <span class="fl">5e-1</span>, <span class="fu">log2</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>, stattype<span class="op">=</span><span class="st">"padj"</span>, symmetric<span class="op">=</span><span class="cn">T</span> <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="saving-results">Saving results<a class="anchor" aria-label="anchor" href="#saving-results"></a>
+</h2>
+<hr class="half-width">
+<div class="codewrapper sourceCode" id="cb23">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">output_file</span> <span class="op">=</span> <span class="st">"final.tsv"</span></span>
+<span><span class="fu">write.table</span><span class="op">(</span><span class="va">statout</span>, file<span class="op">=</span><span class="va">output_file</span>, sep<span class="op">=</span><span class="st">'\t'</span>,col.names<span class="op">=</span><span class="cn">NA</span>,row.names<span class="op">=</span><span class="cn">T</span>,quote<span class="op">=</span><span class="cn">F</span><span class="op">)</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
+</h2>
+<hr class="half-width">
+<div id="keypoints1" class="callout keypoints">
+<div class="callout-square">
+<i class="callout-icon" data-feather="key"></i>
+</div>
+<span class="callout-header">Key Points</span>
+<div class="callout-inner">
+<div class="callout-content">
+
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="appendix-functions">Appendix: functions<a class="anchor" aria-label="anchor" href="#appendix-functions"></a>
+</h2>
+<hr class="half-width">
+<div class="codewrapper sourceCode" id="cb24">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">volcano</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">contrast</span>, <span class="va">p_cut</span><span class="op">=</span><span class="fl">0.1</span>, <span class="va">lfc_cut</span><span class="op">=</span><span class="fl">1.0</span>, <span class="va">stattype</span><span class="op">=</span><span class="st">"svalue"</span>,</span>
+<span>                     <span class="va">title</span><span class="op">=</span><span class="st">"Volcano Plot"</span>, <span class="va">xspace</span><span class="op">=</span><span class="fl">5</span>, <span class="va">yspace</span><span class="op">=</span><span class="fl">1</span>, <span class="va">symmetric</span><span class="op">=</span><span class="cn">FALSE</span> <span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">sig</span> <span class="op">&lt;-</span> <span class="va">contrast</span><span class="op">[[</span><span class="va">stattype</span><span class="op">]</span><span class="op">]</span><span class="op">&lt;</span><span class="va">p_cut</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu">is.na</span><span class="op">(</span><span class="va">contrast</span><span class="op">[[</span><span class="va">stattype</span><span class="op">]</span><span class="op">]</span><span class="op">&lt;</span><span class="va">p_cut</span><span class="op">)</span></span>
+<span>    <span class="va">lfc</span> <span class="op">&lt;-</span> <span class="fu">abs</span><span class="op">(</span><span class="va">contrast</span><span class="op">$</span><span class="va">log2FoldChange</span><span class="op">)</span><span class="op">&gt;</span><span class="va">lfc_cut</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu">is.na</span><span class="op">(</span><span class="va">contrast</span><span class="op">$</span><span class="va">log2FoldChange</span><span class="op">&gt;</span><span class="va">lfc_cut</span><span class="op">)</span></span>
+<span>    <span class="va">both</span> <span class="op">&lt;-</span> <span class="va">sig</span> <span class="op">&amp;</span> <span class="va">lfc</span></span>
+<span>    <span class="va">neither</span> <span class="op">&lt;-</span> <span class="op">!</span><span class="va">sig</span> <span class="op">&amp;</span> <span class="op">!</span><span class="va">lfc</span> </span>
+<span>    <span class="va">other</span> <span class="op">&lt;-</span> <span class="fu">xor</span><span class="op">(</span><span class="va">sig</span>,<span class="va">lfc</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">title</span> <span class="op">==</span> <span class="st">"Volcano Plot"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="va">title</span> <span class="op">&lt;-</span> <span class="fu">sprintf</span><span class="op">(</span><span class="st">"Volcano Plot -  %s"</span>, <span class="va">contrast_name</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    </span>
+<span>    <span class="va">low</span> <span class="op">&lt;-</span> <span class="fu">min</span><span class="op">(</span><span class="va">contrast</span><span class="op">$</span><span class="va">log2FoldChange</span><span class="op">)</span></span>
+<span>    <span class="va">high</span> <span class="op">&lt;-</span> <span class="fu">max</span><span class="op">(</span><span class="va">contrast</span><span class="op">$</span><span class="va">log2FoldChange</span><span class="op">)</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">symmetric</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="va">l</span> <span class="op">&lt;-</span> <span class="fu">max</span><span class="op">(</span><span class="fu">abs</span><span class="op">(</span><span class="va">high</span><span class="op">)</span>, <span class="fu">abs</span><span class="op">(</span><span class="va">low</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="va">limits_x</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="op">-</span><span class="va">l</span>, <span class="va">l</span><span class="op">)</span></span>
+<span>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>        <span class="va">limits_x</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="va">low</span>, <span class="va">high</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    </span>
+<span>    <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">contrast</span>, <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">log2FoldChange</span>, y<span class="op">=</span><span class="fu">log10</span><span class="op">(</span><span class="va">.data</span><span class="op">[[</span><span class="va">stattype</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>        <span class="fu">ggtitle</span><span class="op">(</span><span class="va">title</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">scale_x_continuous</span><span class="op">(</span>limits<span class="op">=</span><span class="va">limits_x</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">geom_hline</span><span class="op">(</span>yintercept<span class="op">=</span><span class="fu">log10</span><span class="op">(</span><span class="va">p_cut</span><span class="op">)</span>, linewidth<span class="op">=</span><span class="fl">0.25</span>, color<span class="op">=</span><span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">geom_vline</span><span class="op">(</span>xintercept<span class="op">=</span><span class="va">lfc_cut</span>, linewidth<span class="op">=</span><span class="fl">0.25</span>, color<span class="op">=</span><span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">geom_vline</span><span class="op">(</span>xintercept<span class="op">=</span><span class="op">-</span><span class="va">lfc_cut</span>, linewidth<span class="op">=</span><span class="fl">0.25</span>, color<span class="op">=</span><span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">geom_point</span><span class="op">(</span>data<span class="op">=</span><span class="va">contrast</span><span class="op">[</span><span class="va">neither</span>,<span class="op">]</span>, color<span class="op">=</span><span class="st">"black"</span>, size<span class="op">=</span><span class="fl">1.2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">geom_point</span><span class="op">(</span>data<span class="op">=</span><span class="va">contrast</span><span class="op">[</span><span class="va">other</span>,<span class="op">]</span>, shape<span class="op">=</span><span class="fl">21</span>, fill<span class="op">=</span><span class="st">"yellow"</span>, size<span class="op">=</span><span class="fl">2</span>, stroke<span class="op">=</span><span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">geom_point</span><span class="op">(</span>data<span class="op">=</span><span class="va">contrast</span><span class="op">[</span><span class="va">both</span>,<span class="op">]</span>, shape<span class="op">=</span><span class="fl">21</span>, color<span class="op">=</span><span class="st">"black"</span>, fill<span class="op">=</span><span class="st">"red"</span>, size<span class="op">=</span><span class="fl">3</span>, stroke<span class="op">=</span><span class="fl">0.6</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="fu">print</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<!--
+Place links that you need to refer to multiple times across pages here. Delete
+any links that you are not going to use.
+ -->
 </section></section><section id="aio-06-gene-set-enrichment-analyses"><p>Content from <a href="06-gene-set-enrichment-analyses.html">Gene set enrichment analysis</a></p>
 <hr>
 <p>Last updated on 2025-12-16 |
@@ -4313,7 +4753,7 @@ signal.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Example interpretation:</p>
 <ul>
