@@ -16,22 +16,6 @@ author:
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Introduction
-
-This script should work for many simple designs ranging from two samples (i.e., control/treatment)
-to designs with large numbers of samples, for instance a time course. The first sample group is 
-used as the denominator in the fold-change calculations. This version is set up for the simple two
-sample case, but you can switch to the code in comments for more complicated setups.
-
-Required packages:
-DESeq2 (bioconductor)
-ggplot2
-reshape2
-ashr or apelgm (for shrunken LFC calculation)
-scales (volcano plot)
-
-For bioconductor packages such as DESeq2, you need to load using BiocManager.
-
 ## Attribution
 
 This section is adapted from materials developed by **Michael Gribskov**, Professor of Computational Genomics & Systems Biology at Purdue University.
@@ -41,9 +25,22 @@ Original and related materials are available via the **CGSB Wiki**:
 
 Michael Gribskov  v 2.4 updated: 2025 December 12
 
+## Introduction
+
+This script should work for many simple designs ranging from two samples (i.e., control/treatment)
+to designs with large numbers of samples, for instance a time course. The first sample group is 
+used as the denominator in the fold-change calculations. This version is set up for the simple two
+sample case, but you can switch to the code in comments for more complicated setups.
+
 ::::::::::::::::::::::::::::::::::::::: prereq
 
-## What you need for this episode
+## Required packages
+
+- DESeq2 (bioconductor)
+- ggplot2
+- reshape2
+- ashr or apelgm (for shrunken LFC calculation)
+- scales (volcano plot)
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -60,6 +57,8 @@ dir()
 
 
 ## Package installation and loading
+
+For bioconductor packages such as DESeq2, you need to load using BiocManager.
 
 ```r
 if (!require("BiocManager", quietly = TRUE))
