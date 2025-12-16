@@ -261,8 +261,8 @@
 
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
-        <ul><li><a href="#introduction">Introduction</a></li>
-<li><a href="#attribution">Attribution</a></li>
+        <ul><li><a href="#attribution">Attribution</a></li>
+<li><a href="#introduction">Introduction</a></li>
 <li><a href="#working-directory-and-setup">Working directory and setup</a></li>
 <li><a href="#package-installation-and-loading">Package installation and loading</a></li>
 <li><a href="#reading-raw-read-count-data">Reading raw read count data</a></li>
@@ -380,34 +380,34 @@
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
-<hr class="half-width"><p>This script should work for many simple designs ranging from two
-samples (i.e., control/treatment) to designs with large numbers of
-samples, for instance a time course. The first sample group is used as
-the denominator in the fold-change calculations. This version is set up
-for the simple two sample case, but you can switch to the code in
-comments for more complicated setups.</p>
-<p>Required packages: DESeq2 (bioconductor) ggplot2 reshape2 ashr or
-apelgm (for shrunken LFC calculation) scales (volcano plot)</p>
-<p>For bioconductor packages such as DESeq2, you need to load using
-BiocManager.</p>
-</section><section><h2 class="section-heading" id="attribution">Attribution<a class="anchor" aria-label="anchor" href="#attribution"></a></h2>
+<section><h2 class="section-heading" id="attribution">Attribution<a class="anchor" aria-label="anchor" href="#attribution"></a></h2>
 <hr class="half-width"><p>This section is adapted from materials developed by <strong>Michael
 Gribskov</strong>, Professor of Computational Genomics &amp; Systems
 Biology at Purdue University.</p>
 <p>Original and related materials are available via the <strong>CGSB
 Wiki</strong>: <a href="https://cgsb.miraheze.org/wiki/Main_Page" class="external-link uri">https://cgsb.miraheze.org/wiki/Main_Page</a></p>
 <p>Michael Gribskov v 2.4 updated: 2025 December 12</p>
-<div id="what-you-need-for-this-episode" class="callout prereq">
+</section><section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
+<hr class="half-width"><p>This script should work for many simple designs ranging from two
+samples (i.e., control/treatment) to designs with large numbers of
+samples, for instance a time course. The first sample group is used as
+the denominator in the fold-change calculations. This version is set up
+for the simple two sample case, but you can switch to the code in
+comments for more complicated setups.</p>
+<div id="required-packages" class="callout prereq">
 <div class="callout-square">
 <i class="callout-icon" data-feather="check"></i>
 </div>
 <span class="callout-header">Prerequisite</span>
-<div id="what-you-need-for-this-episode" class="callout-inner">
-<h3 class="callout-title">What you need for this episode</h3>
+<div id="required-packages" class="callout-inner">
+<h3 class="callout-title">Required packages</h3>
 <div class="callout-content">
-
-</div>
+<ul><li>DESeq2 (bioconductor)</li>
+<li>ggplot2</li>
+<li>reshape2</li>
+<li>ashr or apelgm (for shrunken LFC calculation)</li>
+<li>scales (volcano plot)</li>
+</ul></div>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="working-directory-and-setup">Working directory and setup<a class="anchor" aria-label="anchor" href="#working-directory-and-setup"></a></h2>
@@ -421,7 +421,9 @@ Wiki</strong>: <a href="https://cgsb.miraheze.org/wiki/Main_Page" class="externa
 <span><span class="fu">dir</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
 </section><section><h2 class="section-heading" id="package-installation-and-loading">Package installation and loading<a class="anchor" aria-label="anchor" href="#package-installation-and-loading"></a></h2>
-<hr class="half-width"><div class="codewrapper sourceCode" id="cb2">
+<hr class="half-width"><p>For bioconductor packages such as DESeq2, you need to load using
+BiocManager.</p>
+<div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
