@@ -29,6 +29,14 @@ author:
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+
+## Attribution
+
+This section is adapted from materials developed by **Michael Gribskov**, Professor of Computational Genomics & Systems Biology at Purdue University.
+ 
+Original and related materials are available via the **CGSB Wiki**:
+<https://cgsb.miraheze.org/wiki/Main_Page>
+
 ## Introduction
 
 In Episode 04b, we quantified transcript expression using **Salmon** and summarized the results to gene-level counts using **tximport**. In this episode, we use those gene-level estimates for differential expression analysis with **DESeq2**.
