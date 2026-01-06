@@ -1,368 +1,618 @@
 ---
-title: "Differential expression using DESeq2"
+source: Rmd
+title: "B. Differential expression using DESeq2 (Salmon/Kallisto pathway)"
 teaching: 40
 exercises: 45
 author:
   - Arun Seetharam
   - Michael Gribskov (contributed material)
-
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions
+
+- How do we import transcript-level quantification from Salmon or Kallisto into DESeq2?
+- What exploratory analyses should we perform before differential expression testing?
+- How do we perform differential expression analysis with DESeq2 using tximport data?
+- How do we visualize and interpret DE results from transcript-based quantification?
+- What are the key differences between genome-based and transcript-based DE workflows?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
+- Load tximport data from Salmon quantification into DESeq2.
+- Perform quality control visualizations (boxplots, density plots, PCA).
+- Apply variance stabilizing transformation for exploratory analysis.
+- Run differential expression analysis with appropriate contrasts.
+- Create volcano plots to visualize DE results.
+- Export annotated DE results for downstream analysis.
+
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
-## Attribution
-
-This section is adapted from materials developed by **Michael Gribskov**, Professor of Computational Genomics & Systems Biology at Purdue University.
-
-Original and related materials are available via the **CGSB Wiki**:
-<https://cgsb.miraheze.org/wiki/Main_Page>
-
-Michael Gribskov  v 2.4 updated: 2025 December 12
 
 ## Introduction
 
-This script should work for many simple designs ranging from two samples (i.e., control/treatment)
-to designs with large numbers of samples, for instance a time course. The first sample group is 
-used as the denominator in the fold-change calculations. This version is set up for the simple two
-sample case, but you can switch to the code in comments for more complicated setups.
+In Episode 04b, we quantified transcript expression using **Salmon** and summarized the results to gene-level counts using **tximport**. In this episode, we use those gene-level estimates for differential expression analysis with **DESeq2**.
 
-::::::::::::::::::::::::::::::::::::::: prereq
+The workflow follows the same general pattern as Episode 05 (genome-based), but with important differences:
 
-## Required packages
+1. **Input data**: We use the `txi` object from tximport rather than raw counts from featureCounts.
+2. **Count handling**: Salmon estimates are model-based (not integer counts), and DESeq2 handles this appropriately via `DESeqDataSetFromTximport()`.
+3. **Bias correction**: Salmon's sequence and GC bias corrections are preserved through tximport.
 
-- DESeq2 (bioconductor)
-- ggplot2
-- reshape2
-- ashr or apelgm (for shrunken LFC calculation)
-- scales (volcano plot)
+::::::::::::::::::::::::::::::::::::::: callout
+
+## When to use this pathway
+
+Use this transcript-based workflow when:
+
+- You quantified with Salmon, Kallisto, or similar tools.
+- You want to leverage transcript-level bias corrections.
+- You did not generate BAM files and cannot use featureCounts.
+
+The genome-based workflow (Episode 05) is preferred when you have BAM files and need splice junction information or plan to visualize alignments.
 
 :::::::::::::::::::::::::::::::::::::::
 
-## Working directory and setup
+::::::::::::::::::::::::::::::::::::::: prereq
 
-It's easiest to work in the directory where your data is.
+## What you need for this episode
+
+- `txi.rds` file generated from tximport in Episode 04b
+- A `samples.csv` file describing the experimental groups
+- RStudio session via Open OnDemand
+
+If you haven't created the sample metadata file, create `scripts/samples.csv` with:
+
+```
+sample,condition
+SRR33253285,Nat10-CKO
+SRR33253286,Nat10-CKO
+SRR33253287,Nat10-CKO
+SRR33253288,Nat10flox/flox
+SRR33253289,Nat10flox/flox
+SRR33253290,Nat10flox/flox
+```
+
+Create a results directory:
+
+```bash
+mkdir -p results/deseq2_salmon
+```
+
+:::::::::::::::::::::::::::::::::::::::
+
+## Step 1: Load packages and data
+
+Start your RStudio session via Open OnDemand as described in Episode 05, then load the required packages:
 
 ```r
-getwd()
-setwd("A:/mrg/Dropbox/projects/25plantago")
-dir()
-````
-
-
-
-## Package installation and loading
-
-For bioconductor packages such as DESeq2, you need to load using BiocManager.
-
-```r
-if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-BiocManager::install("DESeq2")
 library(DESeq2)
+library(tximport)
+library(ggplot2)
+library(reshape2)
+library(pheatmap)
+library(RColorBrewer)
+library(ggrepel)
+library(readr)
+library(dplyr)
+
+setwd(paste0(Sys.getenv("SCRATCH"), "/rnaseq-workshop"))
 ```
 
-
-
-## Reading raw read count data
-
-Read in raw read count data from merged salmon output (NumReads column). You may want to adjust
-row and column labels to be shorter or more informative. It will be convenient if you make the
-first sample group the one that will be the denominator in the log fold change calculation.
-
-Normally this will correctly read the rownames and column names from the counts file.
+Load the tximport object created in Episode 04b:
 
 ```r
-salmon <- read.delim("JM13_18_2.numreads.out", row.names=1, header=T)
-
-row.names(salmon)
-colnames(salmon)
-summary(salmon)
+txi <- readRDS("results/salmon_quant/txi.rds")
 ```
 
-If the rownames and colnames are OK, skip ahead to raw counts.
-
-Possible adjustments to rows and columns include reordering columns, selecting subsets, manually
-moving row or column names, and editing names to remove redundant strings.
-
-Remove suffix `.salmon2` from column names.
+Examine the structure of the tximport object:
 
 ```r
-names  <- colnames(salmon)
-names <- sub(".salmon2","",names)
-colnames(salmon) <- names
-
-head(salmon)
+names(txi)
 ```
 
-
-
-## Raw counts quality control
-
-The count matrix from the previous section is named `salmon`.
-
-Total counts per sample can be checked to verify agreement with read counts and expected dimensions.
-
-```r
-head(salmon)
-colSums(salmon)
-dim(salmon)
 ```
-
-Boxplot and density plots of raw counts provide a visual summary of count distributions.
-
-```r
-melted <- melt(round(salmon), value.name="count", variable="sample")
-ggplot(melted,aes(x=sample, y=count, fill=sample)) + 
-    geom_boxplot(show.legend=F ) + 
-    scale_y_continuous(trans='log10') +
-    ggtitle("Un-normalized Counts") + 
-    ylab("log( Count )") + xlab("Sample") +
-    theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
+[1] "abundance"           "counts"              "length"
+[4] "countsFromAbundance"
 ```
 
 ```r
-ggplot(melted, aes(x=count,fill=sample)) +
-  geom_density(alpha=0.3) +
-  scale_x_continuous(trans='log10', limits=c(0.1,100000)) +
-  annotation_logticks() +
-  ggtitle("Un-normalized Counts")
+head(txi$counts)
 ```
 
-```r
-ggplot(melted, aes(x=count,fill=sample)) +
-    geom_density(alpha=0.3, show.legend=F) +
-    scale_x_continuous(trans='log10', limits=c(0.1,100000)) +
-    ggtitle("Un-normalized Counts")
+```
+                      SRR33253285 SRR33253286 SRR33253287 SRR33253288
+ENSMUSG00000000001.5     473.4426  553.784929  826.996853  676.910126
+ENSMUSG00000000003.16      0.0000    0.000000    0.000000    0.000000
+ENSMUSG00000000028.16     40.5783   33.966518   55.305501   97.845071
+ENSMUSG00000000031.20      0.0000    0.000000    0.000000    0.000000
 ```
 
+::::::::::::::::::::::::::::::::::::::: callout
 
+## Understanding the tximport object
 
-## Optional low-count filtering
+The `txi` object contains several components:
 
-Optional removal of very low count transcripts. A threshold of approximately 5 reads per sample
-is typical, but this is experiment specific. Be careful not to remove genes expressed in only one
-group.
+- **counts**: Gene-level estimated counts (used by DESeq2).
+- **abundance**: Gene-level TPM values (within-sample normalized).
+- **length**: Average transcript length per gene (used for length bias correction).
+- **countsFromAbundance**: Method used to generate counts (default: `"no"`).
+
+When using `DESeqDataSetFromTximport()`, the `length` matrix is automatically used to correct for gene-length bias during normalization. This is why we use the default `countsFromAbundance = "no"` in Episode 04b—DESeq2 handles length correction internally, so pre-scaling counts would apply the correction twice.
+
+:::::::::::::::::::::::::::::::::::::::
+
+Load sample metadata:
 
 ```r
-cutoff <- 20
-table( rowSums(salmon[,]) > cutoff )
-cut <- salmon[rowSums(salmon[,]) > cutoff,]
+coldata <- read.csv(
+    "scripts/samples.csv",
+    row.names = 1,
+    header = TRUE,
+    stringsAsFactors = TRUE
+)
+coldata$condition <- as.factor(coldata$condition)
+
+coldata
 ```
 
-```r
-melted  <- melt(cut, variable="sample")
-title <- sprintf("Totals counts > %d", cutoff)
-ggplot(melted, aes(x=value,fill=sample)) +
-    geom_density(alpha=0.3) +
-    scale_x_continuous(trans='log10', limits=c(0.01,100000000)) +
-    annotation_logticks() +
-    ggtitle(title)
+```
+            condition
+SRR33253285   Nat10-CKO
+SRR33253286   Nat10-CKO
+SRR33253287   Nat10-CKO
+SRR33253288   Nat10flox/flox
+SRR33253289   Nat10flox/flox
+SRR33253290   Nat10flox/flox
 ```
 
-Rename filtered data for downstream analysis.
+Verify that sample names match between tximport and metadata:
 
 ```r
-salmon <- cut
+all(colnames(txi$counts) == rownames(coldata))
 ```
 
-
-
-## Preliminary normalization with DESeq2
-
-Preliminary normalization uses one pass of DESeq2 to estimate size factors and enable prefiltering.
-
-```r
-replicates <- as.factor(c(rep("Sminus", 3), rep("Splus", 3)))
-
-metadata <- data.frame(sampleNames=colnames(salmon), sample=replicates)
-
-count_init <- DESeqDataSetFromMatrix( round(salmon), colData=metadata, design=~sample )
-init <- DESeq(count_init)
-plotDispEsts(init)
+```
+[1] TRUE
 ```
 
+## Step 2: Create DESeq2 object from tximport
+
+The key difference from the genome-based workflow is using `DESeqDataSetFromTximport()` instead of `DESeqDataSetFromMatrix()`:
+
 ```r
-summary(counts(init,normalized=T))
+dds <- DESeqDataSetFromTximport(
+    txi,
+    colData = coldata,
+    design = ~ condition
+)
 ```
 
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Why use DESeqDataSetFromTximport?
+
+This function:
+
+- Automatically handles non-integer counts from Salmon/Kallisto.
+- Preserves transcript length information for accurate normalization.
+- Incorporates the `txi$length` matrix to account for gene-length bias.
+
+Using `DESeqDataSetFromMatrix()` with tximport counts would lose this information.
+
+:::::::::::::::::::::::::::::::::::::::
+
+Filter lowly expressed genes using group-aware filtering:
+
 ```r
-melted <- melt(round(counts(init,normalized=T)), variable="sample")
-ggplot(melted, aes(x=value,fill=Var2)) +
-  geom_density(alpha=0.3) +
-  scale_x_continuous(trans='log10', limits=c(0.1,100000)) +
-  annotation_logticks() +
-  ggtitle("Preliminary normalization")
+# Group-aware filtering: keep genes with >= 10 counts in at least 3 samples
+# (the size of the smallest experimental group)
+min_samples <- 3
+min_counts <- 10
+keep <- rowSums(counts(dds) >= min_counts) >= min_samples
+dds <- dds[keep, ]
+dim(dds)
 ```
 
-
-
-## Pre-filtering based on normalized counts
-
-Prefiltering removes poorly measured genes unlikely to show significant differential expression.
-Multiple cutoffs are evaluated to guide selection.
-
-```r
-trial =c()
-svector = c()
-cutoff <- c(0, 5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 100)
-min_over <- 3
-nrep <- 3
-nsample <- length(levels(replicates))
-for( mincount in cutoff) {
-    select <- rowSums(counts(init,normalized=T)[,1:nrep] >= mincount) >= min_over
-    for (c in 2:nsample) {
-        first <- (c - 1) * nrep + 1
-        last <- first + nrep - 1
-        select <- select | rowSums(counts(init,normalized=T)[,first:last] >= mincount) >= min_over
-    }
-    trial[sprintf("%d",mincount)]=list(table(select))
-    svector[sprintf("%d",mincount)]=list(select)
-}
+```
+[1] 18924     6
 ```
 
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Why use group-aware filtering?
+
+A simple sum filter (`rowSums(counts(dds)) >= 10`) can be problematic:
+
+- A gene with 10 total counts across 6 samples averages ~1.7 counts/sample—too low to be informative.
+- It may remove genes expressed in only one condition (biologically interesting!).
+
+Group-aware filtering (`rowSums(counts >= threshold) >= min_group_size`) ensures:
+
+- Each kept gene has meaningful expression in at least one experimental group.
+- Genes with condition-specific expression are retained.
+- The threshold is interpretable (e.g., "at least 10 counts in at least 3 samples").
+
+:::::::::::::::::::::::::::::::::::::::
+
+Estimate size factors:
+
 ```r
-for (cutoff in names(trial)) {
-    s <- sprintf("cutoff:%4s     discard:%6d   keep:%6d", cutoff, trial[[cutoff]]["FALSE"], trial[[cutoff]]["TRUE"])
-    print(s)
-}
+dds <- estimateSizeFactors(dds)
+sizeFactors(dds)
 ```
 
-```r
-cutoff_selected <- 20
-min_selected = svector[[sprintf("%d",cutoff_selected)]]
-table(min_selected)
+```
+SRR33253285 SRR33253286 SRR33253287 SRR33253288 SRR33253289 SRR33253290
+  0.7232591   0.8443123   1.2021389   1.1142267   1.0516283   1.1245413
 ```
 
+## Step 3: Exploratory data analysis
+
+### Raw count distributions
+
+Visualize the distribution of raw counts across samples:
+
 ```r
-melted <- melt(round(counts(init,normalized=T)[min_selected,]), variable="sample", varnames=c("gene", "sample"))
-title <- sprintf("Normalized counts selected for %d samples over %d counts", min_over, cutoff_selected)
-ggplot(melted, aes(x=value,fill=sample)) +
-  geom_density(alpha=0.3) +
-  scale_x_continuous(trans='log10', limits=c(0.1,100000)) +
-  annotation_logticks() +
-  ggtitle(title)
+counts_melted <- melt(
+    log10(counts(dds) + 1),
+    varnames = c("gene", "sample"),
+    value.name = "log10_count"
+)
+
+ggplot(counts_melted, aes(x = sample, y = log10_count, fill = sample)) +
+    geom_boxplot(show.legend = FALSE) +
+    theme_minimal() +
+    labs(
+        x = "Sample",
+        y = "log10(count + 1)",
+        title = "Raw count distributions (Salmon)"
+    ) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-
-
-## Final differential expression analysis
-
-Final DESeq2 analysis is performed using the prefiltered counts.
+Density plot of raw counts:
 
 ```r
-selected <- salmon[min_selected,]
-
-count_filtered <- DESeqDataSetFromMatrix( round(selected), colData=metadata, design=~sample )
-filtered <- DESeq(count_filtered)
-plotDispEsts(filtered)
-summary(counts(filtered,normalized=T))
+ggplot(counts_melted, aes(x = log10_count, fill = sample)) +
+    geom_density(alpha = 0.3) +
+    theme_minimal() +
+    labs(
+        x = "log10(count + 1)",
+        y = "Density",
+        title = "Count density distributions"
+    )
 ```
 
+### Variance stabilizing transformation
 
-
-## PCA with variance stabilization
-
-Variance stabilized PCA provides improved separation of biological signal.
+Apply VST for exploratory analysis:
 
 ```r
-se <- SummarizedExperiment(vst(round(counts(filtered, normalized=TRUE))),
-                           colData=colData(filtered))
+vsd <- vst(dds, blind = TRUE)
+```
 
-se$sampleNames <- c(rep("C16",12), rep("C31",12))
-times <- c(rep("T00",3),rep("T48",3),rep("T06",3),rep("T72",3))
-se$time <-  c(rep(times,2))
+::::::::::::::::::::::::::::::::::::::: callout
 
-pcaData <- plotPCA(DESeqTransform(se), intgroup=c("sampleNames", "time"), returnData=TRUE)
+## Why use VST?
+
+Raw counts have a strong mean-variance relationship: highly expressed genes have higher variance. VST removes this dependency, making distance-based methods (PCA, clustering) more reliable.
+
+Setting `blind = TRUE` ensures the transformation is not influenced by the experimental design, which is appropriate for quality control.
+
+:::::::::::::::::::::::::::::::::::::::
+
+### Sample-to-sample distances
+
+```r
+sampleDists <- dist(t(assay(vsd)))
+sampleDistMatrix <- as.matrix(sampleDists)
+rownames(sampleDistMatrix) <- colnames(vsd)
+colnames(sampleDistMatrix) <- NULL
+colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255)
+
+pheatmap(
+    sampleDistMatrix,
+    clustering_distance_rows = sampleDists,
+    clustering_distance_cols = sampleDists,
+    col = colors,
+    main = "Sample distance heatmap (Salmon)"
+)
+```
+
+The distance heatmap shows how similar samples are to each other. Samples from the same condition should cluster together.
+
+### PCA plot
+
+```r
+pcaData <- plotPCA(vsd, intgroup = "condition", returnData = TRUE)
 percentVar <- round(100 * attr(pcaData, "percentVar"))
 
-ggplot(pcaData, aes(PC1, PC2, color=se$sampleNames, shape=se$time)) +
-  ggtitle("Normalized/Filtered Counts - variance stabilizing transform") + 
-  scale_shape_manual(values = c(15,16,17,18)) +
-  geom_point(size=3) +
-  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
-  ylab(paste0("PC2: ",percentVar[2],"% variance")) +
-  coord_fixed()
+ggplot(pcaData, aes(PC1, PC2, color = condition)) +
+    geom_point(size = 4) +
+    geom_text_repel(aes(label = name)) +
+    xlab(paste0("PC1: ", percentVar[1], "% variance")) +
+    ylab(paste0("PC2: ", percentVar[2], "% variance")) +
+    theme_bw() +
+    ggtitle("PCA of Salmon-quantified samples")
 ```
 
+::::::::::::::::::::::::::::::::::::::: challenge
 
+## Exercise: Interpret exploratory plots
 
-## Differential expression contrasts
+Using the distance heatmap and PCA plot:
+
+1. Do samples cluster by experimental condition?
+2. Are there any outlier samples that don't group with their replicates?
+3. How much variance is explained by PC1? What might this represent biologically?
+
+::::::::::::::::::::::::::::::::::: solution
+
+Example interpretation:
+
+1. Samples should cluster by condition (Nat10-CKO vs Nat10flox/flox) in both the heatmap and PCA.
+2. If all replicates cluster together, there are no obvious outliers.
+3. PC1 typically captures the largest source of variation. If it separates conditions, the experimental treatment is the dominant signal.
+
+:::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::
+
+## Step 4: Differential expression analysis
+
+Run the full DESeq2 pipeline:
 
 ```r
-nrep <- 3
-foreground <- levels(filtered$sample)
+dds <- DESeq(dds)
 ```
+
+```
+estimating size factors
+estimating dispersions
+gene-wise dispersion estimates
+mean-dispersion relationship
+final dispersion estimates
+fitting model and testing
+```
+
+Inspect dispersion estimates:
 
 ```r
-contrasts <- c()
-background = foreground[1]
-for (f in foreground[-1]) {
-    contrast_name <- paste(f, background, sep="_vs_")
-    contrasts <- c(contrasts, contrast_name)
-    contrast <- results(filtered, contrast=c("sample", f, background))
-    assign(contrast_name,contrast)
-    volcano(contrast, 5e-1, log2(2), stattype="padj", symmetric=T )
-}
+plotDispEsts(dds)
 ```
 
+::::::::::::::::::::::::::::::::::::::: callout
 
+## Interpreting the dispersion plot
 
-## Saving results
+- **Black dots**: Gene-wise dispersion estimates.
+- **Red line**: Fitted trend (shrinkage target).
+- **Blue dots**: Final shrunken estimates.
+
+A good fit shows the red line passing through the center of the black cloud, with blue dots closer to the line than the original black dots.
+
+:::::::::::::::::::::::::::::::::::::::
+
+Extract results for the contrast of interest:
 
 ```r
-output_file = "final.tsv"
-write.table(statout, file=output_file, sep='\t',col.names=NA,row.names=T,quote=F)
+res <- results(
+    dds,
+    contrast = c("condition", "Nat10flox/flox", "Nat10-CKO")
+)
+
+summary(res)
 ```
 
+```
+out of 21847 with nonzero total read count
+adjusted p-value < 0.1
+LFC > 0 (up)       : 3842, 18%
+LFC < 0 (down)     : 3956, 18%
+outliers [1]       : 0, 0%
+low counts [2]     : 4182, 19%
+(mean count < 5)
+```
 
+Order results by adjusted p-value:
+
+```r
+res_ordered <- res[order(res$padj), ]
+head(res_ordered)
+```
+
+### Apply log fold change shrinkage
+
+LFC shrinkage improves estimates for genes with low counts or high dispersion.
+
+First, check the available coefficients:
+
+```r
+resultsNames(dds)
+```
+
+```
+[1] "Intercept"                              "condition_Nat10flox.flox_vs_Nat10.CKO"
+```
+
+Apply shrinkage using `apeglm` (recommended for standard contrasts):
+
+```r
+res_shrunk <- lfcShrink(
+    dds,
+    coef = "condition_Nat10flox.flox_vs_Nat10.CKO",
+    type = "apeglm"
+)
+```
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Why shrink log fold changes?
+
+Genes with low counts can have unreliably large fold changes. Shrinkage:
+
+- Reduces noise in LFC estimates.
+- Improves ranking for downstream analyses (e.g., GSEA).
+- Does not affect p-values or significance calls.
+
+## Choosing a shrinkage method
+
+- **`apeglm`** (recommended): Fast, well-calibrated, uses coefficient name (`coef`).
+- **`ashr`**: Required for complex contrasts that can't be specified with `coef` (e.g., interaction terms).
+- **`normal`**: Legacy method, generally not recommended.
+
+For simple two-group comparisons like ours, `apeglm` is preferred.
+
+:::::::::::::::::::::::::::::::::::::::
+
+## Step 5: Summarize and visualize results
+
+Create a summary table:
+
+```r
+log2fc_cut <- log2(1.5)
+
+res_df <- as.data.frame(res_shrunk)
+res_df$gene_id <- rownames(res_df)
+
+summary_table <- tibble(
+    total_genes = nrow(res_df),
+    sig = sum(res_df$padj < 0.05, na.rm = TRUE),
+    up = sum(res_df$padj < 0.05 & res_df$log2FoldChange > log2fc_cut, na.rm = TRUE),
+    down = sum(res_df$padj < 0.05 & res_df$log2FoldChange < -log2fc_cut, na.rm = TRUE)
+)
+
+print(summary_table)
+```
+
+### Volcano plot
+
+```r
+res_df <- res_df %>%
+    mutate(
+        sig = case_when(
+            padj <= 0.05 & log2FoldChange >= log2fc_cut ~ "up",
+            padj <= 0.05 & log2FoldChange <= -log2fc_cut ~ "down",
+            TRUE ~ "ns"
+        )
+    )
+
+ggplot(
+    res_df,
+    aes(
+        x = log2FoldChange,
+        y = -log10(padj),
+        col = sig
+    )
+) +
+    geom_point(alpha = 0.6) +
+    scale_color_manual(values = c(
+        "up" = "firebrick",
+        "down" = "dodgerblue3",
+        "ns" = "grey70"
+    )) +
+    geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "grey40") +
+    geom_vline(xintercept = c(-log2fc_cut, log2fc_cut), linetype = "dashed", color = "grey40") +
+    theme_classic() +
+    xlab("log2 fold change") +
+    ylab("-log10 adjusted p-value") +
+    ggtitle("Volcano plot: Nat10flox/flox vs Nat10-CKO (Salmon)")
+```
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Interpreting the volcano plot
+
+- **X-axis**: Direction and magnitude of change (positive = higher in Nat10flox/flox).
+- **Y-axis**: Statistical significance (-log10 scale, higher = more significant).
+- **Colored points**: Genes passing both fold change and significance thresholds.
+
+:::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::: challenge
+
+## Exercise: Compare with genome-based results
+
+If you also ran Episode 05 (genome-based workflow):
+
+1. Are the number of DE genes similar between the two approaches?
+2. Do the top DE genes overlap?
+3. Are there systematic differences in fold change estimates?
+
+::::::::::::::::::::::::::::::::::: solution
+
+Expected observations:
+
+1. The number of DE genes should be broadly similar, though not identical.
+2. Most top DE genes should overlap between methods.
+3. Salmon's bias corrections may produce slightly different LFC estimates, especially for shorter genes or genes with high GC content.
+
+Both approaches are valid; consistency between them increases confidence in the results.
+
+:::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::
+
+## Step 6: Save results
+
+Save the full results table:
+
+```r
+write_tsv(
+    res_df,
+    "results/deseq2_salmon/DESeq2_salmon_results.tsv"
+)
+```
+
+Save significant genes only:
+
+```r
+sig_res <- res_df %>%
+    filter(
+        padj <= 0.05,
+        abs(log2FoldChange) >= log2fc_cut
+    )
+
+write_tsv(
+    sig_res,
+    "results/deseq2_salmon/DESeq2_salmon_sig.tsv"
+)
+```
+
+Save the DESeq2 object for downstream analysis:
+
+```r
+saveRDS(dds, "results/deseq2_salmon/dds_salmon.rds")
+```
+
+::::::::::::::::::::::::::::::::::::::: discussion
+
+## Genome-based vs. transcript-based: Which to choose?
+
+| Aspect | Genome-based (Ep 05) | Transcript-based (Ep 05b) |
+|--------|---------------------|--------------------------|
+| Input | BAM files | FASTQ files |
+| Speed | Slower (alignment + counting) | Faster (pseudo-alignment) |
+| Storage | Large (BAM files) | Small (quant.sf files) |
+| Bias correction | Limited | Sequence + GC bias |
+| Novel transcripts | Can detect | Cannot detect |
+| Visualization | IGV compatible | No BAM files |
+
+For standard differential expression, both methods produce comparable results. Choose based on your specific needs and available resources.
+
+:::::::::::::::::::::::::::::::::::::::
 
 ## Summary
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
+- Salmon/Kallisto output is imported via `tximport` and loaded with `DESeqDataSetFromTximport()`.
+- The tximport object preserves transcript length information for accurate normalization.
+- Exploratory analysis (PCA, distance heatmaps) should precede differential expression testing.
+- DESeq2 handles the statistical analysis identically to the genome-based workflow.
+- LFC shrinkage improves fold change estimates for low-count genes.
+- Results from transcript-based and genome-based workflows should be broadly concordant.
+
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
-## Appendix: functions
-
-```r
-volcano <- function( contrast, p_cut=0.1, lfc_cut=1.0, stattype="svalue",
-                     title="Volcano Plot", xspace=5, yspace=1, symmetric=FALSE ) {
-    sig <- contrast[[stattype]]<p_cut & !is.na(contrast[[stattype]]<p_cut)
-    lfc <- abs(contrast$log2FoldChange)>lfc_cut & !is.na(contrast$log2FoldChange>lfc_cut)
-    both <- sig & lfc
-    neither <- !sig & !lfc 
-    other <- xor(sig,lfc)
-    
-    if (title == "Volcano Plot") {
-        title <- sprintf("Volcano Plot -  %s", contrast_name)
-    }
-    
-    low <- min(contrast$log2FoldChange)
-    high <- max(contrast$log2FoldChange)
-    if (symmetric) {
-        l <- max(abs(high), abs(low))
-        limits_x <- c(-l, l)
-    } else {
-        limits_x <- c(low, high)
-    }
-    
-    p <- ggplot(contrast, aes(x=log2FoldChange, y=log10(.data[[stattype]]))) + 
-        ggtitle(title) +
-        scale_x_continuous(limits=limits_x) +
-        geom_hline(yintercept=log10(p_cut), linewidth=0.25, color="red") +
-        geom_vline(xintercept=lfc_cut, linewidth=0.25, color="red") +
-        geom_vline(xintercept=-lfc_cut, linewidth=0.25, color="red") +
-        geom_point(data=contrast[neither,], color="black", size=1.2) +
-        geom_point(data=contrast[other,], shape=21, fill="yellow", size=2, stroke=0.6) +
-        geom_point(data=contrast[both,], shape=21, color="black", fill="red", size=3, stroke=0.6)
-    
-    print(p)
-}
-```
-
