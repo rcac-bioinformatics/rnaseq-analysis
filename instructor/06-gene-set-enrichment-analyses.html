@@ -109,11 +109,11 @@
   RNA-seq in practice: Hands-on workshop on RCAC systems
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 86%" class="percentage">
-    86%
+<aside class="col-md-12 lesson-progress"><div style="width: 83%" class="percentage">
+    83%
   </div>
   <div class="progress rcac">
-    <div class="progress-bar rcac" role="progressbar" style="width: 86%" aria-valuenow="86" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar rcac" role="progressbar" style="width: 83%" aria-valuenow="83" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
@@ -251,7 +251,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="05b-deseq2-expression-analyses-kallisto.html">7. Differential expression using DESeq2</a>
+        <a href="05b-deseq2-expression-analyses-kallisto.html">7. B. Differential expression using DESeq2 (Salmon/Kallisto pathway)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -271,12 +271,16 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#introduction">Introduction</a></li>
+<li><a href="#background-understanding-over-representation-analysis">Background: Understanding over-representation analysis</a></li>
 <li><a href="#step-1-load-de-results-and-prepare-gene-lists">Step 1: Load DE results and prepare gene lists</a></li>
-<li><a href="#step-2-go-enrichment">Step 2: GO enrichment</a></li>
-<li><a href="#step-3-kegg-enrichment">Step 3: KEGG enrichment</a></li>
+<li><a href="#step-2-go-enrichment-analysis">Step 2: GO enrichment analysis</a></li>
+<li><a href="#step-3-kegg-pathway-enrichment">Step 3: KEGG pathway enrichment</a></li>
 <li><a href="#step-4-msigdb-hallmark-enrichment">Step 4: MSigDB Hallmark enrichment</a></li>
-<li><a href="#step-5-saving-results">Step 5: Saving results</a></li>
-<li><a href="#step-6-interpretation-guidelines">Step 6: Interpretation guidelines</a></li>
+<li><a href="#step-5-compare-results-across-databases">Step 5: Compare results across databases</a></li>
+<li><a href="#step-5b-direction-aware-enrichment-analysis">Step 5b: Direction-aware enrichment analysis</a></li>
+<li><a href="#step-5c-gene-set-enrichment-analysis-gsea">Step 5c: Gene Set Enrichment Analysis (GSEA)</a></li>
+<li><a href="#step-6-save-results">Step 6: Save results</a></li>
+<li><a href="#interpretation-guidelines">Interpretation guidelines</a></li>
 <li><a href="#summary">Summary</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
@@ -333,7 +337,7 @@
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="../instructor/05b-deseq2-expression-analyses-kallisto.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Differential
+          Previous: B. Differential
         </a>
         <a class="chapter-link float-end" href="../instructor/index.html" rel="next">
           Home
@@ -348,7 +352,7 @@
 
 
 
-        <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 80 minutes</p>
+        <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 95 minutes</p>
 
         <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
@@ -363,13 +367,16 @@
 <div class="card-body">
 <div class="inner">
 <h3 class="card-title">Questions</h3>
-<ul><li>How do we identify functional pathways and biological themes from DE
-genes.</li>
-<li>How do we run over representation analysis for GO, KEGG, and MSigDB
-sets.</li>
-<li>How do we create simple visualizations of enriched terms.</li>
-<li>How do we interpret enrichment results in a biologically meaningful
-way.</li>
+<ul><li>What is over-representation analysis and how does it work
+statistically?</li>
+<li>How do we identify functional pathways and biological themes from DE
+genes?</li>
+<li>How do we run enrichment analysis for GO, KEGG, and MSigDB gene
+sets?</li>
+<li>How do we interpret and compare enrichment results across different
+databases?</li>
+<li>What are the limitations and best practices for enrichment
+analysis?</li>
 </ul></div>
 </div>
 </div>
@@ -377,56 +384,191 @@ way.</li>
 <div class="card-body">
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
-<ul><li>Prepare a gene list from DESeq2 results.</li>
-<li>Run GO enrichment using clusterProfiler.</li>
-<li>Run KEGG pathway enrichment with organism specific data.</li>
-<li>Perform MSigDB Hallmark enrichment.</li>
-<li>Produce barplots and dotplots for enriched terms.</li>
+<ul><li>Understand the statistical basis of over-representation analysis
+(ORA).</li>
+<li>Prepare gene lists and background universes from DESeq2
+results.</li>
+<li>Run GO enrichment using clusterProfiler and interpret ontology
+categories.</li>
+<li>Run KEGG pathway enrichment with organism-specific data.</li>
+<li>Perform MSigDB Hallmark enrichment for curated biological
+signatures.</li>
+<li>Produce and interpret barplots, dotplots, and enrichment maps.</li>
+<li>Compare results across multiple gene set databases.</li>
 </ul></div>
 </div>
 </div>
 </div>
 </div>
 <section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
-<hr class="half-width"><p>Differential expression gives a list of up regulated and down
-regulated genes.<br>
-To understand the underlying biology, we examine which
-<strong>functional gene sets</strong> are enriched.<br>
-This process is called <strong>over representation analysis</strong>
-(ORA). ORA identifies pathways or gene sets that contain more DE genes
-than expected by chance.</p>
-<p>Here we will use <strong>clusterProfiler</strong>,
-<strong>org.Mm.eg.db</strong>, and <strong>msigdbr</strong> to run GO,
-KEGG, and Hallmark analyses on mouse data.</p>
-<div id="what-ora-requires" class="callout">
+<hr class="half-width"><p>Differential expression analysis identifies individual genes that
+change between conditions, but interpreting long gene lists is
+challenging. <strong>Gene set enrichment analysis</strong> provides
+biological context by asking: <em>Are genes with specific functions
+over-represented among the differentially expressed genes?</em></p>
+<p>This episode covers <strong>over-representation analysis
+(ORA)</strong>, the most common approach for interpreting DE
+results.</p>
+<div id="what-you-need-for-this-episode" class="callout prereq">
+<div class="callout-square">
+<i class="callout-icon" data-feather="check"></i>
+</div>
+<span class="callout-header">Prerequisite</span>
+<div id="what-you-need-for-this-episode" class="callout-inner">
+<h3 class="callout-title">What you need for this episode</h3>
+<div class="callout-content">
+<ul><li>DE results from Episode 05 or 05b
+(<code>DESeq2_results_joined.tsv</code> or
+<code>DESeq2_salmon_results.tsv</code>)</li>
+<li>RStudio session via Open OnDemand</li>
+<li>Internet connection (for KEGG queries)</li>
+</ul><div class="section level2">
+<h2 id="required-packages">Required packages<a class="anchor" aria-label="anchor" href="#required-packages"></a></h2>
+<ul><li>clusterProfiler (Bioconductor)</li>
+<li>org.Mm.eg.db (mouse annotation)</li>
+<li>msigdbr (MSigDB gene sets)</li>
+<li>enrichplot (visualization)</li>
+<li>dplyr, ggplot2, readr</li>
+</ul></div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="background-understanding-over-representation-analysis">Background: Understanding over-representation analysis<a class="anchor" aria-label="anchor" href="#background-understanding-over-representation-analysis"></a></h2>
+<hr class="half-width"><div class="section level3">
+<h3 id="what-is-ora">What is ORA?<a class="anchor" aria-label="anchor" href="#what-is-ora"></a></h3>
+<p>ORA tests whether a predefined gene set contains more DE genes than
+expected by chance. It answers the question: <em>If I randomly selected
+the same number of genes from my background, how often would I see this
+many genes from pathway X?</em></p>
+</div>
+<div class="section level3">
+<h3 id="the-statistical-test">The statistical test<a class="anchor" aria-label="anchor" href="#the-statistical-test"></a></h3>
+<p>ORA uses the <strong>hypergeometric test</strong> (equivalent to
+Fisher’s exact test), which calculates the probability of observing
+<em>k</em> or more genes from a pathway given:</p>
+<ul><li>
+<strong>N</strong>: Total genes in the background (universe)</li>
+<li>
+<strong>K</strong>: Genes in the pathway of interest</li>
+<li>
+<strong>n</strong>: Total DE genes in your list</li>
+<li>
+<strong>k</strong>: DE genes that are in the pathway</li>
+</ul><pre><code>                    Pathway genes    Non-pathway genes
+DE genes                 k              n - k
+Non-DE genes           K - k          N - K - n + k</code></pre>
+<div id="the-hypergeometric-distribution" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <span class="callout-header">Callout</span>
-<div id="what-ora-requires" class="callout-inner">
-<h3 class="callout-title">What ORA requires</h3>
+<div id="the-hypergeometric-distribution" class="callout-inner">
+<h3 class="callout-title">The hypergeometric distribution</h3>
 <div class="callout-content">
-<ul><li>A background universe of all tested genes (usually all genes in the
-DESeq2 dataset).</li>
-<li>A subset of genes considered significant (for example padj &lt;
-0.05).</li>
-<li>A gene identifier type that matches the annotation database (Ensembl
-or Entrez).</li>
-</ul></div>
+<p>The p-value represents the probability of drawing <em>k</em> or more
+pathway genes when randomly selecting <em>n</em> genes from a population
+of <em>N</em> genes containing <em>K</em> pathway members:</p>
+<p><span class="math display">\[P(X \geq k) = \sum_{i=k}^{\min(K,n)}
+\frac{\binom{K}{i}\binom{N-K}{n-i}}{\binom{N}{n}}\]</span></p>
+<p>This is a one-tailed test asking if the pathway is over-represented
+(enriched) in your gene list.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="multiple-testing-correction">Multiple testing correction<a class="anchor" aria-label="anchor" href="#multiple-testing-correction"></a></h3>
+<p>With thousands of gene sets tested, many false positives would occur
+by chance. We apply <strong>false discovery rate (FDR)</strong>
+correction using the Benjamini-Hochberg method:</p>
+<ol style="list-style-type: decimal"><li>Rank all p-values from smallest to largest.</li>
+<li>Calculate adjusted p-value: <span class="math inline">\(p_{adj} = p
+\times \frac{n}{rank}\)</span>
+</li>
+<li>Filter results by adjusted p-value threshold (typically 0.05).</li>
+</ol><div id="why-the-universe-matters" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="why-the-universe-matters" class="callout-inner">
+<h3 class="callout-title">Why the universe matters</h3>
+<div class="callout-content">
+<p>The background universe should include <strong>all genes that could
+have been detected as DE</strong> in your experiment, typically all
+genes tested by DESeq2.</p>
+<p>Common mistakes: - Using the whole genome (inflates significance). -
+Using only expressed genes (may miss relevant pathways). - Using a
+different species’ gene list.</p>
+<p>The universe defines what “expected by chance” means. An
+inappropriate universe leads to misleading results.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="gene-set-databases">Gene set databases<a class="anchor" aria-label="anchor" href="#gene-set-databases"></a></h3>
+<p>Different databases capture different aspects of biology:</p>
+<table class="table"><colgroup><col width="30%"><col width="39%"><col width="30%"></colgroup><thead><tr class="header"><th>Database</th>
+<th>Description</th>
+<th>Best for</th>
+</tr></thead><tbody><tr class="odd"><td>GO BP</td>
+<td>Biological Process ontology</td>
+<td>Functional processes</td>
+</tr><tr class="even"><td>GO MF</td>
+<td>Molecular Function ontology</td>
+<td>Protein activities</td>
+</tr><tr class="odd"><td>GO CC</td>
+<td>Cellular Component ontology</td>
+<td>Subcellular localization</td>
+</tr><tr class="even"><td>KEGG</td>
+<td>Curated pathways</td>
+<td>Metabolic/signaling pathways</td>
+</tr><tr class="odd"><td>Reactome</td>
+<td>Detailed pathway reactions</td>
+<td>Mechanistic understanding</td>
+</tr><tr class="even"><td>MSigDB Hallmark</td>
+<td>50 curated signatures</td>
+<td>High-level biological states</td>
+</tr><tr class="odd"><td>MSigDB C2</td>
+<td>Curated gene sets</td>
+<td>Canonical pathways</td>
+</tr></tbody></table><div id="which-database-should-i-use" class="callout discussion">
+<div class="callout-square">
+<i class="callout-icon" data-feather="message-circle"></i>
+</div>
+<span class="callout-header">Discussion</span>
+<div id="which-database-should-i-use" class="callout-inner">
+<h3 class="callout-title">Which database should I use?</h3>
+<div class="callout-content">
+<p>There’s no single “best” database. Consider:</p>
+<ul><li>
+<strong>GO</strong>: Comprehensive but redundant; many overlapping
+terms.</li>
+<li>
+<strong>KEGG</strong>: Well-curated pathways; limited coverage;
+requires Entrez IDs.</li>
+<li>
+<strong>Hallmark</strong>: Reduced redundancy; easier to interpret;
+may miss specific pathways.</li>
+</ul><p>Best practice: Run multiple databases and look for <strong>convergent
+signals</strong> across them.</p>
+</div>
+</div>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="step-1-load-de-results-and-prepare-gene-lists">Step 1: Load DE results and prepare gene lists<a class="anchor" aria-label="anchor" href="#step-1-load-de-results-and-prepare-gene-lists"></a></h2>
 <hr class="half-width"><p>Start your R session:</p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">sinteractive</span> <span class="at">-A</span> rcac <span class="at">-p</span> cpu <span class="at">-N</span> 1 <span class="at">-n</span> 4 <span class="at">--time</span><span class="op">=</span>02:00:00</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="ex">module</span> load r-rnaseq</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="ex">R</span></span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">sinteractive</span> <span class="at">-A</span> rcac <span class="at">-p</span> cpu <span class="at">-N</span> 1 <span class="at">-n</span> 4 <span class="at">--time</span><span class="op">=</span>02:00:00</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="ex">module</span> load r-rnaseq</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="ex">R</span></span></code></pre>
 </div>
-<p>Load data:</p>
-<div class="codewrapper sourceCode" id="cb2">
+<p>Load packages:</p>
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -434,199 +576,143 @@ or Entrez).</li>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">clusterProfiler</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">org.Mm.eg.db</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">msigdbr</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">enrichplot</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">dplyr</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">ggplot2</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">readr</span><span class="op">)</span></span></code></pre>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">readr</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">setwd</span><span class="op">(</span><span class="fu">paste0</span><span class="op">(</span><span class="fu">Sys.getenv</span><span class="op">(</span><span class="st">"SCRATCH"</span><span class="op">)</span>, <span class="st">"/rnaseq-workshop"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Load DESeq2 results from Episode C:</p>
-<div class="codewrapper sourceCode" id="cb3">
+<p>Load DESeq2 results from Episode 05:</p>
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">read_csv</span><span class="op">(</span><span class="st">"DESeq2_results_shrunken.csv"</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">read_tsv</span><span class="op">(</span><span class="st">"results/deseq2/DESeq2_results_joined.tsv"</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">head</span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Define:</p>
-<ul><li>universe = all genes tested<br></li>
-<li>significant set = padj &lt; 0.05</li>
-</ul><div class="codewrapper sourceCode" id="cb4">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">universe</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">X1</span></span>
-<span><span class="va">sig</span> <span class="op">&lt;-</span> <span class="va">res</span> <span class="op">%&gt;%</span> <span class="fu">filter</span><span class="op">(</span><span class="va">padj</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">pull</span><span class="op">(</span><span class="va">X1</span><span class="op">)</span></span></code></pre>
-</div>
-<p>Convert Ensembl IDs to Entrez (required for GO and KEGG):</p>
+<p>Define the gene lists:</p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">id_map</span> <span class="op">&lt;-</span> <span class="fu">bitr</span><span class="op">(</span><span class="va">universe</span>,</span>
-<span>               fromType <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
-<span>               toType <span class="op">=</span> <span class="st">"ENTREZID"</span>,</span>
-<span>               OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Universe: all genes tested</span></span>
+<span><span class="va">universe</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">ensembl_gene_id_version</span></span>
+<span></span>
+<span><span class="co"># Significant genes: padj &lt; 0.05 and |log2FC| &gt; log2(1.5)</span></span>
+<span><span class="va">log2fc_cut</span> <span class="op">&lt;-</span> <span class="fu">log2</span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="va">sig_genes</span> <span class="op">&lt;-</span> <span class="va">res</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">filter</span><span class="op">(</span><span class="va">padj</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, <span class="fu">abs</span><span class="op">(</span><span class="va">log2FoldChange</span><span class="op">)</span> <span class="op">&gt;</span> <span class="va">log2fc_cut</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">pull</span><span class="op">(</span><span class="va">ensembl_gene_id_version</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">length</span><span class="op">(</span><span class="va">universe</span><span class="op">)</span></span>
+<span><span class="fu">length</span><span class="op">(</span><span class="va">sig_genes</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Merge IDs into results:</p>
-<div class="codewrapper sourceCode" id="cb6">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu">left_join</span><span class="op">(</span><span class="va">res</span>, <span class="va">id_map</span>, by <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"X1"</span> <span class="op">=</span> <span class="st">"ENSEMBL"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">sig_entrez</span> <span class="op">&lt;-</span> <span class="va">res2</span> <span class="op">%&gt;%</span> <span class="fu">filter</span><span class="op">(</span><span class="va">padj</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">pull</span><span class="op">(</span><span class="va">ENTREZID</span><span class="op">)</span></span>
-<span><span class="va">universe_entrez</span> <span class="op">&lt;-</span> <span class="va">res2</span><span class="op">$</span><span class="va">ENTREZID</span></span></code></pre>
+<pre><code>[1] 15839
+[1] 4543</code></pre>
+<div id="choosing-significance-thresholds" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
 </div>
-</section><section><h2 class="section-heading" id="step-2-go-enrichment">Step 2: GO enrichment<a class="anchor" aria-label="anchor" href="#step-2-go-enrichment"></a></h2>
-<hr class="half-width"><p>Run GO Biological Process ORA:</p>
+<span class="callout-header">Callout</span>
+<div id="choosing-significance-thresholds" class="callout-inner">
+<h3 class="callout-title">Choosing significance thresholds</h3>
+<div class="callout-content">
+<p>The threshold for “significant” genes affects enrichment results:</p>
+<ul><li>
+<strong>Stringent (padj &lt; 0.01, |LFC| &gt; 1)</strong>: Fewer
+genes, clearer signals, may miss subtle effects.</li>
+<li>
+<strong>Lenient (padj &lt; 0.1, no LFC cutoff)</strong>: More genes,
+noisier results, higher sensitivity.</li>
+</ul><p>There’s no universally correct threshold. Consider your experimental
+question and validate key findings.</p>
+</div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="convert-gene-ids">Convert gene IDs<a class="anchor" aria-label="anchor" href="#convert-gene-ids"></a></h3>
+<p>Most enrichment tools require <strong>Entrez IDs</strong>. Our data
+uses Ensembl IDs with version numbers, so we need to convert:</p>
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ego</span> <span class="op">&lt;-</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">sig_entrez</span>,</span>
-<span>                universe <span class="op">=</span> <span class="va">universe_entrez</span>,</span>
-<span>                OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>,</span>
-<span>                ont <span class="op">=</span> <span class="st">"BP"</span>,</span>
-<span>                readable <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Remove version suffix for mapping</span></span>
+<span><span class="va">universe_clean</span> <span class="op">&lt;-</span> <span class="fu">gsub</span><span class="op">(</span><span class="st">"\\.\\d+$"</span>, <span class="st">""</span>, <span class="va">universe</span><span class="op">)</span></span>
+<span><span class="va">sig_clean</span> <span class="op">&lt;-</span> <span class="fu">gsub</span><span class="op">(</span><span class="st">"\\.\\d+$"</span>, <span class="st">""</span>, <span class="va">sig_genes</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Map Ensembl to Entrez</span></span>
+<span><span class="va">id_map</span> <span class="op">&lt;-</span> <span class="fu">bitr</span><span class="op">(</span></span>
+<span>    <span class="va">universe_clean</span>,</span>
+<span>    fromType <span class="op">=</span> <span class="st">"ENSEMBL"</span>,</span>
+<span>    toType <span class="op">=</span> <span class="st">"ENTREZID"</span>,</span>
+<span>    OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">head</span><span class="op">(</span><span class="va">id_map</span><span class="op">)</span></span></code></pre>
 </div>
-<p>View top terms:</p>
-<div class="codewrapper sourceCode" id="cb8">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">head</span><span class="op">(</span><span class="va">ego</span><span class="op">)</span></span></code></pre>
+<pre><code>           ENSEMBL ENTREZID
+1 ENSMUSG00000051285   381290
+2 ENSMUSG00000025900    14468
+3 ENSMUSG00000033793    70675
+4 ENSMUSG00000033774    18777
+5 ENSMUSG00000025903    14459
+6 ENSMUSG00000090031   628071</code></pre>
+<div id="gene-id-conversion-challenges" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
 </div>
-<p>Plot:</p>
+<span class="callout-header">Callout</span>
+<div id="gene-id-conversion-challenges" class="callout-inner">
+<h3 class="callout-title">Gene ID conversion challenges</h3>
+<div class="callout-content">
+<p>Not all genes map successfully:</p>
+<ul><li>Some Ensembl IDs lack Entrez equivalents.</li>
+<li>ID mapping databases may be outdated.</li>
+<li>Multi-mapping (one Ensembl → multiple Entrez) can occur.</li>
+</ul><p><code>bitr()</code> drops unmapped genes silently. Check how many
+genes were lost:</p>
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">dotplot</span><span class="op">(</span><span class="va">ego</span>, showCategory <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GO Biological Process enrichment"</span><span class="op">)</span></span></code></pre>
-</div>
-<div id="why-go-is-useful" class="callout discussion">
-<div class="callout-square">
-<i class="callout-icon" data-feather="message-circle"></i>
-</div>
-<span class="callout-header">Discussion</span>
-<div id="why-go-is-useful" class="callout-inner">
-<h3 class="callout-title">Why GO is useful</h3>
-<div class="callout-content">
-<p>GO BP terms provide high level summaries of biological
-activity.<br>
-Strongly biased terms (for example mitochondrial or translation) often
-correspond to global shifts in cell state or stress.</p>
+<code class="sourceCode R"><span><span class="fu">message</span><span class="op">(</span><span class="fu">sprintf</span><span class="op">(</span><span class="st">"Mapped %d of %d genes (%.1f%%)"</span>,</span>
+<span>    <span class="fu">nrow</span><span class="op">(</span><span class="va">id_map</span><span class="op">)</span>, <span class="fu">length</span><span class="op">(</span><span class="va">universe_clean</span><span class="op">)</span>,</span>
+<span>    <span class="fl">100</span> <span class="op">*</span> <span class="fu">nrow</span><span class="op">(</span><span class="va">id_map</span><span class="op">)</span> <span class="op">/</span> <span class="fu">length</span><span class="op">(</span><span class="va">universe_clean</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="step-3-kegg-enrichment">Step 3: KEGG enrichment<a class="anchor" aria-label="anchor" href="#step-3-kegg-enrichment"></a></h2>
-<hr class="half-width"><p>KEGG requires Entrez IDs and organism code <code>"mmu"</code> for
-mouse.</p>
+</div>
+<p>Create final gene lists with Entrez IDs:</p>
 <div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ekegg</span> <span class="op">&lt;-</span> <span class="fu">enrichKEGG</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">sig_entrez</span>,</span>
-<span>                    universe <span class="op">=</span> <span class="va">universe_entrez</span>,</span>
-<span>                    organism <span class="op">=</span> <span class="st">"mmu"</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Universe with Entrez IDs</span></span>
+<span><span class="va">universe_entrez</span> <span class="op">&lt;-</span> <span class="va">id_map</span><span class="op">$</span><span class="va">ENTREZID</span></span>
+<span></span>
+<span><span class="co"># Significant genes with Entrez IDs</span></span>
+<span><span class="va">sig_entrez</span> <span class="op">&lt;-</span> <span class="va">id_map</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">filter</span><span class="op">(</span><span class="va">ENSEMBL</span> <span class="op">%in%</span> <span class="va">sig_clean</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">pull</span><span class="op">(</span><span class="va">ENTREZID</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">length</span><span class="op">(</span><span class="va">sig_entrez</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Plot KEGG enrichment:</p>
-<div class="codewrapper sourceCode" id="cb11">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">barplot</span><span class="op">(</span><span class="va">ekegg</span>, showCategory <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></code></pre>
-</div>
-<div id="kegg-caveat" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
-</div>
-<span class="callout-header">Callout</span>
-<div id="kegg-caveat" class="callout-inner">
-<h3 class="callout-title">KEGG caveat</h3>
-<div class="callout-content">
-<p>KEGG Entrez annotations may not perfectly match recent Ensembl
-builds.<br>
-If a gene is missing, it will be silently dropped.</p>
-</div>
-</div>
-</div>
-</section><section><h2 class="section-heading" id="step-4-msigdb-hallmark-enrichment">Step 4: MSigDB Hallmark enrichment<a class="anchor" aria-label="anchor" href="#step-4-msigdb-hallmark-enrichment"></a></h2>
-<hr class="half-width"><p>Load Hallmark gene sets for mouse:</p>
-<div class="codewrapper sourceCode" id="cb12">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">hallmark</span> <span class="op">&lt;-</span> <span class="fu">msigdbr</span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Mus musculus"</span>, category <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span></span>
-<span><span class="va">hallmark_list</span> <span class="op">&lt;-</span> <span class="fu">split</span><span class="op">(</span><span class="va">hallmark</span><span class="op">$</span><span class="va">entrez_gene</span>, <span class="va">hallmark</span><span class="op">$</span><span class="va">gs_name</span><span class="op">)</span></span></code></pre>
-</div>
-<p>Run ORA:</p>
-<div class="codewrapper sourceCode" id="cb13">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ehall</span> <span class="op">&lt;-</span> <span class="fu">enricher</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">sig_entrez</span>,</span>
-<span>                  universe <span class="op">=</span> <span class="va">universe_entrez</span>,</span>
-<span>                  TERM2GENE <span class="op">=</span> <span class="va">hallmark_list</span><span class="op">)</span></span></code></pre>
-</div>
-<p>Plot:</p>
-<div class="codewrapper sourceCode" id="cb14">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">dotplot</span><span class="op">(</span><span class="va">ehall</span>, showCategory <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"MSigDB Hallmark enrichment"</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="section level3">
-<h3 id="inspect-enriched-hallmark-sets">Inspect enriched Hallmark sets<a class="anchor" aria-label="anchor" href="#inspect-enriched-hallmark-sets"></a></h3>
-<div class="codewrapper sourceCode" id="cb15">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">head</span><span class="op">(</span><span class="va">ehall</span><span class="op">)</span></span></code></pre>
-</div>
-<div id="why-hallmark-sets-are-recommended" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
-</div>
-<span class="callout-header">Callout</span>
-<div id="why-hallmark-sets-are-recommended" class="callout-inner">
-<h3 class="callout-title">Why Hallmark sets are recommended</h3>
-<div class="callout-content">
-<p>Hallmark pathways are curated to reduce redundancy.<br>
-They are easier to interpret compared to long lists of GO terms.</p>
-</div>
-</div>
-</div>
-</div>
-</section><section><h2 class="section-heading" id="step-5-saving-results">Step 5: Saving results<a class="anchor" aria-label="anchor" href="#step-5-saving-results"></a></h2>
-<hr class="half-width"><div class="codewrapper sourceCode" id="cb16">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">write_csv</span><span class="op">(</span><span class="fu">as.data.frame</span><span class="op">(</span><span class="va">ego</span><span class="op">)</span>, <span class="st">"GO_enrichment.csv"</span><span class="op">)</span></span>
-<span><span class="fu">write_csv</span><span class="op">(</span><span class="fu">as.data.frame</span><span class="op">(</span><span class="va">ekegg</span><span class="op">)</span>, <span class="st">"KEGG_enrichment.csv"</span><span class="op">)</span></span>
-<span><span class="fu">write_csv</span><span class="op">(</span><span class="fu">as.data.frame</span><span class="op">(</span><span class="va">ehall</span><span class="op">)</span>, <span class="st">"Hallmark_enrichment.csv"</span><span class="op">)</span></span></code></pre>
-</div>
-</section><section><h2 class="section-heading" id="step-6-interpretation-guidelines">Step 6: Interpretation guidelines<a class="anchor" aria-label="anchor" href="#step-6-interpretation-guidelines"></a></h2>
-<hr class="half-width"><p>Meaningful enrichment patterns should:</p>
-<ul><li>involve pathways relevant to your experimental design<br></li>
-<li>contain multiple DE genes in the same direction<br></li>
-<li>show consistent themes across GO, KEGG, and Hallmark sets</li>
-</ul><p>Pathways enriched only by one DE gene or very small sets should be
-interpreted cautiously.</p>
-<div id="exercise-interpret-enrichment-results" class="callout challenge">
+<div id="exercise-prepare-up-regulated-and-down-regulated-gene-lists" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <span class="callout-header">Challenge</span>
-<div id="exercise-interpret-enrichment-results" class="callout-inner">
-<h3 class="callout-title">Exercise: interpret enrichment results</h3>
+<div id="exercise-prepare-up-regulated-and-down-regulated-gene-lists" class="callout-inner">
+<h3 class="callout-title">Exercise: Prepare up-regulated and
+down-regulated gene lists</h3>
 <div class="callout-content">
-<p>Using your GO, KEGG, and Hallmark outputs:</p>
-<ol style="list-style-type: decimal"><li>Identify the pathways with the smallest adjusted p values.<br></li>
-<li>Are the enriched pathways consistent with the expected
-phenotype.<br></li>
-<li>Which pathway collections (GO, KEGG, Hallmark) give the clearest
-signal.</li>
-</ol></div>
+<p>Create separate gene lists for: 1. Up-regulated genes (log2FC &gt; 0
+and padj &lt; 0.05) 2. Down-regulated genes (log2FC &lt; 0 and padj &lt;
+0.05)</p>
+<p>Why might analyzing these separately be informative?</p>
+</div>
 </div>
 </div>
 <div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
@@ -634,18 +720,781 @@ signal.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
-<p>Example interpretation:</p>
-<ul><li>Several GO terms related to RNA processing and cell cycle appear
-enriched.<br></li>
-<li>Hallmark sets provide clearer summaries of biological themes
-compared to GO.<br></li>
-<li>KEGG pathways show fewer hits but corroborate the GO findings.</li>
+<div class="codewrapper sourceCode" id="cb11">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Up-regulated genes</span></span>
+<span><span class="va">up_genes</span> <span class="op">&lt;-</span> <span class="va">res</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">filter</span><span class="op">(</span><span class="va">padj</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, <span class="va">log2FoldChange</span> <span class="op">&gt;</span> <span class="va">log2fc_cut</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">pull</span><span class="op">(</span><span class="va">ensembl_gene_id_version</span><span class="op">)</span></span>
+<span><span class="va">up_clean</span> <span class="op">&lt;-</span> <span class="fu">gsub</span><span class="op">(</span><span class="st">"\\.\\d+$"</span>, <span class="st">""</span>, <span class="va">up_genes</span><span class="op">)</span></span>
+<span><span class="va">up_entrez</span> <span class="op">&lt;-</span> <span class="va">id_map</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">filter</span><span class="op">(</span><span class="va">ENSEMBL</span> <span class="op">%in%</span> <span class="va">up_clean</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">pull</span><span class="op">(</span><span class="va">ENTREZID</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Down-regulated genes</span></span>
+<span><span class="va">down_genes</span> <span class="op">&lt;-</span> <span class="va">res</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">filter</span><span class="op">(</span><span class="va">padj</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, <span class="va">log2FoldChange</span> <span class="op">&lt;</span> <span class="op">-</span><span class="va">log2fc_cut</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">pull</span><span class="op">(</span><span class="va">ensembl_gene_id_version</span><span class="op">)</span></span>
+<span><span class="va">down_clean</span> <span class="op">&lt;-</span> <span class="fu">gsub</span><span class="op">(</span><span class="st">"\\.\\d+$"</span>, <span class="st">""</span>, <span class="va">down_genes</span><span class="op">)</span></span>
+<span><span class="va">down_entrez</span> <span class="op">&lt;-</span> <span class="va">id_map</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">filter</span><span class="op">(</span><span class="va">ENSEMBL</span> <span class="op">%in%</span> <span class="va">down_clean</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">pull</span><span class="op">(</span><span class="va">ENTREZID</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">length</span><span class="op">(</span><span class="va">up_entrez</span><span class="op">)</span></span>
+<span><span class="fu">length</span><span class="op">(</span><span class="va">down_entrez</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Analyzing up and down separately can reveal: - Different biological
+processes activated vs. suppressed. - Clearer signals when combining
+masks opposing effects. - Direction-specific pathway involvement.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="step-2-go-enrichment-analysis">Step 2: GO enrichment analysis<a class="anchor" aria-label="anchor" href="#step-2-go-enrichment-analysis"></a></h2>
+<hr class="half-width"><div class="section level3">
+<h3 id="run-go-biological-process-enrichment">Run GO Biological Process enrichment<a class="anchor" aria-label="anchor" href="#run-go-biological-process-enrichment"></a></h3>
+<div class="codewrapper sourceCode" id="cb12">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ego_bp</span> <span class="op">&lt;-</span> <span class="fu">enrichGO</span><span class="op">(</span></span>
+<span>    gene <span class="op">=</span> <span class="va">sig_entrez</span>,</span>
+<span>    universe <span class="op">=</span> <span class="va">universe_entrez</span>,</span>
+<span>    OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>,</span>
+<span>    ont <span class="op">=</span> <span class="st">"BP"</span>,</span>
+<span>    pAdjustMethod <span class="op">=</span> <span class="st">"BH"</span>,</span>
+<span>    pvalueCutoff <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>    qvalueCutoff <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>    readable <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">head</span><span class="op">(</span><span class="va">ego_bp</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre>
+</div>
+<div id="understanding-enrichgo-output" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="understanding-enrichgo-output" class="callout-inner">
+<h3 class="callout-title">Understanding enrichGO output</h3>
+<div class="callout-content">
+<p>Key columns in the results:</p>
+<ul><li>
+<strong>ID</strong>: GO term identifier (e.g., <a href="GO:0006915" class="uri">GO:0006915</a>)</li>
+<li>
+<strong>Description</strong>: Human-readable term name</li>
+<li>
+<strong>GeneRatio</strong>: DE genes in term / total DE genes with
+annotation</li>
+<li>
+<strong>BgRatio</strong>: Term genes in universe / total annotated
+genes in universe</li>
+<li>
+<strong>pvalue</strong>: Raw hypergeometric p-value</li>
+<li>
+<strong>p.adjust</strong>: BH-corrected p-value</li>
+<li>
+<strong>qvalue</strong>: Alternative FDR estimate</li>
+<li>
+<strong>geneID</strong>: List of DE genes in this term</li>
+<li>
+<strong>Count</strong>: Number of DE genes in this term</li>
 </ul></div>
 </div>
 </div>
 </div>
+<div class="section level3">
+<h3 id="visualize-go-results">Visualize GO results<a class="anchor" aria-label="anchor" href="#visualize-go-results"></a></h3>
+<p>Dotplot showing top enriched terms:</p>
+<div class="codewrapper sourceCode" id="cb13">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">dotplot</span><span class="op">(</span><span class="va">ego_bp</span>, showCategory <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GO Biological Process enrichment"</span><span class="op">)</span></span></code></pre>
+</div>
+<p>The dotplot shows: - <strong>X-axis</strong>: Gene ratio (proportion
+of DE genes in the term) - <strong>Y-axis</strong>: GO term description
+- <strong>Color</strong>: Adjusted p-value - <strong>Size</strong>:
+Number of genes</p>
+<p>Barplot alternative:</p>
+<div class="codewrapper sourceCode" id="cb14">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">barplot</span><span class="op">(</span><span class="va">ego_bp</span>, showCategory <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GO BP enrichment - Top 15 terms"</span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div class="section level3">
+<h3 id="reduce-go-redundancy">Reduce GO redundancy<a class="anchor" aria-label="anchor" href="#reduce-go-redundancy"></a></h3>
+<p>GO terms are hierarchical and often redundant. Use
+<code>simplify()</code> to remove similar terms:</p>
+<div class="codewrapper sourceCode" id="cb15">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ego_bp_simple</span> <span class="op">&lt;-</span> <span class="fu">simplify</span><span class="op">(</span></span>
+<span>    <span class="va">ego_bp</span>,</span>
+<span>    cutoff <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>    by <span class="op">=</span> <span class="st">"p.adjust"</span>,</span>
+<span>    select_fun <span class="op">=</span> <span class="va">min</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">dotplot</span><span class="op">(</span><span class="va">ego_bp_simple</span>, showCategory <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GO BP enrichment (simplified)"</span><span class="op">)</span></span></code></pre>
+</div>
+<div id="why-simplify-go-results" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="why-simplify-go-results" class="callout-inner">
+<h3 class="callout-title">Why simplify GO results?</h3>
+<div class="callout-content">
+<p>The GO hierarchy means related terms often appear together: -
+“regulation of cell death” and “positive regulation of cell death” -
+“response to stimulus” and “response to external stimulus”</p>
+<p><code>simplify()</code> removes redundant terms based on semantic
+similarity, making results easier to interpret. The <code>cutoff</code>
+parameter (0-1) controls how aggressively terms are merged.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="enrichment-map-visualization">Enrichment map visualization<a class="anchor" aria-label="anchor" href="#enrichment-map-visualization"></a></h3>
+<p>For many significant terms, an enrichment map shows
+relationships:</p>
+<div class="codewrapper sourceCode" id="cb16">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ego_bp_em</span> <span class="op">&lt;-</span> <span class="fu">pairwise_termsim</span><span class="op">(</span><span class="va">ego_bp_simple</span><span class="op">)</span></span>
+<span><span class="fu">emapplot</span><span class="op">(</span><span class="va">ego_bp_em</span>, showCategory <span class="op">=</span> <span class="fl">30</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GO BP enrichment map"</span><span class="op">)</span></span></code></pre>
+</div>
+<p>The enrichment map clusters similar terms together, revealing
+functional themes.</p>
+<div id="exercise-compare-go-ontologies" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="exercise-compare-go-ontologies" class="callout-inner">
+<h3 class="callout-title">Exercise: Compare GO ontologies</h3>
+<div class="callout-content">
+<p>Run enrichment for GO Molecular Function (MF) and Cellular Component
+(CC):</p>
+<div class="codewrapper sourceCode" id="cb17">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ego_mf</span> <span class="op">&lt;-</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">sig_entrez</span>, universe <span class="op">=</span> <span class="va">universe_entrez</span>,</span>
+<span>                   OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>, ont <span class="op">=</span> <span class="st">"MF"</span>, readable <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">ego_cc</span> <span class="op">&lt;-</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">sig_entrez</span>, universe <span class="op">=</span> <span class="va">universe_entrez</span>,</span>
+<span>                   OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>, ont <span class="op">=</span> <span class="st">"CC"</span>, readable <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
+</div>
+<ol style="list-style-type: decimal"><li>How do the top terms differ between BP, MF, and CC?</li>
+<li>Are there consistent themes across ontologies?</li>
+<li>Which ontology provides the most interpretable results for your
+experiment?</li>
+</ol></div>
+</div>
+</div>
+<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
+  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
+</button>
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div class="accordion-body">
+<p>Example interpretation:</p>
+<ul><li>
+<strong>BP</strong> terms describe processes (e.g., “cell cycle”,
+“RNA processing”).</li>
+<li>
+<strong>MF</strong> terms describe molecular activities (e.g., “RNA
+binding”, “kinase activity”).</li>
+<li>
+<strong>CC</strong> terms describe locations (e.g., “nucleus”,
+“mitochondrion”).</li>
+</ul><p>Consistent themes across ontologies strengthen biological
+interpretation. For example, if BP shows “translation” enrichment, MF
+might show “ribosome binding”, and CC might show “ribosome” or
+“cytoplasm”.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="step-3-kegg-pathway-enrichment">Step 3: KEGG pathway enrichment<a class="anchor" aria-label="anchor" href="#step-3-kegg-pathway-enrichment"></a></h2>
+<hr class="half-width"><p>KEGG provides curated pathway maps connecting genes to biological
+systems.</p>
+<div class="codewrapper sourceCode" id="cb18">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ekegg</span> <span class="op">&lt;-</span> <span class="fu">enrichKEGG</span><span class="op">(</span></span>
+<span>    gene <span class="op">=</span> <span class="va">sig_entrez</span>,</span>
+<span>    universe <span class="op">=</span> <span class="va">universe_entrez</span>,</span>
+<span>    organism <span class="op">=</span> <span class="st">"mmu"</span>,  <span class="co"># Mouse</span></span>
+<span>    pAdjustMethod <span class="op">=</span> <span class="st">"BH"</span>,</span>
+<span>    pvalueCutoff <span class="op">=</span> <span class="fl">0.05</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">head</span><span class="op">(</span><span class="va">ekegg</span><span class="op">)</span></span></code></pre>
+</div>
+<div id="kegg-organism-codes" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="kegg-organism-codes" class="callout-inner">
+<h3 class="callout-title">KEGG organism codes</h3>
+<div class="callout-content">
+<p>Common organism codes: - <code>"hsa"</code>: Human -
+<code>"mmu"</code>: Mouse - <code>"rno"</code>: Rat -
+<code>"dme"</code>: Drosophila - <code>"sce"</code>: Yeast -
+<code>"ath"</code>: Arabidopsis</p>
+<p>Find your organism:
+<code>search_kegg_organism("species name")</code></p>
+</div>
+</div>
+</div>
+<p>Visualize KEGG results:</p>
+<div class="codewrapper sourceCode" id="cb19">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">barplot</span><span class="op">(</span><span class="va">ekegg</span>, showCategory <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"KEGG pathway enrichment"</span><span class="op">)</span></span></code></pre>
+</div>
+<div id="kegg-limitations" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="kegg-limitations" class="callout-inner">
+<h3 class="callout-title">KEGG limitations</h3>
+<div class="callout-content">
+<p>Be aware of KEGG-specific issues:</p>
+<ol style="list-style-type: decimal"><li>
+<strong>ID coverage</strong>: KEGG uses its own gene IDs; some
+Entrez IDs may not map.</li>
+<li>
+<strong>Update frequency</strong>: KEGG pathways are updated
+periodically; results may vary.</li>
+<li>
+<strong>License</strong>: KEGG has usage restrictions for commercial
+applications.</li>
+<li>
+<strong>Incomplete mapping</strong>: Some genes lack pathway
+assignments.</li>
+</ol><p>Check dropped genes:</p>
+<div class="codewrapper sourceCode" id="cb20">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">message</span><span class="op">(</span><span class="fu">sprintf</span><span class="op">(</span><span class="st">"KEGG analysis used %d of %d input genes"</span>,</span>
+<span>    <span class="fu">length</span><span class="op">(</span><span class="va">ekegg</span><span class="op">@</span><span class="va">gene</span><span class="op">)</span>, <span class="fu">length</span><span class="op">(</span><span class="va">sig_entrez</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="step-4-msigdb-hallmark-enrichment">Step 4: MSigDB Hallmark enrichment<a class="anchor" aria-label="anchor" href="#step-4-msigdb-hallmark-enrichment"></a></h2>
+<hr class="half-width"><p>MSigDB Hallmark gene sets are 50 curated signatures representing
+well-defined biological states and processes.</p>
+<div class="section level3">
+<h3 id="load-hallmark-gene-sets">Load Hallmark gene sets<a class="anchor" aria-label="anchor" href="#load-hallmark-gene-sets"></a></h3>
+<div class="codewrapper sourceCode" id="cb21">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hallmark</span> <span class="op">&lt;-</span> <span class="fu">msigdbr</span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Mus musculus"</span>, category <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span></span>
+<span><span class="fu">head</span><span class="op">(</span><span class="va">hallmark</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Prepare gene set list:</p>
+<div class="codewrapper sourceCode" id="cb22">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hallmark_list</span> <span class="op">&lt;-</span> <span class="va">hallmark</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="va">gs_name</span>, <span class="va">entrez_gene</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">rename</span><span class="op">(</span>term <span class="op">=</span> <span class="va">gs_name</span>, gene <span class="op">=</span> <span class="va">entrez_gene</span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div class="section level3">
+<h3 id="run-hallmark-enrichment">Run Hallmark enrichment<a class="anchor" aria-label="anchor" href="#run-hallmark-enrichment"></a></h3>
+<div class="codewrapper sourceCode" id="cb23">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ehall</span> <span class="op">&lt;-</span> <span class="fu">enricher</span><span class="op">(</span></span>
+<span>    gene <span class="op">=</span> <span class="va">sig_entrez</span>,</span>
+<span>    universe <span class="op">=</span> <span class="va">universe_entrez</span>,</span>
+<span>    TERM2GENE <span class="op">=</span> <span class="va">hallmark_list</span>,</span>
+<span>    pAdjustMethod <span class="op">=</span> <span class="st">"BH"</span>,</span>
+<span>    pvalueCutoff <span class="op">=</span> <span class="fl">0.05</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">head</span><span class="op">(</span><span class="va">ehall</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Visualize:</p>
+<div class="codewrapper sourceCode" id="cb24">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">dotplot</span><span class="op">(</span><span class="va">ehall</span>, showCategory <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"MSigDB Hallmark enrichment"</span><span class="op">)</span></span></code></pre>
+</div>
+<div id="why-use-hallmark-gene-sets" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="why-use-hallmark-gene-sets" class="callout-inner">
+<h3 class="callout-title">Why use Hallmark gene sets?</h3>
+<div class="callout-content">
+<p>Advantages of Hallmark over GO/KEGG:</p>
+<ol style="list-style-type: decimal"><li>
+<strong>Reduced redundancy</strong>: Each signature is distinct and
+non-overlapping.</li>
+<li>
+<strong>Expert curation</strong>: Refined from multiple sources to
+represent coherent biology.</li>
+<li>
+<strong>Interpretability</strong>: 50 sets is manageable for
+detailed examination.</li>
+<li>
+<strong>Reproducibility</strong>: Well-documented and stable
+definitions.</li>
+</ol><p>Common Hallmark sets include: - HALLMARK_INFLAMMATORY_RESPONSE -
+HALLMARK_P53_PATHWAY - HALLMARK_OXIDATIVE_PHOSPHORYLATION -
+HALLMARK_MYC_TARGETS_V1</p>
+</div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="step-5-compare-results-across-databases">Step 5: Compare results across databases<a class="anchor" aria-label="anchor" href="#step-5-compare-results-across-databases"></a></h2>
+<hr class="half-width"><p>Create a summary of top enriched terms from each database:</p>
+<div class="codewrapper sourceCode" id="cb25">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Extract top 10 from each</span></span>
+<span><span class="va">top_go</span> <span class="op">&lt;-</span> <span class="fu">head</span><span class="op">(</span><span class="va">ego_bp_simple</span><span class="op">@</span><span class="va">result</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>Database <span class="op">=</span> <span class="st">"GO BP"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="va">Database</span>, <span class="va">Description</span>, <span class="va">p.adjust</span>, <span class="va">Count</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">top_kegg</span> <span class="op">&lt;-</span> <span class="fu">head</span><span class="op">(</span><span class="va">ekegg</span><span class="op">@</span><span class="va">result</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>Database <span class="op">=</span> <span class="st">"KEGG"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="va">Database</span>, <span class="va">Description</span>, <span class="va">p.adjust</span>, <span class="va">Count</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">top_hall</span> <span class="op">&lt;-</span> <span class="fu">head</span><span class="op">(</span><span class="va">ehall</span><span class="op">@</span><span class="va">result</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>Database <span class="op">=</span> <span class="st">"Hallmark"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="va">Database</span>, <span class="va">ID</span>, <span class="va">p.adjust</span>, <span class="va">Count</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">rename</span><span class="op">(</span>Description <span class="op">=</span> <span class="va">ID</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Combine</span></span>
+<span><span class="va">comparison</span> <span class="op">&lt;-</span> <span class="fu">bind_rows</span><span class="op">(</span><span class="va">top_go</span>, <span class="va">top_kegg</span>, <span class="va">top_hall</span><span class="op">)</span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">comparison</span>, n <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span></code></pre>
+</div>
+<div id="exercise-identify-convergent-themes" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="exercise-identify-convergent-themes" class="callout-inner">
+<h3 class="callout-title">Exercise: Identify convergent themes</h3>
+<div class="callout-content">
+<p>Looking at your GO, KEGG, and Hallmark results:</p>
+<ol style="list-style-type: decimal"><li>Are there biological themes that appear across multiple
+databases?</li>
+<li>Are there database-specific findings that don’t replicate
+elsewhere?</li>
+<li>How would you prioritize which findings to investigate further?</li>
+</ol></div>
+</div>
+</div>
+<div id="accordionSolution3" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
+  <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
+</button>
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div class="accordion-body">
+<p>Convergent signals to look for:</p>
+<ul><li>If GO shows “cell cycle” terms, KEGG might show “Cell cycle”
+pathway, and Hallmark might show “HALLMARK_G2M_CHECKPOINT”.</li>
+<li>If GO shows “immune response”, KEGG might show “Cytokine-cytokine
+receptor interaction”, and Hallmark might show
+“HALLMARK_INFLAMMATORY_RESPONSE”.</li>
+</ul><p>Database-specific findings may indicate: - Pathway coverage
+differences. - Annotation biases. - Potentially spurious signals
+(require validation).</p>
+<p>Prioritization strategy: 1. Focus on themes appearing in multiple
+databases. 2. Consider effect size (how many genes, fold enrichment). 3.
+Assess biological plausibility given experimental design. 4. Validate
+key findings with independent methods.</p>
+</div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="step-5b-direction-aware-enrichment-analysis">Step 5b: Direction-aware enrichment analysis<a class="anchor" aria-label="anchor" href="#step-5b-direction-aware-enrichment-analysis"></a></h2>
+<hr class="half-width"><p>ORA on all significant genes (up + down combined) can mask biological
+signals when up-regulated and down-regulated genes have different
+functions. Analyzing directions separately often reveals clearer
+patterns.</p>
+<div class="section level3">
+<h3 id="prepare-direction-specific-gene-lists">Prepare direction-specific gene lists<a class="anchor" aria-label="anchor" href="#prepare-direction-specific-gene-lists"></a></h3>
+<div class="codewrapper sourceCode" id="cb26">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Up-regulated genes</span></span>
+<span><span class="va">up_genes</span> <span class="op">&lt;-</span> <span class="va">res</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">filter</span><span class="op">(</span><span class="va">padj</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, <span class="va">log2FoldChange</span> <span class="op">&gt;</span> <span class="va">log2fc_cut</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">pull</span><span class="op">(</span><span class="va">ensembl_gene_id_version</span><span class="op">)</span></span>
+<span><span class="va">up_clean</span> <span class="op">&lt;-</span> <span class="fu">gsub</span><span class="op">(</span><span class="st">"\\.\\d+$"</span>, <span class="st">""</span>, <span class="va">up_genes</span><span class="op">)</span></span>
+<span><span class="va">up_entrez</span> <span class="op">&lt;-</span> <span class="va">id_map</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">filter</span><span class="op">(</span><span class="va">ENSEMBL</span> <span class="op">%in%</span> <span class="va">up_clean</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">pull</span><span class="op">(</span><span class="va">ENTREZID</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Down-regulated genes</span></span>
+<span><span class="va">down_genes</span> <span class="op">&lt;-</span> <span class="va">res</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">filter</span><span class="op">(</span><span class="va">padj</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, <span class="va">log2FoldChange</span> <span class="op">&lt;</span> <span class="op">-</span><span class="va">log2fc_cut</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">pull</span><span class="op">(</span><span class="va">ensembl_gene_id_version</span><span class="op">)</span></span>
+<span><span class="va">down_clean</span> <span class="op">&lt;-</span> <span class="fu">gsub</span><span class="op">(</span><span class="st">"\\.\\d+$"</span>, <span class="st">""</span>, <span class="va">down_genes</span><span class="op">)</span></span>
+<span><span class="va">down_entrez</span> <span class="op">&lt;-</span> <span class="va">id_map</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">filter</span><span class="op">(</span><span class="va">ENSEMBL</span> <span class="op">%in%</span> <span class="va">down_clean</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">pull</span><span class="op">(</span><span class="va">ENTREZID</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">message</span><span class="op">(</span><span class="fu">sprintf</span><span class="op">(</span><span class="st">"Up-regulated: %d genes, Down-regulated: %d genes"</span>,</span>
+<span>    <span class="fu">length</span><span class="op">(</span><span class="va">up_entrez</span><span class="op">)</span>, <span class="fu">length</span><span class="op">(</span><span class="va">down_entrez</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div class="section level3">
+<h3 id="run-enrichment-for-each-direction">Run enrichment for each direction<a class="anchor" aria-label="anchor" href="#run-enrichment-for-each-direction"></a></h3>
+<div class="codewrapper sourceCode" id="cb27">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># GO enrichment for up-regulated genes</span></span>
+<span><span class="va">ego_up</span> <span class="op">&lt;-</span> <span class="fu">enrichGO</span><span class="op">(</span></span>
+<span>    gene <span class="op">=</span> <span class="va">up_entrez</span>,</span>
+<span>    universe <span class="op">=</span> <span class="va">universe_entrez</span>,</span>
+<span>    OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>,</span>
+<span>    ont <span class="op">=</span> <span class="st">"BP"</span>,</span>
+<span>    readable <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># GO enrichment for down-regulated genes</span></span>
+<span><span class="va">ego_down</span> <span class="op">&lt;-</span> <span class="fu">enrichGO</span><span class="op">(</span></span>
+<span>    gene <span class="op">=</span> <span class="va">down_entrez</span>,</span>
+<span>    universe <span class="op">=</span> <span class="va">universe_entrez</span>,</span>
+<span>    OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>,</span>
+<span>    ont <span class="op">=</span> <span class="st">"BP"</span>,</span>
+<span>    readable <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div class="section level3">
+<h3 id="compare-directions">Compare directions<a class="anchor" aria-label="anchor" href="#compare-directions"></a></h3>
+<div class="codewrapper sourceCode" id="cb28">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Combine top results for comparison</span></span>
+<span><span class="va">up_top</span> <span class="op">&lt;-</span> <span class="fu">head</span><span class="op">(</span><span class="va">ego_up</span><span class="op">@</span><span class="va">result</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>Direction <span class="op">=</span> <span class="st">"Up-regulated"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="va">Direction</span>, <span class="va">Description</span>, <span class="va">p.adjust</span>, <span class="va">Count</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">down_top</span> <span class="op">&lt;-</span> <span class="fu">head</span><span class="op">(</span><span class="va">ego_down</span><span class="op">@</span><span class="va">result</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>Direction <span class="op">=</span> <span class="st">"Down-regulated"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="va">Direction</span>, <span class="va">Description</span>, <span class="va">p.adjust</span>, <span class="va">Count</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">direction_comparison</span> <span class="op">&lt;-</span> <span class="fu">bind_rows</span><span class="op">(</span><span class="va">up_top</span>, <span class="va">down_top</span><span class="op">)</span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">direction_comparison</span>, n <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre>
+</div>
+<div id="when-to-analyze-directions-separately" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="when-to-analyze-directions-separately" class="callout-inner">
+<h3 class="callout-title">When to analyze directions separately</h3>
+<div class="callout-content">
+<p>Separate analysis is particularly useful when:</p>
+<ul><li>You expect different biological processes to be activated
+vs. suppressed.</li>
+<li>Combined analysis shows few significant results (opposing signals
+may cancel out).</li>
+<li>You want to understand mechanism (what’s gained vs. lost).</li>
+</ul><p>Separate analysis is less useful when:</p>
+<ul><li>You have very few DE genes in one direction.</li>
+<li>The biological question is about overall pathway disruption.</li>
+</ul></div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="step-5c-gene-set-enrichment-analysis-gsea">Step 5c: Gene Set Enrichment Analysis (GSEA)<a class="anchor" aria-label="anchor" href="#step-5c-gene-set-enrichment-analysis-gsea"></a></h2>
+<hr class="half-width"><p>ORA has a fundamental limitation: it requires an arbitrary cutoff to
+define “significant” genes. <strong>GSEA</strong> uses the full ranked
+gene list without cutoffs.</p>
+<div class="section level3">
+<h3 id="how-gsea-differs-from-ora">How GSEA differs from ORA<a class="anchor" aria-label="anchor" href="#how-gsea-differs-from-ora"></a></h3>
+<table style="width:100%;" class="table"><colgroup><col width="42%"><col width="26%"><col width="31%"></colgroup><thead><tr class="header"><th>Aspect</th>
+<th>ORA</th>
+<th>GSEA</th>
+</tr></thead><tbody><tr class="odd"><td>Input</td>
+<td>List of significant genes</td>
+<td>All genes, ranked by fold change</td>
+</tr><tr class="even"><td>Cutoff</td>
+<td>Required (padj, LFC)</td>
+<td>None</td>
+</tr><tr class="odd"><td>Sensitivity</td>
+<td>May miss coordinated small changes</td>
+<td>Detects subtle but consistent shifts</td>
+</tr><tr class="even"><td>Gene weights</td>
+<td>All DE genes treated equally</td>
+<td>Magnitude of change matters</td>
+</tr></tbody></table></div>
+<div class="section level3">
+<h3 id="prepare-ranked-gene-list-for-gsea">Prepare ranked gene list for GSEA<a class="anchor" aria-label="anchor" href="#prepare-ranked-gene-list-for-gsea"></a></h3>
+<p>GSEA requires a named vector of gene scores (typically log2 fold
+change or a signed significance score):</p>
+<div class="codewrapper sourceCode" id="cb29">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create ranked list using signed -log10(pvalue) * sign(LFC)</span></span>
+<span><span class="co"># This weights by both significance and direction</span></span>
+<span><span class="va">res_gsea</span> <span class="op">&lt;-</span> <span class="va">res</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">filter</span><span class="op">(</span><span class="op">!</span><span class="fu">is.na</span><span class="op">(</span><span class="va">padj</span><span class="op">)</span>, <span class="op">!</span><span class="fu">is.na</span><span class="op">(</span><span class="va">log2FoldChange</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">mutate</span><span class="op">(</span></span>
+<span>        ensembl_clean <span class="op">=</span> <span class="fu">gsub</span><span class="op">(</span><span class="st">"\\.\\d+$"</span>, <span class="st">""</span>, <span class="va">ensembl_gene_id_version</span><span class="op">)</span>,</span>
+<span>        rank_score <span class="op">=</span> <span class="op">-</span><span class="fu">log10</span><span class="op">(</span><span class="va">pvalue</span><span class="op">)</span> <span class="op">*</span> <span class="fu">sign</span><span class="op">(</span><span class="va">log2FoldChange</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Map to Entrez IDs</span></span>
+<span><span class="va">res_gsea</span> <span class="op">&lt;-</span> <span class="va">res_gsea</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">inner_join</span><span class="op">(</span><span class="va">id_map</span>, by <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"ensembl_clean"</span> <span class="op">=</span> <span class="st">"ENSEMBL"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create named vector (required format for GSEA)</span></span>
+<span><span class="va">gene_list</span> <span class="op">&lt;-</span> <span class="va">res_gsea</span><span class="op">$</span><span class="va">rank_score</span></span>
+<span><span class="fu">names</span><span class="op">(</span><span class="va">gene_list</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">res_gsea</span><span class="op">$</span><span class="va">ENTREZID</span></span>
+<span></span>
+<span><span class="co"># Sort by rank score (required for GSEA)</span></span>
+<span><span class="va">gene_list</span> <span class="op">&lt;-</span> <span class="fu">sort</span><span class="op">(</span><span class="va">gene_list</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">head</span><span class="op">(</span><span class="va">gene_list</span><span class="op">)</span></span>
+<span><span class="fu">tail</span><span class="op">(</span><span class="va">gene_list</span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div class="section level3">
+<h3 id="run-gsea-with-clusterprofiler">Run GSEA with clusterProfiler<a class="anchor" aria-label="anchor" href="#run-gsea-with-clusterprofiler"></a></h3>
+<div class="codewrapper sourceCode" id="cb30">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gsea_go</span> <span class="op">&lt;-</span> <span class="fu">gseGO</span><span class="op">(</span></span>
+<span>    geneList <span class="op">=</span> <span class="va">gene_list</span>,</span>
+<span>    OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>,</span>
+<span>    ont <span class="op">=</span> <span class="st">"BP"</span>,</span>
+<span>    minGSSize <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    maxGSSize <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>    pvalueCutoff <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>    verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">head</span><span class="op">(</span><span class="va">gsea_go</span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div class="section level3">
+<h3 id="visualize-gsea-results">Visualize GSEA results<a class="anchor" aria-label="anchor" href="#visualize-gsea-results"></a></h3>
+<div class="codewrapper sourceCode" id="cb31">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Dot plot of enriched gene sets</span></span>
+<span><span class="fu">dotplot</span><span class="op">(</span><span class="va">gsea_go</span>, showCategory <span class="op">=</span> <span class="fl">20</span>, split <span class="op">=</span> <span class="st">".sign"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">facet_grid</span><span class="op">(</span><span class="va">.</span> <span class="op">~</span> <span class="va">.sign</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GSEA: GO Biological Process"</span><span class="op">)</span></span></code></pre>
+</div>
+<p>The <code>.sign</code> column indicates whether the gene set is
+enriched in up-regulated (<code>activated</code>) or down-regulated
+(<code>suppressed</code>) genes.</p>
+</div>
+<div class="section level3">
+<h3 id="gsea-enrichment-plot-for-a-specific-term">GSEA enrichment plot for a specific term<a class="anchor" aria-label="anchor" href="#gsea-enrichment-plot-for-a-specific-term"></a></h3>
+<div class="codewrapper sourceCode" id="cb32">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Enrichment plot for top gene set</span></span>
+<span><span class="fu">gseaplot2</span><span class="op">(</span><span class="va">gsea_go</span>, geneSetID <span class="op">=</span> <span class="fl">1</span>, title <span class="op">=</span> <span class="va">gsea_go</span><span class="op">$</span><span class="va">Description</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre>
+</div>
+<div id="interpreting-gsea-results" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="interpreting-gsea-results" class="callout-inner">
+<h3 class="callout-title">Interpreting GSEA results</h3>
+<div class="callout-content">
+<p>Key metrics:</p>
+<ul><li>
+<strong>NES (Normalized Enrichment Score)</strong>: Direction and
+strength of enrichment. Positive = enriched in up-regulated genes;
+Negative = enriched in down-regulated genes.</li>
+<li>
+<strong>pvalue/p.adjust</strong>: Statistical significance.</li>
+<li>
+<strong>core_enrichment</strong>: Genes contributing most to the
+enrichment signal (“leading edge”).</li>
+</ul><p>GSEA is particularly valuable when:</p>
+<ul><li>Changes are subtle but coordinated across many genes.</li>
+<li>You want to avoid arbitrary significance cutoffs.</li>
+<li>You’re comparing with published gene signatures.</li>
+</ul></div>
+</div>
+</div>
+<div id="exercise-compare-ora-and-gsea-results" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="exercise-compare-ora-and-gsea-results" class="callout-inner">
+<h3 class="callout-title">Exercise: Compare ORA and GSEA results</h3>
+<div class="callout-content">
+<ol style="list-style-type: decimal"><li>Do the same pathways appear in both ORA and GSEA results?</li>
+<li>Does GSEA identify any pathways that ORA missed?</li>
+<li>For pathways appearing in both, is the direction (NES sign)
+consistent with the ORA direction analysis?</li>
+</ol></div>
+</div>
+</div>
+<div id="accordionSolution4" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
+  <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
+</button>
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div class="accordion-body">
+<p>Expected observations:</p>
+<ul><li>Many top pathways should overlap between ORA and GSEA.</li>
+<li>GSEA may identify additional pathways where changes are subtle but
+coordinated.</li>
+<li>The NES sign (positive/negative) should match whether the pathway
+was enriched in up- or down-regulated genes in ORA.</li>
+<li>Discrepancies may indicate pathways where the signal comes from many
+small changes rather than a few large ones.</li>
+</ul></div>
+</div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="step-6-save-results">Step 6: Save results<a class="anchor" aria-label="anchor" href="#step-6-save-results"></a></h2>
+<hr class="half-width"><p>Save all enrichment results:</p>
+<div class="codewrapper sourceCode" id="cb33">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create output directory</span></span>
+<span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"results/enrichment"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># GO results</span></span>
+<span><span class="fu">write_csv</span><span class="op">(</span><span class="fu">as.data.frame</span><span class="op">(</span><span class="va">ego_bp</span><span class="op">)</span>, <span class="st">"results/enrichment/GO_BP_enrichment.csv"</span><span class="op">)</span></span>
+<span><span class="fu">write_csv</span><span class="op">(</span><span class="fu">as.data.frame</span><span class="op">(</span><span class="va">ego_bp_simple</span><span class="op">)</span>, <span class="st">"results/enrichment/GO_BP_simplified.csv"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># KEGG results</span></span>
+<span><span class="fu">write_csv</span><span class="op">(</span><span class="fu">as.data.frame</span><span class="op">(</span><span class="va">ekegg</span><span class="op">)</span>, <span class="st">"results/enrichment/KEGG_enrichment.csv"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Hallmark results</span></span>
+<span><span class="fu">write_csv</span><span class="op">(</span><span class="fu">as.data.frame</span><span class="op">(</span><span class="va">ehall</span><span class="op">)</span>, <span class="st">"results/enrichment/Hallmark_enrichment.csv"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Direction-aware results</span></span>
+<span><span class="fu">write_csv</span><span class="op">(</span><span class="fu">as.data.frame</span><span class="op">(</span><span class="va">ego_up</span><span class="op">)</span>, <span class="st">"results/enrichment/GO_BP_up_regulated.csv"</span><span class="op">)</span></span>
+<span><span class="fu">write_csv</span><span class="op">(</span><span class="fu">as.data.frame</span><span class="op">(</span><span class="va">ego_down</span><span class="op">)</span>, <span class="st">"results/enrichment/GO_BP_down_regulated.csv"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># GSEA results</span></span>
+<span><span class="fu">write_csv</span><span class="op">(</span><span class="fu">as.data.frame</span><span class="op">(</span><span class="va">gsea_go</span><span class="op">)</span>, <span class="st">"results/enrichment/GSEA_GO_BP.csv"</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Save plots:</p>
+<div class="codewrapper sourceCode" id="cb34">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># GO dotplot</span></span>
+<span><span class="fu">pdf</span><span class="op">(</span><span class="st">"results/enrichment/GO_BP_dotplot.pdf"</span>, width <span class="op">=</span> <span class="fl">10</span>, height <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
+<span><span class="fu">dotplot</span><span class="op">(</span><span class="va">ego_bp_simple</span>, showCategory <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GO Biological Process enrichment"</span><span class="op">)</span></span>
+<span><span class="fu">dev.off</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># KEGG barplot</span></span>
+<span><span class="fu">pdf</span><span class="op">(</span><span class="st">"results/enrichment/KEGG_barplot.pdf"</span>, width <span class="op">=</span> <span class="fl">10</span>, height <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span>
+<span><span class="fu">barplot</span><span class="op">(</span><span class="va">ekegg</span>, showCategory <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"KEGG pathway enrichment"</span><span class="op">)</span></span>
+<span><span class="fu">dev.off</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Hallmark dotplot</span></span>
+<span><span class="fu">pdf</span><span class="op">(</span><span class="st">"results/enrichment/Hallmark_dotplot.pdf"</span>, width <span class="op">=</span> <span class="fl">10</span>, height <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
+<span><span class="fu">dotplot</span><span class="op">(</span><span class="va">ehall</span>, showCategory <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"MSigDB Hallmark enrichment"</span><span class="op">)</span></span>
+<span><span class="fu">dev.off</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="interpretation-guidelines">Interpretation guidelines<a class="anchor" aria-label="anchor" href="#interpretation-guidelines"></a></h2>
+<hr class="half-width"><div class="section level3">
+<h3 id="signs-of-meaningful-enrichment">Signs of meaningful enrichment<a class="anchor" aria-label="anchor" href="#signs-of-meaningful-enrichment"></a></h3>
+<p>Enrichment results are more reliable when:</p>
+<ul><li>
+<strong>Multiple related terms</strong> appear (not just one
+isolated hit).</li>
+<li>
+<strong>Consistent themes</strong> emerge across databases.</li>
+<li>
+<strong>Biological plausibility</strong>: Results align with known
+biology of your system.</li>
+<li>
+<strong>Reasonable gene counts</strong>: Terms with many genes
+(&gt;5-10) are more robust.</li>
+<li>
+<strong>Moderate p-values</strong>: Extremely low p-values (e.g.,
+10^-50) may indicate annotation bias.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="common-pitfalls">Common pitfalls<a class="anchor" aria-label="anchor" href="#common-pitfalls"></a></h3>
+<ol style="list-style-type: decimal"><li>
+<strong>Over-interpretation</strong>: A significant p-value doesn’t
+prove causation.</li>
+<li>
+<strong>Ignoring effect size</strong>: A term with 3/1000 genes is
+less meaningful than 30/100.</li>
+<li>
+<strong>Cherry-picking</strong>: Report all significant results, not
+just expected ones.</li>
+<li>
+<strong>Universe mismatch</strong>: Using wrong background inflates
+or deflates significance.</li>
+<li>
+<strong>Outdated annotations</strong>: Gene function annotations
+improve over time.</li>
+</ol></div>
+<div class="section level3">
+<h3 id="reporting-enrichment-results">Reporting enrichment results<a class="anchor" aria-label="anchor" href="#reporting-enrichment-results"></a></h3>
+<p>In publications, include:</p>
+<ul><li>Method and software versions used.</li>
+<li>Background universe definition.</li>
+<li>Multiple testing correction method.</li>
+<li>Full results tables (supplementary).</li>
+<li>Number of input genes and those successfully mapped.</li>
+</ul></div>
 </section><section><h2 class="section-heading" id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a></h2>
 <hr class="half-width"><div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
@@ -654,13 +1503,28 @@ compared to GO.<br></li>
 <span class="callout-header">Key Points</span>
 <div class="callout-inner">
 <div class="callout-content">
-<ul><li>ORA requires a universe and a significant gene set.<br></li>
-<li>Ensembl IDs must be converted to Entrez for GO and KEGG.<br></li>
-<li>clusterProfiler provides GO BP and KEGG ORA.<br></li>
-<li>Hallmark sets offer high quality curated pathways for
-interpretation.<br></li>
-<li>Dotplots and barplots are effective for visualizing enrichment
-results.</li>
+<ul><li>ORA tests if gene sets contain more DE genes than expected by chance
+using the hypergeometric test.</li>
+<li>The background universe must include all genes that could have been
+detected as DE.</li>
+<li>Multiple testing correction (FDR) is essential when testing
+thousands of gene sets.</li>
+<li>GO provides comprehensive but redundant functional annotation; use
+<code>simplify()</code> to reduce redundancy.</li>
+<li>KEGG provides curated pathway maps but has limited gene coverage and
+requires Entrez IDs.</li>
+<li>MSigDB Hallmark sets offer 50 high-quality, non-redundant biological
+signatures.</li>
+<li>
+<strong>Direction-aware analysis</strong> (up vs. down separately)
+often reveals clearer biological signals.</li>
+<li>
+<strong>GSEA</strong> avoids arbitrary cutoffs by using the full
+ranked gene list; it detects subtle but coordinated changes.</li>
+<li>Convergent findings across multiple databases and methods strengthen
+biological interpretation.</li>
+<li>Always report methods, thresholds, and full results for
+reproducibility.</li>
 </ul></div>
 </div>
 </div>
@@ -677,7 +1541,7 @@ any links that you are not going to use.
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="../instructor/05b-deseq2-expression-analyses-kallisto.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Differential
+          Previous: B. Differential
         </a>
         <a class="chapter-link float-end" href="../instructor/index.html" rel="next">
           Home

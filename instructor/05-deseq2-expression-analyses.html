@@ -109,11 +109,11 @@
   RNA-seq in practice: Hands-on workshop on RCAC systems
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 55%" class="percentage">
-    55%
+<aside class="col-md-12 lesson-progress"><div style="width: 54%" class="percentage">
+    54%
   </div>
   <div class="progress rcac">
-    <div class="progress-bar rcac" role="progressbar" style="width: 55%" aria-valuenow="55" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar rcac" role="progressbar" style="width: 54%" aria-valuenow="54" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
@@ -269,7 +269,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="05b-deseq2-expression-analyses-kallisto.html">7. Differential expression using DESeq2</a>
+        <a href="05b-deseq2-expression-analyses-kallisto.html">7. B. Differential expression using DESeq2 (Salmon/Kallisto pathway)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -336,7 +336,7 @@
           Previous: B. Transcript-based
         </a>
         <a class="chapter-link float-end" href="../instructor/05b-deseq2-expression-analyses-kallisto.html" rel="next">
-          Next: Differential...
+          Next: B. Differential...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
@@ -516,7 +516,7 @@ Open OnDemand interface
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> How were these data prepared? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p>Since the gene IDs in the count matrix are Ensembl IDs, it will be
 hard to interpret the results without annotation. We will need to use
@@ -652,36 +652,51 @@ loci, but many biotypes (snRNA, TEC, pseudogenes) are not suitable for
 differential expression with DESeq2 because they tend to be lowly
 expressed or unstable. This motivates filtering to protein-coding genes
 for QC and visualization.</p>
-<p>Filter to protein coding genes and lowly expressed genes:</p>
+<p>Filter to protein coding genes and apply group-aware expression
+filtering:</p>
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">cts_coding</span> <span class="op">&lt;-</span> <span class="va">cts_annot</span> <span class="op">%&gt;%</span></span>
+<code class="sourceCode R"><span><span class="co"># Filter to protein-coding genes</span></span>
+<span><span class="va">cts_pc</span> <span class="op">&lt;-</span> <span class="va">cts_annot</span> <span class="op">%&gt;%</span></span>
 <span>    <span class="fu">filter</span><span class="op">(</span><span class="va">gene_biotype</span> <span class="op">==</span> <span class="st">"protein_coding"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>    <span class="fu">filter</span><span class="op">(</span><span class="fu">rowSums</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="fu">rownames</span><span class="op">(</span><span class="va">coldata</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>    <span class="fu">select</span><span class="op">(</span><span class="va">ensembl_gene_id_version</span>, <span class="fu">all_of</span><span class="op">(</span><span class="fu">rownames</span><span class="op">(</span><span class="va">coldata</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="va">ensembl_gene_id_version</span>, <span class="fu">all_of</span><span class="op">(</span><span class="fu">rownames</span><span class="op">(</span><span class="va">coldata</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Group-aware filtering: keep genes with &gt;= 10 counts in at least 3 samples</span></span>
+<span><span class="co"># (the size of the smallest experimental group)</span></span>
+<span><span class="va">min_samples</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
+<span><span class="va">min_counts</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span></span>
+<span><span class="va">cts_coding</span> <span class="op">&lt;-</span> <span class="va">cts_pc</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">filter</span><span class="op">(</span><span class="fu">rowSums</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="fu">rownames</span><span class="op">(</span><span class="va">coldata</span><span class="op">)</span><span class="op">)</span>, <span class="op">~</span> <span class="va">.</span> <span class="op">&gt;=</span> <span class="va">min_counts</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">min_samples</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>    <span class="fu">column_to_rownames</span><span class="op">(</span><span class="st">"ensembl_gene_id_version"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">dim</span><span class="op">(</span><span class="va">cts_coding</span><span class="op">)</span></span></code></pre>
 </div>
 <pre><code>[1] 15839     6</code></pre>
-<div id="why-filter-protein-coding-genes-and-low-expression" class="callout">
+<div id="why-use-group-aware-filtering" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <span class="callout-header">Callout</span>
-<div id="why-filter-protein-coding-genes-and-low-expression" class="callout-inner">
-<h3 class="callout-title">Why filter protein coding genes and low
-expression</h3>
+<div id="why-use-group-aware-filtering" class="callout-inner">
+<h3 class="callout-title">Why use group-aware filtering?</h3>
 <div class="callout-content">
-<p>Noncoding biotypes (lncRNA, pseudogene, etc.) can be biologically
-important. Filtering lowly expressed genes reduces noise in exploratory
-analyses. Genes with near-zero counts across all samples inflate
-variance estimates and obscure real biological structure. The threshold
-of 5 total counts is a conservative filter that keeps genes with minimal
-but genuine expression while removing background noise.</p>
+<p>A simple sum filter (e.g., <code>rowSums &gt; 5</code>) can be
+problematic:</p>
+<ul><li>A gene with 10 total counts across 6 samples averages ~1.7
+counts/sample—often too noisy.</li>
+<li>It may inadvertently remove genes expressed in only one
+condition.</li>
+</ul><p>Group-aware filtering ensures:</p>
+<ul><li>Each kept gene has meaningful expression in at least one
+experimental group.</li>
+<li>Genes with condition-specific expression are retained.</li>
+<li>The threshold is interpretable (“at least 10 counts in at least 3
+samples”).</li>
+</ul><p>For exploratory analysis, we also restrict to protein-coding genes to
+focus on the most interpretable features.</p>
 </div>
 </div>
 </div>
@@ -863,7 +878,49 @@ weak or confounded by other factors.</p>
 </div>
 <figure style="text-align: center"><img src="../fig/05_deseq/pca-plot.png" alt="PCA plot showing sample clustering" class="figure mx-auto d-block"><figcaption>
 PCA plot showing sample clustering
-</figcaption></figure><div id="exercise-interpret-exploratory-plots" class="callout challenge">
+</figcaption></figure><div id="using-pca-to-detect-batch-effects" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="using-pca-to-detect-batch-effects" class="callout-inner">
+<h3 class="callout-title">Using PCA to detect batch effects</h3>
+<div class="callout-content">
+<p>PCA is one of the most powerful tools for detecting <strong>batch
+effects</strong>—unwanted technical variation from sample processing,
+sequencing runs, or other non-biological factors.</p>
+<p><strong>What to look for:</strong></p>
+<ul><li>
+<strong>Good</strong>: Samples separate primarily by biological
+condition (treatment, genotype).</li>
+<li>
+<strong>Concerning</strong>: Samples cluster by processing date,
+sequencing lane, or technician instead of biology.</li>
+<li>
+<strong>Red flag</strong>: PC1 captures technical variation rather
+than the condition of interest.</li>
+</ul><p><strong>If you detect batch effects:</strong></p>
+<ol style="list-style-type: decimal"><li>
+<p><strong>Include batch in the design formula</strong> if batch is
+known:</p>
+<div class="codewrapper sourceCode" id="cb17">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">design</span> <span class="op">=</span> <span class="op">~</span> <span class="va">batch</span> <span class="op">+</span> <span class="va">condition</span></span></code></pre>
+</div>
+</li>
+<li><p><strong>Use batch correction tools</strong> like
+<code>ComBat-seq</code> or <code>sva</code> for complex batch
+structures.</p></li>
+<li><p><strong>Never simply remove batch-affected samples</strong>
+without understanding the underlying cause.</p></li>
+</ol><p>In this dataset, samples cluster cleanly by condition, indicating no
+obvious batch effects.</p>
+</div>
+</div>
+</div>
+<div id="exercise-interpret-exploratory-plots" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
@@ -872,9 +929,11 @@ PCA plot showing sample clustering
 <h3 class="callout-title">Exercise: interpret exploratory plots</h3>
 <div class="callout-content">
 <p>Using the library size, distance heatmap, and PCA:</p>
-<ol style="list-style-type: decimal"><li>Are there any obvious outlier samples.</li>
-<li>Do replicates from the same condition cluster together.</li>
-<li>Does any sample look inconsistent with its metadata label.</li>
+<ol style="list-style-type: decimal"><li>Are there any obvious outlier samples?</li>
+<li>Do replicates from the same condition cluster together?</li>
+<li>Does any sample look inconsistent with its metadata label?</li>
+<li>Is there evidence of batch effects (samples clustering by
+non-biological factors)?</li>
 </ol></div>
 </div>
 </div>
@@ -883,13 +942,15 @@ PCA plot showing sample clustering
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Example interpretation:</p>
 <ol style="list-style-type: decimal"><li>Library sizes are comparable across samples and fall within a narrow
 range.</li>
 <li>Samples cluster by condition in both distance heatmaps and PCA.</li>
 <li>No sample appears as a clear outlier relative to its group.</li>
+<li>No batch effects are apparent—PC1 separates by experimental
+condition, not technical factors.</li>
 </ol></div>
 </div>
 </div>
@@ -899,7 +960,7 @@ range.</li>
 <hr class="half-width"><p>For DE testing we use the <strong>full count matrix</strong>
 (<code>cts</code>) without filtering by biotype. This preserves all
 features counted by featureCounts.</p>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -910,7 +971,7 @@ features counted by featureCounts.</p>
 <span><span class="op">)</span></span></code></pre>
 </div>
 <p>You can either run the individual DESeq2 steps:</p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -923,11 +984,11 @@ features counted by featureCounts.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Single command to run the DESeq2 pipeline </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <p>Above three steps can be run together using the <code>DESeq</code>
 function:</p>
-<div class="codewrapper sourceCode" id="cb19">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -952,7 +1013,7 @@ fitting model and testing</code></pre>
 </div>
 </div>
 <p>Inspect dispersion estimates:</p>
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -962,7 +1023,7 @@ fitting model and testing</code></pre>
 Dispersion estimates from DESeq2
 </figcaption></figure><p>Obtain results for the contrast of interest
 (<code>Nat10flox/flox</code> vs <code>Nat10-CKO</code>):</p>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -978,21 +1039,21 @@ Dispersion estimates from DESeq2
 <span></span>
 <span><span class="fu">summary</span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">TXT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode txt" tabindex="0"><code class="sourceCode default"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>out of 15839 with nonzero total read count</span>
-<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>adjusted p-value &lt; 0.1</span>
-<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>LFC &gt; 0 (up)       : 3195, 20%</span>
-<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>LFC &lt; 0 (down)     : 3398, 21%</span>
-<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>outliers [1]       : 362, 2.3%</span>
-<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>low counts [2]     : 308, 1.9%</span>
-<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a>(mean count &lt; 1)</span>
-<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a>[1] see 'cooksCutoff' argument of ?results</span>
-<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>[2] see 'independentFiltering' argument of ?results</span></code></pre>
+<pre class="sourceCode txt" tabindex="0"><code class="sourceCode default"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>out of 15839 with nonzero total read count</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>adjusted p-value &lt; 0.1</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>LFC &gt; 0 (up)       : 3195, 20%</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>LFC &lt; 0 (down)     : 3398, 21%</span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>outliers [1]       : 362, 2.3%</span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>low counts [2]     : 308, 1.9%</span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>(mean count &lt; 1)</span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>[1] see 'cooksCutoff' argument of ?results</span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>[2] see 'independentFiltering' argument of ?results</span></code></pre>
 </div>
 <p>Order the results by p value to see the top DE genes:</p>
-<div class="codewrapper sourceCode" id="cb24">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1015,8 +1076,67 @@ direction and magnitude of change between groups <code>pvalue</code> /
 <code>padj</code>: statistical significance after multiple testing
 correction Genes with <code>NA</code> values often have too few reads to
 estimate dispersion and should not be interpreted.</p>
+<div class="section level3">
+<h3 id="apply-log-fold-change-shrinkage">Apply log fold change shrinkage<a class="anchor" aria-label="anchor" href="#apply-log-fold-change-shrinkage"></a></h3>
+<p>The raw log2 fold change estimates from DESeq2 can be noisy for genes
+with low counts. Shrinkage improves these estimates.</p>
+<p>First, check the available coefficient names:</p>
+<div class="codewrapper sourceCode" id="cb27">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">resultsNames</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>[1] "Intercept"                              "condition_Nat10flox.flox_vs_Nat10.CKO"</code></pre>
+<p>Apply shrinkage using <code>apeglm</code> (recommended for standard
+two-group comparisons):</p>
+<div class="codewrapper sourceCode" id="cb29">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res_shrunk</span> <span class="op">&lt;-</span> <span class="fu">lfcShrink</span><span class="op">(</span></span>
+<span>    <span class="va">dds</span>,</span>
+<span>    coef <span class="op">=</span> <span class="st">"condition_Nat10flox.flox_vs_Nat10.CKO"</span>,</span>
+<span>    type <span class="op">=</span> <span class="st">"apeglm"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">res_shrunk</span><span class="op">)</span></span></code></pre>
+</div>
+<div id="why-shrink-log-fold-changes" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="why-shrink-log-fold-changes" class="callout-inner">
+<h3 class="callout-title">Why shrink log fold changes?</h3>
+<div class="callout-content">
+<p>Genes with low counts can have unreliably large fold changes.
+Shrinkage:</p>
+<ul><li>Reduces noise in LFC estimates for lowly-expressed genes.</li>
+<li>Improves gene ranking for downstream analyses (e.g., GSEA).</li>
+<li>Does not affect p-values or significance calls.</li>
+</ul><p><strong>Choosing a shrinkage method:</strong></p>
+<ul><li>
+<strong><code>apeglm</code></strong> (recommended): Fast,
+well-calibrated, uses coefficient name (<code>coef</code>).</li>
+<li>
+<strong><code>ashr</code></strong>: Required for complex contrasts
+that can’t be specified with <code>coef</code>.</li>
+<li>
+<strong><code>normal</code></strong>: Legacy method, generally not
+recommended.</li>
+</ul></div>
+</div>
+</div>
+<p>For downstream analyses, we’ll use the shrunken results:</p>
+<div class="codewrapper sourceCode" id="cb30">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="va">res_shrunk</span></span></code></pre>
+</div>
 <p>Create a summary table:</p>
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb31">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1037,16 +1157,17 @@ estimate dispersion and should not be interpreted.</p>
         &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
 1       15839  5658  2180  2363</code></pre>
 <p>Keep gene IDs:</p>
-<div class="codewrapper sourceCode" id="cb28">
+<div class="codewrapper sourceCode" id="cb33">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_df</span> <span class="op">&lt;-</span> <span class="fu">as.data.frame</span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="va">res_df</span><span class="op">$</span><span class="va">ensembl_gene_id_version</span> <span class="op">&lt;-</span> <span class="fu">rownames</span><span class="op">(</span><span class="va">res_df</span><span class="op">)</span></span></code></pre>
 </div>
+</div>
 </section><section><h2 class="section-heading" id="joining-results-with-expression-and-annotation">Joining results with expression and annotation<a class="anchor" aria-label="anchor" href="#joining-results-with-expression-and-annotation"></a></h2>
 <hr class="half-width"><p>Get normalized counts:</p>
-<div class="codewrapper sourceCode" id="cb29">
+<div class="codewrapper sourceCode" id="cb34">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1055,7 +1176,7 @@ estimate dispersion and should not be interpreted.</p>
 <span><span class="va">norm_counts_df</span><span class="op">$</span><span class="va">ensembl_gene_id_version</span> <span class="op">&lt;-</span> <span class="fu">rownames</span><span class="op">(</span><span class="va">norm_counts_df</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Join DE results, normalized counts, and annotation:</p>
-<div class="codewrapper sourceCode" id="cb30">
+<div class="codewrapper sourceCode" id="cb35">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1074,7 +1195,7 @@ results object containing: - <code>gene identifiers</code> -
 researchers expect when examining results or importing them into
 downstream tools.</p>
 <p>Define significance labels for plotting:</p>
-<div class="codewrapper sourceCode" id="cb31">
+<div class="codewrapper sourceCode" id="cb36">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1097,7 +1218,7 @@ simultaneously. Genes far left or right show strong expression
 differences. Genes high on the plot pass stringent significance
 thresholds. Labels help identify the most biologically meaningful
 genes.</p>
-<div class="codewrapper sourceCode" id="cb32">
+<div class="codewrapper sourceCode" id="cb37">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1151,7 +1272,7 @@ mark genes that pass both fold change and padj thresholds.</p>
 flexibility: - The full table is needed for pathway analyses and
 reproducibility. - The subset table focuses on interpretable and
 biologically meaningful DE genes.</p>
-<div class="codewrapper sourceCode" id="cb33">
+<div class="codewrapper sourceCode" id="cb38">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1161,7 +1282,7 @@ biologically meaningful DE genes.</p>
 <span><span class="op">)</span></span></code></pre>
 </div>
 <p>Filter to significant genes (padj ≤ 0.05 and fold change ≥ 1.5):</p>
-<div class="codewrapper sourceCode" id="cb34">
+<div class="codewrapper sourceCode" id="cb39">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1197,7 +1318,7 @@ the studied phenotype.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Example interpretation:</p>
 <ul><li>Several strongly up regulated genes are involved in cell cycle and
@@ -1249,7 +1370,7 @@ any links that you are not going to use.
           Previous: B. Transcript-based
         </a>
         <a class="chapter-link float-end" href="../instructor/05b-deseq2-expression-analyses-kallisto.html" rel="next">
-          Next: Differential...
+          Next: B. Differential...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>

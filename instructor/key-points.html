@@ -308,7 +308,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="05b-deseq2-expression-analyses-kallisto.html">7. Differential expression using DESeq2</a>
+        <a href="05b-deseq2-expression-analyses-kallisto.html">7. B. Differential expression using DESeq2 (Salmon/Kallisto pathway)</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -472,21 +472,46 @@ expression.</li>
 a useful final table.</li>
 <li>Volcano plots summarize differential expression using fold change
 and adjusted p values.</li>
-</ul></section><section id="05b-deseq2-expression-analyses-kallisto"><h2 class="section-heading"><a href="05b-deseq2-expression-analyses-kallisto.html">Differential expression using DESeq2</a></h2>
-<hr class="half-width"></section><section id="06-gene-set-enrichment-analyses"><h2 class="section-heading"><a href="06-gene-set-enrichment-analyses.html">Gene set enrichment analysis</a></h2>
+</ul></section><section id="05b-deseq2-expression-analyses-kallisto"><h2 class="section-heading"><a href="05b-deseq2-expression-analyses-kallisto.html">B. Differential expression using DESeq2 (Salmon/Kallisto pathway)</a></h2>
 <hr class="half-width">
 <ul>
-<li>ORA requires a universe and a significant gene set.<br>
-</li>
-<li>Ensembl IDs must be converted to Entrez for GO and KEGG.<br>
-</li>
-<li>clusterProfiler provides GO BP and KEGG ORA.<br>
-</li>
-<li>Hallmark sets offer high quality curated pathways for
-interpretation.<br>
-</li>
-<li>Dotplots and barplots are effective for visualizing enrichment
-results.</li>
+<li>Salmon/Kallisto output is imported via <code>tximport</code> and
+loaded with <code>DESeqDataSetFromTximport()</code>.</li>
+<li>The tximport object preserves transcript length information for
+accurate normalization.</li>
+<li>Exploratory analysis (PCA, distance heatmaps) should precede
+differential expression testing.</li>
+<li>DESeq2 handles the statistical analysis identically to the
+genome-based workflow.</li>
+<li>LFC shrinkage improves fold change estimates for low-count
+genes.</li>
+<li>Results from transcript-based and genome-based workflows should be
+broadly concordant.</li>
+</ul></section><section id="06-gene-set-enrichment-analyses"><h2 class="section-heading"><a href="06-gene-set-enrichment-analyses.html">Gene set enrichment analysis</a></h2>
+<hr class="half-width">
+<ul>
+<li>ORA tests if gene sets contain more DE genes than expected by chance
+using the hypergeometric test.</li>
+<li>The background universe must include all genes that could have been
+detected as DE.</li>
+<li>Multiple testing correction (FDR) is essential when testing
+thousands of gene sets.</li>
+<li>GO provides comprehensive but redundant functional annotation; use
+<code>simplify()</code> to reduce redundancy.</li>
+<li>KEGG provides curated pathway maps but has limited gene coverage and
+requires Entrez IDs.</li>
+<li>MSigDB Hallmark sets offer 50 high-quality, non-redundant biological
+signatures.</li>
+<li>
+<strong>Direction-aware analysis</strong> (up vs. down separately)
+often reveals clearer biological signals.</li>
+<li>
+<strong>GSEA</strong> avoids arbitrary cutoffs by using the full
+ranked gene list; it detects subtle but coordinated changes.</li>
+<li>Convergent findings across multiple databases and methods strengthen
+biological interpretation.</li>
+<li>Always report methods, thresholds, and full results for
+reproducibility.</li>
 </ul></section>
 </div>
     </main>
