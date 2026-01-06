@@ -333,8 +333,7 @@ names(files) <- samples$X1
 
 txi <- tximport(files,
                 type = "salmon",
-                tx2gene = tx2gene,
-                countsFromAbundance = "lengthScaledTPM")
+                tx2gene = tx2gene)
 saveRDS(txi, file = "results/salmon_quant/txi.rds")
 ```
 
@@ -360,9 +359,13 @@ ENSMUSG00000000049.12    0.993724    9.186882
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
-## Why use lengthScaledTPM?
+## Why use the default countsFromAbundance setting?
 
-This method leverages Salmon's bias correction while generating stable counts for statistical modeling.
+We use the default `countsFromAbundance = "no"` because `DESeqDataSetFromTximport()` (used in Episode 05b) automatically incorporates the `txi$length` matrix to correct for transcript length bias.
+
+Using `"lengthScaledTPM"` would apply length correction twice—once in tximport and again in DESeq2—potentially introducing bias. The default preserves Salmon's original estimated counts while letting DESeq2 handle length normalization correctly.
+
+**Note:** If you plan to use edgeR instead of DESeq2, you may want `countsFromAbundance = "lengthScaledTPM"` since edgeR's `DGEList` doesn't automatically use the length matrix.
 
 :::::::::::::::::::::::::::::::::::::::
 

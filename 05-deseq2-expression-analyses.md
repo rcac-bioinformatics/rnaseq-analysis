@@ -276,14 +276,21 @@ This motivates filtering to protein-coding genes for QC and visualization.
 
 
 
-Filter to protein coding genes and lowly expressed genes:
+Filter to protein coding genes and apply group-aware expression filtering:
 
 ```r
-
-cts_coding <- cts_annot %>%
+# Filter to protein-coding genes
+cts_pc <- cts_annot %>%
     filter(gene_biotype == "protein_coding") %>%
-    filter(rowSums(across(all_of(rownames(coldata)))) > 5) %>%
-    select(ensembl_gene_id_version, all_of(rownames(coldata))) %>%
+    dplyr::select(ensembl_gene_id_version, all_of(rownames(coldata)))
+
+# Group-aware filtering: keep genes with >= 10 counts in at least 3 samples
+# (the size of the smallest experimental group)
+min_samples <- 3
+min_counts <- 10
+
+cts_coding <- cts_pc %>%
+    filter(rowSums(across(all_of(rownames(coldata)), ~ . >= min_counts)) >= min_samples) %>%
     column_to_rownames("ensembl_gene_id_version")
 
 dim(cts_coding)
@@ -294,12 +301,20 @@ dim(cts_coding)
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
-## Why filter protein coding genes and low expression
+## Why use group-aware filtering?
 
-Noncoding biotypes (lncRNA, pseudogene, etc.) can be biologically important.
-Filtering lowly expressed genes reduces noise in exploratory analyses.
-Genes with near-zero counts across all samples inflate variance estimates and obscure real biological structure.
-The threshold of 5 total counts is a conservative filter that keeps genes with minimal but genuine expression while removing background noise.
+A simple sum filter (e.g., `rowSums > 5`) can be problematic:
+
+- A gene with 10 total counts across 6 samples averages ~1.7 counts/sample—often too noisy.
+- It may inadvertently remove genes expressed in only one condition.
+
+Group-aware filtering ensures:
+
+- Each kept gene has meaningful expression in at least one experimental group.
+- Genes with condition-specific expression are retained.
+- The threshold is interpretable ("at least 10 counts in at least 3 samples").
+
+For exploratory analysis, we also restrict to protein-coding genes to focus on the most interpretable features.
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -486,7 +501,32 @@ ggplot(d, aes(PC1, PC2, color = condition)) +
 <p class="caption">PCA plot showing sample clustering</p>
 </div>
 
+::::::::::::::::::::::::::::::::::::::: callout
 
+## Using PCA to detect batch effects
+
+PCA is one of the most powerful tools for detecting **batch effects**—unwanted technical variation from sample processing, sequencing runs, or other non-biological factors.
+
+**What to look for:**
+
+- **Good**: Samples separate primarily by biological condition (treatment, genotype).
+- **Concerning**: Samples cluster by processing date, sequencing lane, or technician instead of biology.
+- **Red flag**: PC1 captures technical variation rather than the condition of interest.
+
+**If you detect batch effects:**
+
+1. **Include batch in the design formula** if batch is known:
+   ```r
+   design = ~ batch + condition
+   ```
+
+2. **Use batch correction tools** like `ComBat-seq` or `sva` for complex batch structures.
+
+3. **Never simply remove batch-affected samples** without understanding the underlying cause.
+
+In this dataset, samples cluster cleanly by condition, indicating no obvious batch effects.
+
+:::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::: challenge
 
@@ -494,9 +534,10 @@ ggplot(d, aes(PC1, PC2, color = condition)) +
 
 Using the library size, distance heatmap, and PCA:
 
-1. Are there any obvious outlier samples.
-2. Do replicates from the same condition cluster together.
-3. Does any sample look inconsistent with its metadata label.
+1. Are there any obvious outlier samples?
+2. Do replicates from the same condition cluster together?
+3. Does any sample look inconsistent with its metadata label?
+4. Is there evidence of batch effects (samples clustering by non-biological factors)?
 
 ::::::::::::::::::::::::::::::::::: solution
 
@@ -505,6 +546,7 @@ Example interpretation:
 1. Library sizes are comparable across samples and fall within a narrow range.
 2. Samples cluster by condition in both distance heatmaps and PCA.
 3. No sample appears as a clear outlier relative to its group.
+4. No batch effects are apparent—PC1 separates by experimental condition, not technical factors.
 
 :::::::::::::::::::::::::::::::::::
 
@@ -629,6 +671,55 @@ Key columns:
 `pvalue` / `padj`: statistical significance after multiple testing correction
 Genes with `NA` values often have too few reads to estimate dispersion and should not be interpreted.
 
+### Apply log fold change shrinkage
+
+The raw log2 fold change estimates from DESeq2 can be noisy for genes with low counts. Shrinkage improves these estimates.
+
+First, check the available coefficient names:
+
+```r
+resultsNames(dds)
+```
+
+```
+[1] "Intercept"                              "condition_Nat10flox.flox_vs_Nat10.CKO"
+```
+
+Apply shrinkage using `apeglm` (recommended for standard two-group comparisons):
+
+```r
+res_shrunk <- lfcShrink(
+    dds,
+    coef = "condition_Nat10flox.flox_vs_Nat10.CKO",
+    type = "apeglm"
+)
+
+summary(res_shrunk)
+```
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Why shrink log fold changes?
+
+Genes with low counts can have unreliably large fold changes. Shrinkage:
+
+- Reduces noise in LFC estimates for lowly-expressed genes.
+- Improves gene ranking for downstream analyses (e.g., GSEA).
+- Does not affect p-values or significance calls.
+
+**Choosing a shrinkage method:**
+
+- **`apeglm`** (recommended): Fast, well-calibrated, uses coefficient name (`coef`).
+- **`ashr`**: Required for complex contrasts that can't be specified with `coef`.
+- **`normal`**: Legacy method, generally not recommended.
+
+:::::::::::::::::::::::::::::::::::::::
+
+For downstream analyses, we'll use the shrunken results:
+
+```r
+res <- res_shrunk
+```
 
 Create a summary table:
 
