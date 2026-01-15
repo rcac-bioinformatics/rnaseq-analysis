@@ -128,9 +128,9 @@ Example command:
 salmon quant \
     --index salmon_index \
     --libType IU \
-    --mates1 data/SRR33253286_1.fastq.gz \
-    --mates2 data/SRR33253286_2.fastq.gz \
-    --output salmon_quant/SRR33253286 \
+    --mates1 data/WT_Bcell_mock_rep1_R1.fastq.gz \
+    --mates2 data/WT_Bcell_mock_rep1_R2.fastq.gz \
+    --output salmon_quant/WT_Bcell_mock_rep1 \
     --threads 16 \
     --validateMappings \
     --seqBias \
@@ -175,7 +175,7 @@ Array job:
 #SBATCH --partition=cpu
 #SBATCH --time=4:00:00
 #SBATCH --job-name=salmon_quant
-#SBATCH --array=1-6
+#SBATCH --array=1-8
 #SBATCH --output=cluster-%x.%j.out
 #SBATCH --error=cluster-%x.%j.err
 
@@ -231,7 +231,7 @@ After Salmon finishes, each sample directory contains a small set of output file
 Only a few of these are important for routine analysis:
 
 ```
-SRR33253285/
+WT_Bcell_mock_rep1/
 ├── quant.sf                       # IMPORTANT: transcript-level TPM, counts, effective lengths
 ├── lib_format_counts.json         # IMPORTANT: inferred library type (IU, ISR, ISF)
 ├── aux_info
@@ -341,20 +341,20 @@ saveRDS(txi, file = "results/salmon_quant/txi.rds")
 
 ```r
 > head(txi$counts)
-                      SRR33253285 SRR33253286 SRR33253287 SRR33253288
-ENSMUSG00000000001.5     473.4426  553.784929  826.996853  676.910126
-ENSMUSG00000000003.16      0.0000    0.000000    0.000000    0.000000
-ENSMUSG00000000028.16     40.5783   33.966518   55.305501   97.845071
-ENSMUSG00000000031.20      0.0000    0.000000    0.000000    0.000000
-ENSMUSG00000000037.18     19.2220    9.599673   16.951493   20.226549
-ENSMUSG00000000049.12      0.0000    5.022073    1.984551    1.016411
-                      SRR33253289 SRR33253290
-ENSMUSG00000000001.5   724.117586  813.848375
-ENSMUSG00000000003.16    0.000000    0.000000
-ENSMUSG00000000028.16   41.691461   63.812279
-ENSMUSG00000000031.20    0.000000    0.000000
-ENSMUSG00000000037.18   19.680740   18.945058
-ENSMUSG00000000049.12    0.993724    9.186882
+                      WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4
+ENSMUSG00000000001.5          473.4426         553.7849         826.9969         676.9101
+ENSMUSG00000000003.16           0.0000           0.0000           0.0000           0.0000
+ENSMUSG00000000028.16          40.5783          33.9665          55.3055          97.8451
+ENSMUSG00000000031.20           0.0000           0.0000           0.0000           0.0000
+ENSMUSG00000000037.18          19.2220           9.5997          16.9515          20.2265
+ENSMUSG00000000049.12           0.0000           5.0221           1.9846           1.0164
+                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4
+ENSMUSG00000000001.5        724.1176        813.8484        689.2341        752.1567
+ENSMUSG00000000003.16         0.0000          0.0000          0.0000          0.0000
+ENSMUSG00000000028.16        41.6915         63.8123         48.3421         55.7892
+ENSMUSG00000000031.20         0.0000          0.0000          0.0000          0.0000
+ENSMUSG00000000037.18        19.6807         18.9451         22.3456         17.8923
+ENSMUSG00000000049.12         0.9937          9.1869          2.3456          4.5678
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout

@@ -29,7 +29,7 @@ exercises: 15
 Before mapping reads to a genome, it is important to evaluate the quality of the raw RNA-seq data.  
 Quality control helps reveal problems such as adapter contamination, low quality cycles, and unexpected technical issues.  
 
-In this episode, we will run FastQC and MultiQC on the mouse heart dataset and interpret the results.  
+In this episode, we will run FastQC and MultiQC on the p53/ionizing radiation dataset and interpret the results.  
 We will also explain when trimming is useful and when it can be harmful for alignment based RNA-seq workflows.
 
 FastQC evaluates individual FASTQ files. MultiQC summarizes all FastQC reports into one view, which is helpful for comparing replicates.
@@ -72,30 +72,38 @@ fastqc data/*.fastq.gz --outdir results/qc_fastq/ --threads 4
 
 ```bash
 qc
-├── SRR33253285_1_fastqc.html
-├── SRR33253285_1_fastqc.zip
-├── SRR33253285_2_fastqc.html
-├── SRR33253285_2_fastqc.zip
-├── SRR33253286_1_fastqc.html
-├── SRR33253286_1_fastqc.zip
-├── SRR33253286_2_fastqc.html
-├── SRR33253286_2_fastqc.zip
-├── SRR33253287_1_fastqc.html
-├── SRR33253287_1_fastqc.zip
-├── SRR33253287_2_fastqc.html
-├── SRR33253287_2_fastqc.zip
-├── SRR33253288_1_fastqc.html
-├── SRR33253288_1_fastqc.zip
-├── SRR33253288_2_fastqc.html
-├── SRR33253288_2_fastqc.zip
-├── SRR33253289_1_fastqc.html
-├── SRR33253289_1_fastqc.zip
-├── SRR33253289_2_fastqc.html
-├── SRR33253289_2_fastqc.zip
-├── SRR33253290_1_fastqc.html
-├── SRR33253290_1_fastqc.zip
-├── SRR33253290_2_fastqc.html
-└── SRR33253290_2_fastqc.zip
+├── WT_Bcell_mock_rep1_R1_fastqc.html
+├── WT_Bcell_mock_rep1_R1_fastqc.zip
+├── WT_Bcell_mock_rep1_R2_fastqc.html
+├── WT_Bcell_mock_rep1_R2_fastqc.zip
+├── WT_Bcell_mock_rep2_R1_fastqc.html
+├── WT_Bcell_mock_rep2_R1_fastqc.zip
+├── WT_Bcell_mock_rep2_R2_fastqc.html
+├── WT_Bcell_mock_rep2_R2_fastqc.zip
+├── WT_Bcell_mock_rep3_R1_fastqc.html
+├── WT_Bcell_mock_rep3_R1_fastqc.zip
+├── WT_Bcell_mock_rep3_R2_fastqc.html
+├── WT_Bcell_mock_rep3_R2_fastqc.zip
+├── WT_Bcell_mock_rep4_R1_fastqc.html
+├── WT_Bcell_mock_rep4_R1_fastqc.zip
+├── WT_Bcell_mock_rep4_R2_fastqc.html
+├── WT_Bcell_mock_rep4_R2_fastqc.zip
+├── WT_Bcell_IR_rep1_R1_fastqc.html
+├── WT_Bcell_IR_rep1_R1_fastqc.zip
+├── WT_Bcell_IR_rep1_R2_fastqc.html
+├── WT_Bcell_IR_rep1_R2_fastqc.zip
+├── WT_Bcell_IR_rep2_R1_fastqc.html
+├── WT_Bcell_IR_rep2_R1_fastqc.zip
+├── WT_Bcell_IR_rep2_R2_fastqc.html
+├── WT_Bcell_IR_rep2_R2_fastqc.zip
+├── WT_Bcell_IR_rep3_R1_fastqc.html
+├── WT_Bcell_IR_rep3_R1_fastqc.zip
+├── WT_Bcell_IR_rep3_R2_fastqc.html
+├── WT_Bcell_IR_rep3_R2_fastqc.zip
+├── WT_Bcell_IR_rep4_R1_fastqc.html
+├── WT_Bcell_IR_rep4_R1_fastqc.zip
+├── WT_Bcell_IR_rep4_R2_fastqc.html
+└── WT_Bcell_IR_rep4_R2_fastqc.zip
 ```
 
 ## Understanding the FastQC report
@@ -140,7 +148,7 @@ knitr::include_graphics("fig/02_qc/fastqc_sequence_quality_histogram.png")
 ### Per tile sequence quality
 
 Reports whether specific regions of the flowcell produced lower quality reads.
-Uneven tiles can indicate instrument issues or bubble formation, but this module rarely shows problems in modern NovaSeq data.
+Uneven tiles can indicate instrument issues or bubble formation, but this module rarely shows problems in modern Illumina data.
 
 ```{r, fig.cap="Per tile sequence quality plot", echo=FALSE, message=FALSE}
 knitr::include_graphics("fig/02_qc/fastqc_per_base_sequence_content.png")

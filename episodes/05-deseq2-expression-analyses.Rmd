@@ -50,12 +50,14 @@ While we created the count matrix in the previous episode, we still need to crea
 
 ```
 sample,condition
-SRR33253285,Nat10-CKO
-SRR33253286,Nat10-CKO
-SRR33253287,Nat10-CKO
-SRR33253288,Nat10floxflox
-SRR33253289,Nat10flox/flox
-SRR33253290,Nat10flox/flox
+WT_Bcell_mock_rep1,WT_mock
+WT_Bcell_mock_rep2,WT_mock
+WT_Bcell_mock_rep3,WT_mock
+WT_Bcell_mock_rep4,WT_mock
+WT_Bcell_IR_rep1,WT_IR
+WT_Bcell_IR_rep2,WT_IR
+WT_Bcell_IR_rep3,WT_IR
+WT_Bcell_IR_rep4,WT_IR
 ```
 Also, create a direcotry for DESeq2 results:
 
@@ -218,7 +220,7 @@ The objects loaded here form the foundation for the entire workflow.
 ## Sample metadata and design
 
 `coldata` must have row names that match the count matrix column names.
-The `condition` column defines the groups for DESeq2 (`Nat10-CKO` vs `Nat10flox/flox`).
+The `condition` column defines the groups for DESeq2 (`WT_mock` vs `WT_IR`).
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -282,9 +284,9 @@ cts_pc <- cts_annot %>%
     filter(gene_biotype == "protein_coding") %>%
     dplyr::select(ensembl_gene_id_version, all_of(rownames(coldata)))
 
-# Group-aware filtering: keep genes with >= 10 counts in at least 3 samples
+# Group-aware filtering: keep genes with >= 10 counts in at least 4 samples
 # (the size of the smallest experimental group)
-min_samples <- 3
+min_samples <- 4
 min_counts <- 10
 
 cts_coding <- cts_pc %>%
@@ -294,7 +296,7 @@ cts_coding <- cts_pc %>%
 dim(cts_coding)
 ```
 ```
-[1] 15839     6
+[1] 15839     8
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
@@ -303,14 +305,14 @@ dim(cts_coding)
 
 A simple sum filter (e.g., `rowSums > 5`) can be problematic:
 
-- A gene with 10 total counts across 6 samples averages ~1.7 counts/sample—often too noisy.
+- A gene with 10 total counts across 8 samples averages ~1.25 counts/sample—often too noisy.
 - It may inadvertently remove genes expressed in only one condition.
 
 Group-aware filtering ensures:
 
 - Each kept gene has meaningful expression in at least one experimental group.
 - Genes with condition-specific expression are retained.
-- The threshold is interpretable ("at least 10 counts in at least 3 samples").
+- The threshold is interpretable ("at least 10 counts in at least 4 samples").
 
 For exploratory analysis, we also restrict to protein-coding genes to focus on the most interpretable features.
 
@@ -478,8 +480,8 @@ d <- data.frame(
 ggplot(d, aes(PC1, PC2, color = condition)) +
   scale_shape_manual(values = 1:12) +
   scale_color_manual(values = c(
-    "Nat10-CKO"       = "#00b462",
-    "Nat10flox/flox"  = "#980c80"
+    "WT_mock" = "#00b462",
+    "WT_IR"   = "#980c80"
   )) +
   theme_bw() +
   theme(legend.title = element_blank()) +
@@ -536,7 +538,7 @@ Using the library size, distance heatmap, and PCA:
 Example interpretation:
 
 1. Library sizes are comparable across samples and fall within a narrow range.
-2. Samples cluster by condition in both distance heatmaps and PCA.
+2. Samples cluster by condition (mock vs IR-treated) in both distance heatmaps and PCA.
 3. No sample appears as a clear outlier relative to its group.
 4. No batch effects are apparent—PC1 separates by experimental condition, not technical factors.
 
@@ -607,7 +609,7 @@ knitr::include_graphics("fig/05_deseq/dispersion-plot.png")
 
 
 
-Obtain results for the contrast of interest (`Nat10flox/flox` vs `Nat10-CKO`):
+Obtain results for the contrast of interest (`WT_IR` vs `WT_mock`):
 
 ```r
 res <-
@@ -615,8 +617,8 @@ res <-
     dds,
     contrast = c(
       "condition",
-      "Nat10flox/flox",
-      "Nat10-CKO"
+      "WT_IR",
+      "WT_mock"
     )
   )
 
@@ -642,8 +644,8 @@ head(res[order(res$pvalue), ])
 ```
 
 ```text
-log2 fold change (MLE): condition Nat10flox/flox vs Nat10-CKO 
-Wald test p-value: condition Nat10flox.flox vs Nat10.CKO 
+log2 fold change (MLE): condition WT_IR vs WT_mock
+Wald test p-value: condition WT_IR vs WT_mock 
 DataFrame with 6 rows and 6 columns
        baseMean log2FoldChange     lfcSE      stat       pvalue         padj
       <numeric>      <numeric> <numeric> <numeric>    <numeric>    <numeric>
@@ -673,7 +675,7 @@ resultsNames(dds)
 ```
 
 ```
-[1] "Intercept"                              "condition_Nat10flox.flox_vs_Nat10.CKO"
+[1] "Intercept"                              "condition_WT_IR_vs_WT_mock"
 ```
 
 Apply shrinkage using `apeglm` (recommended for standard two-group comparisons):
@@ -681,7 +683,7 @@ Apply shrinkage using `apeglm` (recommended for standard two-group comparisons):
 ```r
 res_shrunk <- lfcShrink(
     dds,
-    coef = "condition_Nat10flox.flox_vs_Nat10.CKO",
+    coef = "condition_WT_IR_vs_WT_mock",
     type = "apeglm"
 )
 
@@ -825,7 +827,7 @@ ggplot(
   theme_classic() +
   xlab("log2 fold change") +
   ylab("-log10 adjusted p value") +
-  ggtitle("Volcano plot: Nat10-CKO vs Nat10flox/flox")
+  ggtitle("Volcano plot: WT_IR vs WT_mock")
 ```
 
 
@@ -838,7 +840,7 @@ knitr::include_graphics("fig/05_deseq/volcano-plot.png")
 
 ## Interpreting the volcano
 
-Points to the right are higher in `Nat10flox/flox`, to the left are higher in `Nat10-CKO`.
+Points to the right are higher in IR-treated samples (upregulated by radiation), to the left are higher in mock (downregulated by radiation).
 Points near the top have stronger statistical support (small adjusted p values).
 Colored points mark genes that pass both fold change and padj thresholds.
 
@@ -880,15 +882,15 @@ Using `sig_res`:
 
 1. Which genes have the largest positive log2 fold change.
 2. Which genes have the largest negative log2 fold change.
-3. Are any of the top genes known to be related to Nat10 function or the studied phenotype.
+3. Are any of the top genes known p53 targets or DNA damage response genes.
 
 ::::::::::::::::::::::::::::::::::: solution
 
 Example interpretation:
 
-* Several strongly up regulated genes are involved in cell cycle and RNA processing.
-* Strongly down regulated genes may include transcription factors and signaling components.
-* Cross referencing top hits with prior literature or databases can reveal mechanistic hypotheses.
+* Strongly upregulated genes should include canonical p53 targets such as *Cdkn1a* (p21), *Mdm2*, *Bax*, and *Bbc3* (Puma).
+* DNA damage response genes like *Gadd45a* should be upregulated.
+* Cross-referencing top hits with p53 target databases confirms our analysis is working correctly.
 
 :::::::::::::::::::::::::::::::::::
 
