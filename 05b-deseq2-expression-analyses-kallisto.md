@@ -73,12 +73,14 @@ If you haven't created the sample metadata file, create `scripts/samples.csv` wi
 
 ```
 sample,condition
-SRR33253285,Nat10-CKO
-SRR33253286,Nat10-CKO
-SRR33253287,Nat10-CKO
-SRR33253288,Nat10flox/flox
-SRR33253289,Nat10flox/flox
-SRR33253290,Nat10flox/flox
+WT_Bcell_mock_rep1,WT_mock
+WT_Bcell_mock_rep2,WT_mock
+WT_Bcell_mock_rep3,WT_mock
+WT_Bcell_mock_rep4,WT_mock
+WT_Bcell_IR_rep1,WT_IR
+WT_Bcell_IR_rep2,WT_IR
+WT_Bcell_IR_rep3,WT_IR
+WT_Bcell_IR_rep4,WT_IR
 ```
 
 Create a results directory:
@@ -129,11 +131,11 @@ head(txi$counts)
 ```
 
 ```
-                      SRR33253285 SRR33253286 SRR33253287 SRR33253288
-ENSMUSG00000000001.5     473.4426  553.784929  826.996853  676.910126
-ENSMUSG00000000003.16      0.0000    0.000000    0.000000    0.000000
-ENSMUSG00000000028.16     40.5783   33.966518   55.305501   97.845071
-ENSMUSG00000000031.20      0.0000    0.000000    0.000000    0.000000
+                      WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4
+ENSMUSG00000000001.5          473.4426         553.7849         826.9969         676.9101
+ENSMUSG00000000003.16           0.0000           0.0000           0.0000           0.0000
+ENSMUSG00000000028.16          40.5783          33.9665          55.3055          97.8451
+ENSMUSG00000000031.20           0.0000           0.0000           0.0000           0.0000
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
@@ -166,13 +168,15 @@ coldata
 ```
 
 ```
-            condition
-SRR33253285   Nat10-CKO
-SRR33253286   Nat10-CKO
-SRR33253287   Nat10-CKO
-SRR33253288   Nat10flox/flox
-SRR33253289   Nat10flox/flox
-SRR33253290   Nat10flox/flox
+                   condition
+WT_Bcell_mock_rep1   WT_mock
+WT_Bcell_mock_rep2   WT_mock
+WT_Bcell_mock_rep3   WT_mock
+WT_Bcell_mock_rep4   WT_mock
+WT_Bcell_IR_rep1     WT_IR
+WT_Bcell_IR_rep2     WT_IR
+WT_Bcell_IR_rep3     WT_IR
+WT_Bcell_IR_rep4     WT_IR
 ```
 
 Verify that sample names match between tximport and metadata:
@@ -214,9 +218,9 @@ Using `DESeqDataSetFromMatrix()` with tximport counts would lose this informatio
 Filter lowly expressed genes using group-aware filtering:
 
 ```r
-# Group-aware filtering: keep genes with >= 10 counts in at least 3 samples
+# Group-aware filtering: keep genes with >= 10 counts in at least 4 samples
 # (the size of the smallest experimental group)
-min_samples <- 3
+min_samples <- 4
 min_counts <- 10
 keep <- rowSums(counts(dds) >= min_counts) >= min_samples
 dds <- dds[keep, ]
@@ -224,7 +228,7 @@ dim(dds)
 ```
 
 ```
-[1] 18924     6
+[1] 18924     8
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
@@ -233,14 +237,14 @@ dim(dds)
 
 A simple sum filter (`rowSums(counts(dds)) >= 10`) can be problematic:
 
-- A gene with 10 total counts across 6 samples averages ~1.7 counts/sample—too low to be informative.
+- A gene with 10 total counts across 8 samples averages ~1.25 counts/sample—too low to be informative.
 - It may remove genes expressed in only one condition (biologically interesting!).
 
 Group-aware filtering (`rowSums(counts >= threshold) >= min_group_size`) ensures:
 
 - Each kept gene has meaningful expression in at least one experimental group.
 - Genes with condition-specific expression are retained.
-- The threshold is interpretable (e.g., "at least 10 counts in at least 3 samples").
+- The threshold is interpretable (e.g., "at least 10 counts in at least 4 samples").
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -252,8 +256,10 @@ sizeFactors(dds)
 ```
 
 ```
-SRR33253285 SRR33253286 SRR33253287 SRR33253288 SRR33253289 SRR33253290
-  0.7232591   0.8443123   1.2021389   1.1142267   1.0516283   1.1245413
+WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4
+         0.7232591          0.8443123          1.2021389          1.1142267
+  WT_Bcell_IR_rep1   WT_Bcell_IR_rep2   WT_Bcell_IR_rep3   WT_Bcell_IR_rep4
+         1.0516283          1.1245413          0.9832145          1.0567892
 ```
 
 ## Step 3: Exploratory data analysis
@@ -360,7 +366,7 @@ Using the distance heatmap and PCA plot:
 
 Example interpretation:
 
-1. Samples should cluster by condition (Nat10-CKO vs Nat10flox/flox) in both the heatmap and PCA.
+1. Samples should cluster by condition (WT_mock vs WT_IR) in both the heatmap and PCA.
 2. If all replicates cluster together, there are no obvious outliers.
 3. PC1 typically captures the largest source of variation. If it separates conditions, the experimental treatment is the dominant signal.
 
@@ -408,7 +414,7 @@ Extract results for the contrast of interest:
 ```r
 res <- results(
     dds,
-    contrast = c("condition", "Nat10flox/flox", "Nat10-CKO")
+    contrast = c("condition", "WT_IR", "WT_mock")
 )
 
 summary(res)
@@ -442,7 +448,7 @@ resultsNames(dds)
 ```
 
 ```
-[1] "Intercept"                              "condition_Nat10flox.flox_vs_Nat10.CKO"
+[1] "Intercept"                              "condition_WT_IR_vs_WT_mock"
 ```
 
 Apply shrinkage using `apeglm` (recommended for standard contrasts):
@@ -450,7 +456,7 @@ Apply shrinkage using `apeglm` (recommended for standard contrasts):
 ```r
 res_shrunk <- lfcShrink(
     dds,
-    coef = "condition_Nat10flox.flox_vs_Nat10.CKO",
+    coef = "condition_WT_IR_vs_WT_mock",
     type = "apeglm"
 )
 ```
@@ -526,14 +532,14 @@ ggplot(
     theme_classic() +
     xlab("log2 fold change") +
     ylab("-log10 adjusted p-value") +
-    ggtitle("Volcano plot: Nat10flox/flox vs Nat10-CKO (Salmon)")
+    ggtitle("Volcano plot: WT_IR vs WT_mock (Salmon)")
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
 ## Interpreting the volcano plot
 
-- **X-axis**: Direction and magnitude of change (positive = higher in Nat10flox/flox).
+- **X-axis**: Direction and magnitude of change (positive = higher in WT_IR, i.e., upregulated by radiation).
 - **Y-axis**: Statistical significance (-log10 scale, higher = more significant).
 - **Colored points**: Genes passing both fold change and significance thresholds.
 

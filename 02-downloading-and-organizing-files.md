@@ -50,9 +50,64 @@ More information: <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4766705/>
 
 :::::::::::::::::::::::::::::::::::::::
 
-## Downloading the data and project organization
+## The workshop dataset: p53-mediated response to ionizing radiation
 
-For this workshop, we use a publicly available dataset that investigates the effects of cardiomyocyte specific Nat10 knockout on heart development in mice (BioProject PRJNA1254208, GEO GSE295332). The study includes three biological replicates per group, sequenced on an Illumina NovaSeq X Plus in paired end mode.
+For this workshop, we use a subset of a publicly available dataset (GEO accession [GSE71176](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176)) that investigates the transcriptional response to ionizing radiation (IR) in mouse B cells. The original study by [Tonelli et al. (2015)](https://doi.org/10.1016/j.celrep.2015.02.068) examined how the tumor suppressor p53 (encoded by *Trp53*) regulates gene expression following DNA damage.
+
+### Biological context
+
+The **TP53** gene (called *Trp53* in mice) encodes the p53 protein, often called the "guardian of the genome." When cells experience DNA damage, such as double-strand breaks caused by ionizing radiation, p53 activates transcriptional programs that lead to:
+
+- **Cell cycle arrest** (allowing time for DNA repair)
+- **Apoptosis** (programmed cell death if damage is irreparable)
+- **Senescence** (permanent growth arrest)
+- **Metabolic reprogramming**
+
+Mutations in *TP53* are among the most common alterations in human cancers, occurring in approximately 50% of all tumors. Understanding p53-regulated genes is therefore central to cancer biology.
+
+### Experimental design
+
+The full dataset includes wild-type (WT) and p53-knockout (KO) mouse B cells, with and without IR treatment (7 Gy, 4 hours post-exposure). For simplicity, we will focus on **8 samples from wild-type B cells only**:
+
+| Condition | Description | Samples | Replicates |
+|-----------|-------------|---------|------------|
+| **WT_mock** (control) | Wild-type B cells, no radiation | 4 | SRR2121778-81 |
+| **WT_IR** (treatment) | Wild-type B cells, 4h post 7Gy IR | 4 | SRR2121786-89 |
+
+This balanced design (n=4 per group) allows us to identify genes that respond to ionizing radiation in cells with functional p53.
+
+### Expected biological results
+
+Because p53 is a transcription factor activated by DNA damage, we expect to see upregulation of canonical p53 target genes in IR-treated samples:
+
+**Genes expected to be upregulated (IR vs mock):**
+
+- *Cdkn1a* (p21) - cell cycle arrest
+- *Bax*, *Bbc3* (Puma), *Pmaip1* (Noxa) - pro-apoptotic
+- *Mdm2* - negative feedback regulator of p53
+- *Gadd45a* - DNA damage response
+- *Fas*, *Tnfrsf10b* (DR5) - death receptor signaling
+
+**Pathways expected to be enriched:**
+
+- p53 signaling pathway
+- Apoptosis
+- Cell cycle
+- DNA damage response
+
+The presence of these expected results serves as a positive control that our analysis pipeline is working correctly.
+
+### Why this dataset?
+
+This dataset is ideal for teaching because:
+
+1. **Simple two-group comparison**: Control vs. treatment with balanced replicates
+2. **Clear biological interpretation**: DNA damage response is well-characterized
+3. **Expected positive controls**: Known p53 targets should appear as top hits
+4. **Clinical relevance**: p53 biology is fundamental to cancer research
+5. **Model organism**: Mouse with excellent genome annotation
+
+## Project organization
 
 Before downloading files, we create a reproducible directory layout for raw data, scripts, mapping outputs, and count files.
 
@@ -227,14 +282,14 @@ grep ">" gencode.vM38.transcripts-clean.fa |head -1
 
 ## Raw reads
 
-The experiment we use investigates how **NAT10** influences **mouse heart development**.
-
-> **Study:** The effects of NAT10 on heart development in mice  
-> **Organism:** Mus musculus  
-> **Design:** Nat10^flox/flox vs Nat10-CKO (n=3 per group), P10 hearts  
-> **Sequencing:** Illumina NovaSeq X Plus, paired-end  
-> **BioProject:** PRJNA1254208  
-> **GEO:** GSE295332  
+> **Study:** Genome-wide identification of p53-regulated genes in response to ionizing radiation
+> **Organism:** Mus musculus (C57BL/6)
+> **Cell type:** Primary B cells from spleen
+> **Design:** Wild-type mock vs Wild-type IR-treated (n=4 per group)
+> **Treatment:** 7 Gy ionizing radiation, harvested 4 hours post-exposure
+> **Sequencing:** Illumina HiSeq 2000, paired-end 51bp
+> **GEO:** [GSE71176](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176)
+> **Reference:** [Tonelli et al. (2015) Cell Reports](https://doi.org/10.1016/j.celrep.2015.02.068)
 
 <div class="figure" style="text-align: center">
 <img src="fig/01_fq2counts/geo-db.png" alt="FASTQ files from GEO"  />
@@ -280,23 +335,26 @@ Since downloading may take a long time, we provide a pre-downloaded copy of all 
 
 ```bash
 data
-├── annot.tsv
 ├── gencode.vM38.primary_assembly.basic.annotation.gtf
 ├── gencode.vM38.transcripts.fa
+├── gencode.vM38.transcripts-clean.fa
 ├── GRCm39.primary_assembly.genome.fa
-├── mart.tsv
-├── SRR33253285_1.fastq.gz
-├── SRR33253285_2.fastq.gz
-├── SRR33253286_1.fastq.gz
-├── SRR33253286_2.fastq.gz
-├── SRR33253287_1.fastq.gz
-├── SRR33253287_2.fastq.gz
-├── SRR33253288_1.fastq.gz
-├── SRR33253288_2.fastq.gz
-├── SRR33253289_1.fastq.gz
-├── SRR33253289_2.fastq.gz
-├── SRR33253290_1.fastq.gz
-├── SRR33253290_2.fastq.gz
+├── WT_Bcell_mock_rep1_R1.fastq.gz
+├── WT_Bcell_mock_rep1_R2.fastq.gz
+├── WT_Bcell_mock_rep2_R1.fastq.gz
+├── WT_Bcell_mock_rep2_R2.fastq.gz
+├── WT_Bcell_mock_rep3_R1.fastq.gz
+├── WT_Bcell_mock_rep3_R2.fastq.gz
+├── WT_Bcell_mock_rep4_R1.fastq.gz
+├── WT_Bcell_mock_rep4_R2.fastq.gz
+├── WT_Bcell_IR_rep1_R1.fastq.gz
+├── WT_Bcell_IR_rep1_R2.fastq.gz
+├── WT_Bcell_IR_rep2_R1.fastq.gz
+├── WT_Bcell_IR_rep2_R2.fastq.gz
+├── WT_Bcell_IR_rep3_R1.fastq.gz
+├── WT_Bcell_IR_rep3_R2.fastq.gz
+├── WT_Bcell_IR_rep4_R1.fastq.gz
+├── WT_Bcell_IR_rep4_R2.fastq.gz
 └── SRR_Acc_List.txt
 ```
 

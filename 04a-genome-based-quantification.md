@@ -75,8 +75,8 @@ salmon index --transcripts data/gencode.vM38.transcripts-clean.fa \
 
 salmon quant --index data/salmon_index \
              --libType A \
-             --mates1 data/SRR33253286_1.fastq.gz \
-             --mates2 data/SRR33253286_2.fastq.gz \
+             --mates1 data/WT_Bcell_mock_rep1_R1.fastq.gz \
+             --mates2 data/WT_Bcell_mock_rep1_R2.fastq.gz \
              --output results/strand_check \
              --threads 4
 ```
@@ -88,7 +88,7 @@ The important output is in `results/strand_check/lib_format_counts.json`:
 
 ```json
 {
-    "read_files": "[ data/SRR33253286_1.fastq.gz, data/SRR33253286_2.fastq.gz]",
+    "read_files": "[ data/WT_Bcell_mock_rep1_R1.fastq.gz, data/WT_Bcell_mock_rep1_R2.fastq.gz]",
     "expected_format": "IU",
     "compatible_fragment_ratio": 1.0,
     "num_compatible_fragments": 21088696,
@@ -330,7 +330,7 @@ ls *_1.fastq.gz | sed 's/_1.fastq.gz//' > ${SCRATCH}/rnaseq-workshop/scripts/sam
 #SBATCH --partition=cpu
 #SBATCH --time=8:00:00
 #SBATCH --job-name=read_mapping
-#SBATCH --array=1-6
+#SBATCH --array=1-8
 #SBATCH --output=cluster-%x.%j.out
 #SBATCH --error=cluster-%x.%j.err
 
@@ -371,10 +371,10 @@ sbatch map_reads.sh
 
 Think about this:
 
-- We have *six* samples, each with two FASTQ files  
-- Having six separate slurm jobs means:  
-  - Copy-pasting the same command six times  
-  - Higher chance of typos or mistakes  
+- We have *eight* samples, each with two FASTQ files
+- Having eight separate slurm jobs means:
+  - Copy-pasting the same command eight times
+  - Higher chance of typos or mistakes
 - if mapping with single slurm file, sequential execution = slower
 - Samples can run independently  
 
@@ -562,7 +562,7 @@ Using your MultiQC featureCounts report:
 
 Example interpretation for this dataset:
 
-1. SRR33253289 has the lowest assignment rate. Causes include low complexity, incomplete annotation, or more intronic reads.
+1. The sample with the lowest assignment rate may vary. Causes include low complexity, incomplete annotation, or more intronic reads.
 2. Unmapped or No Features dominate. These reflect reads that do not align or do not overlap annotated exons.
 3. No. Total assigned reads depend on depth, while percent assigned reflects library quality.
 4. Reads mapped outside annotated exons, often from intronic regions, unannotated transcripts, or incomplete annotation.
