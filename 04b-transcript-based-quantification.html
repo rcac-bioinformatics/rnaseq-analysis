@@ -342,7 +342,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>B. Transcript-based quantification (Salmon)</h1>
-        <p>Last updated on 2026-01-06 |
+        <p>Last updated on 2026-01-15 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04b-transcript-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -460,7 +460,7 @@ transcripts.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What will the index contain? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <pre><code>salmon_index/
 ├── complete_ref_lens.bin        # IMPORTANT: full transcript lengths used in TPM/effLength calculations
@@ -498,9 +498,9 @@ transcript index and paired-end FASTQ files.</p>
 <pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">salmon</span> quant <span class="dt">\</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>    <span class="at">--index</span> salmon_index <span class="dt">\</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    <span class="at">--libType</span> IU <span class="dt">\</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="at">--mates1</span> data/SRR33253286_1.fastq.gz <span class="dt">\</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="at">--mates2</span> data/SRR33253286_2.fastq.gz <span class="dt">\</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="at">--output</span> salmon_quant/SRR33253286 <span class="dt">\</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="at">--mates1</span> data/WT_Bcell_mock_rep1_R1.fastq.gz <span class="dt">\</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="at">--mates2</span> data/WT_Bcell_mock_rep1_R2.fastq.gz <span class="dt">\</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="at">--output</span> salmon_quant/WT_Bcell_mock_rep1 <span class="dt">\</span></span>
 <span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    <span class="at">--threads</span> 16 <span class="dt">\</span></span>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>    <span class="at">--validateMappings</span> <span class="dt">\</span></span>
 <span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    <span class="at">--seqBias</span> <span class="dt">\</span></span>
@@ -551,7 +551,7 @@ if unsure.</p>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#SBATCH --partition=cpu</span></span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#SBATCH --time=4:00:00</span></span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#SBATCH --job-name=salmon_quant</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#SBATCH --array=1-6</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#SBATCH --array=1-8</span></span>
 <span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#SBATCH --output=cluster-%x.%j.out</span></span>
 <span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#SBATCH --error=cluster-%x.%j.err</span></span>
 <span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a></span>
@@ -608,7 +608,7 @@ count estimates are directly comparable across samples.</p>
 <p>After Salmon finishes, each sample directory contains a small set of
 output files.<br>
 Only a few of these are important for routine analysis:</p>
-<pre><code>SRR33253285/
+<pre><code>WT_Bcell_mock_rep1/
 ├── quant.sf                       # IMPORTANT: transcript-level TPM, counts, effective lengths
 ├── lib_format_counts.json         # IMPORTANT: inferred library type (IU, ISR, ISF)
 ├── aux_info
@@ -734,20 +734,20 @@ DESeq2.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">head</span>(txi<span class="sc">$</span>counts)</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>                      SRR33253285 SRR33253286 SRR33253287 SRR33253288</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>ENSMUSG00000000001<span class="fl">.5</span>     <span class="fl">473.4426</span>  <span class="fl">553.784929</span>  <span class="fl">826.996853</span>  <span class="fl">676.910126</span></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>ENSMUSG00000000003<span class="fl">.16</span>      <span class="fl">0.0000</span>    <span class="fl">0.000000</span>    <span class="fl">0.000000</span>    <span class="fl">0.000000</span></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>ENSMUSG00000000028<span class="fl">.16</span>     <span class="fl">40.5783</span>   <span class="fl">33.966518</span>   <span class="fl">55.305501</span>   <span class="fl">97.845071</span></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>ENSMUSG00000000031<span class="fl">.20</span>      <span class="fl">0.0000</span>    <span class="fl">0.000000</span>    <span class="fl">0.000000</span>    <span class="fl">0.000000</span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>ENSMUSG00000000037<span class="fl">.18</span>     <span class="fl">19.2220</span>    <span class="fl">9.599673</span>   <span class="fl">16.951493</span>   <span class="fl">20.226549</span></span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>ENSMUSG00000000049<span class="fl">.12</span>      <span class="fl">0.0000</span>    <span class="fl">5.022073</span>    <span class="fl">1.984551</span>    <span class="fl">1.016411</span></span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>                      SRR33253289 SRR33253290</span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>ENSMUSG00000000001<span class="fl">.5</span>   <span class="fl">724.117586</span>  <span class="fl">813.848375</span></span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>ENSMUSG00000000003<span class="fl">.16</span>    <span class="fl">0.000000</span>    <span class="fl">0.000000</span></span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>ENSMUSG00000000028<span class="fl">.16</span>   <span class="fl">41.691461</span>   <span class="fl">63.812279</span></span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>ENSMUSG00000000031<span class="fl">.20</span>    <span class="fl">0.000000</span>    <span class="fl">0.000000</span></span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>ENSMUSG00000000037<span class="fl">.18</span>   <span class="fl">19.680740</span>   <span class="fl">18.945058</span></span>
-<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>ENSMUSG00000000049<span class="fl">.12</span>    <span class="fl">0.993724</span>    <span class="fl">9.186882</span></span></code></pre>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>                      WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>ENSMUSG00000000001<span class="fl">.5</span>          <span class="fl">473.4426</span>         <span class="fl">553.7849</span>         <span class="fl">826.9969</span>         <span class="fl">676.9101</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>ENSMUSG00000000003<span class="fl">.16</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>ENSMUSG00000000028<span class="fl">.16</span>          <span class="fl">40.5783</span>          <span class="fl">33.9665</span>          <span class="fl">55.3055</span>          <span class="fl">97.8451</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>ENSMUSG00000000031<span class="fl">.20</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>ENSMUSG00000000037<span class="fl">.18</span>          <span class="fl">19.2220</span>           <span class="fl">9.5997</span>          <span class="fl">16.9515</span>          <span class="fl">20.2265</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>ENSMUSG00000000049<span class="fl">.12</span>           <span class="fl">0.0000</span>           <span class="fl">5.0221</span>           <span class="fl">1.9846</span>           <span class="fl">1.0164</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>ENSMUSG00000000001<span class="fl">.5</span>        <span class="fl">724.1176</span>        <span class="fl">813.8484</span>        <span class="fl">689.2341</span>        <span class="fl">752.1567</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>ENSMUSG00000000003<span class="fl">.16</span>         <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>ENSMUSG00000000028<span class="fl">.16</span>        <span class="fl">41.6915</span>         <span class="fl">63.8123</span>         <span class="fl">48.3421</span>         <span class="fl">55.7892</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>ENSMUSG00000000031<span class="fl">.20</span>         <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>ENSMUSG00000000037<span class="fl">.18</span>        <span class="fl">19.6807</span>         <span class="fl">18.9451</span>         <span class="fl">22.3456</span>         <span class="fl">17.8923</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>ENSMUSG00000000049<span class="fl">.12</span>         <span class="fl">0.9937</span>          <span class="fl">9.1869</span>          <span class="fl">2.3456</span>          <span class="fl">4.5678</span></span></code></pre>
 </div>
 <div id="why-use-the-default-countsfromabundance-setting" class="callout">
 <div class="callout-square">
@@ -814,7 +814,7 @@ multimodality?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Example interpretation for this dataset:</p>
 <ol style="list-style-type: decimal"><li>All samples show about 89 to 91 percent aligned. No sample is an
@@ -917,8 +917,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/04b-transcript-based-quantification.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/04b-transcript-based-quantification.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-01-06",
-  "datePublished": "2026-01-06"
+  "dateModified": "2026-01-15",
+  "datePublished": "2026-01-15"
 }
 
   </script><script>

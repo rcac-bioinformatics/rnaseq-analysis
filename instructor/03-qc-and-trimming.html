@@ -342,7 +342,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Quality control of RNA-seq reads</h1>
-        <p>Last updated on 2026-01-06 |
+        <p>Last updated on 2026-01-15 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/03-qc-and-trimming.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -390,8 +390,8 @@ RNA-seq.</li>
 quality of the raw RNA-seq data.<br>
 Quality control helps reveal problems such as adapter contamination, low
 quality cycles, and unexpected technical issues.</p>
-<p>In this episode, we will run FastQC and MultiQC on the mouse heart
-dataset and interpret the results.<br>
+<p>In this episode, we will run FastQC and MultiQC on the p53/ionizing
+radiation dataset and interpret the results.<br>
 We will also explain when trimming is useful and when it can be harmful
 for alignment based RNA-seq workflows.</p>
 <p>FastQC evaluates individual FASTQ files. MultiQC summarizes all
@@ -439,30 +439,38 @@ FASTQ files.</p>
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">qc</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_1_fastqc.html</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_1_fastqc.zip</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_2_fastqc.html</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_2_fastqc.zip</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_1_fastqc.html</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_1_fastqc.zip</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_2_fastqc.html</span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_2_fastqc.zip</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_1_fastqc.html</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_1_fastqc.zip</span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_2_fastqc.html</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_2_fastqc.zip</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_1_fastqc.html</span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_1_fastqc.zip</span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_2_fastqc.html</span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_2_fastqc.zip</span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_1_fastqc.html</span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_1_fastqc.zip</span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_2_fastqc.html</span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_2_fastqc.zip</span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="ex">├──</span> SRR33253290_1_fastqc.html</span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="ex">├──</span> SRR33253290_1_fastqc.zip</span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="ex">├──</span> SRR33253290_2_fastqc.html</span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="ex">└──</span> SRR33253290_2_fastqc.zip</span></code></pre>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R1_fastqc.html</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R1_fastqc.zip</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R2_fastqc.html</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R2_fastqc.zip</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R1_fastqc.html</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R1_fastqc.zip</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R2_fastqc.html</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R2_fastqc.zip</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R1_fastqc.html</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R1_fastqc.zip</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R2_fastqc.html</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R2_fastqc.zip</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R1_fastqc.html</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R1_fastqc.zip</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R2_fastqc.html</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R2_fastqc.zip</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R1_fastqc.html</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R1_fastqc.zip</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R2_fastqc.html</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R2_fastqc.zip</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R1_fastqc.html</span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R1_fastqc.zip</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R2_fastqc.html</span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R2_fastqc.zip</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R1_fastqc.html</span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R1_fastqc.zip</span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R2_fastqc.html</span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R2_fastqc.zip</span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R1_fastqc.html</span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R1_fastqc.zip</span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R2_fastqc.html</span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="ex">└──</span> WT_Bcell_IR_rep4_R2_fastqc.zip</span></code></pre>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="understanding-the-fastqc-report">Understanding the FastQC report<a class="anchor" aria-label="anchor" href="#understanding-the-fastqc-report"></a></h2>
@@ -510,7 +518,7 @@ Per base sequence quality for a typical RNA-seq dataset
 <h3 id="per-tile-sequence-quality">Per tile sequence quality<a class="anchor" aria-label="anchor" href="#per-tile-sequence-quality"></a></h3>
 <p>Reports whether specific regions of the flowcell produced lower
 quality reads. Uneven tiles can indicate instrument issues or bubble
-formation, but this module rarely shows problems in modern NovaSeq
+formation, but this module rarely shows problems in modern Illumina
 data.</p>
 <figure style="text-align: center"><img src="../fig/02_qc/fastqc_per_base_sequence_content.png" alt="Per tile sequence quality plot" class="figure mx-auto d-block"><figcaption>
 Per tile sequence quality plot
@@ -824,8 +832,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/03-qc-and-trimming.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/03-qc-and-trimming.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-01-06",
-  "datePublished": "2026-01-06"
+  "dateModified": "2026-01-15",
+  "datePublished": "2026-01-15"
 }
 
   </script><script>

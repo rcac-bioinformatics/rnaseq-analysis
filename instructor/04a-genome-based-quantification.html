@@ -342,7 +342,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>A. Genome-based quantification (STAR + featureCounts)</h1>
-        <p>Last updated on 2026-01-06 |
+        <p>Last updated on 2026-01-15 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04a-genome-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -444,8 +444,8 @@ library types.</p>
 <span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a></span>
 <span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="ex">salmon</span> quant <span class="at">--index</span> data/salmon_index <span class="dt">\</span></span>
 <span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>             <span class="at">--libType</span> A <span class="dt">\</span></span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>             <span class="at">--mates1</span> data/SRR33253286_1.fastq.gz <span class="dt">\</span></span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>             <span class="at">--mates2</span> data/SRR33253286_2.fastq.gz <span class="dt">\</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>             <span class="at">--mates1</span> data/WT_Bcell_mock_rep1_R1.fastq.gz <span class="dt">\</span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>             <span class="at">--mates2</span> data/WT_Bcell_mock_rep1_R2.fastq.gz <span class="dt">\</span></span>
 <span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>             <span class="at">--output</span> results/strand_check <span class="dt">\</span></span>
 <span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>             <span class="at">--threads</span> 4</span></code></pre>
 </div>
@@ -462,7 +462,7 @@ library types.</p>
 <h3 class="code-label">JSON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode json" tabindex="0"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="dt">"read_files"</span><span class="fu">:</span> <span class="st">"[ data/SRR33253286_1.fastq.gz, data/SRR33253286_2.fastq.gz]"</span><span class="fu">,</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="dt">"read_files"</span><span class="fu">:</span> <span class="st">"[ data/WT_Bcell_mock_rep1_R1.fastq.gz, data/WT_Bcell_mock_rep1_R2.fastq.gz]"</span><span class="fu">,</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="dt">"expected_format"</span><span class="fu">:</span> <span class="st">"IU"</span><span class="fu">,</span></span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="dt">"compatible_fragment_ratio"</span><span class="fu">:</span> <span class="fl">1.0</span><span class="fu">,</span></span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="dt">"num_compatible_fragments"</span><span class="fu">:</span> <span class="dv">21088696</span><span class="fu">,</span></span>
@@ -755,7 +755,7 @@ sample names</p>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#SBATCH --partition=cpu</span></span>
 <span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#SBATCH --time=8:00:00</span></span>
 <span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#SBATCH --job-name=read_mapping</span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#SBATCH --array=1-6</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#SBATCH --array=1-8</span></span>
 <span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#SBATCH --output=cluster-%x.%j.out</span></span>
 <span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#SBATCH --error=cluster-%x.%j.err</span></span>
 <span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a></span>
@@ -797,10 +797,10 @@ sample names</p>
 <h3 class="callout-title">Why use an array job?</h3>
 <div class="callout-content">
 <p>Think about this:</p>
-<ul><li>We have <em>six</em> samples, each with two FASTQ files<br></li>
-<li>Having six separate slurm jobs means:
-<ul><li>Copy-pasting the same command six times<br></li>
-<li>Higher chance of typos or mistakes<br></li>
+<ul><li>We have <em>eight</em> samples, each with two FASTQ files</li>
+<li>Having eight separate slurm jobs means:
+<ul><li>Copy-pasting the same command eight times</li>
+<li>Higher chance of typos or mistakes</li>
 </ul></li>
 <li>if mapping with single slurm file, sequential execution =
 slower</li>
@@ -1024,8 +1024,8 @@ expression?</li>
 <div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <p>Example interpretation for this dataset:</p>
-<ol style="list-style-type: decimal"><li>SRR33253289 has the lowest assignment rate. Causes include low
-complexity, incomplete annotation, or more intronic reads.</li>
+<ol style="list-style-type: decimal"><li>The sample with the lowest assignment rate may vary. Causes include
+low complexity, incomplete annotation, or more intronic reads.</li>
 <li>Unmapped or No Features dominate. These reflect reads that do not
 align or do not overlap annotated exons.</li>
 <li>No. Total assigned reads depend on depth, while percent assigned
@@ -1127,8 +1127,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/04a-genome-based-quantification.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/04a-genome-based-quantification.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-01-06",
-  "datePublished": "2026-01-06"
+  "dateModified": "2026-01-15",
+  "datePublished": "2026-01-15"
 }
 
   </script><script>

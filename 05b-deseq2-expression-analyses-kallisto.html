@@ -343,7 +343,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>B. Differential expression using DESeq2 (Salmon/Kallisto pathway)</h1>
-        <p>Last updated on 2026-01-06 |
+        <p>Last updated on 2026-01-15 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/05b-deseq2-expression-analyses-kallisto.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -452,12 +452,14 @@ groups</li>
 </ul><p>If you haven’t created the sample metadata file, create
 <code>scripts/samples.csv</code> with:</p>
 <pre><code>sample,condition
-SRR33253285,Nat10-CKO
-SRR33253286,Nat10-CKO
-SRR33253287,Nat10-CKO
-SRR33253288,Nat10flox/flox
-SRR33253289,Nat10flox/flox
-SRR33253290,Nat10flox/flox</code></pre>
+WT_Bcell_mock_rep1,WT_mock
+WT_Bcell_mock_rep2,WT_mock
+WT_Bcell_mock_rep3,WT_mock
+WT_Bcell_mock_rep4,WT_mock
+WT_Bcell_IR_rep1,WT_IR
+WT_Bcell_IR_rep2,WT_IR
+WT_Bcell_IR_rep3,WT_IR
+WT_Bcell_IR_rep4,WT_IR</code></pre>
 <p>Create a results directory:</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -508,11 +510,11 @@ SRR33253290,Nat10flox/flox</code></pre>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">head</span><span class="op">(</span><span class="va">txi</span><span class="op">$</span><span class="va">counts</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>                      SRR33253285 SRR33253286 SRR33253287 SRR33253288
-ENSMUSG00000000001.5     473.4426  553.784929  826.996853  676.910126
-ENSMUSG00000000003.16      0.0000    0.000000    0.000000    0.000000
-ENSMUSG00000000028.16     40.5783   33.966518   55.305501   97.845071
-ENSMUSG00000000031.20      0.0000    0.000000    0.000000    0.000000</code></pre>
+<pre><code>                      WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4
+ENSMUSG00000000001.5          473.4426         553.7849         826.9969         676.9101
+ENSMUSG00000000003.16           0.0000           0.0000           0.0000           0.0000
+ENSMUSG00000000028.16          40.5783          33.9665          55.3055          97.8451
+ENSMUSG00000000031.20           0.0000           0.0000           0.0000           0.0000</code></pre>
 <div id="understanding-the-tximport-object" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -558,13 +560,15 @@ correction twice.</p>
 <span></span>
 <span><span class="va">coldata</span></span></code></pre>
 </div>
-<pre><code>            condition
-SRR33253285   Nat10-CKO
-SRR33253286   Nat10-CKO
-SRR33253287   Nat10-CKO
-SRR33253288   Nat10flox/flox
-SRR33253289   Nat10flox/flox
-SRR33253290   Nat10flox/flox</code></pre>
+<pre><code>                   condition
+WT_Bcell_mock_rep1   WT_mock
+WT_Bcell_mock_rep2   WT_mock
+WT_Bcell_mock_rep3   WT_mock
+WT_Bcell_mock_rep4   WT_mock
+WT_Bcell_IR_rep1     WT_IR
+WT_Bcell_IR_rep2     WT_IR
+WT_Bcell_IR_rep3     WT_IR
+WT_Bcell_IR_rep4     WT_IR</code></pre>
 <p>Verify that sample names match between tximport and metadata:</p>
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -611,15 +615,15 @@ would lose this information.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Group-aware filtering: keep genes with &gt;= 10 counts in at least 3 samples</span></span>
+<code class="sourceCode R"><span><span class="co"># Group-aware filtering: keep genes with &gt;= 10 counts in at least 4 samples</span></span>
 <span><span class="co"># (the size of the smallest experimental group)</span></span>
-<span><span class="va">min_samples</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
+<span><span class="va">min_samples</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
 <span><span class="va">min_counts</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu">rowSums</span><span class="op">(</span><span class="fu">counts</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">min_counts</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">min_samples</span></span>
 <span><span class="va">dds</span> <span class="op">&lt;-</span> <span class="va">dds</span><span class="op">[</span><span class="va">keep</span>, <span class="op">]</span></span>
 <span><span class="fu">dim</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>[1] 18924     6</code></pre>
+<pre><code>[1] 18924     8</code></pre>
 <div id="why-use-group-aware-filtering" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -630,7 +634,7 @@ would lose this information.</p>
 <div class="callout-content">
 <p>A simple sum filter (<code>rowSums(counts(dds)) &gt;= 10</code>) can
 be problematic:</p>
-<ul><li>A gene with 10 total counts across 6 samples averages ~1.7
+<ul><li>A gene with 10 total counts across 8 samples averages ~1.25
 counts/sample—too low to be informative.</li>
 <li>It may remove genes expressed in only one condition (biologically
 interesting!).</li>
@@ -641,7 +645,7 @@ ensures:</p>
 experimental group.</li>
 <li>Genes with condition-specific expression are retained.</li>
 <li>The threshold is interpretable (e.g., “at least 10 counts in at
-least 3 samples”).</li>
+least 4 samples”).</li>
 </ul></div>
 </div>
 </div>
@@ -653,8 +657,10 @@ least 3 samples”).</li>
 <code class="sourceCode R"><span><span class="va">dds</span> <span class="op">&lt;-</span> <span class="fu">estimateSizeFactors</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span></span>
 <span><span class="fu">sizeFactors</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>SRR33253285 SRR33253286 SRR33253287 SRR33253288 SRR33253289 SRR33253290
-  0.7232591   0.8443123   1.2021389   1.1142267   1.0516283   1.1245413</code></pre>
+<pre><code>WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4
+         0.7232591          0.8443123          1.2021389          1.1142267
+  WT_Bcell_IR_rep1   WT_Bcell_IR_rep2   WT_Bcell_IR_rep3   WT_Bcell_IR_rep4
+         1.0516283          1.1245413          0.9832145          1.0567892</code></pre>
 </section><section><h2 class="section-heading" id="step-3-exploratory-data-analysis">Step 3: Exploratory data analysis<a class="anchor" aria-label="anchor" href="#step-3-exploratory-data-analysis"></a></h2>
 <hr class="half-width"><div class="section level3">
 <h3 id="raw-count-distributions">Raw count distributions<a class="anchor" aria-label="anchor" href="#raw-count-distributions"></a></h3>
@@ -786,8 +792,8 @@ biologically?</li>
 <div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Example interpretation:</p>
-<ol style="list-style-type: decimal"><li>Samples should cluster by condition (Nat10-CKO vs Nat10flox/flox) in
-both the heatmap and PCA.</li>
+<ol style="list-style-type: decimal"><li>Samples should cluster by condition (WT_mock vs WT_IR) in both the
+heatmap and PCA.</li>
 <li>If all replicates cluster together, there are no obvious
 outliers.</li>
 <li>PC1 typically captures the largest source of variation. If it
@@ -846,7 +852,7 @@ dots.</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">results</span><span class="op">(</span></span>
 <span>    <span class="va">dds</span>,</span>
-<span>    contrast <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"condition"</span>, <span class="st">"Nat10flox/flox"</span>, <span class="st">"Nat10-CKO"</span><span class="op">)</span></span>
+<span>    contrast <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"condition"</span>, <span class="st">"WT_IR"</span>, <span class="st">"WT_mock"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">summary</span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre>
@@ -877,7 +883,7 @@ dispersion.</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">resultsNames</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>[1] "Intercept"                              "condition_Nat10flox.flox_vs_Nat10.CKO"</code></pre>
+<pre><code>[1] "Intercept"                              "condition_WT_IR_vs_WT_mock"</code></pre>
 <p>Apply shrinkage using <code>apeglm</code> (recommended for standard
 contrasts):</p>
 <div class="codewrapper sourceCode" id="cb31">
@@ -886,7 +892,7 @@ contrasts):</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_shrunk</span> <span class="op">&lt;-</span> <span class="fu">lfcShrink</span><span class="op">(</span></span>
 <span>    <span class="va">dds</span>,</span>
-<span>    coef <span class="op">=</span> <span class="st">"condition_Nat10flox.flox_vs_Nat10.CKO"</span>,</span>
+<span>    coef <span class="op">=</span> <span class="st">"condition_WT_IR_vs_WT_mock"</span>,</span>
 <span>    type <span class="op">=</span> <span class="st">"apeglm"</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
@@ -976,7 +982,7 @@ preferred.</p>
 <span>    <span class="fu">theme_classic</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"log2 fold change"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"-log10 adjusted p-value"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Volcano plot: Nat10flox/flox vs Nat10-CKO (Salmon)"</span><span class="op">)</span></span></code></pre>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Volcano plot: WT_IR vs WT_mock (Salmon)"</span><span class="op">)</span></span></code></pre>
 </div>
 <div id="interpreting-the-volcano-plot" class="callout">
 <div class="callout-square">
@@ -988,7 +994,7 @@ preferred.</p>
 <div class="callout-content">
 <ul><li>
 <strong>X-axis</strong>: Direction and magnitude of change (positive
-= higher in Nat10flox/flox).</li>
+= higher in WT_IR, i.e., upregulated by radiation).</li>
 <li>
 <strong>Y-axis</strong>: Statistical significance (-log10 scale,
 higher = more significant).</li>
@@ -1192,8 +1198,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/05b-deseq2-expression-analyses-kallisto.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/05b-deseq2-expression-analyses-kallisto.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-01-06",
-  "datePublished": "2026-01-06"
+  "dateModified": "2026-01-15",
+  "datePublished": "2026-01-15"
 }
 
   </script><script>

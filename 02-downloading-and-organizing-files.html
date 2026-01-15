@@ -217,7 +217,9 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#introduction">Introduction</a></li>
-<li><a href="#downloading-the-data-and-project-organization">Downloading the data and project organization</a></li>
+<li><a href="#the-workshop-dataset-p53-mediated-response-to-ionizing-radiation">The workshop dataset: p53-mediated response to ionizing
+radiation</a></li>
+<li><a href="#project-organization">Project organization</a></li>
 <li><a href="#what-files-do-i-need-for-rna-seq-analysis">What files do I need for RNA-seq analysis?</a></li>
 <li><a href="#downloading-the-data">Downloading the data</a></li>
 <li><a href="#raw-reads">Raw reads</a></li>
@@ -339,7 +341,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Downloading and organizing files</h1>
-        <p>Last updated on 2026-01-06 |
+        <p>Last updated on 2026-01-15 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/02-downloading-and-organizing-files.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -435,13 +437,105 @@ More information: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4766705/
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="downloading-the-data-and-project-organization">Downloading the data and project organization<a class="anchor" aria-label="anchor" href="#downloading-the-data-and-project-organization"></a></h2>
-<hr class="half-width"><p>For this workshop, we use a publicly available dataset that
-investigates the effects of cardiomyocyte specific Nat10 knockout on
-heart development in mice (BioProject PRJNA1254208, GEO GSE295332). The
-study includes three biological replicates per group, sequenced on an
-Illumina NovaSeq X Plus in paired end mode.</p>
-<p>Before downloading files, we create a reproducible directory layout
+</section><section><h2 class="section-heading" id="the-workshop-dataset-p53-mediated-response-to-ionizing-radiation">The workshop dataset: p53-mediated response to ionizing
+radiation<a class="anchor" aria-label="anchor" href="#the-workshop-dataset-p53-mediated-response-to-ionizing-radiation"></a></h2>
+<hr class="half-width"><p>For this workshop, we use a subset of a publicly available dataset
+(GEO accession <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176" class="external-link">GSE71176</a>)
+that investigates the transcriptional response to ionizing radiation
+(IR) in mouse B cells. The original study by <a href="https://doi.org/10.1016/j.celrep.2015.02.068" class="external-link">Tonelli et
+al. (2015)</a> examined how the tumor suppressor p53 (encoded by
+<em>Trp53</em>) regulates gene expression following DNA damage.</p>
+<div class="section level3">
+<h3 id="biological-context">Biological context<a class="anchor" aria-label="anchor" href="#biological-context"></a></h3>
+<p>The <strong>TP53</strong> gene (called <em>Trp53</em> in mice)
+encodes the p53 protein, often called the “guardian of the genome.” When
+cells experience DNA damage, such as double-strand breaks caused by
+ionizing radiation, p53 activates transcriptional programs that lead
+to:</p>
+<ul><li>
+<strong>Cell cycle arrest</strong> (allowing time for DNA
+repair)</li>
+<li>
+<strong>Apoptosis</strong> (programmed cell death if damage is
+irreparable)</li>
+<li>
+<strong>Senescence</strong> (permanent growth arrest)</li>
+<li><strong>Metabolic reprogramming</strong></li>
+</ul><p>Mutations in <em>TP53</em> are among the most common alterations in
+human cancers, occurring in approximately 50% of all tumors.
+Understanding p53-regulated genes is therefore central to cancer
+biology.</p>
+</div>
+<div class="section level3">
+<h3 id="experimental-design">Experimental design<a class="anchor" aria-label="anchor" href="#experimental-design"></a></h3>
+<p>The full dataset includes wild-type (WT) and p53-knockout (KO) mouse
+B cells, with and without IR treatment (7 Gy, 4 hours post-exposure).
+For simplicity, we will focus on <strong>8 samples from wild-type B
+cells only</strong>:</p>
+<table class="table"><colgroup><col width="24%"><col width="28%"><col width="20%"><col width="26%"></colgroup><thead><tr class="header"><th>Condition</th>
+<th>Description</th>
+<th>Samples</th>
+<th>Replicates</th>
+</tr></thead><tbody><tr class="odd"><td>
+<strong>WT_mock</strong> (control)</td>
+<td>Wild-type B cells, no radiation</td>
+<td>4</td>
+<td>SRR2121778-81</td>
+</tr><tr class="even"><td>
+<strong>WT_IR</strong> (treatment)</td>
+<td>Wild-type B cells, 4h post 7Gy IR</td>
+<td>4</td>
+<td>SRR2121786-89</td>
+</tr></tbody></table><p>This balanced design (n=4 per group) allows us to identify genes that
+respond to ionizing radiation in cells with functional p53.</p>
+</div>
+<div class="section level3">
+<h3 id="expected-biological-results">Expected biological results<a class="anchor" aria-label="anchor" href="#expected-biological-results"></a></h3>
+<p>Because p53 is a transcription factor activated by DNA damage, we
+expect to see upregulation of canonical p53 target genes in IR-treated
+samples:</p>
+<p><strong>Genes expected to be upregulated (IR vs mock):</strong></p>
+<ul><li>
+<em>Cdkn1a</em> (p21) - cell cycle arrest</li>
+<li>
+<em>Bax</em>, <em>Bbc3</em> (Puma), <em>Pmaip1</em> (Noxa) -
+pro-apoptotic</li>
+<li>
+<em>Mdm2</em> - negative feedback regulator of p53</li>
+<li>
+<em>Gadd45a</em> - DNA damage response</li>
+<li>
+<em>Fas</em>, <em>Tnfrsf10b</em> (DR5) - death receptor
+signaling</li>
+</ul><p><strong>Pathways expected to be enriched:</strong></p>
+<ul><li>p53 signaling pathway</li>
+<li>Apoptosis</li>
+<li>Cell cycle</li>
+<li>DNA damage response</li>
+</ul><p>The presence of these expected results serves as a positive control
+that our analysis pipeline is working correctly.</p>
+</div>
+<div class="section level3">
+<h3 id="why-this-dataset">Why this dataset?<a class="anchor" aria-label="anchor" href="#why-this-dataset"></a></h3>
+<p>This dataset is ideal for teaching because:</p>
+<ol style="list-style-type: decimal"><li>
+<strong>Simple two-group comparison</strong>: Control vs. treatment
+with balanced replicates</li>
+<li>
+<strong>Clear biological interpretation</strong>: DNA damage
+response is well-characterized</li>
+<li>
+<strong>Expected positive controls</strong>: Known p53 targets
+should appear as top hits</li>
+<li>
+<strong>Clinical relevance</strong>: p53 biology is fundamental to
+cancer research</li>
+<li>
+<strong>Model organism</strong>: Mouse with excellent genome
+annotation</li>
+</ol></div>
+</section><section><h2 class="section-heading" id="project-organization">Project organization<a class="anchor" aria-label="anchor" href="#project-organization"></a></h2>
+<hr class="half-width"><p>Before downloading files, we create a reproducible directory layout
 for raw data, scripts, mapping outputs, and count files.</p>
 <div id="create-the-directories-needed-for-this-episode" class="callout challenge">
 <div class="callout-square">
@@ -471,7 +565,7 @@ outputs</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -557,7 +651,7 @@ why?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Use the <strong>basic gene annotation in GTF format</strong> (e.g.,
 <code>gencode.vM38.primary_assembly.basic.annotation.gtf.gz</code>).<br>
@@ -588,7 +682,7 @@ FASTA</strong> (e.g.,
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <figure style="text-align: center"><img src="fig/01_fq2counts/gencode-genome.png" alt="Reference genome file in FASTA format" class="figure mx-auto d-block"><figcaption>
 Reference genome file in FASTA format
@@ -620,7 +714,7 @@ for all transcripts in GRCm39
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <p>The transcript FASTA file is available in the same release directory
 as the genome and annotation files (under FASTA files). It is named
@@ -666,12 +760,16 @@ containing only the transcript IDs.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="raw-reads">Raw reads<a class="anchor" aria-label="anchor" href="#raw-reads"></a></h2>
-<hr class="half-width"><p>The experiment we use investigates how <strong>NAT10</strong>
-influences <strong>mouse heart development</strong>.</p>
-<blockquote>
-<p><strong>Study:</strong> The effects of NAT10 on heart development in
-mice<br><strong>Organism:</strong> Mus musculus<br><strong>Design:</strong> Nat10^flox/flox vs Nat10-CKO (n=3 per group),
-P10 hearts<br><strong>Sequencing:</strong> Illumina NovaSeq X Plus, paired-end<br><strong>BioProject:</strong> PRJNA1254208<br><strong>GEO:</strong> GSE295332</p>
+<hr class="half-width"><blockquote>
+<p><strong>Study:</strong> Genome-wide identification of p53-regulated
+genes in response to ionizing radiation <strong>Organism:</strong> Mus
+musculus (C57BL/6) <strong>Cell type:</strong> Primary B cells from
+spleen <strong>Design:</strong> Wild-type mock vs Wild-type IR-treated
+(n=4 per group) <strong>Treatment:</strong> 7 Gy ionizing radiation,
+harvested 4 hours post-exposure <strong>Sequencing:</strong> Illumina
+HiSeq 2000, paired-end 51bp <strong>GEO:</strong> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176" class="external-link">GSE71176</a>
+<strong>Reference:</strong> <a href="https://doi.org/10.1016/j.celrep.2015.02.068" class="external-link">Tonelli et
+al. (2015) Cell Reports</a></p>
 </blockquote>
 <figure style="text-align: center"><img src="fig/01_fq2counts/geo-db.png" alt="FASTQ files from GEO" class="figure mx-auto d-block"><figcaption>
 FASTQ files from GEO
@@ -694,7 +792,7 @@ of sequencing runs?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
 <div class="accordion-body">
 <p>Navigate to the SRA page for the BioProject and use <strong>Run
 Selector</strong> to list runs.<br>
@@ -728,24 +826,27 @@ like this:</p>
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">data</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="ex">├──</span> annot.tsv</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="ex">├──</span> gencode.vM38.primary_assembly.basic.annotation.gtf</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="ex">├──</span> gencode.vM38.transcripts.fa</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="ex">├──</span> gencode.vM38.primary_assembly.basic.annotation.gtf</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="ex">├──</span> gencode.vM38.transcripts.fa</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="ex">├──</span> gencode.vM38.transcripts-clean.fa</span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="ex">├──</span> GRCm39.primary_assembly.genome.fa</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="ex">├──</span> mart.tsv</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_1.fastq.gz</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_2.fastq.gz</span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_1.fastq.gz</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_2.fastq.gz</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_1.fastq.gz</span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_2.fastq.gz</span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_1.fastq.gz</span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_2.fastq.gz</span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_1.fastq.gz</span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_2.fastq.gz</span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="ex">├──</span> SRR33253290_1.fastq.gz</span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="ex">├──</span> SRR33253290_2.fastq.gz</span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="ex">└──</span> SRR_Acc_List.txt</span></code></pre>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R1.fastq.gz</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R2.fastq.gz</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R1.fastq.gz</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R2.fastq.gz</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R1.fastq.gz</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R2.fastq.gz</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R1.fastq.gz</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R2.fastq.gz</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R1.fastq.gz</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R2.fastq.gz</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R1.fastq.gz</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R2.fastq.gz</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R1.fastq.gz</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R2.fastq.gz</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R1.fastq.gz</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R2.fastq.gz</span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="ex">└──</span> SRR_Acc_List.txt</span></code></pre>
 </div>
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
@@ -834,8 +935,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/02-downloading-and-organizing-files.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/02-downloading-and-organizing-files.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-01-06",
-  "datePublished": "2026-01-06"
+  "dateModified": "2026-01-15",
+  "datePublished": "2026-01-15"
 }
 
   </script><script>

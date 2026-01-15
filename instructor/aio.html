@@ -386,7 +386,7 @@
         
 <section id="aio-01-intro-to-rnaseq"><p>Content from <a href="01-intro-to-rnaseq.html">Introduction to RNA-seq</a></p>
 <hr>
-<p>Last updated on 2026-01-06 |
+<p>Last updated on 2026-01-15 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/01-intro-to-rnaseq.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 100 minutes</p>
@@ -734,7 +734,7 @@ any links that you are not going to use.
  -->
 </div></section><section id="aio-02-downloading-and-organizing-files"><p>Content from <a href="02-downloading-and-organizing-files.html">Downloading and organizing files</a></p>
 <hr>
-<p>Last updated on 2026-01-06 |
+<p>Last updated on 2026-01-15 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/02-downloading-and-organizing-files.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 35 minutes</p>
@@ -831,14 +831,136 @@ More information: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4766705/
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="downloading-the-data-and-project-organization">Downloading the data and project organization<a class="anchor" aria-label="anchor" href="#downloading-the-data-and-project-organization"></a>
+</section><section><h2 class="section-heading" id="the-workshop-dataset-p53-mediated-response-to-ionizing-radiation">The workshop dataset: p53-mediated response to ionizing
+radiation<a class="anchor" aria-label="anchor" href="#the-workshop-dataset-p53-mediated-response-to-ionizing-radiation"></a>
 </h2>
 <hr class="half-width">
-<p>For this workshop, we use a publicly available dataset that
-investigates the effects of cardiomyocyte specific Nat10 knockout on
-heart development in mice (BioProject PRJNA1254208, GEO GSE295332). The
-study includes three biological replicates per group, sequenced on an
-Illumina NovaSeq X Plus in paired end mode.</p>
+<p>For this workshop, we use a subset of a publicly available dataset
+(GEO accession <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176" class="external-link">GSE71176</a>)
+that investigates the transcriptional response to ionizing radiation
+(IR) in mouse B cells. The original study by <a href="https://doi.org/10.1016/j.celrep.2015.02.068" class="external-link">Tonelli et
+al. (2015)</a> examined how the tumor suppressor p53 (encoded by
+<em>Trp53</em>) regulates gene expression following DNA damage.</p>
+<div class="section level3">
+<h3 id="biological-context">Biological context<a class="anchor" aria-label="anchor" href="#biological-context"></a>
+</h3>
+<p>The <strong>TP53</strong> gene (called <em>Trp53</em> in mice)
+encodes the p53 protein, often called the “guardian of the genome.” When
+cells experience DNA damage, such as double-strand breaks caused by
+ionizing radiation, p53 activates transcriptional programs that lead
+to:</p>
+<ul>
+<li>
+<strong>Cell cycle arrest</strong> (allowing time for DNA
+repair)</li>
+<li>
+<strong>Apoptosis</strong> (programmed cell death if damage is
+irreparable)</li>
+<li>
+<strong>Senescence</strong> (permanent growth arrest)</li>
+<li><strong>Metabolic reprogramming</strong></li>
+</ul>
+<p>Mutations in <em>TP53</em> are among the most common alterations in
+human cancers, occurring in approximately 50% of all tumors.
+Understanding p53-regulated genes is therefore central to cancer
+biology.</p>
+</div>
+<div class="section level3">
+<h3 id="experimental-design">Experimental design<a class="anchor" aria-label="anchor" href="#experimental-design"></a>
+</h3>
+<p>The full dataset includes wild-type (WT) and p53-knockout (KO) mouse
+B cells, with and without IR treatment (7 Gy, 4 hours post-exposure).
+For simplicity, we will focus on <strong>8 samples from wild-type B
+cells only</strong>:</p>
+<table class="table">
+<colgroup>
+<col width="24%">
+<col width="28%">
+<col width="20%">
+<col width="26%">
+</colgroup>
+<thead><tr class="header">
+<th>Condition</th>
+<th>Description</th>
+<th>Samples</th>
+<th>Replicates</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>
+<strong>WT_mock</strong> (control)</td>
+<td>Wild-type B cells, no radiation</td>
+<td>4</td>
+<td>SRR2121778-81</td>
+</tr>
+<tr class="even">
+<td>
+<strong>WT_IR</strong> (treatment)</td>
+<td>Wild-type B cells, 4h post 7Gy IR</td>
+<td>4</td>
+<td>SRR2121786-89</td>
+</tr>
+</tbody>
+</table>
+<p>This balanced design (n=4 per group) allows us to identify genes that
+respond to ionizing radiation in cells with functional p53.</p>
+</div>
+<div class="section level3">
+<h3 id="expected-biological-results">Expected biological results<a class="anchor" aria-label="anchor" href="#expected-biological-results"></a>
+</h3>
+<p>Because p53 is a transcription factor activated by DNA damage, we
+expect to see upregulation of canonical p53 target genes in IR-treated
+samples:</p>
+<p><strong>Genes expected to be upregulated (IR vs mock):</strong></p>
+<ul>
+<li>
+<em>Cdkn1a</em> (p21) - cell cycle arrest</li>
+<li>
+<em>Bax</em>, <em>Bbc3</em> (Puma), <em>Pmaip1</em> (Noxa) -
+pro-apoptotic</li>
+<li>
+<em>Mdm2</em> - negative feedback regulator of p53</li>
+<li>
+<em>Gadd45a</em> - DNA damage response</li>
+<li>
+<em>Fas</em>, <em>Tnfrsf10b</em> (DR5) - death receptor
+signaling</li>
+</ul>
+<p><strong>Pathways expected to be enriched:</strong></p>
+<ul>
+<li>p53 signaling pathway</li>
+<li>Apoptosis</li>
+<li>Cell cycle</li>
+<li>DNA damage response</li>
+</ul>
+<p>The presence of these expected results serves as a positive control
+that our analysis pipeline is working correctly.</p>
+</div>
+<div class="section level3">
+<h3 id="why-this-dataset">Why this dataset?<a class="anchor" aria-label="anchor" href="#why-this-dataset"></a>
+</h3>
+<p>This dataset is ideal for teaching because:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Simple two-group comparison</strong>: Control vs. treatment
+with balanced replicates</li>
+<li>
+<strong>Clear biological interpretation</strong>: DNA damage
+response is well-characterized</li>
+<li>
+<strong>Expected positive controls</strong>: Known p53 targets
+should appear as top hits</li>
+<li>
+<strong>Clinical relevance</strong>: p53 biology is fundamental to
+cancer research</li>
+<li>
+<strong>Model organism</strong>: Mouse with excellent genome
+annotation</li>
+</ol>
+</div>
+</section><section><h2 class="section-heading" id="project-organization">Project organization<a class="anchor" aria-label="anchor" href="#project-organization"></a>
+</h2>
+<hr class="half-width">
 <p>Before downloading files, we create a reproducible directory layout
 for raw data, scripts, mapping outputs, and count files.</p>
 <div id="create-the-directories-needed-for-this-episode" class="callout challenge">
@@ -873,7 +995,7 @@ outputs</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -981,7 +1103,7 @@ why?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Use the <strong>basic gene annotation in GTF format</strong> (e.g.,
 <code>gencode.vM38.primary_assembly.basic.annotation.gtf.gz</code>).<br>
@@ -1013,7 +1135,7 @@ FASTA</strong> (e.g.,
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <figure style="text-align: center"><img src="../fig/01_fq2counts/gencode-genome.png" alt="Reference genome file in FASTA format" class="figure mx-auto d-block"><figcaption>
 Reference genome file in FASTA format
@@ -1047,7 +1169,7 @@ for all transcripts in GRCm39
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <p>The transcript FASTA file is available in the same release directory
 as the genome and annotation files (under FASTA files). It is named
@@ -1097,12 +1219,16 @@ containing only the transcript IDs.</p>
 </section><section><h2 class="section-heading" id="raw-reads">Raw reads<a class="anchor" aria-label="anchor" href="#raw-reads"></a>
 </h2>
 <hr class="half-width">
-<p>The experiment we use investigates how <strong>NAT10</strong>
-influences <strong>mouse heart development</strong>.</p>
 <blockquote>
-<p><strong>Study:</strong> The effects of NAT10 on heart development in
-mice<br><strong>Organism:</strong> Mus musculus<br><strong>Design:</strong> Nat10^flox/flox vs Nat10-CKO (n=3 per group),
-P10 hearts<br><strong>Sequencing:</strong> Illumina NovaSeq X Plus, paired-end<br><strong>BioProject:</strong> PRJNA1254208<br><strong>GEO:</strong> GSE295332</p>
+<p><strong>Study:</strong> Genome-wide identification of p53-regulated
+genes in response to ionizing radiation <strong>Organism:</strong> Mus
+musculus (C57BL/6) <strong>Cell type:</strong> Primary B cells from
+spleen <strong>Design:</strong> Wild-type mock vs Wild-type IR-treated
+(n=4 per group) <strong>Treatment:</strong> 7 Gy ionizing radiation,
+harvested 4 hours post-exposure <strong>Sequencing:</strong> Illumina
+HiSeq 2000, paired-end 51bp <strong>GEO:</strong> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176" class="external-link">GSE71176</a>
+<strong>Reference:</strong> <a href="https://doi.org/10.1016/j.celrep.2015.02.068" class="external-link">Tonelli et
+al. (2015) Cell Reports</a></p>
 </blockquote>
 <figure style="text-align: center"><img src="../fig/01_fq2counts/geo-db.png" alt="FASTQ files from GEO" class="figure mx-auto d-block"><figcaption>
 FASTQ files from GEO
@@ -1125,7 +1251,7 @@ of sequencing runs?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
 <div class="accordion-body">
 <p>Navigate to the SRA page for the BioProject and use <strong>Run
 Selector</strong> to list runs.<br>
@@ -1161,24 +1287,27 @@ like this:</p>
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">data</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="ex">├──</span> annot.tsv</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="ex">├──</span> gencode.vM38.primary_assembly.basic.annotation.gtf</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="ex">├──</span> gencode.vM38.transcripts.fa</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="ex">├──</span> gencode.vM38.primary_assembly.basic.annotation.gtf</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="ex">├──</span> gencode.vM38.transcripts.fa</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="ex">├──</span> gencode.vM38.transcripts-clean.fa</span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="ex">├──</span> GRCm39.primary_assembly.genome.fa</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="ex">├──</span> mart.tsv</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_1.fastq.gz</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_2.fastq.gz</span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_1.fastq.gz</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_2.fastq.gz</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_1.fastq.gz</span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_2.fastq.gz</span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_1.fastq.gz</span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_2.fastq.gz</span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_1.fastq.gz</span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_2.fastq.gz</span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="ex">├──</span> SRR33253290_1.fastq.gz</span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="ex">├──</span> SRR33253290_2.fastq.gz</span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="ex">└──</span> SRR_Acc_List.txt</span></code></pre>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R1.fastq.gz</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R2.fastq.gz</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R1.fastq.gz</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R2.fastq.gz</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R1.fastq.gz</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R2.fastq.gz</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R1.fastq.gz</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R2.fastq.gz</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R1.fastq.gz</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R2.fastq.gz</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R1.fastq.gz</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R2.fastq.gz</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R1.fastq.gz</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R2.fastq.gz</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R1.fastq.gz</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R2.fastq.gz</span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="ex">└──</span> SRR_Acc_List.txt</span></code></pre>
 </div>
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
@@ -1211,7 +1340,7 @@ any links that you are not going to use.
 </div>
 </section></section><section id="aio-03-qc-and-trimming"><p>Content from <a href="03-qc-and-trimming.html">Quality control of RNA-seq reads</a></p>
 <hr>
-<p>Last updated on 2026-01-06 |
+<p>Last updated on 2026-01-15 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/03-qc-and-trimming.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 35 minutes</p>
@@ -1258,8 +1387,8 @@ RNA-seq.</li>
 quality of the raw RNA-seq data.<br>
 Quality control helps reveal problems such as adapter contamination, low
 quality cycles, and unexpected technical issues.</p>
-<p>In this episode, we will run FastQC and MultiQC on the mouse heart
-dataset and interpret the results.<br>
+<p>In this episode, we will run FastQC and MultiQC on the p53/ionizing
+radiation dataset and interpret the results.<br>
 We will also explain when trimming is useful and when it can be harmful
 for alignment based RNA-seq workflows.</p>
 <p>FastQC evaluates individual FASTQ files. MultiQC summarizes all
@@ -1315,30 +1444,38 @@ FASTQ files.</p>
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">qc</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_1_fastqc.html</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_1_fastqc.zip</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_2_fastqc.html</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="ex">├──</span> SRR33253285_2_fastqc.zip</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_1_fastqc.html</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_1_fastqc.zip</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_2_fastqc.html</span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="ex">├──</span> SRR33253286_2_fastqc.zip</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_1_fastqc.html</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_1_fastqc.zip</span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_2_fastqc.html</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="ex">├──</span> SRR33253287_2_fastqc.zip</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_1_fastqc.html</span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_1_fastqc.zip</span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_2_fastqc.html</span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="ex">├──</span> SRR33253288_2_fastqc.zip</span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_1_fastqc.html</span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_1_fastqc.zip</span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_2_fastqc.html</span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="ex">├──</span> SRR33253289_2_fastqc.zip</span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="ex">├──</span> SRR33253290_1_fastqc.html</span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="ex">├──</span> SRR33253290_1_fastqc.zip</span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="ex">├──</span> SRR33253290_2_fastqc.html</span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="ex">└──</span> SRR33253290_2_fastqc.zip</span></code></pre>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R1_fastqc.html</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R1_fastqc.zip</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R2_fastqc.html</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R2_fastqc.zip</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R1_fastqc.html</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R1_fastqc.zip</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R2_fastqc.html</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R2_fastqc.zip</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R1_fastqc.html</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R1_fastqc.zip</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R2_fastqc.html</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R2_fastqc.zip</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R1_fastqc.html</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R1_fastqc.zip</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R2_fastqc.html</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R2_fastqc.zip</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R1_fastqc.html</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R1_fastqc.zip</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R2_fastqc.html</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R2_fastqc.zip</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R1_fastqc.html</span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R1_fastqc.zip</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R2_fastqc.html</span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R2_fastqc.zip</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R1_fastqc.html</span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R1_fastqc.zip</span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R2_fastqc.html</span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R2_fastqc.zip</span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R1_fastqc.html</span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R1_fastqc.zip</span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R2_fastqc.html</span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="ex">└──</span> WT_Bcell_IR_rep4_R2_fastqc.zip</span></code></pre>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="understanding-the-fastqc-report">Understanding the FastQC report<a class="anchor" aria-label="anchor" href="#understanding-the-fastqc-report"></a>
@@ -1397,7 +1534,7 @@ Per base sequence quality for a typical RNA-seq dataset
 </h3>
 <p>Reports whether specific regions of the flowcell produced lower
 quality reads. Uneven tiles can indicate instrument issues or bubble
-formation, but this module rarely shows problems in modern NovaSeq
+formation, but this module rarely shows problems in modern Illumina
 data.</p>
 <figure style="text-align: center"><img src="../fig/02_qc/fastqc_per_base_sequence_content.png" alt="Per tile sequence quality plot" class="figure mx-auto d-block"><figcaption>
 Per tile sequence quality plot
@@ -1696,7 +1833,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-04a-genome-based-quantification"><p>Content from <a href="04a-genome-based-quantification.html">A. Genome-based quantification (STAR + featureCounts)</a></p>
 <hr>
-<p>Last updated on 2026-01-06 |
+<p>Last updated on 2026-01-15 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04a-genome-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 70 minutes</p>
@@ -1806,8 +1943,8 @@ library types.</p>
 <span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a></span>
 <span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="ex">salmon</span> quant <span class="at">--index</span> data/salmon_index <span class="dt">\</span></span>
 <span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>             <span class="at">--libType</span> A <span class="dt">\</span></span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>             <span class="at">--mates1</span> data/SRR33253286_1.fastq.gz <span class="dt">\</span></span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>             <span class="at">--mates2</span> data/SRR33253286_2.fastq.gz <span class="dt">\</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>             <span class="at">--mates1</span> data/WT_Bcell_mock_rep1_R1.fastq.gz <span class="dt">\</span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>             <span class="at">--mates2</span> data/WT_Bcell_mock_rep1_R2.fastq.gz <span class="dt">\</span></span>
 <span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>             <span class="at">--output</span> results/strand_check <span class="dt">\</span></span>
 <span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>             <span class="at">--threads</span> 4</span></code></pre>
 </div>
@@ -1824,7 +1961,7 @@ library types.</p>
 <h3 class="code-label">JSON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode json" tabindex="0"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="dt">"read_files"</span><span class="fu">:</span> <span class="st">"[ data/SRR33253286_1.fastq.gz, data/SRR33253286_2.fastq.gz]"</span><span class="fu">,</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="dt">"read_files"</span><span class="fu">:</span> <span class="st">"[ data/WT_Bcell_mock_rep1_R1.fastq.gz, data/WT_Bcell_mock_rep1_R2.fastq.gz]"</span><span class="fu">,</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="dt">"expected_format"</span><span class="fu">:</span> <span class="st">"IU"</span><span class="fu">,</span></span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="dt">"compatible_fragment_ratio"</span><span class="fu">:</span> <span class="fl">1.0</span><span class="fu">,</span></span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="dt">"num_compatible_fragments"</span><span class="fu">:</span> <span class="dv">21088696</span><span class="fu">,</span></span>
@@ -2158,7 +2295,7 @@ sample names</p>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#SBATCH --partition=cpu</span></span>
 <span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#SBATCH --time=8:00:00</span></span>
 <span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#SBATCH --job-name=read_mapping</span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#SBATCH --array=1-6</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#SBATCH --array=1-8</span></span>
 <span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#SBATCH --output=cluster-%x.%j.out</span></span>
 <span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#SBATCH --error=cluster-%x.%j.err</span></span>
 <span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a></span>
@@ -2201,14 +2338,11 @@ sample names</p>
 <div class="callout-content">
 <p>Think about this:</p>
 <ul>
-<li>We have <em>six</em> samples, each with two FASTQ files<br>
-</li>
-<li>Having six separate slurm jobs means:
+<li>We have <em>eight</em> samples, each with two FASTQ files</li>
+<li>Having eight separate slurm jobs means:
 <ul>
-<li>Copy-pasting the same command six times<br>
-</li>
-<li>Higher chance of typos or mistakes<br>
-</li>
+<li>Copy-pasting the same command eight times</li>
+<li>Higher chance of typos or mistakes</li>
 </ul>
 </li>
 <li>if mapping with single slurm file, sequential execution =
@@ -2470,8 +2604,8 @@ expression?</li>
 <div class="accordion-body">
 <p>Example interpretation for this dataset:</p>
 <ol style="list-style-type: decimal">
-<li>SRR33253289 has the lowest assignment rate. Causes include low
-complexity, incomplete annotation, or more intronic reads.</li>
+<li>The sample with the lowest assignment rate may vary. Causes include
+low complexity, incomplete annotation, or more intronic reads.</li>
 <li>Unmapped or No Features dominate. These reflect reads that do not
 align or do not overlap annotated exons.</li>
 <li>No. Total assigned reads depend on depth, while percent assigned
@@ -2520,7 +2654,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-04b-transcript-based-quantification"><p>Content from <a href="04b-transcript-based-quantification.html">B. Transcript-based quantification (Salmon)</a></p>
 <hr>
-<p>Last updated on 2026-01-06 |
+<p>Last updated on 2026-01-15 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04b-transcript-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 70 minutes</p>
@@ -2648,7 +2782,7 @@ transcripts.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What will the index contain? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <pre><code>salmon_index/
 ├── complete_ref_lens.bin        # IMPORTANT: full transcript lengths used in TPM/effLength calculations
@@ -2688,9 +2822,9 @@ transcript index and paired-end FASTQ files.</p>
 <pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">salmon</span> quant <span class="dt">\</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>    <span class="at">--index</span> salmon_index <span class="dt">\</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    <span class="at">--libType</span> IU <span class="dt">\</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="at">--mates1</span> data/SRR33253286_1.fastq.gz <span class="dt">\</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="at">--mates2</span> data/SRR33253286_2.fastq.gz <span class="dt">\</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="at">--output</span> salmon_quant/SRR33253286 <span class="dt">\</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="at">--mates1</span> data/WT_Bcell_mock_rep1_R1.fastq.gz <span class="dt">\</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="at">--mates2</span> data/WT_Bcell_mock_rep1_R2.fastq.gz <span class="dt">\</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="at">--output</span> salmon_quant/WT_Bcell_mock_rep1 <span class="dt">\</span></span>
 <span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    <span class="at">--threads</span> 16 <span class="dt">\</span></span>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>    <span class="at">--validateMappings</span> <span class="dt">\</span></span>
 <span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    <span class="at">--seqBias</span> <span class="dt">\</span></span>
@@ -2745,7 +2879,7 @@ if unsure.</p>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#SBATCH --partition=cpu</span></span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#SBATCH --time=4:00:00</span></span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#SBATCH --job-name=salmon_quant</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#SBATCH --array=1-6</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#SBATCH --array=1-8</span></span>
 <span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#SBATCH --output=cluster-%x.%j.out</span></span>
 <span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#SBATCH --error=cluster-%x.%j.err</span></span>
 <span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a></span>
@@ -2803,7 +2937,7 @@ count estimates are directly comparable across samples.</p>
 <p>After Salmon finishes, each sample directory contains a small set of
 output files.<br>
 Only a few of these are important for routine analysis:</p>
-<pre><code>SRR33253285/
+<pre><code>WT_Bcell_mock_rep1/
 ├── quant.sf                       # IMPORTANT: transcript-level TPM, counts, effective lengths
 ├── lib_format_counts.json         # IMPORTANT: inferred library type (IU, ISR, ISF)
 ├── aux_info
@@ -2942,20 +3076,20 @@ DESeq2.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">head</span>(txi<span class="sc">$</span>counts)</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>                      SRR33253285 SRR33253286 SRR33253287 SRR33253288</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>ENSMUSG00000000001<span class="fl">.5</span>     <span class="fl">473.4426</span>  <span class="fl">553.784929</span>  <span class="fl">826.996853</span>  <span class="fl">676.910126</span></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>ENSMUSG00000000003<span class="fl">.16</span>      <span class="fl">0.0000</span>    <span class="fl">0.000000</span>    <span class="fl">0.000000</span>    <span class="fl">0.000000</span></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>ENSMUSG00000000028<span class="fl">.16</span>     <span class="fl">40.5783</span>   <span class="fl">33.966518</span>   <span class="fl">55.305501</span>   <span class="fl">97.845071</span></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>ENSMUSG00000000031<span class="fl">.20</span>      <span class="fl">0.0000</span>    <span class="fl">0.000000</span>    <span class="fl">0.000000</span>    <span class="fl">0.000000</span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>ENSMUSG00000000037<span class="fl">.18</span>     <span class="fl">19.2220</span>    <span class="fl">9.599673</span>   <span class="fl">16.951493</span>   <span class="fl">20.226549</span></span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>ENSMUSG00000000049<span class="fl">.12</span>      <span class="fl">0.0000</span>    <span class="fl">5.022073</span>    <span class="fl">1.984551</span>    <span class="fl">1.016411</span></span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>                      SRR33253289 SRR33253290</span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>ENSMUSG00000000001<span class="fl">.5</span>   <span class="fl">724.117586</span>  <span class="fl">813.848375</span></span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>ENSMUSG00000000003<span class="fl">.16</span>    <span class="fl">0.000000</span>    <span class="fl">0.000000</span></span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>ENSMUSG00000000028<span class="fl">.16</span>   <span class="fl">41.691461</span>   <span class="fl">63.812279</span></span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>ENSMUSG00000000031<span class="fl">.20</span>    <span class="fl">0.000000</span>    <span class="fl">0.000000</span></span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>ENSMUSG00000000037<span class="fl">.18</span>   <span class="fl">19.680740</span>   <span class="fl">18.945058</span></span>
-<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>ENSMUSG00000000049<span class="fl">.12</span>    <span class="fl">0.993724</span>    <span class="fl">9.186882</span></span></code></pre>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>                      WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>ENSMUSG00000000001<span class="fl">.5</span>          <span class="fl">473.4426</span>         <span class="fl">553.7849</span>         <span class="fl">826.9969</span>         <span class="fl">676.9101</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>ENSMUSG00000000003<span class="fl">.16</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>ENSMUSG00000000028<span class="fl">.16</span>          <span class="fl">40.5783</span>          <span class="fl">33.9665</span>          <span class="fl">55.3055</span>          <span class="fl">97.8451</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>ENSMUSG00000000031<span class="fl">.20</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>ENSMUSG00000000037<span class="fl">.18</span>          <span class="fl">19.2220</span>           <span class="fl">9.5997</span>          <span class="fl">16.9515</span>          <span class="fl">20.2265</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>ENSMUSG00000000049<span class="fl">.12</span>           <span class="fl">0.0000</span>           <span class="fl">5.0221</span>           <span class="fl">1.9846</span>           <span class="fl">1.0164</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>ENSMUSG00000000001<span class="fl">.5</span>        <span class="fl">724.1176</span>        <span class="fl">813.8484</span>        <span class="fl">689.2341</span>        <span class="fl">752.1567</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>ENSMUSG00000000003<span class="fl">.16</span>         <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>ENSMUSG00000000028<span class="fl">.16</span>        <span class="fl">41.6915</span>         <span class="fl">63.8123</span>         <span class="fl">48.3421</span>         <span class="fl">55.7892</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>ENSMUSG00000000031<span class="fl">.20</span>         <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>ENSMUSG00000000037<span class="fl">.18</span>        <span class="fl">19.6807</span>         <span class="fl">18.9451</span>         <span class="fl">22.3456</span>         <span class="fl">17.8923</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>ENSMUSG00000000049<span class="fl">.12</span>         <span class="fl">0.9937</span>          <span class="fl">9.1869</span>          <span class="fl">2.3456</span>          <span class="fl">4.5678</span></span></code></pre>
 </div>
 <div id="why-use-the-default-countsfromabundance-setting" class="callout">
 <div class="callout-square">
@@ -3028,7 +3162,7 @@ multimodality?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Example interpretation for this dataset:</p>
 <ol style="list-style-type: decimal">
@@ -3079,7 +3213,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-05-deseq2-expression-analyses"><p>Content from <a href="05-deseq2-expression-analyses.html">Gene-level QC and differential expression (DESeq2)</a></p>
 <hr>
-<p>Last updated on 2026-01-06 |
+<p>Last updated on 2026-01-15 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/05-deseq2-expression-analyses.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 85 minutes</p>
@@ -3161,12 +3295,14 @@ the experimental condition (e.g., control vs treatment). Simply
 copy/paste the following into a text file and save it in your
 <code>scripts</code> directory as <code>samples.csv</code>:</p>
 <pre><code>sample,condition
-SRR33253285,Nat10-CKO
-SRR33253286,Nat10-CKO
-SRR33253287,Nat10-CKO
-SRR33253288,Nat10floxflox
-SRR33253289,Nat10flox/flox
-SRR33253290,Nat10flox/flox</code></pre>
+WT_Bcell_mock_rep1,WT_mock
+WT_Bcell_mock_rep2,WT_mock
+WT_Bcell_mock_rep3,WT_mock
+WT_Bcell_mock_rep4,WT_mock
+WT_Bcell_IR_rep1,WT_IR
+WT_Bcell_IR_rep2,WT_IR
+WT_Bcell_IR_rep3,WT_IR
+WT_Bcell_IR_rep4,WT_IR</code></pre>
 <p>Also, create a direcotry for DESeq2 results:</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3265,7 +3401,7 @@ Open OnDemand interface
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> How were these data prepared? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>Since the gene IDs in the count matrix are Ensembl IDs, it will be
 hard to interpret the results without annotation. We will need to use
@@ -3346,7 +3482,7 @@ can attach gene symbols and biotypes later in the analysis.</p>
 <div class="callout-content">
 <p><code>coldata</code> must have row names that match the count matrix
 column names. The <code>condition</code> column defines the groups for
-DESeq2 (<code>Nat10-CKO</code> vs <code>Nat10flox/flox</code>).</p>
+DESeq2 (<code>WT_mock</code> vs <code>WT_IR</code>).</p>
 </div>
 </div>
 </div>
@@ -3415,9 +3551,9 @@ filtering:</p>
 <span>    <span class="fu">filter</span><span class="op">(</span><span class="va">gene_biotype</span> <span class="op">==</span> <span class="st">"protein_coding"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="va">ensembl_gene_id_version</span>, <span class="fu">all_of</span><span class="op">(</span><span class="fu">rownames</span><span class="op">(</span><span class="va">coldata</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Group-aware filtering: keep genes with &gt;= 10 counts in at least 3 samples</span></span>
+<span><span class="co"># Group-aware filtering: keep genes with &gt;= 10 counts in at least 4 samples</span></span>
 <span><span class="co"># (the size of the smallest experimental group)</span></span>
-<span><span class="va">min_samples</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
+<span><span class="va">min_samples</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
 <span><span class="va">min_counts</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span></span>
 <span><span class="va">cts_coding</span> <span class="op">&lt;-</span> <span class="va">cts_pc</span> <span class="op">%&gt;%</span></span>
@@ -3426,7 +3562,7 @@ filtering:</p>
 <span></span>
 <span><span class="fu">dim</span><span class="op">(</span><span class="va">cts_coding</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>[1] 15839     6</code></pre>
+<pre><code>[1] 15839     8</code></pre>
 <div id="why-use-group-aware-filtering" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -3438,7 +3574,7 @@ filtering:</p>
 <p>A simple sum filter (e.g., <code>rowSums &gt; 5</code>) can be
 problematic:</p>
 <ul>
-<li>A gene with 10 total counts across 6 samples averages ~1.7
+<li>A gene with 10 total counts across 8 samples averages ~1.25
 counts/sample—often too noisy.</li>
 <li>It may inadvertently remove genes expressed in only one
 condition.</li>
@@ -3448,7 +3584,7 @@ condition.</li>
 <li>Each kept gene has meaningful expression in at least one
 experimental group.</li>
 <li>Genes with condition-specific expression are retained.</li>
-<li>The threshold is interpretable (“at least 10 counts in at least 3
+<li>The threshold is interpretable (“at least 10 counts in at least 4
 samples”).</li>
 </ul>
 <p>For exploratory analysis, we also restrict to protein-coding genes to
@@ -3629,8 +3765,8 @@ weak or confounded by other factors.</p>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">d</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">PC1</span>, <span class="va">PC2</span>, color <span class="op">=</span> <span class="va">condition</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_shape_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_color_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu">c</span><span class="op">(</span></span>
-<span>    <span class="st">"Nat10-CKO"</span>       <span class="op">=</span> <span class="st">"#00b462"</span>,</span>
-<span>    <span class="st">"Nat10flox/flox"</span>  <span class="op">=</span> <span class="st">"#980c80"</span></span>
+<span>    <span class="st">"WT_mock"</span> <span class="op">=</span> <span class="st">"#00b462"</span>,</span>
+<span>    <span class="st">"WT_IR"</span>   <span class="op">=</span> <span class="st">"#980c80"</span></span>
 <span>  <span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.title <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -3711,13 +3847,14 @@ non-biological factors)?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Example interpretation:</p>
 <ol style="list-style-type: decimal">
 <li>Library sizes are comparable across samples and fall within a narrow
 range.</li>
-<li>Samples cluster by condition in both distance heatmaps and PCA.</li>
+<li>Samples cluster by condition (mock vs IR-treated) in both distance
+heatmaps and PCA.</li>
 <li>No sample appears as a clear outlier relative to its group.</li>
 <li>No batch effects are apparent—PC1 separates by experimental
 condition, not technical factors.</li>
@@ -3757,7 +3894,7 @@ features counted by featureCounts.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Single command to run the DESeq2 pipeline </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <p>Above three steps can be run together using the <code>DESeq</code>
 function:</p>
@@ -3794,8 +3931,8 @@ fitting model and testing</code></pre>
 </div>
 <figure style="text-align: center"><img src="../fig/05_deseq/dispersion-plot.png" alt="Dispersion estimates from DESeq2" class="figure mx-auto d-block"><figcaption>
 Dispersion estimates from DESeq2
-</figcaption></figure><p>Obtain results for the contrast of interest
-(<code>Nat10flox/flox</code> vs <code>Nat10-CKO</code>):</p>
+</figcaption></figure><p>Obtain results for the contrast of interest (<code>WT_IR</code> vs
+<code>WT_mock</code>):</p>
 <div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -3805,8 +3942,8 @@ Dispersion estimates from DESeq2
 <span>    <span class="va">dds</span>,</span>
 <span>    contrast <span class="op">=</span> <span class="fu">c</span><span class="op">(</span></span>
 <span>      <span class="st">"condition"</span>,</span>
-<span>      <span class="st">"Nat10flox/flox"</span>,</span>
-<span>      <span class="st">"Nat10-CKO"</span></span>
+<span>      <span class="st">"WT_IR"</span>,</span>
+<span>      <span class="st">"WT_mock"</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
@@ -3832,8 +3969,8 @@ Dispersion estimates from DESeq2
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">head</span><span class="op">(</span><span class="va">res</span><span class="op">[</span><span class="fu">order</span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">pvalue</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span></span></code></pre>
 </div>
-<pre class="text"><code>log2 fold change (MLE): condition Nat10flox/flox vs Nat10-CKO
-Wald test p-value: condition Nat10flox.flox vs Nat10.CKO
+<pre class="text"><code>log2 fold change (MLE): condition WT_IR vs WT_mock
+Wald test p-value: condition WT_IR vs WT_mock
 DataFrame with 6 rows and 6 columns
        baseMean log2FoldChange     lfcSE      stat       pvalue         padj
       &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;
@@ -3861,7 +3998,7 @@ with low counts. Shrinkage improves these estimates.</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">resultsNames</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>[1] "Intercept"                              "condition_Nat10flox.flox_vs_Nat10.CKO"</code></pre>
+<pre><code>[1] "Intercept"                              "condition_WT_IR_vs_WT_mock"</code></pre>
 <p>Apply shrinkage using <code>apeglm</code> (recommended for standard
 two-group comparisons):</p>
 <div class="codewrapper sourceCode" id="cb29">
@@ -3870,7 +4007,7 @@ two-group comparisons):</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_shrunk</span> <span class="op">&lt;-</span> <span class="fu">lfcShrink</span><span class="op">(</span></span>
 <span>    <span class="va">dds</span>,</span>
-<span>    coef <span class="op">=</span> <span class="st">"condition_Nat10flox.flox_vs_Nat10.CKO"</span>,</span>
+<span>    coef <span class="op">=</span> <span class="st">"condition_WT_IR_vs_WT_mock"</span>,</span>
 <span>    type <span class="op">=</span> <span class="st">"apeglm"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -4030,7 +4167,7 @@ genes.</p>
 <span>  <span class="fu">theme_classic</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">xlab</span><span class="op">(</span><span class="st">"log2 fold change"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ylab</span><span class="op">(</span><span class="st">"-log10 adjusted p value"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Volcano plot: Nat10-CKO vs Nat10flox/flox"</span><span class="op">)</span></span></code></pre>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Volcano plot: WT_IR vs WT_mock"</span><span class="op">)</span></span></code></pre>
 </div>
 <figure style="text-align: center"><img src="../fig/05_deseq/volcano-plot.png" alt="Volcano plot of differential expression results" class="figure mx-auto d-block"><figcaption>
 Volcano plot of differential expression results
@@ -4042,10 +4179,11 @@ Volcano plot of differential expression results
 <div id="interpreting-the-volcano" class="callout-inner">
 <h3 class="callout-title">Interpreting the volcano</h3>
 <div class="callout-content">
-<p>Points to the right are higher in <code>Nat10flox/flox</code>, to the
-left are higher in <code>Nat10-CKO</code>. Points near the top have
-stronger statistical support (small adjusted p values). Colored points
-mark genes that pass both fold change and padj thresholds.</p>
+<p>Points to the right are higher in IR-treated samples (upregulated by
+radiation), to the left are higher in mock (downregulated by radiation).
+Points near the top have stronger statistical support (small adjusted p
+values). Colored points mark genes that pass both fold change and padj
+thresholds.</p>
 </div>
 </div>
 </div>
@@ -4093,8 +4231,8 @@ biologically meaningful DE genes.</p>
 <ol style="list-style-type: decimal">
 <li>Which genes have the largest positive log2 fold change.</li>
 <li>Which genes have the largest negative log2 fold change.</li>
-<li>Are any of the top genes known to be related to Nat10 function or
-the studied phenotype.</li>
+<li>Are any of the top genes known p53 targets or DNA damage response
+genes.</li>
 </ol>
 </div>
 </div>
@@ -4104,16 +4242,17 @@ the studied phenotype.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Example interpretation:</p>
 <ul>
-<li>Several strongly up regulated genes are involved in cell cycle and
-RNA processing.</li>
-<li>Strongly down regulated genes may include transcription factors and
-signaling components.</li>
-<li>Cross referencing top hits with prior literature or databases can
-reveal mechanistic hypotheses.</li>
+<li>Strongly upregulated genes should include canonical p53 targets such
+as <em>Cdkn1a</em> (p21), <em>Mdm2</em>, <em>Bax</em>, and <em>Bbc3</em>
+(Puma).</li>
+<li>DNA damage response genes like <em>Gadd45a</em> should be
+upregulated.</li>
+<li>Cross-referencing top hits with p53 target databases confirms our
+analysis is working correctly.</li>
 </ul>
 </div>
 </div>
@@ -4152,7 +4291,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-05b-deseq2-expression-analyses-kallisto"><p>Content from <a href="05b-deseq2-expression-analyses-kallisto.html">B. Differential expression using DESeq2 (Salmon/Kallisto pathway)</a></p>
 <hr>
-<p>Last updated on 2026-01-06 |
+<p>Last updated on 2026-01-15 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/05b-deseq2-expression-analyses-kallisto.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 85 minutes</p>
@@ -4270,12 +4409,14 @@ groups</li>
 <p>If you haven’t created the sample metadata file, create
 <code>scripts/samples.csv</code> with:</p>
 <pre><code>sample,condition
-SRR33253285,Nat10-CKO
-SRR33253286,Nat10-CKO
-SRR33253287,Nat10-CKO
-SRR33253288,Nat10flox/flox
-SRR33253289,Nat10flox/flox
-SRR33253290,Nat10flox/flox</code></pre>
+WT_Bcell_mock_rep1,WT_mock
+WT_Bcell_mock_rep2,WT_mock
+WT_Bcell_mock_rep3,WT_mock
+WT_Bcell_mock_rep4,WT_mock
+WT_Bcell_IR_rep1,WT_IR
+WT_Bcell_IR_rep2,WT_IR
+WT_Bcell_IR_rep3,WT_IR
+WT_Bcell_IR_rep4,WT_IR</code></pre>
 <p>Create a results directory:</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -4328,11 +4469,11 @@ SRR33253290,Nat10flox/flox</code></pre>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">head</span><span class="op">(</span><span class="va">txi</span><span class="op">$</span><span class="va">counts</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>                      SRR33253285 SRR33253286 SRR33253287 SRR33253288
-ENSMUSG00000000001.5     473.4426  553.784929  826.996853  676.910126
-ENSMUSG00000000003.16      0.0000    0.000000    0.000000    0.000000
-ENSMUSG00000000028.16     40.5783   33.966518   55.305501   97.845071
-ENSMUSG00000000031.20      0.0000    0.000000    0.000000    0.000000</code></pre>
+<pre><code>                      WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4
+ENSMUSG00000000001.5          473.4426         553.7849         826.9969         676.9101
+ENSMUSG00000000003.16           0.0000           0.0000           0.0000           0.0000
+ENSMUSG00000000028.16          40.5783          33.9665          55.3055          97.8451
+ENSMUSG00000000031.20           0.0000           0.0000           0.0000           0.0000</code></pre>
 <div id="understanding-the-tximport-object" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -4380,13 +4521,15 @@ correction twice.</p>
 <span></span>
 <span><span class="va">coldata</span></span></code></pre>
 </div>
-<pre><code>            condition
-SRR33253285   Nat10-CKO
-SRR33253286   Nat10-CKO
-SRR33253287   Nat10-CKO
-SRR33253288   Nat10flox/flox
-SRR33253289   Nat10flox/flox
-SRR33253290   Nat10flox/flox</code></pre>
+<pre><code>                   condition
+WT_Bcell_mock_rep1   WT_mock
+WT_Bcell_mock_rep2   WT_mock
+WT_Bcell_mock_rep3   WT_mock
+WT_Bcell_mock_rep4   WT_mock
+WT_Bcell_IR_rep1     WT_IR
+WT_Bcell_IR_rep2     WT_IR
+WT_Bcell_IR_rep3     WT_IR
+WT_Bcell_IR_rep4     WT_IR</code></pre>
 <p>Verify that sample names match between tximport and metadata:</p>
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -4437,15 +4580,15 @@ would lose this information.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Group-aware filtering: keep genes with &gt;= 10 counts in at least 3 samples</span></span>
+<code class="sourceCode R"><span><span class="co"># Group-aware filtering: keep genes with &gt;= 10 counts in at least 4 samples</span></span>
 <span><span class="co"># (the size of the smallest experimental group)</span></span>
-<span><span class="va">min_samples</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
+<span><span class="va">min_samples</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
 <span><span class="va">min_counts</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu">rowSums</span><span class="op">(</span><span class="fu">counts</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">min_counts</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">min_samples</span></span>
 <span><span class="va">dds</span> <span class="op">&lt;-</span> <span class="va">dds</span><span class="op">[</span><span class="va">keep</span>, <span class="op">]</span></span>
 <span><span class="fu">dim</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>[1] 18924     6</code></pre>
+<pre><code>[1] 18924     8</code></pre>
 <div id="why-use-group-aware-filtering" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -4457,7 +4600,7 @@ would lose this information.</p>
 <p>A simple sum filter (<code>rowSums(counts(dds)) &gt;= 10</code>) can
 be problematic:</p>
 <ul>
-<li>A gene with 10 total counts across 6 samples averages ~1.7
+<li>A gene with 10 total counts across 8 samples averages ~1.25
 counts/sample—too low to be informative.</li>
 <li>It may remove genes expressed in only one condition (biologically
 interesting!).</li>
@@ -4470,7 +4613,7 @@ ensures:</p>
 experimental group.</li>
 <li>Genes with condition-specific expression are retained.</li>
 <li>The threshold is interpretable (e.g., “at least 10 counts in at
-least 3 samples”).</li>
+least 4 samples”).</li>
 </ul>
 </div>
 </div>
@@ -4483,8 +4626,10 @@ least 3 samples”).</li>
 <code class="sourceCode R"><span><span class="va">dds</span> <span class="op">&lt;-</span> <span class="fu">estimateSizeFactors</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span></span>
 <span><span class="fu">sizeFactors</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>SRR33253285 SRR33253286 SRR33253287 SRR33253288 SRR33253289 SRR33253290
-  0.7232591   0.8443123   1.2021389   1.1142267   1.0516283   1.1245413</code></pre>
+<pre><code>WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4
+         0.7232591          0.8443123          1.2021389          1.1142267
+  WT_Bcell_IR_rep1   WT_Bcell_IR_rep2   WT_Bcell_IR_rep3   WT_Bcell_IR_rep4
+         1.0516283          1.1245413          0.9832145          1.0567892</code></pre>
 </section><section><h2 class="section-heading" id="step-3-exploratory-data-analysis">Step 3: Exploratory data analysis<a class="anchor" aria-label="anchor" href="#step-3-exploratory-data-analysis"></a>
 </h2>
 <hr class="half-width">
@@ -4625,8 +4770,8 @@ biologically?</li>
 <div class="accordion-body">
 <p>Example interpretation:</p>
 <ol style="list-style-type: decimal">
-<li>Samples should cluster by condition (Nat10-CKO vs Nat10flox/flox) in
-both the heatmap and PCA.</li>
+<li>Samples should cluster by condition (WT_mock vs WT_IR) in both the
+heatmap and PCA.</li>
 <li>If all replicates cluster together, there are no obvious
 outliers.</li>
 <li>PC1 typically captures the largest source of variation. If it
@@ -4690,7 +4835,7 @@ dots.</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">results</span><span class="op">(</span></span>
 <span>    <span class="va">dds</span>,</span>
-<span>    contrast <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"condition"</span>, <span class="st">"Nat10flox/flox"</span>, <span class="st">"Nat10-CKO"</span><span class="op">)</span></span>
+<span>    contrast <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"condition"</span>, <span class="st">"WT_IR"</span>, <span class="st">"WT_mock"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">summary</span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre>
@@ -4722,7 +4867,7 @@ dispersion.</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">resultsNames</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>[1] "Intercept"                              "condition_Nat10flox.flox_vs_Nat10.CKO"</code></pre>
+<pre><code>[1] "Intercept"                              "condition_WT_IR_vs_WT_mock"</code></pre>
 <p>Apply shrinkage using <code>apeglm</code> (recommended for standard
 contrasts):</p>
 <div class="codewrapper sourceCode" id="cb31">
@@ -4731,7 +4876,7 @@ contrasts):</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_shrunk</span> <span class="op">&lt;-</span> <span class="fu">lfcShrink</span><span class="op">(</span></span>
 <span>    <span class="va">dds</span>,</span>
-<span>    coef <span class="op">=</span> <span class="st">"condition_Nat10flox.flox_vs_Nat10.CKO"</span>,</span>
+<span>    coef <span class="op">=</span> <span class="st">"condition_WT_IR_vs_WT_mock"</span>,</span>
 <span>    type <span class="op">=</span> <span class="st">"apeglm"</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
@@ -4829,7 +4974,7 @@ preferred.</p>
 <span>    <span class="fu">theme_classic</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">xlab</span><span class="op">(</span><span class="st">"log2 fold change"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">"-log10 adjusted p-value"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Volcano plot: Nat10flox/flox vs Nat10-CKO (Salmon)"</span><span class="op">)</span></span></code></pre>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Volcano plot: WT_IR vs WT_mock (Salmon)"</span><span class="op">)</span></span></code></pre>
 </div>
 <div id="interpreting-the-volcano-plot" class="callout">
 <div class="callout-square">
@@ -4842,7 +4987,7 @@ preferred.</p>
 <ul>
 <li>
 <strong>X-axis</strong>: Direction and magnitude of change (positive
-= higher in Nat10flox/flox).</li>
+= higher in WT_IR, i.e., upregulated by radiation).</li>
 <li>
 <strong>Y-axis</strong>: Statistical significance (-log10 scale,
 higher = more significant).</li>
@@ -5017,7 +5162,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-06-gene-set-enrichment-analyses"><p>Content from <a href="06-gene-set-enrichment-analyses.html">Gene set enrichment analysis</a></p>
 <hr>
-<p>Last updated on 2026-01-06 |
+<p>Last updated on 2026-01-15 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/06-gene-set-enrichment-analyses.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 95 minutes</p>
@@ -5439,7 +5584,7 @@ and padj &lt; 0.05) 2. Down-regulated genes (log2FC &lt; 0 and padj &lt;
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -5641,7 +5786,7 @@ experiment?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Example interpretation:</p>
 <ul>
@@ -5872,7 +6017,7 @@ elsewhere?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>Convergent signals to look for:</p>
 <ul>
@@ -6173,7 +6318,7 @@ consistent with the ORA direction analysis?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <p>Expected observations:</p>
 <ul>
@@ -6389,8 +6534,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/aio.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/aio.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-01-06",
-  "datePublished": "2026-01-06"
+  "dateModified": "2026-01-15",
+  "datePublished": "2026-01-15"
 }
 
   </script><script>

@@ -342,7 +342,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Gene-level QC and differential expression (DESeq2)</h1>
-        <p>Last updated on 2026-01-06 |
+        <p>Last updated on 2026-01-15 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/05-deseq2-expression-analyses.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -417,12 +417,14 @@ the experimental condition (e.g., control vs treatment). Simply
 copy/paste the following into a text file and save it in your
 <code>scripts</code> directory as <code>samples.csv</code>:</p>
 <pre><code>sample,condition
-SRR33253285,Nat10-CKO
-SRR33253286,Nat10-CKO
-SRR33253287,Nat10-CKO
-SRR33253288,Nat10floxflox
-SRR33253289,Nat10flox/flox
-SRR33253290,Nat10flox/flox</code></pre>
+WT_Bcell_mock_rep1,WT_mock
+WT_Bcell_mock_rep2,WT_mock
+WT_Bcell_mock_rep3,WT_mock
+WT_Bcell_mock_rep4,WT_mock
+WT_Bcell_IR_rep1,WT_IR
+WT_Bcell_IR_rep2,WT_IR
+WT_Bcell_IR_rep3,WT_IR
+WT_Bcell_IR_rep4,WT_IR</code></pre>
 <p>Also, create a direcotry for DESeq2 results:</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -514,7 +516,7 @@ Open OnDemand interface
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> How were these data prepared? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>Since the gene IDs in the count matrix are Ensembl IDs, it will be
 hard to interpret the results without annotation. We will need to use
@@ -595,7 +597,7 @@ can attach gene symbols and biotypes later in the analysis.</p>
 <div class="callout-content">
 <p><code>coldata</code> must have row names that match the count matrix
 column names. The <code>condition</code> column defines the groups for
-DESeq2 (<code>Nat10-CKO</code> vs <code>Nat10flox/flox</code>).</p>
+DESeq2 (<code>WT_mock</code> vs <code>WT_IR</code>).</p>
 </div>
 </div>
 </div>
@@ -661,9 +663,9 @@ filtering:</p>
 <span>    <span class="fu">filter</span><span class="op">(</span><span class="va">gene_biotype</span> <span class="op">==</span> <span class="st">"protein_coding"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="va">ensembl_gene_id_version</span>, <span class="fu">all_of</span><span class="op">(</span><span class="fu">rownames</span><span class="op">(</span><span class="va">coldata</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Group-aware filtering: keep genes with &gt;= 10 counts in at least 3 samples</span></span>
+<span><span class="co"># Group-aware filtering: keep genes with &gt;= 10 counts in at least 4 samples</span></span>
 <span><span class="co"># (the size of the smallest experimental group)</span></span>
-<span><span class="va">min_samples</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
+<span><span class="va">min_samples</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
 <span><span class="va">min_counts</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span></span>
 <span><span class="va">cts_coding</span> <span class="op">&lt;-</span> <span class="va">cts_pc</span> <span class="op">%&gt;%</span></span>
@@ -672,7 +674,7 @@ filtering:</p>
 <span></span>
 <span><span class="fu">dim</span><span class="op">(</span><span class="va">cts_coding</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>[1] 15839     6</code></pre>
+<pre><code>[1] 15839     8</code></pre>
 <div id="why-use-group-aware-filtering" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -683,7 +685,7 @@ filtering:</p>
 <div class="callout-content">
 <p>A simple sum filter (e.g., <code>rowSums &gt; 5</code>) can be
 problematic:</p>
-<ul><li>A gene with 10 total counts across 6 samples averages ~1.7
+<ul><li>A gene with 10 total counts across 8 samples averages ~1.25
 counts/sample—often too noisy.</li>
 <li>It may inadvertently remove genes expressed in only one
 condition.</li>
@@ -691,7 +693,7 @@ condition.</li>
 <ul><li>Each kept gene has meaningful expression in at least one
 experimental group.</li>
 <li>Genes with condition-specific expression are retained.</li>
-<li>The threshold is interpretable (“at least 10 counts in at least 3
+<li>The threshold is interpretable (“at least 10 counts in at least 4
 samples”).</li>
 </ul><p>For exploratory analysis, we also restrict to protein-coding genes to
 focus on the most interpretable features.</p>
@@ -864,8 +866,8 @@ weak or confounded by other factors.</p>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">d</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">PC1</span>, <span class="va">PC2</span>, color <span class="op">=</span> <span class="va">condition</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_shape_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_color_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu">c</span><span class="op">(</span></span>
-<span>    <span class="st">"Nat10-CKO"</span>       <span class="op">=</span> <span class="st">"#00b462"</span>,</span>
-<span>    <span class="st">"Nat10flox/flox"</span>  <span class="op">=</span> <span class="st">"#980c80"</span></span>
+<span>    <span class="st">"WT_mock"</span> <span class="op">=</span> <span class="st">"#00b462"</span>,</span>
+<span>    <span class="st">"WT_IR"</span>   <span class="op">=</span> <span class="st">"#980c80"</span></span>
 <span>  <span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.title <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -940,12 +942,13 @@ non-biological factors)?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Example interpretation:</p>
 <ol style="list-style-type: decimal"><li>Library sizes are comparable across samples and fall within a narrow
 range.</li>
-<li>Samples cluster by condition in both distance heatmaps and PCA.</li>
+<li>Samples cluster by condition (mock vs IR-treated) in both distance
+heatmaps and PCA.</li>
 <li>No sample appears as a clear outlier relative to its group.</li>
 <li>No batch effects are apparent—PC1 separates by experimental
 condition, not technical factors.</li>
@@ -982,7 +985,7 @@ features counted by featureCounts.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Single command to run the DESeq2 pipeline </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <p>Above three steps can be run together using the <code>DESeq</code>
 function:</p>
@@ -1019,8 +1022,8 @@ fitting model and testing</code></pre>
 </div>
 <figure style="text-align: center"><img src="fig/05_deseq/dispersion-plot.png" alt="Dispersion estimates from DESeq2" class="figure mx-auto d-block"><figcaption>
 Dispersion estimates from DESeq2
-</figcaption></figure><p>Obtain results for the contrast of interest
-(<code>Nat10flox/flox</code> vs <code>Nat10-CKO</code>):</p>
+</figcaption></figure><p>Obtain results for the contrast of interest (<code>WT_IR</code> vs
+<code>WT_mock</code>):</p>
 <div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1030,8 +1033,8 @@ Dispersion estimates from DESeq2
 <span>    <span class="va">dds</span>,</span>
 <span>    contrast <span class="op">=</span> <span class="fu">c</span><span class="op">(</span></span>
 <span>      <span class="st">"condition"</span>,</span>
-<span>      <span class="st">"Nat10flox/flox"</span>,</span>
-<span>      <span class="st">"Nat10-CKO"</span></span>
+<span>      <span class="st">"WT_IR"</span>,</span>
+<span>      <span class="st">"WT_mock"</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
@@ -1057,8 +1060,8 @@ Dispersion estimates from DESeq2
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">head</span><span class="op">(</span><span class="va">res</span><span class="op">[</span><span class="fu">order</span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">pvalue</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span></span></code></pre>
 </div>
-<pre class="text"><code>log2 fold change (MLE): condition Nat10flox/flox vs Nat10-CKO
-Wald test p-value: condition Nat10flox.flox vs Nat10.CKO
+<pre class="text"><code>log2 fold change (MLE): condition WT_IR vs WT_mock
+Wald test p-value: condition WT_IR vs WT_mock
 DataFrame with 6 rows and 6 columns
        baseMean log2FoldChange     lfcSE      stat       pvalue         padj
       &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;
@@ -1085,7 +1088,7 @@ with low counts. Shrinkage improves these estimates.</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">resultsNames</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span></span></code></pre>
 </div>
-<pre><code>[1] "Intercept"                              "condition_Nat10flox.flox_vs_Nat10.CKO"</code></pre>
+<pre><code>[1] "Intercept"                              "condition_WT_IR_vs_WT_mock"</code></pre>
 <p>Apply shrinkage using <code>apeglm</code> (recommended for standard
 two-group comparisons):</p>
 <div class="codewrapper sourceCode" id="cb29">
@@ -1094,7 +1097,7 @@ two-group comparisons):</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_shrunk</span> <span class="op">&lt;-</span> <span class="fu">lfcShrink</span><span class="op">(</span></span>
 <span>    <span class="va">dds</span>,</span>
-<span>    coef <span class="op">=</span> <span class="st">"condition_Nat10flox.flox_vs_Nat10.CKO"</span>,</span>
+<span>    coef <span class="op">=</span> <span class="st">"condition_WT_IR_vs_WT_mock"</span>,</span>
 <span>    type <span class="op">=</span> <span class="st">"apeglm"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -1246,7 +1249,7 @@ genes.</p>
 <span>  <span class="fu">theme_classic</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">xlab</span><span class="op">(</span><span class="st">"log2 fold change"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ylab</span><span class="op">(</span><span class="st">"-log10 adjusted p value"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Volcano plot: Nat10-CKO vs Nat10flox/flox"</span><span class="op">)</span></span></code></pre>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Volcano plot: WT_IR vs WT_mock"</span><span class="op">)</span></span></code></pre>
 </div>
 <figure style="text-align: center"><img src="fig/05_deseq/volcano-plot.png" alt="Volcano plot of differential expression results" class="figure mx-auto d-block"><figcaption>
 Volcano plot of differential expression results
@@ -1258,10 +1261,11 @@ Volcano plot of differential expression results
 <div id="interpreting-the-volcano" class="callout-inner">
 <h3 class="callout-title">Interpreting the volcano</h3>
 <div class="callout-content">
-<p>Points to the right are higher in <code>Nat10flox/flox</code>, to the
-left are higher in <code>Nat10-CKO</code>. Points near the top have
-stronger statistical support (small adjusted p values). Colored points
-mark genes that pass both fold change and padj thresholds.</p>
+<p>Points to the right are higher in IR-treated samples (upregulated by
+radiation), to the left are higher in mock (downregulated by radiation).
+Points near the top have stronger statistical support (small adjusted p
+values). Colored points mark genes that pass both fold change and padj
+thresholds.</p>
 </div>
 </div>
 </div>
@@ -1306,8 +1310,8 @@ biologically meaningful DE genes.</p>
 <p>Using <code>sig_res</code>:</p>
 <ol style="list-style-type: decimal"><li>Which genes have the largest positive log2 fold change.</li>
 <li>Which genes have the largest negative log2 fold change.</li>
-<li>Are any of the top genes known to be related to Nat10 function or
-the studied phenotype.</li>
+<li>Are any of the top genes known p53 targets or DNA damage response
+genes.</li>
 </ol></div>
 </div>
 </div>
@@ -1316,15 +1320,16 @@ the studied phenotype.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Example interpretation:</p>
-<ul><li>Several strongly up regulated genes are involved in cell cycle and
-RNA processing.</li>
-<li>Strongly down regulated genes may include transcription factors and
-signaling components.</li>
-<li>Cross referencing top hits with prior literature or databases can
-reveal mechanistic hypotheses.</li>
+<ul><li>Strongly upregulated genes should include canonical p53 targets such
+as <em>Cdkn1a</em> (p21), <em>Mdm2</em>, <em>Bax</em>, and <em>Bbc3</em>
+(Puma).</li>
+<li>DNA damage response genes like <em>Gadd45a</em> should be
+upregulated.</li>
+<li>Cross-referencing top hits with p53 target databases confirms our
+analysis is working correctly.</li>
 </ul></div>
 </div>
 </div>
@@ -1416,8 +1421,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/05-deseq2-expression-analyses.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/05-deseq2-expression-analyses.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-01-06",
-  "datePublished": "2026-01-06"
+  "dateModified": "2026-01-15",
+  "datePublished": "2026-01-15"
 }
 
   </script><script>
