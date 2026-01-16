@@ -1,6 +1,6 @@
 ---
 source: Rmd
-title: "B. Differential expression using DESeq2 (Salmon/Kallisto pathway)"
+title: "B. Differential expression using DESeq2 (Kallisto pathway)"
 teaching: 40
 exercises: 45
 author:
@@ -10,7 +10,7 @@ author:
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- How do we import transcript-level quantification from Salmon or Kallisto into DESeq2?
+- How do we import transcript-level quantification from Kallisto into DESeq2?
 - What exploratory analyses should we perform before differential expression testing?
 - How do we perform differential expression analysis with DESeq2 using tximport data?
 - How do we visualize and interpret DE results from transcript-based quantification?
@@ -20,7 +20,7 @@ author:
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Load tximport data from Salmon quantification into DESeq2.
+- Load tximport data from Kallisto quantification into DESeq2.
 - Perform quality control visualizations (boxplots, density plots, PCA).
 - Apply variance stabilizing transformation for exploratory analysis.
 - Run differential expression analysis with appropriate contrasts.
@@ -39,13 +39,13 @@ Original and related materials are available via the **CGSB Wiki**:
 
 ## Introduction
 
-In Episode 04b, we quantified transcript expression using **Salmon** and summarized the results to gene-level counts using **tximport**. In this episode, we use those gene-level estimates for differential expression analysis with **DESeq2**.
+In Episode 04b, we quantified transcript expression using **Kallisto** and summarized the results to gene-level counts using **tximport**. In this episode, we use those gene-level estimates for differential expression analysis with **DESeq2**.
 
 The workflow follows the same general pattern as Episode 05 (genome-based), but with important differences:
 
 1. **Input data**: We use the `txi` object from tximport rather than raw counts from featureCounts.
-2. **Count handling**: Salmon estimates are model-based (not integer counts), and DESeq2 handles this appropriately via `DESeqDataSetFromTximport()`.
-3. **Bias correction**: Salmon's sequence and GC bias corrections are preserved through tximport.
+2. **Count handling**: Kallisto estimates are model-based (not integer counts), and DESeq2 handles this appropriately via `DESeqDataSetFromTximport()`.
+3. **Bootstrap support**: Kallisto's uncertainty estimates (from bootstraps) can be used with sleuth for transcript-level DE.
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
@@ -86,7 +86,7 @@ WT_Bcell_IR_rep4,WT_IR
 Create a results directory:
 
 ```bash
-mkdir -p results/deseq2_salmon
+mkdir -p results/deseq2_kallisto
 ```
 
 :::::::::::::::::::::::::::::::::::::::
@@ -112,7 +112,7 @@ setwd(paste0(Sys.getenv("SCRATCH"), "/rnaseq-workshop"))
 Load the tximport object created in Episode 04b:
 
 ```r
-txi <- readRDS("results/salmon_quant/txi.rds")
+txi <- readRDS("results/kallisto_quant/txi.rds")
 ```
 
 Examine the structure of the tximport object:
@@ -281,7 +281,7 @@ ggplot(counts_melted, aes(x = sample, y = log10_count, fill = sample)) +
     labs(
         x = "Sample",
         y = "log10(count + 1)",
-        title = "Raw count distributions (Salmon)"
+        title = "Raw count distributions (Kallisto)"
     ) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
@@ -331,7 +331,7 @@ pheatmap(
     clustering_distance_rows = sampleDists,
     clustering_distance_cols = sampleDists,
     col = colors,
-    main = "Sample distance heatmap (Salmon)"
+    main = "Sample distance heatmap (Kallisto)"
 )
 ```
 
@@ -349,7 +349,7 @@ ggplot(pcaData, aes(PC1, PC2, color = condition)) +
     xlab(paste0("PC1: ", percentVar[1], "% variance")) +
     ylab(paste0("PC2: ", percentVar[2], "% variance")) +
     theme_bw() +
-    ggtitle("PCA of Salmon-quantified samples")
+    ggtitle("PCA of Kallisto-quantified samples")
 ```
 
 ::::::::::::::::::::::::::::::::::::::: challenge
@@ -532,7 +532,7 @@ ggplot(
     theme_classic() +
     xlab("log2 fold change") +
     ylab("-log10 adjusted p-value") +
-    ggtitle("Volcano plot: WT_IR vs WT_mock (Salmon)")
+    ggtitle("Volcano plot: WT_IR vs WT_mock (Kallisto)")
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
@@ -561,7 +561,7 @@ Expected observations:
 
 1. The number of DE genes should be broadly similar, though not identical.
 2. Most top DE genes should overlap between methods.
-3. Salmon's bias corrections may produce slightly different LFC estimates, especially for shorter genes or genes with high GC content.
+3. Kallisto may produce slightly different LFC estimates due to its different quantification algorithm.
 
 Both approaches are valid; consistency between them increases confidence in the results.
 
@@ -576,7 +576,7 @@ Save the full results table:
 ```r
 write_tsv(
     res_df,
-    "results/deseq2_salmon/DESeq2_salmon_results.tsv"
+    "results/deseq2_kallisto/DESeq2_kallisto_results.tsv"
 )
 ```
 
@@ -591,14 +591,14 @@ sig_res <- res_df %>%
 
 write_tsv(
     sig_res,
-    "results/deseq2_salmon/DESeq2_salmon_sig.tsv"
+    "results/deseq2_kallisto/DESeq2_kallisto_sig.tsv"
 )
 ```
 
 Save the DESeq2 object for downstream analysis:
 
 ```r
-saveRDS(dds, "results/deseq2_salmon/dds_salmon.rds")
+saveRDS(dds, "results/deseq2_kallisto/dds_kallisto.rds")
 ```
 
 ::::::::::::::::::::::::::::::::::::::: discussion
@@ -609,7 +609,7 @@ saveRDS(dds, "results/deseq2_salmon/dds_salmon.rds")
 |--------|---------------------|--------------------------|
 | Input | BAM files | FASTQ files |
 | Speed | Slower (alignment + counting) | Faster (pseudo-alignment) |
-| Storage | Large (BAM files) | Small (quant.sf files) |
+| Storage | Large (BAM files) | Small (abundance.tsv files) |
 | Bias correction | Limited | Sequence + GC bias |
 | Novel transcripts | Can detect | Cannot detect |
 | Visualization | IGV compatible | No BAM files |

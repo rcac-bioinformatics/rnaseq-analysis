@@ -52,7 +52,7 @@ More information: <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4766705/>
 
 ## The workshop dataset: p53-mediated response to ionizing radiation
 
-For this workshop, we use a subset of a publicly available dataset (GEO accession [GSE71176](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176)) that investigates the transcriptional response to ionizing radiation (IR) in mouse B cells. The original study by [Tonelli et al. (2015)](https://doi.org/10.1016/j.celrep.2015.02.068) examined how the tumor suppressor p53 (encoded by *Trp53*) regulates gene expression following DNA damage.
+For this workshop, we use a subset of a publicly available dataset (GEO accession [GSE71176](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176)) that investigates the transcriptional response to ionizing radiation (IR) in mouse B cells. The original study by [Tonelli et al. (2015)](https://doi.org/10.18632/oncotarget.5232) examined how the tumor suppressor p53 (encoded by *Trp53*) regulates gene expression following DNA damage.
 
 ### Biological context
 
@@ -282,14 +282,14 @@ grep ">" gencode.vM38.transcripts-clean.fa |head -1
 
 ## Raw reads
 
-> **Study:** Genome-wide identification of p53-regulated genes in response to ionizing radiation
-> **Organism:** Mus musculus (C57BL/6)
-> **Cell type:** Primary B cells from spleen
-> **Design:** Wild-type mock vs Wild-type IR-treated (n=4 per group)
-> **Treatment:** 7 Gy ionizing radiation, harvested 4 hours post-exposure
-> **Sequencing:** Illumina HiSeq 2000, paired-end 51bp
-> **GEO:** [GSE71176](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176)
-> **Reference:** [Tonelli et al. (2015) Cell Reports](https://doi.org/10.1016/j.celrep.2015.02.068)
+- **Study:** Genome-wide analysis of p53 transcriptional programs in B cells upon exposure to genotoxic stress _in vivo_ \
+- **Organism:** Mus musculus (C57BL/6) 
+- **Cell type:** Primary B cells from spleen
+- **Design:** Wild-type mock vs Wild-type IR-treated (n=4 per group)
+- **Treatment:** 7 Gy ionizing radiation, harvested 4 hours post-exposure
+- **Sequencing:** Illumina HiSeq 2000, paired-end 51bp
+- **GEO:** [GSE71176](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176)
+- **Reference:** Tonelli et al. _Oncotarget_ 2015 Sep 22;6(28):24611-26. [PMID: 26372730](https://doi.org/10.18632/oncotarget.5232)
 
 <div class="figure" style="text-align: center">
 <img src="fig/01_fq2counts/geo-db.png" alt="FASTQ files from GEO"  />
@@ -306,7 +306,7 @@ How do you obtain the complete list of sequencing runs?
 ::::::::::::::::::::::::::::::::::: solution
 
 Navigate to the SRA page for the BioProject and use **Run Selector** to list runs.  
-On the Run Selector page, click **Accession List** to download all SRR accession IDs.
+On the Run Selector page, select the accessions (SRR2121778-81, SRR2121786-89), toggle the "selected" and click **Accession List** to download the selected SRR accession IDs.
 
 <div class="figure" style="text-align: center">
 <img src="fig/01_fq2counts/srr-runs.png" alt="FASTQ files from SRA Run Selector"  />
@@ -319,6 +319,8 @@ On the Run Selector page, click **Accession List** to download all SRR accession
 
 ### Download FASTQ files with SRA Toolkit
 
+[DO NOT RUN THIS COMMAND DURING THE WORKSHOP - IT TAKES TOO LONG TO COMPLETE]. You already copied the pre-downloaded data to your scratch space.
+
 ```bash
 sinteractive -A workshop -p cpu -N 1 -n 4 --time=1:00:00
 cd ${SCRATCH}/rnaseq-workshop/data
@@ -329,9 +331,28 @@ while read SRR; do
    gzip ${SRR}_1.fastq
    gzip ${SRR}_2.fastq
 done<SRR_Acc_List.txt
+# rename files to meaningful names
+# WT B cells - mock
+mv SRR2121778_1.fastq.gz WT_Bcell_mock_rep1_R1.fastq.gz
+mv SRR2121778_2.fastq.gz WT_Bcell_mock_rep1_R2.fastq.gz
+mv SRR2121779_1.fastq.gz WT_Bcell_mock_rep2_R1.fastq.gz
+mv SRR2121779_2.fastq.gz WT_Bcell_mock_rep2_R2.fastq.gz
+mv SRR2121780_1.fastq.gz WT_Bcell_mock_rep3_R1.fastq.gz
+mv SRR2121780_2.fastq.gz WT_Bcell_mock_rep3_R2.fastq.gz
+mv SRR2121781_1.fastq.gz WT_Bcell_mock_rep4_R1.fastq.gz
+mv SRR2121781_2.fastq.gz WT_Bcell_mock_rep4_R2.fastq.gz
+# WT B cells - IR
+mv SRR2121786_1.fastq.gz WT_Bcell_IR_rep1_R1.fastq.gz
+mv SRR2121786_2.fastq.gz WT_Bcell_IR_rep1_R2.fastq.gz
+mv SRR2121787_1.fastq.gz WT_Bcell_IR_rep2_R1.fastq.gz
+mv SRR2121787_2.fastq.gz WT_Bcell_IR_rep2_R2.fastq.gz
+mv SRR2121788_1.fastq.gz WT_Bcell_IR_rep3_R1.fastq.gz
+mv SRR2121788_2.fastq.gz WT_Bcell_IR_rep3_R2.fastq.gz
+mv SRR2121789_1.fastq.gz WT_Bcell_IR_rep4_R1.fastq.gz
+mv SRR2121789_2.fastq.gz WT_Bcell_IR_rep4_R2.fastq.gz
 ```
 
-Since downloading may take a long time, we provide a pre-downloaded copy of all FASTQ files. The directory, after downloading, should look like this:
+The directory, after downloading, should look like this:
 
 ```bash
 data

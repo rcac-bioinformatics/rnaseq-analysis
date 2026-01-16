@@ -91,19 +91,19 @@ The important output is in `results/strand_check/lib_format_counts.json`:
     "read_files": "[ data/WT_Bcell_mock_rep1_R1.fastq.gz, data/WT_Bcell_mock_rep1_R2.fastq.gz]",
     "expected_format": "IU",
     "compatible_fragment_ratio": 1.0,
-    "num_compatible_fragments": 21088696,
-    "num_assigned_fragments": 21088696,
-    "num_frags_with_concordant_consistent_mappings": 19116702,
-    "num_frags_with_inconsistent_or_orphan_mappings": 2510542,
-    "strand_mapping_bias": 0.5117980078362889,
+    "num_compatible_fragments": 82046534,
+    "num_assigned_fragments": 82046534,
+    "num_frags_with_concordant_consistent_mappings": 71639414,
+    "num_frags_with_inconsistent_or_orphan_mappings": 15601146,
+    "strand_mapping_bias": 0.5080563891826363,
     "MSF": 0,
     "OSF": 0,
-    "ISF": 9783890,
+    "ISF": 36396862,
     "MSR": 0,
     "OSR": 0,
-    "ISR": 9332812,
-    "SF": 1234245,
-    "SR": 1276297,
+    "ISR": 35242552,
+    "SF": 7863036,
+    "SR": 7738110,
     "MU": 0,
     "OU": 0,
     "IU": 0,
@@ -118,8 +118,8 @@ The important output is in `results/strand_check/lib_format_counts.json`:
 > This JSON file reports Salmon's automatic library type detection.
 >
 > - **`"expected_format": "IU"`**: This is Salmon's conclusion. "I" means **Inward** (correct for paired-end reads) and "U" means **Unstranded**.
-> - **`"strand_mapping_bias": 0.512`**: This is the key evidence. A value near 0.5 (50%) indicates that reads mapped equally to both the sense and antisense strands, the definitive sign of an **unstranded** library.
-> - **`"ISF"`** and **`"ISR"`**: These are the counts for Inward-Sense-Forward (9.78M) and Inward-Sense-Reverse (9.33M) fragments. Because these values are almost equal, they confirm the ~50/50 split seen in the strand bias.
+> - **`"strand_mapping_bias": 0.508`**: This is the key evidence. A value near 0.5 (50%) indicates that reads mapped equally to both the sense and antisense strands, the definitive sign of an **unstranded** library.
+> - **`"ISF"`** and **`"ISR"`**: These are the counts for Inward-Sense-Forward (36.4M) and Inward-Sense-Reverse (35.2M) fragments. Because these values are almost equal, they confirm the ~50/50 split seen in the strand bias.
 
 Common results:
 
@@ -318,7 +318,7 @@ First, we will create `samples.txt` file with just the sample names
 
 ```bash
 cd $SCRATCH/rnaseq-workshop/data
-ls *_1.fastq.gz | sed 's/_1.fastq.gz//' > ${SCRATCH}/rnaseq-workshop/scripts/samples.txt
+ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' > ${SCRATCH}/rnaseq-workshop/scripts/samples.txt
 ```
 
 ```bash
@@ -345,8 +345,8 @@ mkdir -p $OUTDIR
 
 SAMPLE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" samples.txt)
 
-R1=${FASTQ_DIR}/${SAMPLE}_1.fastq.gz
-R2=${FASTQ_DIR}/${SAMPLE}_2.fastq.gz
+R1=${FASTQ_DIR}/${SAMPLE}_R1.fastq.gz
+R2=${FASTQ_DIR}/${SAMPLE}_R2.fastq.gz
 
 STAR \
     --runThreadN ${SLURM_CPUS_ON_NODE} \
