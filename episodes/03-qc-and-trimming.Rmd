@@ -71,7 +71,7 @@ fastqc data/*.fastq.gz --outdir results/qc_fastq/ --threads 4
 ````
 
 ```bash
-qc
+results/qc_fastq/
 ├── WT_Bcell_mock_rep1_R1_fastqc.html
 ├── WT_Bcell_mock_rep1_R1_fastqc.zip
 ├── WT_Bcell_mock_rep1_R2_fastqc.html

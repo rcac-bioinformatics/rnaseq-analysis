@@ -1,6 +1,6 @@
 ---
 source: Rmd
-title: "B. Transcript-based quantification (Salmon)"
+title: "B. Transcript-based quantification (Kallisto)"
 teaching: 30
 exercises: 40
 ---
@@ -8,18 +8,18 @@ exercises: 40
 :::::::::::::::::::::::::::::::::::::: questions
 
 - How do we quantify expression without genome alignment?
-- What inputs does Salmon require?
-- How do we run Salmon for paired-end RNA-seq data?
-- How do we interpret transcript-level outputs (TPM, NumReads)?
+- What inputs does Kallisto require?
+- How do we run Kallisto for paired-end RNA-seq data?
+- How do we interpret transcript-level outputs (TPM, est_counts)?
 - How do we summarize transcripts to gene-level counts using tximport?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Build a transcriptome index for Salmon.
+- Build a transcriptome index for Kallisto.
 - Quantify transcript abundance directly from FASTQ files.
-- Understand key Salmon output files.
+- Understand key Kallisto output files.
 - Summarize transcript-level estimates to gene-level counts.
 - Prepare counts for downstream differential expression.
 
@@ -31,137 +31,202 @@ In the previous episode, we mapped reads to the **genome** using STAR and genera
 
 In this episode, we use an alternative quantification strategy:
 
-1. Build a *transcriptome* index  
-2. Quantify expression directly from FASTQ files using **Salmon** (*without alignment*)  
+1. Build a *transcriptome* index
+2. Quantify expression directly from FASTQ files using **Kallisto** (*without alignment*)
 3. Summarize transcript estimates back to gene-level counts
 
 This workflow is faster, uses less storage, and models transcript-level uncertainty.
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
-## When should I use transcript-based quantification?
+## Why Kallisto?
 
-Salmon is ideal when:
+Kallisto uses pseudo-alignment to rapidly quantify transcript abundances without traditional read mapping. Key advantages include:
 
-- You do not need alignment files.
-- You want transcript-level TPMs.
-- You want fast quantification with bias correction.
-- Storage is limited (no BAM files generated).
+- **Speed**: Kallisto is extremely fast, typically completing in 2-3 minutes per sample.
+- **Accuracy**: Comparable accuracy to alignment-based methods for quantification.
+- **Bootstrap support**: Native support for uncertainty estimation via bootstraps (useful for sleuth).
+- **Low resource usage**: No large BAM files generated, minimal storage requirements.
 
-It is *not* ideal if you need splice junctions, variant calling, or visualization in IGV (all those depends on alignment files).
+Kallisto is ideal when you do not need alignment files, want fast quantification, or plan to use sleuth for differential transcript analysis.
 
 :::::::::::::::::::::::::::::::::::::::
-
-## Step 1: Preparing the transcriptome reference
-
-Salmon requires a **transcriptome FASTA file** (all annotated transcripts). We previously downloaded transcripts file from GENCODE for this purpose (`gencode.vM38.transcripts.fa`).
-
-
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
-## Why transcriptome choice matters
+## When should I use transcript-based quantification?
 
-Transcript-level quantification **inherits all assumptions of the annotation**.  
-Missing or incorrect transcripts → biased TPM estimates.
+Kallisto is ideal when:
+
+- You do not need alignment files.
+- You want transcript-level TPMs.
+- You want fast quantification.
+- Storage is limited (no BAM files generated).
+- You plan to use sleuth for differential transcript expression.
+
+It is *not* ideal if you need splice junctions, variant calling, or visualization in IGV (all those depend on alignment files).
 
 :::::::::::::::::::::::::::::::::::::::
 
-### Building the Salmon index
+## Step 0: Strand detection with Salmon
 
-A Salmon index is lightweight and quick to build. _You may have already built this in Episode 4A._
+Before running Kallisto, we need to determine our library strandedness. Kallisto requires you to specify the strand information manually, while Salmon has an excellent automatic library type detection feature.
+
+We use Salmon **only** for strand inference, then use Kallisto for the actual quantification.
 
 ```bash
 sinteractive -A workshop -p cpu -N 1 -n 4 --time=1:00:00
 
 cd $SCRATCH/rnaseq-workshop
-mkdir -p data/salmon_index
+mkdir -p results/strand_check
 
 module load biocontainers
 module load salmon
 
+# Build a quick Salmon index for strand detection
 salmon index \
     --transcripts data/gencode.vM38.transcripts-clean.fa \
-    --index data/salmon_index \
+    --index data/salmon_index_strand \
+    --threads 4
+
+# Run Salmon on one sample with automatic library type detection
+salmon quant \
+    --index data/salmon_index_strand \
+    --libType A \
+    --mates1 data/WT_Bcell_mock_rep1_R1.fastq.gz \
+    --mates2 data/WT_Bcell_mock_rep1_R2.fastq.gz \
+    --output results/strand_check \
     --threads 4
 ```
 
-This creates a directory containing Salmon's k-mer index of all transcripts.
+Check the inferred library type:
 
-::::::::::::::::::::::::::::::::::::::: spoiler
-
-## What will the index contain?
-
+```bash
+cat results/strand_check/lib_format_counts.json
 ```
-salmon_index/
-├── complete_ref_lens.bin        # IMPORTANT: full transcript lengths used in TPM/effLength calculations
-├── ctable.bin                   # internal k-mer lookup table (not user-relevant)
-├── ctg_offsets.bin              # internal offsets for reference sequences
-├── duplicate_clusters.tsv       # internal duplicate k-mer cluster info
-├── info.json                    # IMPORTANT: index metadata (k-mer size, transcripts, build parameters)
-├── mphf.bin                     # minimal perfect hash function for fast lookup
-├── pos.bin                      # internal k-mer position table
-├── pre_indexing.log             # IMPORTANT: log of preprocessing and FASTA parsing steps
-├── rank.bin                     # internal rank/select bitvector structure
-├── refAccumLengths.bin          # cumulative reference lengths (internal)
-├── ref_indexing.log             # IMPORTANT: main indexing log; good for debugging build problems
-├── reflengths.bin               # IMPORTANT: transcript lengths used in quantification math
-├── refseq.bin                   # IMPORTANT: transcript sequences stored in binary format (core index content)
-├── seq.bin                      # internal sequence encoding structures
-└── versionInfo.json             # IMPORTANT: Salmon version + environment info for reproducibility
+
+The key fields are:
+
+- **expected_format**: The library type (e.g., `IU` = Inward Unstranded, `ISR` = Inward Stranded Reverse)
+- **strand_mapping_bias**: Values near 0.5 indicate unstranded data
+
+For our dataset, you should see `IU` (Inward Unstranded), meaning reads map equally to both strands.
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Why use Salmon for strand detection?
+
+Salmon's library type inference is well-documented, robust, and fast. Using a small subset of reads to detect strandedness takes only a few minutes and provides reliable results. Kallisto does not have automatic strand detection, so this preliminary step ensures we provide the correct parameters.
+
+:::::::::::::::::::::::::::::::::::::::
+
+## Step 1: Preparing the transcriptome reference
+
+Kallisto requires a **transcriptome FASTA file** (all annotated transcripts). We previously downloaded the transcripts file from GENCODE for this purpose (`gencode.vM38.transcripts-clean.fa`).
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Why transcriptome choice matters
+
+Transcript-level quantification **inherits all assumptions of the annotation**.
+Missing or incorrect transcripts → biased TPM estimates.
+
+:::::::::::::::::::::::::::::::::::::::
+
+### Building the Kallisto index
+
+The Kallisto index is lightweight and quick to build:
+
+```bash
+cd $SCRATCH/rnaseq-workshop
+mkdir -p data/kallisto_index
+
+module load biocontainers
+module load kallisto
+
+kallisto index \
+    -i data/kallisto_index/transcripts.idx \
+    data/gencode.vM38.transcripts-clean.fa
 ```
+
+This creates an index file that Kallisto uses for pseudo-alignment. Index building typically takes 2-3 minutes for a mammalian transcriptome.
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Kallisto vs Salmon index
+
+Note that Kallisto and Salmon indices are **not interchangeable**. Each tool has its own index format:
+
+- Kallisto: Single `.idx` file
+- Salmon: Directory with multiple files
+
+You must build a separate index for each tool.
 
 :::::::::::::::::::::::::::::::::::::::
 
 ## Step 2: Quantifying transcript abundances
 
-The core Salmon command is `salmon quant`.
-We use the transcript index and paired-end FASTQ files.
+The core Kallisto command is `kallisto quant`. We use the transcript index and paired-end FASTQ files.
 
 ```bash
-mkdir -p $SCRATCH/rnaseq-workshop/results/salmon_quant
+mkdir -p $SCRATCH/rnaseq-workshop/results/kallisto_quant
 ```
 
 Example command:
 
 ```bash
-salmon quant \
-    --index salmon_index \
-    --libType IU \
-    --mates1 data/WT_Bcell_mock_rep1_R1.fastq.gz \
-    --mates2 data/WT_Bcell_mock_rep1_R2.fastq.gz \
-    --output salmon_quant/WT_Bcell_mock_rep1 \
-    --threads 16 \
-    --validateMappings \
-    --seqBias \
-    --gcBias
+kallisto quant \
+    -i data/kallisto_index/transcripts.idx \
+    -o results/kallisto_quant/WT_Bcell_mock_rep1 \
+    -b 100 \
+    -t 16 \
+    data/WT_Bcell_mock_rep1_R1.fastq.gz \
+    data/WT_Bcell_mock_rep1_R2.fastq.gz
 ```
 
 Important flags:
 
-* `--libType IU` → **unstranded**, inward-oriented paired-end
-  (Replace with `ISR`, `ISF`, etc. based on your strandness.)
-* `--validateMappings` → improves mapping accuracy
-* `--seqBias`, `--gcBias` → corrects sequence- and GC-related biases
+* `-i` → path to the Kallisto index
+* `-o` → output directory for this sample
+* `-b 100` → number of bootstrap samples (useful for uncertainty estimation and sleuth)
+* `-t 16` → number of threads to use
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
-## Correct library type is essential
+## Strand-specific libraries
 
-A wrong `--libType` silently distorts transcript abundances.
-Use Salmon's *strandness detection* from Episode 4A if unsure.
+For **strand-specific** libraries, add the appropriate flag:
+
+- `--rf-stranded` for reverse-stranded libraries (e.g., Illumina TruSeq stranded)
+- `--fr-stranded` for forward-stranded libraries
+
+Our dataset is **unstranded** (detected as `IU` in Step 0), so we omit these flags.
 
 :::::::::::::::::::::::::::::::::::::::
 
-## Step 3: Running Salmon for many samples
+::::::::::::::::::::::::::::::::::::::: callout
 
-Again, we use a SLURM array.
+## Bootstrap samples
+
+The `-b 100` flag generates 100 bootstrap samples. These are useful for:
+
+- Estimating uncertainty in transcript abundance
+- Required if you plan to use **sleuth** for differential expression
+- Can be omitted if you only use DESeq2/edgeR (for faster runtime)
+
+For DESeq2 analysis only, you can use `-b 0` or omit the flag entirely.
+
+:::::::::::::::::::::::::::::::::::::::
+
+## Step 3: Running Kallisto for many samples
+
+We use a SLURM array job for efficiency and consistency.
 
 First, create a sample list (or reuse the one from Episode 4A):
 
 ```bash
 cd $SCRATCH/rnaseq-workshop/data
-ls *_1.fastq.gz | sed 's/_1.fastq.gz//' > $SCRATCH/rnaseq-workshop/scripts/samples.txt
+ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' > $SCRATCH/rnaseq-workshop/scripts/samples.txt
 ```
 
 Array job:
@@ -173,134 +238,107 @@ Array job:
 #SBATCH --cpus-per-task=16
 #SBATCH --account=workshop
 #SBATCH --partition=cpu
-#SBATCH --time=4:00:00
-#SBATCH --job-name=salmon_quant
+#SBATCH --time=1:00:00
+#SBATCH --job-name=kallisto_quant
 #SBATCH --array=1-8
 #SBATCH --output=cluster-%x.%j.out
 #SBATCH --error=cluster-%x.%j.err
 
 module load biocontainers
-module load salmon
+module load kallisto
 
 DATA="$SCRATCH/rnaseq-workshop/data"
-INDEX="$SCRATCH/rnaseq-workshop/data/salmon_index"
-OUT="$SCRATCH/rnaseq-workshop/results/salmon_quant"
+INDEX="$SCRATCH/rnaseq-workshop/data/kallisto_index/transcripts.idx"
+OUT="$SCRATCH/rnaseq-workshop/results/kallisto_quant"
 
 mkdir -p $OUT
 
-SAMPLE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" samples.txt)
+SAMPLE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" scripts/samples.txt)
 
-R1=${DATA}/${SAMPLE}_1.fastq.gz
-R2=${DATA}/${SAMPLE}_2.fastq.gz
+R1=${DATA}/${SAMPLE}_R1.fastq.gz
+R2=${DATA}/${SAMPLE}_R2.fastq.gz
 
-salmon quant \
-  --index $INDEX \
-  --libType IU \
-  --mates1 $R1 \
-  --mates2 $R2 \
-  --output $OUT/$SAMPLE \
-  --threads ${SLURM_CPUS_ON_NODE} \
-  --validateMappings \
-  --seqBias \
-  --gcBias
+kallisto quant \
+    -i $INDEX \
+    -o $OUT/$SAMPLE \
+    -b 100 \
+    -t ${SLURM_CPUS_ON_NODE} \
+    $R1 $R2
 ```
 
 Submit:
 
 ```bash
-sbatch quant_salmon.sh
+sbatch quant_kallisto.sh
 ```
-The typical run time is ~5 minutes per sample.
+
+The typical run time is ~2-3 minutes per sample (faster than Salmon).
 
 ::::::::::::::::::::::::::::::::::::::: discussion
 
 ## Why use an array job here?
 
-Unlike the STAR workflow in 4A, Salmon runs quickly and produces small output.
-The advantage of array jobs here is not speed, but *consistency*, all samples are quantified with
-identical parameters and metadata. This ensures that transcript-level TPM and count estimates
-are directly comparable across samples.
+Kallisto runs very quickly and produces small output. The advantage of array jobs is *consistency*: all samples are quantified with identical parameters and metadata. This ensures that transcript-level TPM and count estimates are directly comparable across samples.
 
 :::::::::::::::::::::::::::::::::::::::
 
-
-
 ### Inspect results
 
-After Salmon finishes, each sample directory contains a small set of output files.  
-Only a few of these are important for routine analysis:
+After Kallisto finishes, each sample directory contains a small set of output files:
 
 ```
 WT_Bcell_mock_rep1/
-├── quant.sf                       # IMPORTANT: transcript-level TPM, counts, effective lengths
-├── lib_format_counts.json         # IMPORTANT: inferred library type (IU, ISR, ISF)
-├── aux_info
-│   ├── meta_info.json             # IMPORTANT: mapping rate, fragment counts, bias flags
-│   ├── fld.gz                     # fragment length distribution (binary format)
-│   ├── expected_bias.gz           # bias model used for correction
-│   ├── observed_bias.gz           # observed sequence and GC bias
-│   └── ambig_info.tsv             # ambiguous equivalence class summaries (advanced QC only)
-├── libParams
-│   └── flenDist.txt               # fragment length distribution in a human-readable format
-├── cmd_info.json                  # command and parameters used to run Salmon
-└── logs
-└── salmon_quant.log               # main log file for troubleshooting
+├── abundance.tsv          # IMPORTANT: transcript-level TPM, counts, effective lengths
+├── abundance.h5           # IMPORTANT: HDF5 format with bootstrap data (for sleuth)
+└── run_info.json          # IMPORTANT: run parameters and mapping statistics
 ```
 
-### What is inside *quant.sf*?
+### What is inside *abundance.tsv*?
 
 This file contains the transcript-level quantification results:
 
-* **Name**: transcript ID  
-* **Length**: transcript length  
-* **EffectiveLength**: length adjusted for fragment distribution and bias  
-* **TPM**: within-sample normalized abundance  
-* **NumReads**: estimated number of reads assigned to that transcript  
-
+* **target_id**: transcript ID
+* **length**: transcript length
+* **eff_length**: effective length adjusted for fragment distribution
+* **est_counts**: estimated number of reads assigned to that transcript
+* **tpm**: within-sample normalized abundance (Transcripts Per Million)
 
 Example:
 
 ```text
-Name                       Length  EffectiveLength TPM             NumReads
-ENSMUST00000193812.2       1070    775.000         0.000000        0.000
-ENSMUST00000082908.3       110     110.000         0.000000        0.000
-ENSMUST00000162897.2       4153    3483.630        0.013994        1.000
-ENSMUST00000159265.2       2989    2694.000        0.000000        0.000
-ENSMUST00000070533.5       3634    3339.000        0.000000        0.000
-ENSMUST00000192857.2       480     185.000         0.000000        0.000
-ENSMUST00000195335.2       2819    2524.000        0.000000        0.000
-ENSMUST00000192336.2       2233    1938.000        0.000000        0.000
-ENSMUST00000194099.2       2309    2014.000        0.000000        0.000
+target_id                  length  eff_length  est_counts  tpm
+ENSMUST00000193812.2       1070    775.000     0.000       0.000000
+ENSMUST00000082908.3       110     110.000     0.000       0.000000
+ENSMUST00000162897.2       4153    3483.630    1.000       0.013994
+ENSMUST00000159265.2       2989    2694.000    0.000       0.000000
+ENSMUST00000070533.5       3634    3339.000    0.000       0.000000
 ```
 
 ### Key QC metrics to review
 
-Open `aux_info/meta_info.json` and check:
+Open `run_info.json` and check:
 
-- **percent_mapped**: proportion of fragments assigned to transcripts
-- **library_types**: Salmon inferred library orientation, which should match your `--libType`
-- **fragment length statistics**: mean and standard deviation of inferred fragment lengths
+- **n_processed**: total number of reads processed
+- **n_pseudoaligned**: number of reads that pseudoaligned to transcripts
+- **p_pseudoaligned**: proportion of reads pseudoaligned (mapping rate)
 
 These metrics provide a first-pass sanity check before summarizing the results to gene-level counts.
 
-
 ::::::::::::::::::::::::::::::::::::::: callout
 
-## What does Salmon count?
+## What does Kallisto count?
 
-`NumReads` is a model-based estimate, not raw counts of reads. 
-TPM values are *within-sample* normalized and should not be directly compared across samples.
+`est_counts` is a model-based estimate, not raw counts of reads. TPM values are *within-sample* normalized and should not be directly compared across samples for statistical testing.
 
 :::::::::::::::::::::::::::::::::::::::
 
 ## Step 4: Summarizing to gene-level counts (`tximport`)
 
-Most differential expression tools (DESeq2, edgeR) require **gene-level** counts.
-We convert transcript estimates → gene-level matrix.
+Most differential expression tools (DESeq2, edgeR) require **gene-level** counts. We convert transcript estimates → gene-level matrix.
 
 ### Prepare tx2gene mapping
 
-We will need a mapping file that links the transcript IDs to gene IDs. The `gencode.vM38.primary_assembly.basic.annotation.gtf` file contains this information.
+We need a mapping file that links transcript IDs to gene IDs. The GTF annotation file contains this information.
 
 ```bash
 cd $SCRATCH/rnaseq-workshop/data
@@ -311,7 +349,7 @@ awk -F'\t' '$3=="transcript" {
 }' gencode.vM38.primary_assembly.basic.annotation.gtf > tx2gene.tsv
 ```
 
-Next, we need to process this mapping in R. Load the modules and start the R session, first:
+Next, we process this mapping in R. Load the modules and start the R session:
 
 ```bash
 module load biocontainers
@@ -319,22 +357,22 @@ module load r-rnaseq
 R
 ```
 
-In the R session, read in the `tx2gene` mapping:
+In the R session, read in the `tx2gene` mapping and run tximport:
 
 ```r
-setwd(paste0(Sys.getenv("SCRATCH"),"/rnaseq-workshop"))
+setwd(paste0(Sys.getenv("SCRATCH"), "/rnaseq-workshop"))
 library(readr)
 library(tximport)
 
 tx2gene <- read_tsv("data/tx2gene.tsv", col_types = "cc", col_names = FALSE)
 samples <- read_tsv("scripts/samples.txt", col_names = FALSE)
-files <- file.path("results/salmon_quant", samples$X1, "quant.sf")
+files <- file.path("results/kallisto_quant", samples$X1, "abundance.h5")
 names(files) <- samples$X1
 
 txi <- tximport(files,
-                type = "salmon",
+                type = "kallisto",
                 tx2gene = tx2gene)
-saveRDS(txi, file = "results/salmon_quant/txi.rds")
+saveRDS(txi, file = "results/kallisto_quant/txi.rds")
 ```
 
 `txi$counts` now contains gene-level counts suitable for DESeq2.
@@ -363,67 +401,77 @@ ENSMUSG00000000049.12         0.9937          9.1869          2.3456          4.
 
 We use the default `countsFromAbundance = "no"` because `DESeqDataSetFromTximport()` (used in Episode 05b) automatically incorporates the `txi$length` matrix to correct for transcript length bias.
 
-Using `"lengthScaledTPM"` would apply length correction twice—once in tximport and again in DESeq2—potentially introducing bias. The default preserves Salmon's original estimated counts while letting DESeq2 handle length normalization correctly.
+Using `"lengthScaledTPM"` would apply length correction twice—once in tximport and again in DESeq2—potentially introducing bias. The default preserves Kallisto's original estimated counts while letting DESeq2 handle length normalization correctly.
 
 **Note:** If you plan to use edgeR instead of DESeq2, you may want `countsFromAbundance = "lengthScaledTPM"` since edgeR's `DGEList` doesn't automatically use the length matrix.
 
 :::::::::::::::::::::::::::::::::::::::
 
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Using abundance.h5 vs abundance.tsv
+
+tximport can read either format:
+
+- **abundance.h5**: HDF5 format, includes bootstrap information, faster to read
+- **abundance.tsv**: Plain text, easier to inspect manually
+
+We use the `.h5` files here because they load faster and preserve bootstrap data for potential sleuth analysis. If you didn't generate bootstraps, you can use `.tsv` files instead.
+
+:::::::::::::::::::::::::::::::::::::::
+
 ## Step 5: QC of quantification metrics
 
-Use MultiQC to verify:
+Use MultiQC to aggregate Kallisto results:
 
 ```bash
 cd $SCRATCH/rnaseq-workshop
 module load biocontainers
 module load multiqc
 
-multiqc results/salmon_quant -o results/qc_salmon
+multiqc results/kallisto_quant -o results/qc_kallisto
 ```
 
 Inspect:
 
-* mapping rates
+* pseudoalignment rates
 * fragment length distributions
-* library type consistency
+* consistency across samples
 
 ::::::::::::::::::::::::::::::::::::::: challenge
 
-## Exercise: examine your Salmon outputs
+## Exercise: examine your Kallisto outputs
 
-Using your MultiQC summary and Salmon fragment length plots:
+Using your MultiQC summary and Kallisto outputs:
 
-1. What is the percent aligned for each sample, and are any samples outliers?
-2. Is the inferred library type consistent across samples?
+1. What is the percent pseudoaligned for each sample, and are any samples outliers?
+2. Are the pseudoalignment rates consistent across samples?
 3. How similar are the fragment length distributions across samples?
-4. Does the fragment length curve show unusual peaks or multimodality?
-5. Do CFR and M bias values suggest any strand or positional bias?
+4. Check `run_info.json` for one sample - what parameters were used?
 
-::::::::::::::::::::::::::::::::::: solution
+::::::::::::::::::::::::::::::::::::::: solution
 
 Example interpretation for this dataset:
 
-1. All samples show about 89 to 91 percent aligned. No sample is an outlier and the range is narrow.
-2. The inferred library type is consistent across samples and matches an unstranded protocol.
-3. Fragment length distributions are nearly identical. All samples peak around the same length and have similar spread.
-4. The fragment length curves are smooth and unimodal. There are no secondary peaks or irregular shoulders.
-5. CFR is 100 percent for all samples and M bias is about 0.5, indicating balanced, strand-neutral coverage without detectable end bias.
+1. All samples show about 85 to 90 percent pseudoaligned. No sample is an outlier and the range is narrow.
+2. Pseudoalignment rates are consistent across all samples.
+3. Fragment length distributions should be nearly identical across samples.
+4. The `run_info.json` should show the index path, number of bootstraps, and thread count used.
 
 :::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::
 
-
 ## Summary
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
-* Salmon performs fast, alignment-free transcript quantification.
-* A transcriptome FASTA is required for building the index.
-* `salmon quant` uses FASTQ files directly with bias correction.
+* Kallisto performs fast, alignment-free transcript quantification.
+* Salmon is used for strand detection before running Kallisto.
+* A transcriptome FASTA is required for building the Kallisto index.
+* `kallisto quant` uses FASTQ files directly for pseudo-alignment.
 * Transcript-level outputs include TPM and estimated counts.
-* `tximport` converts transcript estimates to gene-level counts.
-* Gene-level counts from Salmon are suitable for DESeq2.
+* `tximport` converts transcript estimates to gene-level counts with `type = "kallisto"`.
+* Gene-level counts from Kallisto are suitable for DESeq2.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
