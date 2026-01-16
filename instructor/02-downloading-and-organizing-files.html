@@ -250,7 +250,7 @@ radiation</a></li>
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="04b-transcript-based-quantification.html">5. B. Transcript-based quantification (Salmon)</a>
+        <a href="04b-transcript-based-quantification.html">5. B. Transcript-based quantification (Kallisto)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -268,7 +268,7 @@ radiation</a></li>
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="05b-deseq2-expression-analyses-kallisto.html">7. B. Differential expression using DESeq2 (Salmon/Kallisto pathway)</a>
+        <a href="05b-deseq2-expression-analyses-kallisto.html">7. B. Differential expression using DESeq2 (Kallisto pathway)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -341,7 +341,7 @@ radiation</a></li>
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Downloading and organizing files</h1>
-        <p>Last updated on 2026-01-15 |
+        <p>Last updated on 2026-01-16 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/02-downloading-and-organizing-files.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -444,7 +444,7 @@ radiation<a class="anchor" aria-label="anchor" href="#the-workshop-dataset-p53-m
 <hr class="half-width"><p>For this workshop, we use a subset of a publicly available dataset
 (GEO accession <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176" class="external-link">GSE71176</a>)
 that investigates the transcriptional response to ionizing radiation
-(IR) in mouse B cells. The original study by <a href="https://doi.org/10.1016/j.celrep.2015.02.068" class="external-link">Tonelli et
+(IR) in mouse B cells. The original study by <a href="https://doi.org/10.18632/oncotarget.5232" class="external-link">Tonelli et
 al. (2015)</a> examined how the tumor suppressor p53 (encoded by
 <em>Trp53</em>) regulates gene expression following DNA damage.</p>
 <div class="section level3">
@@ -762,18 +762,31 @@ containing only the transcript IDs.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="raw-reads">Raw reads<a class="anchor" aria-label="anchor" href="#raw-reads"></a></h2>
-<hr class="half-width"><blockquote>
-<p><strong>Study:</strong> Genome-wide identification of p53-regulated
-genes in response to ionizing radiation <strong>Organism:</strong> Mus
-musculus (C57BL/6) <strong>Cell type:</strong> Primary B cells from
-spleen <strong>Design:</strong> Wild-type mock vs Wild-type IR-treated
-(n=4 per group) <strong>Treatment:</strong> 7 Gy ionizing radiation,
-harvested 4 hours post-exposure <strong>Sequencing:</strong> Illumina
-HiSeq 2000, paired-end 51bp <strong>GEO:</strong> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176" class="external-link">GSE71176</a>
-<strong>Reference:</strong> <a href="https://doi.org/10.1016/j.celrep.2015.02.068" class="external-link">Tonelli et
-al. (2015) Cell Reports</a></p>
-</blockquote>
-<figure style="text-align: center"><img src="../fig/01_fq2counts/geo-db.png" alt="FASTQ files from GEO" class="figure mx-auto d-block"><figcaption>
+<hr class="half-width"><ul><li>
+<strong>Study:</strong> Genome-wide analysis of p53 transcriptional
+programs in B cells upon exposure to genotoxic stress <em>in
+vivo</em><br></li>
+<li>
+<strong>Organism:</strong> Mus musculus (C57BL/6)</li>
+<li>
+<strong>Cell type:</strong> Primary B cells from spleen</li>
+<li>
+<strong>Design:</strong> Wild-type mock vs Wild-type IR-treated (n=4
+per group)</li>
+<li>
+<strong>Treatment:</strong> 7 Gy ionizing radiation, harvested 4
+hours post-exposure</li>
+<li>
+<strong>Sequencing:</strong> Illumina HiSeq 2000, paired-end
+51bp</li>
+<li>
+<strong>GEO:</strong> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176" class="external-link">GSE71176</a>
+</li>
+<li>
+<strong>Reference:</strong> Tonelli et al. <em>Oncotarget</em> 2015
+Sep 22;6(28):24611-26. <a href="https://doi.org/10.18632/oncotarget.5232" class="external-link">PMID: 26372730</a>
+</li>
+</ul><figure style="text-align: center"><img src="../fig/01_fq2counts/geo-db.png" alt="FASTQ files from GEO" class="figure mx-auto d-block"><figcaption>
 FASTQ files from GEO
 </figcaption></figure><div id="where-do-you-find-fastq-files" class="callout challenge">
 <div class="callout-square">
@@ -798,8 +811,9 @@ of sequencing runs?</p>
 <div class="accordion-body">
 <p>Navigate to the SRA page for the BioProject and use <strong>Run
 Selector</strong> to list runs.<br>
-On the Run Selector page, click <strong>Accession List</strong> to
-download all SRR accession IDs.</p>
+On the Run Selector page, select the accessions (SRR2121778-81,
+SRR2121786-89), toggle the “selected” and click <strong>Accession
+List</strong> to download the selected SRR accession IDs.</p>
 <figure style="text-align: center"><img src="../fig/01_fq2counts/srr-runs.png" alt="FASTQ files from SRA Run Selector" class="figure mx-auto d-block"><figcaption>
 FASTQ files from SRA Run Selector
 </figcaption></figure></div>
@@ -808,6 +822,9 @@ FASTQ files from SRA Run Selector
 </div>
 <div class="section level3">
 <h3 id="download-fastq-files-with-sra-toolkit">Download FASTQ files with SRA Toolkit<a class="anchor" aria-label="anchor" href="#download-fastq-files-with-sra-toolkit"></a></h3>
+<p>[DO NOT RUN THIS COMMAND DURING THE WORKSHOP - IT TAKES TOO LONG TO
+COMPLETE]. You already copied the pre-downloaded data to your scratch
+space.</p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -819,11 +836,28 @@ FASTQ files from SRA Run Selector
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>   <span class="ex">fasterq-dump</span> <span class="at">--threads</span> 4 <span class="at">--progress</span> <span class="va">$SRR</span><span class="kw">;</span></span>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>   <span class="fu">gzip</span> <span class="va">${SRR}</span>_1.fastq</span>
 <span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>   <span class="fu">gzip</span> <span class="va">${SRR}</span>_2.fastq</span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="cf">done</span><span class="op">&lt;</span>SRR_Acc_List.txt</span></code></pre>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="cf">done</span><span class="op">&lt;</span>SRR_Acc_List.txt</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co"># rename files to meaningful names</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co"># WT B cells - mock</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="fu">mv</span> SRR2121778_1.fastq.gz WT_Bcell_mock_rep1_R1.fastq.gz</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="fu">mv</span> SRR2121778_2.fastq.gz WT_Bcell_mock_rep1_R2.fastq.gz</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="fu">mv</span> SRR2121779_1.fastq.gz WT_Bcell_mock_rep2_R1.fastq.gz</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="fu">mv</span> SRR2121779_2.fastq.gz WT_Bcell_mock_rep2_R2.fastq.gz</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="fu">mv</span> SRR2121780_1.fastq.gz WT_Bcell_mock_rep3_R1.fastq.gz</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="fu">mv</span> SRR2121780_2.fastq.gz WT_Bcell_mock_rep3_R2.fastq.gz</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="fu">mv</span> SRR2121781_1.fastq.gz WT_Bcell_mock_rep4_R1.fastq.gz</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="fu">mv</span> SRR2121781_2.fastq.gz WT_Bcell_mock_rep4_R2.fastq.gz</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co"># WT B cells - IR</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="fu">mv</span> SRR2121786_1.fastq.gz WT_Bcell_IR_rep1_R1.fastq.gz</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="fu">mv</span> SRR2121786_2.fastq.gz WT_Bcell_IR_rep1_R2.fastq.gz</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="fu">mv</span> SRR2121787_1.fastq.gz WT_Bcell_IR_rep2_R1.fastq.gz</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="fu">mv</span> SRR2121787_2.fastq.gz WT_Bcell_IR_rep2_R2.fastq.gz</span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="fu">mv</span> SRR2121788_1.fastq.gz WT_Bcell_IR_rep3_R1.fastq.gz</span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="fu">mv</span> SRR2121788_2.fastq.gz WT_Bcell_IR_rep3_R2.fastq.gz</span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="fu">mv</span> SRR2121789_1.fastq.gz WT_Bcell_IR_rep4_R1.fastq.gz</span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="fu">mv</span> SRR2121789_2.fastq.gz WT_Bcell_IR_rep4_R2.fastq.gz</span></code></pre>
 </div>
-<p>Since downloading may take a long time, we provide a pre-downloaded
-copy of all FASTQ files. The directory, after downloading, should look
-like this:</p>
+<p>The directory, after downloading, should look like this:</p>
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -937,8 +971,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/02-downloading-and-organizing-files.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/02-downloading-and-organizing-files.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-01-15",
-  "datePublished": "2026-01-15"
+  "dateModified": "2026-01-16",
+  "datePublished": "2026-01-16"
 }
 
   </script><script>

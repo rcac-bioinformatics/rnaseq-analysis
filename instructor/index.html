@@ -237,7 +237,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="04b-transcript-based-quantification.html">5. B. Transcript-based quantification (Salmon)</a>
+        <a href="04b-transcript-based-quantification.html">5. B. Transcript-based quantification (Kallisto)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -255,7 +255,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="05b-deseq2-expression-analyses-kallisto.html">7. B. Differential expression using DESeq2 (Salmon/Kallisto pathway)</a>
+        <a href="05b-deseq2-expression-analyses-kallisto.html">7. B. Differential expression using DESeq2 (Kallisto pathway)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -387,13 +387,13 @@ RCAC clusters with SLURM?
 </td>
 <td>
  5. <a href="04b-transcript-based-quantification.html">B.
-Transcript-based quantification (Salmon)</a>
+Transcript-based quantification (Kallisto)</a>
 </td>
 <td>
 How do we quantify expression without genome alignment?<br>What inputs
-does Salmon require?<br>How do we run Salmon for paired-end RNA-seq
+does Kallisto require?<br>How do we run Kallisto for paired-end RNA-seq
 data?<br>How do we interpret transcript-level outputs (TPM,
-NumReads)?<br>How do we summarize transcripts to gene-level counts
+est_counts)?<br>How do we summarize transcripts to gene-level counts
 using tximport?
 </td>
 </tr><tr><td>
@@ -415,11 +415,11 @@ with annotation and expression values.
 </td>
 <td>
  7. <a href="05b-deseq2-expression-analyses-kallisto.html">B.
-Differential expression using DESeq2 (Salmon/Kallisto pathway)</a>
+Differential expression using DESeq2 (Kallisto pathway)</a>
 </td>
 <td>
-How do we import transcript-level quantification from Salmon or Kallisto
-into DESeq2?<br>What exploratory analyses should we perform before
+How do we import transcript-level quantification from Kallisto into
+DESeq2?<br>What exploratory analyses should we perform before
 differential expression testing?<br>How do we perform differential
 expression analysis with DESeq2 using tximport data?<br>How do we
 visualize and interpret DE results from transcript-based
@@ -565,7 +565,7 @@ configure passwordless access.</p>
   Windows
   </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Open <strong>PowerShell</strong> or <strong>Git Bash</strong> and
 run:</p>
@@ -586,7 +586,7 @@ run:</p>
   macOS
   </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Open <strong>Terminal</strong> and run:</p>
 <div class="codewrapper sourceCode" id="cb5">
@@ -606,7 +606,7 @@ run:</p>
   Linux
   </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>Open a terminal and run:</p>
 <div class="codewrapper sourceCode" id="cb6">
@@ -674,8 +674,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/index.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/index.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-01-15",
-  "datePublished": "2026-01-15"
+  "dateModified": "2026-01-16",
+  "datePublished": "2026-01-16"
 }
 
   </script><script>

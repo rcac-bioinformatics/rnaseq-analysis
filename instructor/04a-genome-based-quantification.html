@@ -251,7 +251,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="04b-transcript-based-quantification.html">5. B. Transcript-based quantification (Salmon)</a>
+        <a href="04b-transcript-based-quantification.html">5. B. Transcript-based quantification (Kallisto)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -269,7 +269,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="05b-deseq2-expression-analyses-kallisto.html">7. B. Differential expression using DESeq2 (Salmon/Kallisto pathway)</a>
+        <a href="05b-deseq2-expression-analyses-kallisto.html">7. B. Differential expression using DESeq2 (Kallisto pathway)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -342,7 +342,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>A. Genome-based quantification (STAR + featureCounts)</h1>
-        <p>Last updated on 2026-01-15 |
+        <p>Last updated on 2026-01-16 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04a-genome-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -465,19 +465,19 @@ library types.</p>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="dt">"read_files"</span><span class="fu">:</span> <span class="st">"[ data/WT_Bcell_mock_rep1_R1.fastq.gz, data/WT_Bcell_mock_rep1_R2.fastq.gz]"</span><span class="fu">,</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="dt">"expected_format"</span><span class="fu">:</span> <span class="st">"IU"</span><span class="fu">,</span></span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="dt">"compatible_fragment_ratio"</span><span class="fu">:</span> <span class="fl">1.0</span><span class="fu">,</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="dt">"num_compatible_fragments"</span><span class="fu">:</span> <span class="dv">21088696</span><span class="fu">,</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="dt">"num_assigned_fragments"</span><span class="fu">:</span> <span class="dv">21088696</span><span class="fu">,</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="dt">"num_frags_with_concordant_consistent_mappings"</span><span class="fu">:</span> <span class="dv">19116702</span><span class="fu">,</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="dt">"num_frags_with_inconsistent_or_orphan_mappings"</span><span class="fu">:</span> <span class="dv">2510542</span><span class="fu">,</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="dt">"strand_mapping_bias"</span><span class="fu">:</span> <span class="dv">0</span><span class="er">.</span><span class="dv">5117980078362889</span><span class="fu">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="dt">"num_compatible_fragments"</span><span class="fu">:</span> <span class="dv">82046534</span><span class="fu">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="dt">"num_assigned_fragments"</span><span class="fu">:</span> <span class="dv">82046534</span><span class="fu">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="dt">"num_frags_with_concordant_consistent_mappings"</span><span class="fu">:</span> <span class="dv">71639414</span><span class="fu">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="dt">"num_frags_with_inconsistent_or_orphan_mappings"</span><span class="fu">:</span> <span class="dv">15601146</span><span class="fu">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="dt">"strand_mapping_bias"</span><span class="fu">:</span> <span class="dv">0</span><span class="er">.</span><span class="dv">5080563891826363</span><span class="fu">,</span></span>
 <span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="dt">"MSF"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
 <span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="dt">"OSF"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>    <span class="dt">"ISF"</span><span class="fu">:</span> <span class="dv">9783890</span><span class="fu">,</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>    <span class="dt">"ISF"</span><span class="fu">:</span> <span class="dv">36396862</span><span class="fu">,</span></span>
 <span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>    <span class="dt">"MSR"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
 <span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    <span class="dt">"OSR"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="dt">"ISR"</span><span class="fu">:</span> <span class="dv">9332812</span><span class="fu">,</span></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>    <span class="dt">"SF"</span><span class="fu">:</span> <span class="dv">1234245</span><span class="fu">,</span></span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>    <span class="dt">"SR"</span><span class="fu">:</span> <span class="dv">1276297</span><span class="fu">,</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="dt">"ISR"</span><span class="fu">:</span> <span class="dv">35242552</span><span class="fu">,</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>    <span class="dt">"SF"</span><span class="fu">:</span> <span class="dv">7863036</span><span class="fu">,</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>    <span class="dt">"SR"</span><span class="fu">:</span> <span class="dv">7738110</span><span class="fu">,</span></span>
 <span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>    <span class="dt">"MU"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
 <span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>    <span class="dt">"OU"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
 <span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>    <span class="dt">"IU"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
@@ -494,14 +494,14 @@ library types.</p>
 Salmon’s conclusion. “I” means <strong>Inward</strong> (correct for
 paired-end reads) and “U” means <strong>Unstranded</strong>.</li>
 <li>
-<strong><code>"strand_mapping_bias": 0.512</code></strong>: This is
+<strong><code>"strand_mapping_bias": 0.508</code></strong>: This is
 the key evidence. A value near 0.5 (50%) indicates that reads mapped
 equally to both the sense and antisense strands, the definitive sign of
 an <strong>unstranded</strong> library.</li>
 <li>
 <strong><code>"ISF"</code></strong> and
 <strong><code>"ISR"</code></strong>: These are the counts for
-Inward-Sense-Forward (9.78M) and Inward-Sense-Reverse (9.33M) fragments.
+Inward-Sense-Forward (36.4M) and Inward-Sense-Reverse (35.2M) fragments.
 Because these values are almost equal, they confirm the ~50/50 split
 seen in the strand bias.</li>
 </ul></blockquote>
@@ -742,7 +742,7 @@ sample names</p>
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/data</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span>_1.fastq.gz <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/_1.fastq.gz//'</span> <span class="op">&gt;</span> <span class="va">${SCRATCH}</span>/rnaseq-workshop/scripts/samples.txt</span></code></pre>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span>_R1.fastq.gz <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/_R1.fastq.gz//'</span> <span class="op">&gt;</span> <span class="va">${SCRATCH}</span>/rnaseq-workshop/scripts/samples.txt</span></code></pre>
 </div>
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -770,8 +770,8 @@ sample names</p>
 <span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a></span>
 <span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="va">SAMPLE</span><span class="op">=</span><span class="va">$(</span><span class="fu">sed</span> <span class="at">-n</span> <span class="st">"</span><span class="va">${SLURM_ARRAY_TASK_ID}</span><span class="st">p"</span> samples.txt<span class="va">)</span></span>
 <span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a></span>
-<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="va">R1</span><span class="op">=</span><span class="va">${FASTQ_DIR}</span>/<span class="va">${SAMPLE}</span>_1.fastq.gz</span>
-<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="va">R2</span><span class="op">=</span><span class="va">${FASTQ_DIR}</span>/<span class="va">${SAMPLE}</span>_2.fastq.gz</span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="va">R1</span><span class="op">=</span><span class="va">${FASTQ_DIR}</span>/<span class="va">${SAMPLE}</span>_R1.fastq.gz</span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="va">R2</span><span class="op">=</span><span class="va">${FASTQ_DIR}</span>/<span class="va">${SAMPLE}</span>_R2.fastq.gz</span>
 <span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a></span>
 <span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="ex">STAR</span> <span class="dt">\</span></span>
 <span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a>    <span class="at">--runThreadN</span> <span class="va">${SLURM_CPUS_ON_NODE}</span> <span class="dt">\</span></span>
@@ -1127,8 +1127,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/04a-genome-based-quantification.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/04a-genome-based-quantification.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-01-15",
-  "datePublished": "2026-01-15"
+  "dateModified": "2026-01-16",
+  "datePublished": "2026-01-16"
 }
 
   </script><script>

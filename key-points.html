@@ -283,7 +283,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="04b-transcript-based-quantification.html">5. B. Transcript-based quantification (Salmon)</a>
+        <a href="04b-transcript-based-quantification.html">5. B. Transcript-based quantification (Kallisto)</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -307,7 +307,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="05b-deseq2-expression-analyses-kallisto.html">7. B. Differential expression using DESeq2 (Salmon/Kallisto pathway)</a>
+        <a href="05b-deseq2-expression-analyses-kallisto.html">7. B. Differential expression using DESeq2 (Kallisto pathway)</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -442,19 +442,22 @@ differential expression.</li>
 <li>Exons are counted and summed per gene.</li>
 <li>The output is a simple matrix for downstream statistical
 analysis.</li>
-</ul></section><section id="04b-transcript-based-quantification"><h2 class="section-heading"><a href="04b-transcript-based-quantification.html">B. Transcript-based quantification (Salmon)</a></h2>
+</ul></section><section id="04b-transcript-based-quantification"><h2 class="section-heading"><a href="04b-transcript-based-quantification.html">B. Transcript-based quantification (Kallisto)</a></h2>
 <hr class="half-width">
 <ul>
-<li>Salmon performs fast, alignment-free transcript quantification.</li>
-<li>A transcriptome FASTA is required for building the index.</li>
+<li>Kallisto performs fast, alignment-free transcript
+quantification.</li>
+<li>Salmon is used for strand detection before running Kallisto.</li>
+<li>A transcriptome FASTA is required for building the Kallisto
+index.</li>
 <li>
-<code>salmon quant</code> uses FASTQ files directly with bias
-correction.</li>
+<code>kallisto quant</code> uses FASTQ files directly for
+pseudo-alignment.</li>
 <li>Transcript-level outputs include TPM and estimated counts.</li>
 <li>
 <code>tximport</code> converts transcript estimates to gene-level
-counts.</li>
-<li>Gene-level counts from Salmon are suitable for DESeq2.</li>
+counts with <code>type = "kallisto"</code>.</li>
+<li>Gene-level counts from Kallisto are suitable for DESeq2.</li>
 </ul></section><section id="05-deseq2-expression-analyses"><h2 class="section-heading"><a href="05-deseq2-expression-analyses.html">Gene-level QC and differential expression (DESeq2)</a></h2>
 <hr class="half-width">
 <ul>
@@ -470,7 +473,7 @@ expression.</li>
 a useful final table.</li>
 <li>Volcano plots summarize differential expression using fold change
 and adjusted p values.</li>
-</ul></section><section id="05b-deseq2-expression-analyses-kallisto"><h2 class="section-heading"><a href="05b-deseq2-expression-analyses-kallisto.html">B. Differential expression using DESeq2 (Salmon/Kallisto pathway)</a></h2>
+</ul></section><section id="05b-deseq2-expression-analyses-kallisto"><h2 class="section-heading"><a href="05b-deseq2-expression-analyses-kallisto.html">B. Differential expression using DESeq2 (Kallisto pathway)</a></h2>
 <hr class="half-width">
 <ul>
 <li>Salmon/Kallisto output is imported via <code>tximport</code> and
@@ -560,8 +563,8 @@ reproducibility.</li>
   "url": "https://rcac_rnaseq_workshop.github.io/NA/key-points.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/key-points.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-01-15",
-  "datePublished": "2026-01-15"
+  "dateModified": "2026-01-16",
+  "datePublished": "2026-01-16"
 }
 
   </script><script>
