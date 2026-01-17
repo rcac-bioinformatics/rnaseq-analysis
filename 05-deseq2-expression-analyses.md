@@ -107,8 +107,9 @@ library(dplyr)
 library(ComplexHeatmap)
 library(ggrepel)
 library(vsn)
-# Modify the path as needed
-setwd("/scratch/negishi/aseethar/rnaseq-workshop")
+# Construct the path dynamically
+work_dir <- file.path("/scratch/negishi", Sys.getenv("USER"), "rnaseq-workshop")
+setwd(work_dir)
 
 countsFile <- "results/counts/gene_counts_clean.txt"
 # prepare this file first!
@@ -242,6 +243,13 @@ cts_annot <- cts_tbl %>%
 sum(is.na(cts_annot$gene_biotype))
 ```
 
+Output:
+
+```text
+[1] 0
+```
+
+
 Joining annotation allows us to move beyond raw Ensembl IDs.
 This step attaches gene symbols, biotypes, and descriptions so that later plots and tables are interpretable.
 At this point the dataset is still large and includes many noncoding genes, pseudogenes, and biotypes we won't analyze further.
@@ -253,6 +261,7 @@ Summarize gene biotypes:
 
 ```r
 biotype_df <- cts_annot %>%
+  filter(rowSums(select(., starts_with("WT_Bcell"))) > 10) %>%
   dplyr::count(gene_biotype, name = "n") %>%
   arrange(desc(n))
 
@@ -263,7 +272,7 @@ ggplot(biotype_df, aes(x = reorder(gene_biotype, n), y = n)) +
   labs(
     x = "Gene biotype",
     y = "Number of genes",
-    title = "Distribution of gene biotypes in annotation"
+    title = "Distribution of expressed gene biotypes (Total Counts > 10)"
   )
 ```
 
@@ -298,7 +307,7 @@ cts_coding <- cts_pc %>%
 dim(cts_coding)
 ```
 ```
-[1] 15839     8
+[1] 11330     8
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
@@ -635,13 +644,13 @@ summary(res)
 ```
 
 ```txt
-out of 15839 with nonzero total read count
+out of 11330 with nonzero total read count
 adjusted p-value < 0.1
-LFC > 0 (up)       : 3195, 20%
-LFC < 0 (down)     : 3398, 21%
-outliers [1]       : 362, 2.3%
-low counts [2]     : 308, 1.9%
-(mean count < 1)
+LFC > 0 (up)       : 3317, 29%
+LFC < 0 (down)     : 3260, 29%
+outliers [1]       : 0, 0%
+low counts [2]     : 0, 0%
+(mean count < 7)
 [1] see 'cooksCutoff' argument of ?results
 [2] see 'independentFiltering' argument of ?results
 ```
@@ -653,17 +662,17 @@ head(res[order(res$pvalue), ])
 ```
 
 ```text
-log2 fold change (MLE): condition WT_IR vs WT_mock
+log2 fold change (MLE): condition WT_IR vs WT_mock 
 Wald test p-value: condition WT_IR vs WT_mock 
 DataFrame with 6 rows and 6 columns
-       baseMean log2FoldChange     lfcSE      stat       pvalue         padj
-      <numeric>      <numeric> <numeric> <numeric>    <numeric>    <numeric>
-18512   4645.33       -5.17453 0.1335387  -38.7493  0.00000e+00  0.00000e+00
-940     5041.68       -2.88015 0.1039939  -27.6953 7.94364e-169 6.02485e-165
-13789  14362.27       -2.40229 0.0951377  -25.2506 1.11514e-140 5.63852e-137
-16183  42766.77       -4.68585 0.1923780  -24.3575 4.82857e-131 1.83111e-127
-18278   7055.06       -3.48409 0.1535305  -22.6932 5.23170e-114 1.58719e-110
-270     1469.83       -2.87951 0.1298316  -22.1788 5.50606e-109 1.39202e-105
+                       baseMean log2FoldChange     lfcSE      stat       pvalue         padj
+                      <numeric>      <numeric> <numeric> <numeric>    <numeric>    <numeric>
+ENSMUSG00000026581.15  2412.406       -2.80863 0.0812517  -34.5671 7.89898e-262 8.94955e-258
+ENSMUSG00000021668.16   869.712        3.75461 0.1109288   33.8470 4.01308e-251 2.27341e-247
+ENSMUSG00000075122.6    614.418        4.47065 0.1336974   33.4386 3.77523e-245 1.42578e-241
+ENSMUSG00000004085.15   833.506        4.21081 0.1293034   32.5654 1.26916e-232 3.59488e-229
+ENSMUSG00000020184.16  1619.577        2.82923 0.0906311   31.2170 6.26193e-214 1.41895e-210
+ENSMUSG00000072825.13   724.296        4.73072 0.1518464   31.1546 4.39181e-213 8.29321e-210
 ```
 
 Each row represents one gene.
@@ -684,7 +693,7 @@ resultsNames(dds)
 ```
 
 ```
-[1] "Intercept"                              "condition_WT_IR_vs_WT_mock"
+[1] "Intercept"                  "condition_WT_mock_vs_WT_IR"
 ```
 
 Apply shrinkage using `apeglm` (recommended for standard two-group comparisons):
@@ -692,12 +701,25 @@ Apply shrinkage using `apeglm` (recommended for standard two-group comparisons):
 ```r
 res_shrunk <- lfcShrink(
     dds,
-    coef = "condition_WT_IR_vs_WT_mock",
+    coef = "condition_WT_mock_vs_WT_IR",
     type = "apeglm"
 )
 
 summary(res_shrunk)
 ```
+
+```text
+out of 11330 with nonzero total read count
+adjusted p-value < 0.1
+LFC > 0 (up)       : 3260, 29%
+LFC < 0 (down)     : 3317, 29%
+outliers [1]       : 0, 0%
+low counts [2]     : 0, 0%
+(mean count < 7)
+[1] see 'cooksCutoff' argument of ?results
+[2] see 'independentFiltering' argument of ?results
+```
+
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
@@ -739,11 +761,13 @@ summary_table <- tibble(
 print(summary_table)
 ```
 
+Output:
+
 ```text
 # A tibble: 1 × 4
   total_genes   sig    up  down
         <int> <int> <int> <int>
-1       15839  5658  2180  2363
+1       11330  5967  1802  1795
 ```
 
 
@@ -883,6 +907,13 @@ readr::write_tsv(
   "results/deseq2/DESeq2_results_sig.tsv"
 )
 ```
+
+Save the DESeq2 object for downstream analysis:
+
+```r
+saveRDS(dds, "results/deseq2_results/dds_featurecounts.rds")
+```
+
 
 ::::::::::::::::::::::::::::::::::::::: challenge
 

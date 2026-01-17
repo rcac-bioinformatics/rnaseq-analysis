@@ -97,7 +97,7 @@ Start your RStudio session via Open OnDemand as described in Episode 05, then lo
 
 ```r
 library(DESeq2)
-library(tximport)
+library(tximportData)
 library(ggplot2)
 library(reshape2)
 library(pheatmap)
@@ -105,8 +105,9 @@ library(RColorBrewer)
 library(ggrepel)
 library(readr)
 library(dplyr)
-
-setwd(paste0(Sys.getenv("SCRATCH"), "/rnaseq-workshop"))
+# Construct the path dynamically
+work_dir <- file.path("/scratch/negishi", Sys.getenv("USER"), "rnaseq-workshop")
+setwd(work_dir)
 ```
 
 Load the tximport object created in Episode 04b:
@@ -122,20 +123,28 @@ names(txi)
 ```
 
 ```
-[1] "abundance"           "counts"              "length"
-[4] "countsFromAbundance"
+[1] "abundance"           "counts"              "infReps"             "length"              "countsFromAbundance"
 ```
 
 ```r
 head(txi$counts)
 ```
 
-```
-                      WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4
-ENSMUSG00000000001.5          473.4426         553.7849         826.9969         676.9101
-ENSMUSG00000000003.16           0.0000           0.0000           0.0000           0.0000
-ENSMUSG00000000028.16          40.5783          33.9665          55.3055          97.8451
-ENSMUSG00000000031.20           0.0000           0.0000           0.0000           0.0000
+```text
+                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4 WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3
+ENSMUSG00000000001.5         387.39815         329.4356     737.97311964        654.17550           687.1189          620.35065          661.35411
+ENSMUSG00000000003.16          0.00000           1.0000       0.00000000          0.00000             0.0000            0.00000            0.00000
+ENSMUSG00000000028.16         32.81579          20.0000      36.63144821         29.71743            53.5750           36.92104           39.00000
+ENSMUSG00000000031.20          0.00000           0.0000       0.09733145          0.00000             0.0000            0.00000            0.00000
+ENSMUSG00000000037.18          2.00000           3.0000       1.28018005          8.00000             1.0000            0.00000            1.58711
+ENSMUSG00000000049.12          0.00000           0.0000       0.00000000          0.00000             0.0000            0.00000            0.00000
+                      WT_Bcell_mock_rep4
+ENSMUSG00000000001.5            704.8851
+ENSMUSG00000000003.16             0.0000
+ENSMUSG00000000028.16            36.0000
+ENSMUSG00000000031.20             0.0000
+ENSMUSG00000000037.18             0.0000
+ENSMUSG00000000049.12             0.0000
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
@@ -163,20 +172,20 @@ coldata <- read.csv(
     stringsAsFactors = TRUE
 )
 coldata$condition <- as.factor(coldata$condition)
-
+coldata <- coldata[colnames(txi$counts), , drop = FALSE]
 coldata
 ```
 
 ```
                    condition
+WT_Bcell_IR_rep1       WT_IR
+WT_Bcell_IR_rep2       WT_IR
+WT_Bcell_IR_rep3       WT_IR
+WT_Bcell_IR_rep4       WT_IR
 WT_Bcell_mock_rep1   WT_mock
 WT_Bcell_mock_rep2   WT_mock
 WT_Bcell_mock_rep3   WT_mock
 WT_Bcell_mock_rep4   WT_mock
-WT_Bcell_IR_rep1     WT_IR
-WT_Bcell_IR_rep2     WT_IR
-WT_Bcell_IR_rep3     WT_IR
-WT_Bcell_IR_rep4     WT_IR
 ```
 
 Verify that sample names match between tximport and metadata:
@@ -252,14 +261,25 @@ Estimate size factors:
 
 ```r
 dds <- estimateSizeFactors(dds)
-sizeFactors(dds)
+head(normalizationFactors(dds))
+
 ```
 
 ```
-WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4
-         0.7232591          0.8443123          1.2021389          1.1142267
-  WT_Bcell_IR_rep1   WT_Bcell_IR_rep2   WT_Bcell_IR_rep3   WT_Bcell_IR_rep4
-         1.0516283          1.1245413          0.9832145          1.0567892
+                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4 WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3
+ENSMUSG00000000001.5         0.8578693        0.8520842         1.099577        1.0524525           1.059461          0.9946634          0.9552297
+ENSMUSG00000000028.16        0.9455555        0.7479666         1.149805        0.9882356           1.071439          1.0191038          0.9154327
+ENSMUSG00000000056.8         0.8580737        0.8528464         1.101744        1.0540656           1.058546          0.9930345          0.9540278
+ENSMUSG00000000078.8         0.8580503        0.8527592         1.101496        1.0538811           1.058650          0.9932207          0.9541651
+ENSMUSG00000000085.17        0.7941016        0.7697798         1.199288        1.0181546           1.163680          0.9580967          1.0675296
+ENSMUSG00000000088.8         0.8537054        0.8364591         1.055812        1.0199231           1.078562          1.0286198          0.9803416
+                      WT_Bcell_mock_rep4
+ENSMUSG00000000001.5            1.174355
+ENSMUSG00000000028.16           1.244899
+ENSMUSG00000000056.8            1.173333
+ENSMUSG00000000078.8            1.173450
+ENSMUSG00000000085.17           1.125634
+ENSMUSG00000000088.8            1.195682
 ```
 
 ## Step 3: Exploratory data analysis
@@ -286,6 +306,13 @@ ggplot(counts_melted, aes(x = sample, y = log10_count, fill = sample)) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+<div class="figure" style="text-align: center">
+<img src="fig/05_deseq/raw-count-k.png" alt="Raw count distributions"  />
+<p class="caption">Raw count distributions</p>
+</div>
+
+
+
 Density plot of raw counts:
 
 ```r
@@ -298,6 +325,13 @@ ggplot(counts_melted, aes(x = log10_count, fill = sample)) +
         title = "Count density distributions"
     )
 ```
+
+<div class="figure" style="text-align: center">
+<img src="fig/05_deseq/count-density-k.png" alt="Count density distributions"  />
+<p class="caption">Count density distributions</p>
+</div>
+
+
 
 ### Variance stabilizing transformation
 
@@ -335,6 +369,13 @@ pheatmap(
 )
 ```
 
+<div class="figure" style="text-align: center">
+<img src="fig/05_deseq/pheatmap-k.png" alt="Sample distance heatmap"  />
+<p class="caption">Sample distance heatmap</p>
+</div>
+
+
+
 The distance heatmap shows how similar samples are to each other. Samples from the same condition should cluster together.
 
 ### PCA plot
@@ -351,6 +392,11 @@ ggplot(pcaData, aes(PC1, PC2, color = condition)) +
     theme_bw() +
     ggtitle("PCA of Kallisto-quantified samples")
 ```
+
+<div class="figure" style="text-align: center">
+<img src="fig/05_deseq/pcaplot-k.png" alt="PCA plot of Kallisto-quantified samples"  />
+<p class="caption">PCA plot of Kallisto-quantified samples</p>
+</div>
 
 ::::::::::::::::::::::::::::::::::::::: challenge
 
@@ -397,6 +443,13 @@ Inspect dispersion estimates:
 plotDispEsts(dds)
 ```
 
+<div class="figure" style="text-align: center">
+<img src="fig/05_deseq/plotdispests-k.png" alt="Volcano plot of differential expression results"  />
+<p class="caption">Volcano plot of differential expression results</p>
+</div>
+
+
+
 ::::::::::::::::::::::::::::::::::::::: callout
 
 ## Interpreting the dispersion plot
@@ -414,20 +467,22 @@ Extract results for the contrast of interest:
 ```r
 res <- results(
     dds,
-    contrast = c("condition", "WT_IR", "WT_mock")
+    contrast = c("condition", "WT_mock", "WT_IR")
 )
 
 summary(res)
 ```
 
 ```
-out of 21847 with nonzero total read count
+out of 19693 with nonzero total read count
 adjusted p-value < 0.1
-LFC > 0 (up)       : 3842, 18%
-LFC < 0 (down)     : 3956, 18%
-outliers [1]       : 0, 0%
-low counts [2]     : 4182, 19%
-(mean count < 5)
+LFC > 0 (up)       : 3482, 18%
+LFC < 0 (down)     : 3675, 19%
+outliers [1]       : 10, 0.051%
+low counts [2]     : 0, 0%
+(mean count < 6)
+[1] see 'cooksCutoff' argument of ?results
+[2] see 'independentFiltering' argument of ?results
 ```
 
 Order results by adjusted p-value:
@@ -435,6 +490,22 @@ Order results by adjusted p-value:
 ```r
 res_ordered <- res[order(res$padj), ]
 head(res_ordered)
+```
+
+Output:
+
+```text
+log2 fold change (MLE): condition WT_IR vs WT_mock 
+Wald test p-value: condition WT_IR vs WT_mock 
+DataFrame with 6 rows and 6 columns
+                       baseMean log2FoldChange     lfcSE      stat       pvalue         padj
+                      <numeric>      <numeric> <numeric> <numeric>    <numeric>    <numeric>
+ENSMUSG00000004085.15   795.499        4.10779  0.157888   26.0172 3.16645e-149 6.23252e-145
+ENSMUSG00000021701.9    840.251        6.34293  0.253829   24.9889 8.06388e-138 7.93607e-134
+ENSMUSG00000072825.13   705.733        4.70979  0.190927   24.6680 2.35896e-134 1.54771e-130
+ENSMUSG00000048458.9    820.666        5.79808  0.238203   24.3409 7.24251e-131 3.56386e-127
+ENSMUSG00000028893.9    680.824        4.28171  0.179531   23.8495 1.02517e-125 4.03570e-122
+ENSMUSG00000075122.6    836.194        3.74860  0.158501   23.6502 1.17375e-123 3.85048e-120
 ```
 
 ### Apply log fold change shrinkage
@@ -448,7 +519,7 @@ resultsNames(dds)
 ```
 
 ```
-[1] "Intercept"                              "condition_WT_IR_vs_WT_mock"
+[1] "Intercept"        "condition_WT_mock_vs_WT_IR"
 ```
 
 Apply shrinkage using `apeglm` (recommended for standard contrasts):
@@ -456,7 +527,7 @@ Apply shrinkage using `apeglm` (recommended for standard contrasts):
 ```r
 res_shrunk <- lfcShrink(
     dds,
-    coef = "condition_WT_IR_vs_WT_mock",
+    coef = "condition_WT_mock_vs_WT_IR",
     type = "apeglm"
 )
 ```
@@ -470,6 +541,9 @@ Genes with low counts can have unreliably large fold changes. Shrinkage:
 - Reduces noise in LFC estimates.
 - Improves ranking for downstream analyses (e.g., GSEA).
 - Does not affect p-values or significance calls.
+:::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::: callout
 
 ## Choosing a shrinkage method
 
@@ -500,40 +574,113 @@ summary_table <- tibble(
 
 print(summary_table)
 ```
+output:
+
+```text
+# A tibble: 1 × 4
+  total_genes   sig    up  down
+        <int> <int> <int> <int>
+1       19693  6078  2296  2448
+```
+
+We will attach annotations so that results are interpretable. Load gene annotation data (from Episode 02):
+
+
+```r
+mart <-
+  read.csv(
+    "data/mart.tsv",
+    sep = "\t",
+    header = TRUE
+  )
+
+annot <-
+  read.csv(
+    "data/annot.tsv",
+    sep = "\t",
+    header = TRUE
+  )
+```
+
+```r
+res_df <- as.data.frame(res)
+res_df$ensembl_gene_id_version <- rownames(res_df)
+```
+
+Join DE results, normalized counts, and annotation:
+
+```r
+res_annot <- res_df %>%
+  dplyr::left_join(mart,
+                   by = "ensembl_gene_id_version")
+```
+
+Joining normalized counts and annotation makes the output biologically interpretable.
+The final table becomes a comprehensive results object containing:
+
+- `gene identifiers`
+- `gene symbols`
+- `functional descriptions`
+- `differential expression statistics`
+
+This is the format most researchers expect when examining results or importing them into downstream tools.
+
+Define significance labels for plotting:
+
+```r
+log2fc_cut <- log2(1.5)
+
+res_annot <- res_annot %>%
+  dplyr::mutate(
+    label = dplyr::coalesce(external_gene_name, ensembl_gene_id_version),
+    sig = dplyr::case_when(
+      padj <= 0.05 & log2FoldChange >=  log2fc_cut ~ "up",
+      padj <= 0.05 & log2FoldChange <= -log2fc_cut ~ "down",
+      TRUE ~ "ns"
+    )
+  )
+```
+
 
 ### Volcano plot
 
 ```r
-res_df <- res_df %>%
-    mutate(
-        sig = case_when(
-            padj <= 0.05 & log2FoldChange >= log2fc_cut ~ "up",
-            padj <= 0.05 & log2FoldChange <= -log2fc_cut ~ "down",
-            TRUE ~ "ns"
-        )
-    )
-
 ggplot(
-    res_df,
-    aes(
-        x = log2FoldChange,
-        y = -log10(padj),
-        col = sig
-    )
+  res_annot,
+  aes(
+    x     = log2FoldChange,
+    y     = -log10(padj),
+    col   = sig,
+    label = label
+  )
 ) +
-    geom_point(alpha = 0.6) +
-    scale_color_manual(values = c(
-        "up" = "firebrick",
-        "down" = "dodgerblue3",
-        "ns" = "grey70"
-    )) +
-    geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "grey40") +
-    geom_vline(xintercept = c(-log2fc_cut, log2fc_cut), linetype = "dashed", color = "grey40") +
-    theme_classic() +
-    xlab("log2 fold change") +
-    ylab("-log10 adjusted p-value") +
-    ggtitle("Volcano plot: WT_IR vs WT_mock (Kallisto)")
+  geom_point(alpha = 0.6) +
+  scale_color_manual(values = c(
+    "up"   = "firebrick",
+    "down" = "dodgerblue3",
+    "ns"   = "grey70"
+  )) +
+  geom_text_repel(
+    data = dplyr::filter(res_annot, sig != "ns"),
+    max.overlaps       = 12,
+    min.segment.length = Inf,
+    box.padding        = 0.3,
+    seed               = 42,
+    show.legend        = FALSE
+  ) +
+  geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "grey40") +
+  geom_vline(xintercept = c(-log2fc_cut, log2fc_cut), linetype = "dashed", color = "grey40") +
+  theme_classic() +
+  xlab("log2 fold change") +
+  ylab("-log10 adjusted p value") +
+  ggtitle("Volcano plot: WT_IR vs WT_mock")
 ```
+
+<div class="figure" style="text-align: center">
+<img src="fig/05_deseq/volcano-k.png" alt="Volcano plot of differential expression results"  />
+<p class="caption">Volcano plot of differential expression results</p>
+</div>
+
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
@@ -622,7 +769,7 @@ For standard differential expression, both methods produce comparable results. C
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
-- Salmon/Kallisto output is imported via `tximport` and loaded with `DESeqDataSetFromTximport()`.
+- Kallisto output is imported via `tximport` and loaded with `DESeqDataSetFromTximport()`.
 - The tximport object preserves transcript length information for accurate normalization.
 - Exploratory analysis (PCA, distance heatmaps) should precede differential expression testing.
 - DESeq2 handles the statistical analysis identically to the genome-based workflow.

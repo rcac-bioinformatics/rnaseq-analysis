@@ -6,10 +6,9 @@ title: Setup
 
 1. **Arun Seetharam, Ph.D.**: Arun is a lead bioinformatics scientist at Purdue University’s Rosen Center for Advanced Computing. With extensive expertise in comparative genomics, genome assembly, annotation, single-cell genomics,  NGS data analysis, metagenomics, proteomics, and metabolomics. Arun supports a diverse range of bioinformatics projects across various organisms, including human model systems.
 
-2. **Michael Carlson, Ph.D.**: Michael has a background in computational physics, specifically hypersonic materials. He also leads many introductory workshops in the High-Performance Computing domain.
 
+## Schedule (01/22/2026)
 
-## Schedule
 
 | **Time**     | **Session**                                                                                                                                                                                          |
 |:---|-------------|
@@ -17,7 +16,7 @@ title: Setup
 | **9:00 AM**  | **Introduction to RNA-seq Analysis:** Experimental design, biological replicates, sequencing depth, and overview of the analysis workflow (QC → alignment → quantification → DE)                     |
 | **9:45 AM**  | **Data Preparation & Quality Control:** Inspecting raw FASTQ files, running FastQC and MultiQC, trimming with fastp                                                                                  |
 | **10:30 AM** | **Break**                                                                                                                                                                                            |
-| **10:45 AM** | **Read Alignment & Quantification:** Mapping with STAR, building indices, generating gene-level counts with featureCounts (Salmon covered conceptually only)                                         |
+| **10:45 AM** | **Read Alignment & Quantification:** Mapping with STAR, building indices, generating gene-level counts with featureCounts (Kallisto covered conceptually only)                                         |
 | **12:00 PM** | **Lunch Break**                                                                                                                                                                                      |
 | **1:00 PM**  | **Differential Expression Analysis (DESeq2):** Importing counts into R, normalization, exploratory plots (VST, distance heatmaps, PCA), and identifying significantly differentially expressed genes |
 | **2:15 PM**  | **Break**                                                                                                                                                                                            |
