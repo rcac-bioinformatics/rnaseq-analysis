@@ -412,8 +412,8 @@ meanSdPlot(assay(dds), ranks = FALSE)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="fig/05_deseq/before-vsd.png" alt="average counts vs variance"  />
-<p class="caption">average counts vs variance</p>
+<img src="fig/05_deseq/before-vsd.png" alt="Average counts vs variance before transformation"  />
+<p class="caption">Average counts vs variance before transformation</p>
 </div>
 
 Apply variance stabilizing transform (VST):
@@ -461,8 +461,8 @@ pheatmap(
 ```
 
 <div class="figure" style="text-align: center">
-<img src="fig/05_deseq/clustering.png" alt="Eucledean distance heatmap"  />
-<p class="caption">Eucledean distance heatmap</p>
+<img src="fig/05_deseq/clustering.png" alt="Euclidean distance heatmap"  />
+<p class="caption">Euclidean distance heatmap</p>
 </div>
 
 

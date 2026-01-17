@@ -37,7 +37,7 @@ This episode covers **over-representation analysis (ORA)**, the most common appr
 
 ## What you need for this episode
 
-- DE results from Episode 05 or 05b (`DESeq2_results_joined.tsv` or `DESeq2_salmon_results.tsv`)
+- DE results from Episode 05 or 05b (`DESeq2_results_joined.tsv` or `DESeq2_kallisto_results.tsv`)
 - RStudio session via Open OnDemand
 - Internet connection (for KEGG queries)
 
@@ -407,8 +407,8 @@ dotplot(ego_bp, showCategory = 20) +
 ```
 
 <div class="figure" style="text-align: center">
-<img src="fig/06-enrich/go-bp-up.png" alt="CAPTION GOES HERE"  />
-<p class="caption">CAPTION GOES HERE</p>
+<img src="fig/06-enrich/go-bp-up.png" alt="GO Biological Process enrichment dotplot for upregulated genes"  />
+<p class="caption">GO Biological Process enrichment dotplot for upregulated genes</p>
 </div>
 
 
@@ -426,8 +426,8 @@ barplot(ego_bp, showCategory = 15) +
 ```
 
 <div class="figure" style="text-align: center">
-<img src="fig/06-enrich/go-bp-up-bar.png" alt="CAPTION GOES HERE"  />
-<p class="caption">CAPTION GOES HERE</p>
+<img src="fig/06-enrich/go-bp-up-bar.png" alt="GO Biological Process enrichment barplot for upregulated genes"  />
+<p class="caption">GO Biological Process enrichment barplot for upregulated genes</p>
 </div>
 
 ### Reduce GO redundancy
@@ -447,13 +447,13 @@ dotplot(ego_bp_simple, showCategory = 15) +
 ```
 
 <div class="figure" style="text-align: center">
-<img src="fig/06-enrich/go-bp-up-simple.png" alt="CAPTION GOES HERE"  />
-<p class="caption">CAPTION GOES HERE</p>
+<img src="fig/06-enrich/go-bp-up-simple.png" alt="Simplified GO Biological Process enrichment dotplot"  />
+<p class="caption">Simplified GO Biological Process enrichment dotplot</p>
 </div>
 
 <div class="figure" style="text-align: center">
-<img src="fig/06-enrich/go-bp-up-bar-simple.png" alt="CAPTION GOES HERE"  />
-<p class="caption">CAPTION GOES HERE</p>
+<img src="fig/06-enrich/go-bp-up-bar-simple.png" alt="Simplified GO Biological Process enrichment barplot"  />
+<p class="caption">Simplified GO Biological Process enrichment barplot</p>
 </div>
 
 
@@ -482,8 +482,8 @@ emapplot(ego_bp_em, showCategory = 30) +
 
 
 <div class="figure" style="text-align: center">
-<img src="fig/06-enrich/go-bp-up-enrichment-map.png" alt="CAPTION GOES HERE"  />
-<p class="caption">CAPTION GOES HERE</p>
+<img src="fig/06-enrich/go-bp-up-enrichment-map.png" alt="GO Biological Process enrichment map showing term relationships"  />
+<p class="caption">GO Biological Process enrichment map showing term relationships</p>
 </div>
 
 
@@ -586,8 +586,8 @@ barplot(ekegg, showCategory = 15) +
 ```
 
 <div class="figure" style="text-align: center">
-<img src="fig/06-enrich/kegg-bar.png" alt="CAPTION GOES HERE"  />
-<p class="caption">CAPTION GOES HERE</p>
+<img src="fig/06-enrich/kegg-bar.png" alt="KEGG pathway enrichment barplot"  />
+<p class="caption">KEGG pathway enrichment barplot</p>
 </div>
 
 
@@ -681,8 +681,8 @@ dotplot(ehall, showCategory = 20) +
 ```
 
 <div class="figure" style="text-align: center">
-<img src="fig/06-enrich/hallmark1.png" alt="CAPTION GOES HERE"  />
-<p class="caption">CAPTION GOES HERE</p>
+<img src="fig/06-enrich/hallmark1.png" alt="MSigDB Hallmark gene set enrichment dotplot"  />
+<p class="caption">MSigDB Hallmark gene set enrichment dotplot</p>
 </div>
 
 
@@ -1008,8 +1008,8 @@ dotplot(gsea_go, showCategory = 20, split = ".sign") +
 ```
 
 <div class="figure" style="text-align: center">
-<img src="fig/06-enrich/gsea-1.png" alt="CAPTION GOES HERE"  />
-<p class="caption">CAPTION GOES HERE</p>
+<img src="fig/06-enrich/gsea-1.png" alt="GSEA dotplot for GO Biological Process showing activated and suppressed gene sets"  />
+<p class="caption">GSEA dotplot for GO Biological Process showing activated and suppressed gene sets</p>
 </div>
 
 
@@ -1024,8 +1024,8 @@ gseaplot2(gsea_go, geneSetID = 1, title = gsea_go$Description[1])
 
 
 <div class="figure" style="text-align: center">
-<img src="fig/06-enrich/gsea-2b.png" alt="CAPTION GOES HERE"  />
-<p class="caption">CAPTION GOES HERE</p>
+<img src="fig/06-enrich/gsea-2b.png" alt="GSEA enrichment plot showing running enrichment score for top gene set"  />
+<p class="caption">GSEA enrichment plot showing running enrichment score for top gene set</p>
 </div>
 
 
