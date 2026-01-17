@@ -37,7 +37,7 @@ This episode covers **over-representation analysis (ORA)**, the most common appr
 
 ## What you need for this episode
 
-- DE results from Episode 05 or 05b (`DESeq2_results_joined.tsv` or `DESeq2_salmon_results.tsv`)
+- DE results from Episode 05 or 05b (`DESeq2_results_joined.tsv` or `DESeq2_kallisto_results.tsv`)
 - RStudio session via Open OnDemand
 - Internet connection (for KEGG queries)
 
@@ -406,7 +406,7 @@ dotplot(ego_bp, showCategory = 20) +
     ggtitle("GO Biological Process enrichment")
 ```
 
-```{r, fig.cap="CAPTION GOES HERE", echo=FALSE, message=FALSE}
+```{r, fig.cap="GO Biological Process enrichment dotplot for upregulated genes", echo=FALSE, message=FALSE}
 knitr::include_graphics("fig/06-enrich/go-bp-up.png")
 ```
 
@@ -424,7 +424,7 @@ barplot(ego_bp, showCategory = 15) +
     ggtitle("GO BP enrichment - Top 15 terms")
 ```
 
-```{r, fig.cap="CAPTION GOES HERE", echo=FALSE, message=FALSE}
+```{r, fig.cap="GO Biological Process enrichment barplot for upregulated genes", echo=FALSE, message=FALSE}
 knitr::include_graphics("fig/06-enrich/go-bp-up-bar.png")
 ```
 
@@ -444,11 +444,11 @@ dotplot(ego_bp_simple, showCategory = 15) +
     ggtitle("GO BP enrichment (simplified)")
 ```
 
-```{r, fig.cap="CAPTION GOES HERE", echo=FALSE, message=FALSE}
+```{r, fig.cap="Simplified GO Biological Process enrichment dotplot", echo=FALSE, message=FALSE}
 knitr::include_graphics("fig/06-enrich/go-bp-up-simple.png")
 ```
 
-```{r, fig.cap="CAPTION GOES HERE", echo=FALSE, message=FALSE}
+```{r, fig.cap="Simplified GO Biological Process enrichment barplot", echo=FALSE, message=FALSE}
 knitr::include_graphics("fig/06-enrich/go-bp-up-bar-simple.png")
 ```
 
@@ -477,7 +477,7 @@ emapplot(ego_bp_em, showCategory = 30) +
 ```
 
 
-```{r, fig.cap="CAPTION GOES HERE", echo=FALSE, message=FALSE}
+```{r, fig.cap="GO Biological Process enrichment map showing term relationships", echo=FALSE, message=FALSE}
 knitr::include_graphics("fig/06-enrich/go-bp-up-enrichment-map.png")
 ```
 
@@ -580,7 +580,7 @@ barplot(ekegg, showCategory = 15) +
     ggtitle("KEGG pathway enrichment")
 ```
 
-```{r, fig.cap="CAPTION GOES HERE", echo=FALSE, message=FALSE}
+```{r, fig.cap="KEGG pathway enrichment barplot", echo=FALSE, message=FALSE}
 knitr::include_graphics("fig/06-enrich/kegg-bar.png")
 ```
 
@@ -674,7 +674,7 @@ dotplot(ehall, showCategory = 20) +
     ggtitle("MSigDB Hallmark enrichment")
 ```
 
-```{r, fig.cap="CAPTION GOES HERE", echo=FALSE, message=FALSE}
+```{r, fig.cap="MSigDB Hallmark gene set enrichment dotplot", echo=FALSE, message=FALSE}
 knitr::include_graphics("fig/06-enrich/hallmark1.png")
 ```
 
@@ -1000,7 +1000,7 @@ dotplot(gsea_go, showCategory = 20, split = ".sign") +
     ggtitle("GSEA: GO Biological Process")
 ```
 
-```{r, fig.cap="CAPTION GOES HERE", echo=FALSE, message=FALSE}
+```{r, fig.cap="GSEA dotplot for GO Biological Process showing activated and suppressed gene sets", echo=FALSE, message=FALSE}
 knitr::include_graphics("fig/06-enrich/gsea-1.png")
 ```
 
@@ -1015,7 +1015,7 @@ gseaplot2(gsea_go, geneSetID = 1, title = gsea_go$Description[1])
 ```
 
 
-```{r, fig.cap="CAPTION GOES HERE", echo=FALSE, message=FALSE}
+```{r, fig.cap="GSEA enrichment plot showing running enrichment score for top gene set", echo=FALSE, message=FALSE}
 knitr::include_graphics("fig/06-enrich/gsea-2b.png")
 ```
 

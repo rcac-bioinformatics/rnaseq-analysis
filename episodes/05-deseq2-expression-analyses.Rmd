@@ -407,7 +407,7 @@ Inspect mean vs standard deviation plot before transformation:
 meanSdPlot(assay(dds), ranks = FALSE)
 ```
 
-```{r, fig.cap="average counts vs variance", echo=FALSE, message=FALSE}
+```{r, fig.cap="Average counts vs variance before transformation", echo=FALSE, message=FALSE}
 knitr::include_graphics("fig/05_deseq/before-vsd.png")
 ```
 
@@ -454,7 +454,7 @@ pheatmap(
 )
 ```
 
-```{r, fig.cap="Eucledean distance heatmap", echo=FALSE, message=FALSE}
+```{r, fig.cap="Euclidean distance heatmap", echo=FALSE, message=FALSE}
 knitr::include_graphics("fig/05_deseq/clustering.png")
 ```
 

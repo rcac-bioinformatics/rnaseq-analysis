@@ -35,7 +35,7 @@ Most FASTQ files arrive compressed as `.fastq.gz` files. Modern RNA seq tools ac
 
 ## Should I uncompress FASTQ files?
 
-In almost all RNA seq workflows, you should keep FASTQ files compressed. Tools such as FastQC, HISAT2, STAR, salmon, and fastp can read `.gz` files directly. Keeping files compressed saves space and reduces input and output overhead.
+In almost all RNA-seq workflows, you should keep FASTQ files compressed. Tools such as FastQC, HISAT2, STAR, Salmon, and fastp can read `.gz` files directly. Keeping files compressed saves space and reduces input and output overhead.
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -167,7 +167,7 @@ You will need:
 **_For transcript-level quantification workflows_**
 
 4. Transcript sequences (FASTA)  
-   - Required for transcript based quantification with tools such as salmon, kallisto, and RSEM.
+   - Required for transcript-based quantification with tools such as Salmon, Kallisto, and RSEM.
 
 Reference files must be consistent with each other (same genome version).
 To ensure a smooth analysis workflow, keep these files logically organized. Good directory structure minimizes mistakes, simplifies scripting, and supports reproducibility.

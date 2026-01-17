@@ -136,7 +136,7 @@ At typical sequencing read depth, gene expression quantification is often more a
 However, differential gene expression analyses can be [improved](https://doi.org/10.12688/f1000research.7563.1)
 by having access also to transcript-level quantifications.
 
-Other tools used in RNA-seq quantification include: TopHat2, bowtie2, kallisto, HTseq, among many others.
+Other tools used in RNA-seq quantification include: TopHat2, Bowtie2, Kallisto, HTSeq, among many others.
 
 The choice of an appropriate RNA-seq quantification depends on the quality of the transcriptome annotation,
 the quality of the RNA-seq library preparation, the presence of contaminating sequences, among many factors.
