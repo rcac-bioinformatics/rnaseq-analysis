@@ -347,6 +347,66 @@ mv SRR2121789_1.fastq.gz WT_Bcell_IR_rep4_R1.fastq.gz
 mv SRR2121789_2.fastq.gz WT_Bcell_IR_rep4_R2.fastq.gz
 ```
 
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Workshop data is subsampled
+
+The FASTQ files provided for this workshop have been **subsampled to 20 million reads per sample**. The original samples contain 100+ million reads each, and running the full pipeline would take many hours—far exceeding our workshop session time.
+
+**Never subsample your real experimental data.** This is done exclusively for workshop time constraints. Subsampling reduces statistical power and may affect differential expression results.
+
+:::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::: spoiler
+
+## Workshop-only: How reads were subsampled
+
+For reference, here is how the workshop data was prepared. **You do not need to run this**—the pre-downloaded data is already subsampled.
+
+The original samples from SRA contain 80-100+ million paired-end reads each. To enable completion of the full analysis pipeline within a single workshop day, we subsample to 20 million read pairs per sample using `seqtk`.
+
+```bash
+# Subsample reads to 20 million per sample (WORKSHOP ONLY - do not do this with real data!)
+module load biocontainers
+module load seqtk
+
+for sample in WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4 \
+              WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4; do
+    # Use same seed for R1 and R2 to maintain pairing
+    seqtk sample -s 42 ${sample}_R1.fastq.gz 20000000 | gzip > ${sample}_sub_R1.fastq.gz
+    seqtk sample -s 42 ${sample}_R2.fastq.gz 20000000 | gzip > ${sample}_sub_R2.fastq.gz
+done
+
+# Archive original files
+mkdir -p original_reads
+mv *_R1.fastq.gz *_R2.fastq.gz original_reads/
+
+# Rename subsampled files to original names for pipeline compatibility
+for sample in WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4 \
+              WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4; do
+    mv ${sample}_sub_R1.fastq.gz ${sample}_R1.fastq.gz
+    mv ${sample}_sub_R2.fastq.gz ${sample}_R2.fastq.gz
+done
+```
+
+**Why 20 million reads?**
+
+- Sufficient depth for differential expression analysis of moderately expressed genes
+- Reduces alignment time from ~30 minutes to ~5-10 minutes per sample
+- Allows completion of the full workshop pipeline in a single day
+- Still produces biologically meaningful results for well-expressed p53 target genes
+
+**What you lose by subsampling:**
+
+- Statistical power to detect lowly expressed genes
+- Precision in abundance estimates
+- Ability to detect subtle fold changes
+- Some lowly expressed transcripts may appear as zeros
+
+For your own research, always use the full sequencing depth. Modern RNA-seq experiments typically aim for 20-50 million reads for differential expression, but the original unsubsampled data is always preferred.
+
+:::::::::::::::::::::::::::::::::::::::
+
 The directory, after downloading, should look like this:
 
 ```bash

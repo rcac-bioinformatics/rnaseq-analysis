@@ -68,57 +68,6 @@ It is *not* ideal if you need splice junctions, variant calling, or visualizatio
 
 :::::::::::::::::::::::::::::::::::::::
 
-## Step 0: Strand detection with Salmon
-
-Before running Kallisto, we need to determine our library strandedness. Kallisto requires you to specify the strand information manually, while Salmon has an excellent automatic library type detection feature.
-
-We use Salmon **only** for strand inference, then use Kallisto for the actual quantification.
-
-```bash
-sinteractive -A workshop -p cpu -N 1 -n 4 --time=1:00:00
-
-cd $SCRATCH/rnaseq-workshop
-mkdir -p results/strand_check
-
-module load biocontainers
-module load salmon
-
-# Build a quick Salmon index for strand detection
-salmon index \
-    --transcripts data/gencode.vM38.transcripts-clean.fa \
-    --index data/salmon_index_strand \
-    --threads 4
-
-# Run Salmon on one sample with automatic library type detection
-salmon quant \
-    --index data/salmon_index_strand \
-    --libType A \
-    --mates1 data/WT_Bcell_mock_rep1_R1.fastq.gz \
-    --mates2 data/WT_Bcell_mock_rep1_R2.fastq.gz \
-    --output results/strand_check \
-    --threads 4
-```
-
-Check the inferred library type:
-
-```bash
-cat results/strand_check/lib_format_counts.json
-```
-
-The key fields are:
-
-- **expected_format**: The library type (e.g., `IU` = Inward Unstranded, `ISR` = Inward Stranded Reverse)
-- **strand_mapping_bias**: Values near 0.5 indicate unstranded data
-
-For our dataset, you should see `IU` (Inward Unstranded), meaning reads map equally to both strands.
-
-::::::::::::::::::::::::::::::::::::::: callout
-
-## Why use Salmon for strand detection?
-
-Salmon's library type inference is well-documented, robust, and fast. Using a small subset of reads to detect strandedness takes only a few minutes and provides reliable results. Kallisto does not have automatic strand detection, so this preliminary step ensures we provide the correct parameters.
-
-:::::::::::::::::::::::::::::::::::::::
 
 ## Step 1: Preparing the transcriptome reference
 
@@ -232,7 +181,7 @@ ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' > $SCRATCH/rnaseq-workshop/scripts/sam
 Array job:
 
 ```bash
-#!/bin/bash
+!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
@@ -251,9 +200,9 @@ DATA="$SCRATCH/rnaseq-workshop/data"
 INDEX="$SCRATCH/rnaseq-workshop/data/kallisto_index/transcripts.idx"
 OUT="$SCRATCH/rnaseq-workshop/results/kallisto_quant"
 
-mkdir -p $OUT
+SAMPLE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" samples.txt)
 
-SAMPLE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" scripts/samples.txt)
+mkdir -p ${OUT}/${SAMPLE}
 
 R1=${DATA}/${SAMPLE}_R1.fastq.gz
 R2=${DATA}/${SAMPLE}_R2.fastq.gz
@@ -263,7 +212,7 @@ kallisto quant \
     -o $OUT/$SAMPLE \
     -b 100 \
     -t ${SLURM_CPUS_ON_NODE} \
-    $R1 $R2
+    $R1 $R2 &> $OUT/$SAMPLE/${SAMPLE}.log
 ```
 
 Submit:

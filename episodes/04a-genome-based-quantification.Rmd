@@ -91,19 +91,19 @@ The important output is in `results/strand_check/lib_format_counts.json`:
     "read_files": "[ data/WT_Bcell_mock_rep1_R1.fastq.gz, data/WT_Bcell_mock_rep1_R2.fastq.gz]",
     "expected_format": "IU",
     "compatible_fragment_ratio": 1.0,
-    "num_compatible_fragments": 82046534,
-    "num_assigned_fragments": 82046534,
-    "num_frags_with_concordant_consistent_mappings": 71639414,
-    "num_frags_with_inconsistent_or_orphan_mappings": 15601146,
-    "strand_mapping_bias": 0.5080563891826363,
+    "num_compatible_fragments": 11994681,
+    "num_assigned_fragments": 11994681,
+    "num_frags_with_concordant_consistent_mappings": 10472924,
+    "num_frags_with_inconsistent_or_orphan_mappings": 2280227,
+    "strand_mapping_bias": 0.5082214861866657,
     "MSF": 0,
     "OSF": 0,
-    "ISF": 36396862,
+    "ISF": 5322565,
     "MSR": 0,
     "OSR": 0,
-    "ISR": 35242552,
-    "SF": 7863036,
-    "SR": 7738110,
+    "ISR": 5150359,
+    "SF": 1149290,
+    "SR": 1130937,
     "MU": 0,
     "OU": 0,
     "IU": 0,
@@ -495,7 +495,7 @@ Below is an example SLURM script to count all BAM files at once.
 module load biocontainers
 module load subread
 
-GTF="$SCRATCH/rnaseq-workshop/data/gencode.vM38.annotation.gtf"
+GTF="$SCRATCH/rnaseq-workshop/data/gencode.vM38.primary_assembly.basic.annotation.gtf"
 BAMS="$SCRATCH/rnaseq-workshop/results/mapping/*.bam"
 output_dir="$SCRATCH/rnaseq-workshop/results/counts"
 
