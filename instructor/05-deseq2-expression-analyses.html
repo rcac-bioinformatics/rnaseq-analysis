@@ -519,7 +519,7 @@ Open OnDemand interface
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> How were these data prepared? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>Since the gene IDs in the count matrix are Ensembl IDs, it will be
 hard to interpret the results without annotation. We will need to use
@@ -787,8 +787,8 @@ biologically meaningful rather than driven by count scale.</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">meanSdPlot</span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span>, ranks <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="../fig/05_deseq/before-vsd.png" alt="average counts vs variance" class="figure mx-auto d-block"><figcaption>
-average counts vs variance
+<figure style="text-align: center"><img src="../fig/05_deseq/before-vsd.png" alt="Average counts vs variance before transformation" class="figure mx-auto d-block"><figcaption>
+Average counts vs variance before transformation
 </figcaption></figure><p>Apply variance stabilizing transform (VST):</p>
 <div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -836,8 +836,8 @@ contamination)? This is one of the fastest ways to detect outliers.</p>
 <span>  col                      <span class="op">=</span> <span class="va">colors</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="../fig/05_deseq/clustering.png" alt="Eucledean distance heatmap" class="figure mx-auto d-block"><figcaption>
-Eucledean distance heatmap
+<figure style="text-align: center"><img src="../fig/05_deseq/clustering.png" alt="Euclidean distance heatmap" class="figure mx-auto d-block"><figcaption>
+Euclidean distance heatmap
 </figcaption></figure></div>
 <div class="section level3">
 <h3 id="pca-on-top-variable-genes">PCA on top variable genes<a class="anchor" aria-label="anchor" href="#pca-on-top-variable-genes"></a></h3>
@@ -948,7 +948,7 @@ non-biological factors)?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Example interpretation:</p>
 <ol style="list-style-type: decimal"><li>Library sizes are comparable across samples and fall within a narrow
@@ -991,7 +991,7 @@ features counted by featureCounts.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Single command to run the DESeq2 pipeline </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <p>Above three steps can be run together using the <code>DESeq</code>
 function:</p>
@@ -1343,7 +1343,7 @@ genes.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Example interpretation:</p>
 <ul><li>Strongly upregulated genes should include canonical p53 targets such

@@ -604,8 +604,8 @@ and GC bias correction. Example: <code>salmon quant --gcBias</code> +
 often more accurate than transcript expression quantification. However,
 differential gene expression analyses can be <a href="https://doi.org/10.12688/f1000research.7563.1" class="external-link">improved</a> by
 having access also to transcript-level quantifications.</p>
-<p>Other tools used in RNA-seq quantification include: TopHat2, bowtie2,
-kallisto, HTseq, among many others.</p>
+<p>Other tools used in RNA-seq quantification include: TopHat2, Bowtie2,
+Kallisto, HTSeq, among many others.</p>
 <p>The choice of an appropriate RNA-seq quantification depends on the
 quality of the transcriptome annotation, the quality of the RNA-seq
 library preparation, the presence of contaminating sequences, among many
@@ -798,8 +798,8 @@ them is usually unnecessary.</p>
 <div id="should-i-uncompress-fastq-files" class="callout-inner">
 <h3 class="callout-title">Should I uncompress FASTQ files?</h3>
 <div class="callout-content">
-<p>In almost all RNA seq workflows, you should keep FASTQ files
-compressed. Tools such as FastQC, HISAT2, STAR, salmon, and fastp can
+<p>In almost all RNA-seq workflows, you should keep FASTQ files
+compressed. Tools such as FastQC, HISAT2, STAR, Salmon, and fastp can
 read <code>.gz</code> files directly. Keeping files compressed saves
 space and reduces input and output overhead.</p>
 </div>
@@ -991,7 +991,7 @@ outputs</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1052,8 +1052,8 @@ workflows</em></strong></p>
 <ol start="4" style="list-style-type: decimal">
 <li>Transcript sequences (FASTA)
 <ul>
-<li>Required for transcript based quantification with tools such as
-salmon, kallisto, and RSEM.</li>
+<li>Required for transcript-based quantification with tools such as
+Salmon, Kallisto, and RSEM.</li>
 </ul>
 </li>
 </ol>
@@ -1099,7 +1099,7 @@ why?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Use the <strong>basic gene annotation in GTF format</strong> (e.g.,
 <code>gencode.vM38.primary_assembly.basic.annotation.gtf.gz</code>).<br>
@@ -1131,7 +1131,7 @@ FASTA</strong> (e.g.,
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <figure style="text-align: center"><img src="fig/01_fq2counts/gencode-genome.png" alt="Reference genome file in FASTA format" class="figure mx-auto d-block"><figcaption>
 Reference genome file in FASTA format
@@ -1165,7 +1165,7 @@ for all transcripts in GRCm39
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <p>The transcript FASTA file is available in the same release directory
 as the genome and annotation files (under FASTA files). It is named
@@ -1263,7 +1263,7 @@ of sequencing runs?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
 <div class="accordion-body">
 <p>Navigate to the SRA page for the BioProject and use <strong>Run
 Selector</strong> to list runs.<br>
@@ -1338,7 +1338,7 @@ statistical power and may affect differential expression results.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Workshop-only: How reads were subsampled </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p>For reference, here is how the workshop data was prepared.
 <strong>You do not need to run this</strong>—the pre-downloaded data is
@@ -1837,7 +1837,7 @@ number of reads, quality, duplication, or GC percentage?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Typical interpretation for this dataset (students should compare with
 their own):</p>
@@ -1857,7 +1857,7 @@ selected samples and is less than 4 percent.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What if trimming is required? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p><em>Optional reference: how to trim adapters with <code>fastp</code>
 (not part of the hands-on)</em></p>
@@ -2068,7 +2068,7 @@ library types.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What does this file look like? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">JSON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -2213,7 +2213,7 @@ manual</a></p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Key options:</p>
 <ul>
@@ -2287,7 +2287,7 @@ index. Create a file named <code>index_genome.sh</code> in
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What will the output look like? </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <p>The index directory is now ready for use in mapping and should have
 contents like this: Location: <code>$SCRATCH/rcac_rnaseq/data</code>
@@ -2367,7 +2367,7 @@ paired FASTQ files.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -2543,7 +2543,7 @@ contamination issues</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>Example interpretation for this dataset:</p>
 <ul>
@@ -2713,7 +2713,7 @@ expression?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <p>Example interpretation for this dataset:</p>
 <ol style="list-style-type: decimal">
@@ -3555,7 +3555,7 @@ Open OnDemand interface
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> How were these data prepared? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>Since the gene IDs in the count matrix are Ensembl IDs, it will be
 hard to interpret the results without annotation. We will need to use
@@ -3834,8 +3834,8 @@ biologically meaningful rather than driven by count scale.</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">meanSdPlot</span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">dds</span><span class="op">)</span>, ranks <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="fig/05_deseq/before-vsd.png" alt="average counts vs variance" class="figure mx-auto d-block"><figcaption>
-average counts vs variance
+<figure style="text-align: center"><img src="fig/05_deseq/before-vsd.png" alt="Average counts vs variance before transformation" class="figure mx-auto d-block"><figcaption>
+Average counts vs variance before transformation
 </figcaption></figure><p>Apply variance stabilizing transform (VST):</p>
 <div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3884,8 +3884,8 @@ contamination)? This is one of the fastest ways to detect outliers.</p>
 <span>  col                      <span class="op">=</span> <span class="va">colors</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="fig/05_deseq/clustering.png" alt="Eucledean distance heatmap" class="figure mx-auto d-block"><figcaption>
-Eucledean distance heatmap
+<figure style="text-align: center"><img src="fig/05_deseq/clustering.png" alt="Euclidean distance heatmap" class="figure mx-auto d-block"><figcaption>
+Euclidean distance heatmap
 </figcaption></figure>
 </div>
 <div class="section level3">
@@ -4004,7 +4004,7 @@ non-biological factors)?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Example interpretation:</p>
 <ol style="list-style-type: decimal">
@@ -4051,7 +4051,7 @@ features counted by featureCounts.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Single command to run the DESeq2 pipeline </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <p>Above three steps can be run together using the <code>DESeq</code>
 function:</p>
@@ -4416,7 +4416,7 @@ genes.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Example interpretation:</p>
 <ul>
@@ -4967,7 +4967,7 @@ biologically?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Example interpretation:</p>
 <ol style="list-style-type: decimal">
@@ -5316,7 +5316,7 @@ results</h3>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Expected observations:</p>
 <ol style="list-style-type: decimal">
@@ -5528,7 +5528,7 @@ results.</p>
 <ul>
 <li>DE results from Episode 05 or 05b
 (<code>DESeq2_results_joined.tsv</code> or
-<code>DESeq2_salmon_results.tsv</code>)</li>
+<code>DESeq2_kallisto_results.tsv</code>)</li>
 <li>RStudio session via Open OnDemand</li>
 <li>Internet connection (for KEGG queries)</li>
 </ul>
@@ -6015,8 +6015,8 @@ genes in universe</li>
 <code class="sourceCode R"><span><span class="fu">dotplot</span><span class="op">(</span><span class="va">ego_bp</span>, showCategory <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GO Biological Process enrichment"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="fig/06-enrich/go-bp-up.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="fig/06-enrich/go-bp-up.png" alt="GO Biological Process enrichment dotplot for upregulated genes" class="figure mx-auto d-block"><figcaption>
+GO Biological Process enrichment dotplot for upregulated genes
 </figcaption></figure><p>The dotplot shows: - <strong>X-axis</strong>: Gene ratio (proportion
 of DE genes in the term) - <strong>Y-axis</strong>: GO term description
 - <strong>Color</strong>: Adjusted p-value - <strong>Size</strong>:
@@ -6029,8 +6029,8 @@ Number of genes</p>
 <code class="sourceCode R"><span><span class="fu">barplot</span><span class="op">(</span><span class="va">ego_bp</span>, showCategory <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GO BP enrichment - Top 15 terms"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="fig/06-enrich/go-bp-up-bar.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="fig/06-enrich/go-bp-up-bar.png" alt="GO Biological Process enrichment barplot for upregulated genes" class="figure mx-auto d-block"><figcaption>
+GO Biological Process enrichment barplot for upregulated genes
 </figcaption></figure>
 </div>
 <div class="section level3">
@@ -6052,10 +6052,10 @@ CAPTION GOES HERE
 <span><span class="fu">dotplot</span><span class="op">(</span><span class="va">ego_bp_simple</span>, showCategory <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GO BP enrichment (simplified)"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="fig/06-enrich/go-bp-up-simple.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
-</figcaption></figure><figure style="text-align: center"><img src="fig/06-enrich/go-bp-up-bar-simple.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="fig/06-enrich/go-bp-up-simple.png" alt="Simplified GO Biological Process enrichment dotplot" class="figure mx-auto d-block"><figcaption>
+Simplified GO Biological Process enrichment dotplot
+</figcaption></figure><figure style="text-align: center"><img src="fig/06-enrich/go-bp-up-bar-simple.png" alt="Simplified GO Biological Process enrichment barplot" class="figure mx-auto d-block"><figcaption>
+Simplified GO Biological Process enrichment barplot
 </figcaption></figure><div id="why-simplify-go-results" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -6087,8 +6087,8 @@ relationships:</p>
 <span><span class="fu">emapplot</span><span class="op">(</span><span class="va">ego_bp_em</span>, showCategory <span class="op">=</span> <span class="fl">30</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GO BP enrichment map"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="fig/06-enrich/go-bp-up-enrichment-map.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="fig/06-enrich/go-bp-up-enrichment-map.png" alt="GO Biological Process enrichment map showing term relationships" class="figure mx-auto d-block"><figcaption>
+GO Biological Process enrichment map showing term relationships
 </figcaption></figure><p>The enrichment map clusters similar terms together, revealing
 functional themes.</p>
 <div id="exercise-compare-go-ontologies" class="callout challenge">
@@ -6213,8 +6213,8 @@ mmu04981    13</code></pre>
 <code class="sourceCode R"><span><span class="fu">barplot</span><span class="op">(</span><span class="va">ekegg</span>, showCategory <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"KEGG pathway enrichment"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="fig/06-enrich/kegg-bar.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="fig/06-enrich/kegg-bar.png" alt="KEGG pathway enrichment barplot" class="figure mx-auto d-block"><figcaption>
+KEGG pathway enrichment barplot
 </figcaption></figure><div id="kegg-limitations" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -6317,8 +6317,8 @@ HALLMARK_P53_PATHWAY       HALLMARK_P53_PATHWAY    HALLMARK_P53_PATHWAY   86/113
 <code class="sourceCode R"><span><span class="fu">dotplot</span><span class="op">(</span><span class="va">ehall</span>, showCategory <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"MSigDB Hallmark enrichment"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="fig/06-enrich/hallmark1.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="fig/06-enrich/hallmark1.png" alt="MSigDB Hallmark gene set enrichment dotplot" class="figure mx-auto d-block"><figcaption>
+MSigDB Hallmark gene set enrichment dotplot
 </figcaption></figure><div id="why-use-hallmark-gene-sets" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -6713,8 +6713,9 @@ GO:0042274 GO:0042274            ribosomal small subunit biogenesis     106     
 <span>    <span class="fu">facet_grid</span><span class="op">(</span><span class="va">.</span> <span class="op">~</span> <span class="va">.sign</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GSEA: GO Biological Process"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="fig/06-enrich/gsea-1.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="fig/06-enrich/gsea-1.png" alt="GSEA dotplot for GO Biological Process showing activated and suppressed gene sets" class="figure mx-auto d-block"><figcaption>
+GSEA dotplot for GO Biological Process showing activated and suppressed
+gene sets
 </figcaption></figure><p>The <code>.sign</code> column indicates whether the gene set is
 enriched in up-regulated (<code>activated</code>) or down-regulated
 (<code>suppressed</code>) genes.</p>
@@ -6729,8 +6730,8 @@ enriched in up-regulated (<code>activated</code>) or down-regulated
 <code class="sourceCode R"><span><span class="co"># Enrichment plot for top gene set</span></span>
 <span><span class="fu">gseaplot2</span><span class="op">(</span><span class="va">gsea_go</span>, geneSetID <span class="op">=</span> <span class="fl">1</span>, title <span class="op">=</span> <span class="va">gsea_go</span><span class="op">$</span><span class="va">Description</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="fig/06-enrich/gsea-2b.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="fig/06-enrich/gsea-2b.png" alt="GSEA enrichment plot showing running enrichment score for top gene set" class="figure mx-auto d-block"><figcaption>
+GSEA enrichment plot showing running enrichment score for top gene set
 </figcaption></figure><div id="interpreting-gsea-results" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>

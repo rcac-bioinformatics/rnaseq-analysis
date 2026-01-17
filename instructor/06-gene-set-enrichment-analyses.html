@@ -419,7 +419,7 @@ results.</p>
 <div class="callout-content">
 <ul><li>DE results from Episode 05 or 05b
 (<code>DESeq2_results_joined.tsv</code> or
-<code>DESeq2_salmon_results.tsv</code>)</li>
+<code>DESeq2_kallisto_results.tsv</code>)</li>
 <li>RStudio session via Open OnDemand</li>
 <li>Internet connection (for KEGG queries)</li>
 </ul><div class="section level2">
@@ -852,8 +852,8 @@ genes in universe</li>
 <code class="sourceCode R"><span><span class="fu">dotplot</span><span class="op">(</span><span class="va">ego_bp</span>, showCategory <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GO Biological Process enrichment"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="../fig/06-enrich/go-bp-up.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="../fig/06-enrich/go-bp-up.png" alt="GO Biological Process enrichment dotplot for upregulated genes" class="figure mx-auto d-block"><figcaption>
+GO Biological Process enrichment dotplot for upregulated genes
 </figcaption></figure><p>The dotplot shows: - <strong>X-axis</strong>: Gene ratio (proportion
 of DE genes in the term) - <strong>Y-axis</strong>: GO term description
 - <strong>Color</strong>: Adjusted p-value - <strong>Size</strong>:
@@ -866,8 +866,8 @@ Number of genes</p>
 <code class="sourceCode R"><span><span class="fu">barplot</span><span class="op">(</span><span class="va">ego_bp</span>, showCategory <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GO BP enrichment - Top 15 terms"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="../fig/06-enrich/go-bp-up-bar.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="../fig/06-enrich/go-bp-up-bar.png" alt="GO Biological Process enrichment barplot for upregulated genes" class="figure mx-auto d-block"><figcaption>
+GO Biological Process enrichment barplot for upregulated genes
 </figcaption></figure></div>
 <div class="section level3">
 <h3 id="reduce-go-redundancy">Reduce GO redundancy<a class="anchor" aria-label="anchor" href="#reduce-go-redundancy"></a></h3>
@@ -887,10 +887,10 @@ CAPTION GOES HERE
 <span><span class="fu">dotplot</span><span class="op">(</span><span class="va">ego_bp_simple</span>, showCategory <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GO BP enrichment (simplified)"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="../fig/06-enrich/go-bp-up-simple.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
-</figcaption></figure><figure style="text-align: center"><img src="../fig/06-enrich/go-bp-up-bar-simple.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="../fig/06-enrich/go-bp-up-simple.png" alt="Simplified GO Biological Process enrichment dotplot" class="figure mx-auto d-block"><figcaption>
+Simplified GO Biological Process enrichment dotplot
+</figcaption></figure><figure style="text-align: center"><img src="../fig/06-enrich/go-bp-up-bar-simple.png" alt="Simplified GO Biological Process enrichment barplot" class="figure mx-auto d-block"><figcaption>
+Simplified GO Biological Process enrichment barplot
 </figcaption></figure><div id="why-simplify-go-results" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -921,8 +921,8 @@ relationships:</p>
 <span><span class="fu">emapplot</span><span class="op">(</span><span class="va">ego_bp_em</span>, showCategory <span class="op">=</span> <span class="fl">30</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GO BP enrichment map"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="../fig/06-enrich/go-bp-up-enrichment-map.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="../fig/06-enrich/go-bp-up-enrichment-map.png" alt="GO Biological Process enrichment map showing term relationships" class="figure mx-auto d-block"><figcaption>
+GO Biological Process enrichment map showing term relationships
 </figcaption></figure><p>The enrichment map clusters similar terms together, revealing
 functional themes.</p>
 <div id="exercise-compare-go-ontologies" class="callout challenge">
@@ -1041,8 +1041,8 @@ mmu04981    13</code></pre>
 <code class="sourceCode R"><span><span class="fu">barplot</span><span class="op">(</span><span class="va">ekegg</span>, showCategory <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"KEGG pathway enrichment"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="../fig/06-enrich/kegg-bar.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="../fig/06-enrich/kegg-bar.png" alt="KEGG pathway enrichment barplot" class="figure mx-auto d-block"><figcaption>
+KEGG pathway enrichment barplot
 </figcaption></figure><div id="kegg-limitations" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -1139,8 +1139,8 @@ HALLMARK_P53_PATHWAY       HALLMARK_P53_PATHWAY    HALLMARK_P53_PATHWAY   86/113
 <code class="sourceCode R"><span><span class="fu">dotplot</span><span class="op">(</span><span class="va">ehall</span>, showCategory <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"MSigDB Hallmark enrichment"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="../fig/06-enrich/hallmark1.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="../fig/06-enrich/hallmark1.png" alt="MSigDB Hallmark gene set enrichment dotplot" class="figure mx-auto d-block"><figcaption>
+MSigDB Hallmark gene set enrichment dotplot
 </figcaption></figure><div id="why-use-hallmark-gene-sets" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -1493,8 +1493,9 @@ GO:0042274 GO:0042274            ribosomal small subunit biogenesis     106     
 <span>    <span class="fu">facet_grid</span><span class="op">(</span><span class="va">.</span> <span class="op">~</span> <span class="va">.sign</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"GSEA: GO Biological Process"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="../fig/06-enrich/gsea-1.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="../fig/06-enrich/gsea-1.png" alt="GSEA dotplot for GO Biological Process showing activated and suppressed gene sets" class="figure mx-auto d-block"><figcaption>
+GSEA dotplot for GO Biological Process showing activated and suppressed
+gene sets
 </figcaption></figure><p>The <code>.sign</code> column indicates whether the gene set is
 enriched in up-regulated (<code>activated</code>) or down-regulated
 (<code>suppressed</code>) genes.</p>
@@ -1508,8 +1509,8 @@ enriched in up-regulated (<code>activated</code>) or down-regulated
 <code class="sourceCode R"><span><span class="co"># Enrichment plot for top gene set</span></span>
 <span><span class="fu">gseaplot2</span><span class="op">(</span><span class="va">gsea_go</span>, geneSetID <span class="op">=</span> <span class="fl">1</span>, title <span class="op">=</span> <span class="va">gsea_go</span><span class="op">$</span><span class="va">Description</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre>
 </div>
-<figure style="text-align: center"><img src="../fig/06-enrich/gsea-2b.png" alt="CAPTION GOES HERE" class="figure mx-auto d-block"><figcaption>
-CAPTION GOES HERE
+<figure style="text-align: center"><img src="../fig/06-enrich/gsea-2b.png" alt="GSEA enrichment plot showing running enrichment score for top gene set" class="figure mx-auto d-block"><figcaption>
+GSEA enrichment plot showing running enrichment score for top gene set
 </figcaption></figure><div id="interpreting-gsea-results" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
