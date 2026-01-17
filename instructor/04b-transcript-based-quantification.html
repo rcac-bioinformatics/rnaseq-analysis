@@ -244,7 +244,6 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#introduction">Introduction</a></li>
-<li><a href="#step-0-strand-detection-with-salmon">Step 0: Strand detection with Salmon</a></li>
 <li><a href="#step-1-preparing-the-transcriptome-reference">Step 1: Preparing the transcriptome reference</a></li>
 <li><a href="#step-2-quantifying-transcript-abundances">Step 2: Quantifying transcript abundances</a></li>
 <li><a href="#step-3-running-kallisto-for-many-samples">Step 3: Running Kallisto for many samples</a></li>
@@ -343,7 +342,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>B. Transcript-based quantification (Kallisto)</h1>
-        <p>Last updated on 2026-01-16 |
+        <p>Last updated on 2026-01-17 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04b-transcript-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -447,71 +446,6 @@ files).</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="step-0-strand-detection-with-salmon">Step 0: Strand detection with Salmon<a class="anchor" aria-label="anchor" href="#step-0-strand-detection-with-salmon"></a></h2>
-<hr class="half-width"><p>Before running Kallisto, we need to determine our library
-strandedness. Kallisto requires you to specify the strand information
-manually, while Salmon has an excellent automatic library type detection
-feature.</p>
-<p>We use Salmon <strong>only</strong> for strand inference, then use
-Kallisto for the actual quantification.</p>
-<div class="codewrapper sourceCode" id="cb1">
-<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">sinteractive</span> <span class="at">-A</span> workshop <span class="at">-p</span> cpu <span class="at">-N</span> 1 <span class="at">-n</span> 4 <span class="at">--time</span><span class="op">=</span>1:00:00</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/strand_check</span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="ex">module</span> load salmon</span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="co"># Build a quick Salmon index for strand detection</span></span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="ex">salmon</span> index <span class="dt">\</span></span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>    <span class="at">--transcripts</span> data/gencode.vM38.transcripts-clean.fa <span class="dt">\</span></span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>    <span class="at">--index</span> data/salmon_index_strand <span class="dt">\</span></span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>    <span class="at">--threads</span> 4</span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co"># Run Salmon on one sample with automatic library type detection</span></span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="ex">salmon</span> quant <span class="dt">\</span></span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>    <span class="at">--index</span> data/salmon_index_strand <span class="dt">\</span></span>
-<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>    <span class="at">--libType</span> A <span class="dt">\</span></span>
-<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>    <span class="at">--mates1</span> data/WT_Bcell_mock_rep1_R1.fastq.gz <span class="dt">\</span></span>
-<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>    <span class="at">--mates2</span> data/WT_Bcell_mock_rep1_R2.fastq.gz <span class="dt">\</span></span>
-<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>    <span class="at">--output</span> results/strand_check <span class="dt">\</span></span>
-<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>    <span class="at">--threads</span> 4</span></code></pre>
-</div>
-<p>Check the inferred library type:</p>
-<div class="codewrapper sourceCode" id="cb2">
-<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">cat</span> results/strand_check/lib_format_counts.json</span></code></pre>
-</div>
-<p>The key fields are:</p>
-<ul><li>
-<strong>expected_format</strong>: The library type (e.g.,
-<code>IU</code> = Inward Unstranded, <code>ISR</code> = Inward Stranded
-Reverse)</li>
-<li>
-<strong>strand_mapping_bias</strong>: Values near 0.5 indicate
-unstranded data</li>
-</ul><p>For our dataset, you should see <code>IU</code> (Inward Unstranded),
-meaning reads map equally to both strands.</p>
-<div id="why-use-salmon-for-strand-detection" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
-</div>
-<span class="callout-header">Callout</span>
-<div id="why-use-salmon-for-strand-detection" class="callout-inner">
-<h3 class="callout-title">Why use Salmon for strand detection?</h3>
-<div class="callout-content">
-<p>Salmon’s library type inference is well-documented, robust, and fast.
-Using a small subset of reads to detect strandedness takes only a few
-minutes and provides reliable results. Kallisto does not have automatic
-strand detection, so this preliminary step ensures we provide the
-correct parameters.</p>
-</div>
-</div>
-</div>
 </section><section><h2 class="section-heading" id="step-1-preparing-the-transcriptome-reference">Step 1: Preparing the transcriptome reference<a class="anchor" aria-label="anchor" href="#step-1-preparing-the-transcriptome-reference"></a></h2>
 <hr class="half-width"><p>Kallisto requires a <strong>transcriptome FASTA file</strong> (all
 annotated transcripts). We previously downloaded the transcripts file
@@ -534,18 +468,18 @@ estimates.</p>
 <div class="section level3">
 <h3 id="building-the-kallisto-index">Building the Kallisto index<a class="anchor" aria-label="anchor" href="#building-the-kallisto-index"></a></h3>
 <p>The Kallisto index is lightweight and quick to build:</p>
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> data/kallisto_index</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="ex">module</span> load kallisto</span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="ex">kallisto</span> index <span class="dt">\</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    <span class="at">-i</span> data/kallisto_index/transcripts.idx <span class="dt">\</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    data/gencode.vM38.transcripts-clean.fa</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> data/kallisto_index</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="ex">module</span> load kallisto</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="ex">kallisto</span> index <span class="dt">\</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>    <span class="at">-i</span> data/kallisto_index/transcripts.idx <span class="dt">\</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>    data/gencode.vM38.transcripts-clean.fa</span></code></pre>
 </div>
 <p>This creates an index file that Kallisto uses for pseudo-alignment.
 Index building typically takes 2-3 minutes for a mammalian
@@ -570,22 +504,22 @@ interchangeable</strong>. Each tool has its own index format:</p>
 </section><section><h2 class="section-heading" id="step-2-quantifying-transcript-abundances">Step 2: Quantifying transcript abundances<a class="anchor" aria-label="anchor" href="#step-2-quantifying-transcript-abundances"></a></h2>
 <hr class="half-width"><p>The core Kallisto command is <code>kallisto quant</code>. We use the
 transcript index and paired-end FASTQ files.</p>
-<div class="codewrapper sourceCode" id="cb4">
+<div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/results/kallisto_quant</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/results/kallisto_quant</span></code></pre>
 </div>
 <p>Example command:</p>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">kallisto</span> quant <span class="dt">\</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>    <span class="at">-i</span> data/kallisto_index/transcripts.idx <span class="dt">\</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    <span class="at">-o</span> results/kallisto_quant/WT_Bcell_mock_rep1 <span class="dt">\</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="at">-b</span> 100 <span class="dt">\</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="at">-t</span> 16 <span class="dt">\</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    data/WT_Bcell_mock_rep1_R1.fastq.gz <span class="dt">\</span></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    data/WT_Bcell_mock_rep1_R2.fastq.gz</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">kallisto</span> quant <span class="dt">\</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>    <span class="at">-i</span> data/kallisto_index/transcripts.idx <span class="dt">\</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>    <span class="at">-o</span> results/kallisto_quant/WT_Bcell_mock_rep1 <span class="dt">\</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>    <span class="at">-b</span> 100 <span class="dt">\</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="at">-t</span> 16 <span class="dt">\</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>    data/WT_Bcell_mock_rep1_R1.fastq.gz <span class="dt">\</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>    data/WT_Bcell_mock_rep1_R2.fastq.gz</span></code></pre>
 </div>
 <p>Important flags:</p>
 <ul><li>
@@ -640,54 +574,54 @@ flag entirely.</p>
 </section><section><h2 class="section-heading" id="step-3-running-kallisto-for-many-samples">Step 3: Running Kallisto for many samples<a class="anchor" aria-label="anchor" href="#step-3-running-kallisto-for-many-samples"></a></h2>
 <hr class="half-width"><p>We use a SLURM array job for efficiency and consistency.</p>
 <p>First, create a sample list (or reuse the one from Episode 4A):</p>
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/data</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span>_R1.fastq.gz <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/_R1.fastq.gz//'</span> <span class="op">&gt;</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/scripts/samples.txt</span></code></pre>
+</div>
+<p>Array job:</p>
+<div class="codewrapper sourceCode" id="cb5">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">!/bin/bash</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#SBATCH --nodes=1</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=16</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#SBATCH --account=workshop</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#SBATCH --partition=cpu</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#SBATCH --time=1:00:00</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#SBATCH --job-name=kallisto_quant</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#SBATCH --array=1-8</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#SBATCH --output=cluster-%x.%j.out</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#SBATCH --error=cluster-%x.%j.err</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="ex">module</span> load kallisto</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="va">DATA</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/data"</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="va">INDEX</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/data/kallisto_index/transcripts.idx"</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="va">OUT</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/results/kallisto_quant"</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="va">SAMPLE</span><span class="op">=</span><span class="va">$(</span><span class="fu">sed</span> <span class="at">-n</span> <span class="st">"</span><span class="va">${SLURM_ARRAY_TASK_ID}</span><span class="st">p"</span> samples.txt<span class="va">)</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">${OUT}</span>/<span class="va">${SAMPLE}</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="va">R1</span><span class="op">=</span><span class="va">${DATA}</span>/<span class="va">${SAMPLE}</span>_R1.fastq.gz</span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="va">R2</span><span class="op">=</span><span class="va">${DATA}</span>/<span class="va">${SAMPLE}</span>_R2.fastq.gz</span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="ex">kallisto</span> quant <span class="dt">\</span></span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a>    <span class="at">-i</span> <span class="va">$INDEX</span> <span class="dt">\</span></span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a>    <span class="at">-o</span> <span class="va">$OUT</span>/<span class="va">$SAMPLE</span> <span class="dt">\</span></span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a>    <span class="at">-b</span> 100 <span class="dt">\</span></span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a>    <span class="at">-t</span> <span class="va">${SLURM_CPUS_ON_NODE}</span> <span class="dt">\</span></span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a>    <span class="va">$R1</span> <span class="va">$R2</span> <span class="op">&amp;&gt;</span> <span class="va">$OUT</span>/<span class="va">$SAMPLE</span>/<span class="va">${SAMPLE}</span>.log</span></code></pre>
+</div>
+<p>Submit:</p>
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/data</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span>_R1.fastq.gz <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/_R1.fastq.gz//'</span> <span class="op">&gt;</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/scripts/samples.txt</span></code></pre>
-</div>
-<p>Array job:</p>
-<div class="codewrapper sourceCode" id="cb7">
-<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#SBATCH --nodes=1</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=16</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#SBATCH --account=workshop</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#SBATCH --partition=cpu</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#SBATCH --time=1:00:00</span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#SBATCH --job-name=kallisto_quant</span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#SBATCH --array=1-8</span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#SBATCH --output=cluster-%x.%j.out</span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#SBATCH --error=cluster-%x.%j.err</span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="ex">module</span> load kallisto</span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a></span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="va">DATA</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/data"</span></span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="va">INDEX</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/data/kallisto_index/transcripts.idx"</span></span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="va">OUT</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/results/kallisto_quant"</span></span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a></span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$OUT</span></span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a></span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="va">SAMPLE</span><span class="op">=</span><span class="va">$(</span><span class="fu">sed</span> <span class="at">-n</span> <span class="st">"</span><span class="va">${SLURM_ARRAY_TASK_ID}</span><span class="st">p"</span> scripts/samples.txt<span class="va">)</span></span>
-<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a></span>
-<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="va">R1</span><span class="op">=</span><span class="va">${DATA}</span>/<span class="va">${SAMPLE}</span>_R1.fastq.gz</span>
-<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="va">R2</span><span class="op">=</span><span class="va">${DATA}</span>/<span class="va">${SAMPLE}</span>_R2.fastq.gz</span>
-<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a></span>
-<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a><span class="ex">kallisto</span> quant <span class="dt">\</span></span>
-<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a>    <span class="at">-i</span> <span class="va">$INDEX</span> <span class="dt">\</span></span>
-<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a>    <span class="at">-o</span> <span class="va">$OUT</span>/<span class="va">$SAMPLE</span> <span class="dt">\</span></span>
-<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a>    <span class="at">-b</span> 100 <span class="dt">\</span></span>
-<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a>    <span class="at">-t</span> <span class="va">${SLURM_CPUS_ON_NODE}</span> <span class="dt">\</span></span>
-<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a>    <span class="va">$R1</span> <span class="va">$R2</span></span></code></pre>
-</div>
-<p>Submit:</p>
-<div class="codewrapper sourceCode" id="cb8">
-<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">sbatch</span> quant_kallisto.sh</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">sbatch</span> quant_kallisto.sh</span></code></pre>
 </div>
 <p>The typical run time is ~2-3 minutes per sample (faster than
 Salmon).</p>
@@ -776,28 +710,28 @@ gene-level matrix.</p>
 <h3 id="prepare-tx2gene-mapping">Prepare tx2gene mapping<a class="anchor" aria-label="anchor" href="#prepare-tx2gene-mapping"></a></h3>
 <p>We need a mapping file that links transcript IDs to gene IDs. The GTF
 annotation file contains this information.</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/data</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'$3=="transcript" {</span></span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="st">    match($9, /transcript_id "([^"]+)"/, tx);</span></span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="st">    match($9, /gene_id "([^"]+)"/, gene);</span></span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="st">    print tx[1] "\t" gene[1]</span></span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="st">}'</span> gencode.vM38.primary_assembly.basic.annotation.gtf <span class="op">&gt;</span> tx2gene.tsv</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/data</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F</span><span class="st">'\t'</span> <span class="st">'$3=="transcript" {</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="st">    match($9, /transcript_id "([^"]+)"/, tx);</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="st">    match($9, /gene_id "([^"]+)"/, gene);</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="st">    print tx[1] "\t" gene[1]</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="st">}'</span> gencode.vM38.primary_assembly.basic.annotation.gtf <span class="op">&gt;</span> tx2gene.tsv</span></code></pre>
 </div>
 <p>Next, we process this mapping in R. Load the modules and start the R
 session:</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="ex">module</span> load r-rnaseq</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="ex">R</span></span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="ex">module</span> load r-rnaseq</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="ex">R</span></span></code></pre>
 </div>
 <p>In the R session, read in the <code>tx2gene</code> mapping and run
 tximport:</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -817,24 +751,24 @@ tximport:</p>
 </div>
 <p><code>txi$counts</code> now contains gene-level counts suitable for
 DESeq2.</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">head</span>(txi<span class="sc">$</span>counts)</span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>                      WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>ENSMUSG00000000001<span class="fl">.5</span>          <span class="fl">473.4426</span>         <span class="fl">553.7849</span>         <span class="fl">826.9969</span>         <span class="fl">676.9101</span></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>ENSMUSG00000000003<span class="fl">.16</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>ENSMUSG00000000028<span class="fl">.16</span>          <span class="fl">40.5783</span>          <span class="fl">33.9665</span>          <span class="fl">55.3055</span>          <span class="fl">97.8451</span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>ENSMUSG00000000031<span class="fl">.20</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>ENSMUSG00000000037<span class="fl">.18</span>          <span class="fl">19.2220</span>           <span class="fl">9.5997</span>          <span class="fl">16.9515</span>          <span class="fl">20.2265</span></span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>ENSMUSG00000000049<span class="fl">.12</span>           <span class="fl">0.0000</span>           <span class="fl">5.0221</span>           <span class="fl">1.9846</span>           <span class="fl">1.0164</span></span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4</span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>ENSMUSG00000000001<span class="fl">.5</span>        <span class="fl">724.1176</span>        <span class="fl">813.8484</span>        <span class="fl">689.2341</span>        <span class="fl">752.1567</span></span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>ENSMUSG00000000003<span class="fl">.16</span>         <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span></span>
-<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>ENSMUSG00000000028<span class="fl">.16</span>        <span class="fl">41.6915</span>         <span class="fl">63.8123</span>         <span class="fl">48.3421</span>         <span class="fl">55.7892</span></span>
-<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>ENSMUSG00000000031<span class="fl">.20</span>         <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span></span>
-<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>ENSMUSG00000000037<span class="fl">.18</span>        <span class="fl">19.6807</span>         <span class="fl">18.9451</span>         <span class="fl">22.3456</span>         <span class="fl">17.8923</span></span>
-<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>ENSMUSG00000000049<span class="fl">.12</span>         <span class="fl">0.9937</span>          <span class="fl">9.1869</span>          <span class="fl">2.3456</span>          <span class="fl">4.5678</span></span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">head</span>(txi<span class="sc">$</span>counts)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>                      WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>ENSMUSG00000000001<span class="fl">.5</span>          <span class="fl">473.4426</span>         <span class="fl">553.7849</span>         <span class="fl">826.9969</span>         <span class="fl">676.9101</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>ENSMUSG00000000003<span class="fl">.16</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>ENSMUSG00000000028<span class="fl">.16</span>          <span class="fl">40.5783</span>          <span class="fl">33.9665</span>          <span class="fl">55.3055</span>          <span class="fl">97.8451</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>ENSMUSG00000000031<span class="fl">.20</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span>           <span class="fl">0.0000</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>ENSMUSG00000000037<span class="fl">.18</span>          <span class="fl">19.2220</span>           <span class="fl">9.5997</span>          <span class="fl">16.9515</span>          <span class="fl">20.2265</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>ENSMUSG00000000049<span class="fl">.12</span>           <span class="fl">0.0000</span>           <span class="fl">5.0221</span>           <span class="fl">1.9846</span>           <span class="fl">1.0164</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>ENSMUSG00000000001<span class="fl">.5</span>        <span class="fl">724.1176</span>        <span class="fl">813.8484</span>        <span class="fl">689.2341</span>        <span class="fl">752.1567</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>ENSMUSG00000000003<span class="fl">.16</span>         <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>ENSMUSG00000000028<span class="fl">.16</span>        <span class="fl">41.6915</span>         <span class="fl">63.8123</span>         <span class="fl">48.3421</span>         <span class="fl">55.7892</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>ENSMUSG00000000031<span class="fl">.20</span>         <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span>          <span class="fl">0.0000</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>ENSMUSG00000000037<span class="fl">.18</span>        <span class="fl">19.6807</span>         <span class="fl">18.9451</span>         <span class="fl">22.3456</span>         <span class="fl">17.8923</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>ENSMUSG00000000049<span class="fl">.12</span>         <span class="fl">0.9937</span>          <span class="fl">9.1869</span>          <span class="fl">2.3456</span>          <span class="fl">4.5678</span></span></code></pre>
 </div>
 <div id="why-use-the-default-countsfromabundance-setting" class="callout">
 <div class="callout-square">
@@ -884,14 +818,14 @@ generate bootstraps, you can use <code>.tsv</code> files instead.</p>
 </div>
 </section><section><h2 class="section-heading" id="step-5-qc-of-quantification-metrics">Step 5: QC of quantification metrics<a class="anchor" aria-label="anchor" href="#step-5-qc-of-quantification-metrics"></a></h2>
 <hr class="half-width"><p>Use MultiQC to aggregate Kallisto results:</p>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="ex">module</span> load multiqc</span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="ex">multiqc</span> results/kallisto_quant <span class="at">-o</span> results/qc_kallisto</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="ex">module</span> load multiqc</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="ex">multiqc</span> results/kallisto_quant <span class="at">-o</span> results/qc_kallisto</span></code></pre>
 </div>
 <p>Inspect:</p>
 <ul><li>pseudoalignment rates</li>
@@ -1001,7 +935,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.17.3" class="external-link">sandpaper (0.17.3)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/9765d26807833061ac50b41dc951cf45941290f6" class="external-link">varnish (1.0.7)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.18.0" class="external-link">sandpaper (0.18.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/9765d26807833061ac50b41dc951cf45941290f6" class="external-link">varnish (1.0.7)</a></p>
 		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -1023,8 +957,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/04b-transcript-based-quantification.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/04b-transcript-based-quantification.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-01-16",
-  "datePublished": "2026-01-16"
+  "dateModified": "2026-01-17",
+  "datePublished": "2026-01-17"
 }
 
   </script><script>
