@@ -78,7 +78,7 @@ We will be using the OOD to start an interactive session on Scholar:
 1. Login using your Purdue credentials after clicking the above link
 2. Click on "Interactive Apps" in the top menu, and select "RStudio (Bioconductor)"
 3. Fill the job submission form as follows:
-   - queue: `workshop`
+   - queue: `rcac-rnaseq`
    - Walltime: `4`
    - Number of cores: `4`
 4. Click "Launch" and wait for the RStudio session to start

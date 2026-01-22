@@ -8,7 +8,7 @@ title: Setup
 
 2. **Tomas Ratkus**: is a Research Solutions Engineer with Rosen Center for Advanced Computing (RCAC), and a Senior Laboratory Operations Specialist in the Department of Earth, Atmospheric, and Planetary Sciences (EAPS). He primarily supports earth system and climate modeling researchers through high performance computing, software environments, and workflow support.
 
-3. **Rose Wilfong**: works jointly with the Bindley Bioscience Center on campus. Prior to joining, she did graduate research in bioinformatics, cheminformatics, and cryo-ET.
+3. **Rose Wilfong**: is a senior research data facilitator with Rosen Center for Advanced Computing and works jointly with the Bindley Bioscience Center on campus. She mainly supports data management workflows and automation with the facilities. Prior to joining RCAC, she did graduate research in bioinformatics, cheminformatics, and cryo-ET.
 
 
 ## Schedule (01/22/2026)
@@ -58,13 +58,13 @@ rsync -avP /scratch/negishi/aseethar/rnaseq-workshop ${RCAC_SCRATCH}/
 A completed version of the workshop data is available at:
 
 ```
-/depot/workshop/data/rnaseq-workshop_results
+/scratch/negishi/aseethar/rnaseq-workshop_results
 ```
 
 You can copy it to your scratch space using:
 
 ```bash
-rsync -avP /scratch/negishi/aseethar/rnaseq-workshop/rnaseq-workshop_results ${RCAC_SCRATCH}/
+rsync -avP /scratch/negishi/aseethar/rnaseq-workshop_results ${RCAC_SCRATCH}/
 ```
 
 Use this folder **only if you are unable to complete the exercises during the workshop**.

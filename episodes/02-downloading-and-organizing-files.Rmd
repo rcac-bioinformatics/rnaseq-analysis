@@ -317,7 +317,7 @@ knitr::include_graphics("fig/01_fq2counts/srr-runs.png")
 [DO NOT RUN THIS COMMAND DURING THE WORKSHOP - IT TAKES TOO LONG TO COMPLETE]. You already copied the pre-downloaded data to your scratch space.
 
 ```bash
-sinteractive -A workshop -p cpu -N 1 -n 4 --time=1:00:00
+sinteractive -A rcac-rnaseq -q standby -p cpu -N 1 -n 4 --time=1:00:00
 cd ${SCRATCH}/rnaseq-workshop/data
 module load biocontainers
 module load sra-tools

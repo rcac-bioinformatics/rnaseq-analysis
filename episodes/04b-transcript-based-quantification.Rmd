@@ -181,11 +181,12 @@ ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' > $SCRATCH/rnaseq-workshop/scripts/sam
 Array job:
 
 ```bash
-!/bin/bash
+#!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
-#SBATCH --account=workshop
+#SBATCH --account=rcac-rnaseq
+#SBATCH --qos=standby
 #SBATCH --partition=cpu
 #SBATCH --time=1:00:00
 #SBATCH --job-name=kallisto_quant
