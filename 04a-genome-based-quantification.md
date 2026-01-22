@@ -61,7 +61,7 @@ Salmon can infer strandness directly from raw FASTQ files without any alignment.
 We run Salmon with `-l A`, which tells it to explore all library types.
 
 ```bash
-sinteractive -A workshop -q standby -p cpu -N 1 -n 4 --time=1:00:00
+sinteractive -A rcac-workshop -q standby -p cpu -N 1 -n 4 --time=1:00:00
 
 cd $SCRATCH/rnaseq-workshop
 mkdir -p results/strand_check
@@ -197,7 +197,8 @@ Below is a minimal SLURM job script for building the STAR genome index. Create a
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --account=workshop
+#SBATCH --account=rcac-rnaseq
+#SBATCH --qos=standby
 #SBATCH --partition=cpu
 #SBATCH --time=1:00:00
 #SBATCH --job-name=star_index
@@ -326,7 +327,8 @@ ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' > ${SCRATCH}/rnaseq-workshop/scripts/s
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --account=workshop
+#SBATCH --account=rcac-rnaseq
+#SBATCH --qos=standby
 #SBATCH --partition=cpu
 #SBATCH --time=8:00:00
 #SBATCH --job-name=read_mapping
@@ -485,7 +487,8 @@ Below is an example SLURM script to count all BAM files at once.
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
-#SBATCH --account=workshop
+#SBATCH --account=rcac-rnaseq
+#SBATCH --qos=standby
 #SBATCH --partition=cpu
 #SBATCH --time=1:00:00
 #SBATCH --job-name=featurecounts

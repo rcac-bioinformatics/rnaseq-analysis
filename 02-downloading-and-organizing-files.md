@@ -322,7 +322,7 @@ On the Run Selector page, select the accessions (SRR2121778-81, SRR2121786-89), 
 [DO NOT RUN THIS COMMAND DURING THE WORKSHOP - IT TAKES TOO LONG TO COMPLETE]. You already copied the pre-downloaded data to your scratch space.
 
 ```bash
-sinteractive -A workshop -p cpu -N 1 -n 4 --time=1:00:00
+sinteractive -A rcac-rnaseq -q standby -p cpu -N 1 -n 4 --time=1:00:00
 cd ${SCRATCH}/rnaseq-workshop/data
 module load biocontainers
 module load sra-tools
