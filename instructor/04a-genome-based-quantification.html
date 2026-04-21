@@ -232,7 +232,7 @@
       </button>
     </div><!--/div.accordion-header-->
 
-    <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
+    <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#introduction">Introduction</a></li>
 <li><a href="#step-1-checking-rna-seq-library-strandness">Step 1: Checking RNA-seq library strandness</a></li>
@@ -342,7 +342,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>A. Genome-based quantification (STAR + featureCounts)</h1>
-        <p>Last updated on 2026-04-14 |
+        <p>Last updated on 2026-04-21 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04a-genome-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -430,24 +430,24 @@ library types.</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">sinteractive</span> <span class="at">-A</span> rcac-workshop <span class="at">-q</span> standby <span class="at">-p</span> cpu <span class="at">-N</span> 1 <span class="at">-n</span> 4 <span class="at">--time</span><span class="op">=</span>1:00:00</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/strand_check</span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="ex">module</span> load salmon</span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="ex">salmon</span> index <span class="at">--transcripts</span> data/gencode.vM38.transcripts-clean.fa <span class="dt">\</span></span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>             <span class="at">--index</span> data/salmon_index <span class="dt">\</span></span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>             <span class="at">--threads</span> 4</span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="ex">salmon</span> quant <span class="at">--index</span> data/salmon_index <span class="dt">\</span></span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>             <span class="at">--libType</span> A <span class="dt">\</span></span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>             <span class="at">--mates1</span> data/WT_Bcell_mock_rep1_R1.fastq.gz <span class="dt">\</span></span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>             <span class="at">--mates2</span> data/WT_Bcell_mock_rep1_R2.fastq.gz <span class="dt">\</span></span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>             <span class="at">--output</span> results/strand_check <span class="dt">\</span></span>
-<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>             <span class="at">--threads</span> 4</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1" aria-label="code-block-1-1"></a><span class="ex">sinteractive</span> <span class="at">-A</span> rcac-workshop <span class="at">-q</span> standby <span class="at">-p</span> cpu <span class="at">-N</span> 1 <span class="at">-n</span> 4 <span class="at">--time</span><span class="op">=</span>1:00:00</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1" aria-label="code-block-1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1" aria-label="code-block-1-3"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1" aria-label="code-block-1-4"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/strand_check</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1" aria-label="code-block-1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1" aria-label="code-block-1-6"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1" aria-label="code-block-1-7"></a><span class="ex">module</span> load salmon</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1" aria-label="code-block-1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1" aria-label="code-block-1-9"></a><span class="ex">salmon</span> index <span class="at">--transcripts</span> data/gencode.vM38.transcripts-clean.fa <span class="dt">\</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1" aria-label="code-block-1-10"></a>             <span class="at">--index</span> data/salmon_index <span class="dt">\</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1" aria-label="code-block-1-11"></a>             <span class="at">--threads</span> 4</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1" aria-label="code-block-1-12"></a></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1" aria-label="code-block-1-13"></a><span class="ex">salmon</span> quant <span class="at">--index</span> data/salmon_index <span class="dt">\</span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1" aria-label="code-block-1-14"></a>             <span class="at">--libType</span> A <span class="dt">\</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1" aria-label="code-block-1-15"></a>             <span class="at">--mates1</span> data/WT_Bcell_mock_rep1_R1.fastq.gz <span class="dt">\</span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1" aria-label="code-block-1-16"></a>             <span class="at">--mates2</span> data/WT_Bcell_mock_rep1_R2.fastq.gz <span class="dt">\</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1" aria-label="code-block-1-17"></a>             <span class="at">--output</span> results/strand_check <span class="dt">\</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1" aria-label="code-block-1-18"></a>             <span class="at">--threads</span> 4</span></code></pre>
 </div>
 <p>The important output is in
 <code>results/strand_check/lib_format_counts.json</code>:</p>
@@ -461,28 +461,28 @@ library types.</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">JSON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode json" tabindex="0"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="dt">"read_files"</span><span class="fu">:</span> <span class="st">"[ data/WT_Bcell_mock_rep1_R1.fastq.gz, data/WT_Bcell_mock_rep1_R2.fastq.gz]"</span><span class="fu">,</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="dt">"expected_format"</span><span class="fu">:</span> <span class="st">"IU"</span><span class="fu">,</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="dt">"compatible_fragment_ratio"</span><span class="fu">:</span> <span class="fl">1.0</span><span class="fu">,</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="dt">"num_compatible_fragments"</span><span class="fu">:</span> <span class="dv">11994681</span><span class="fu">,</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="dt">"num_assigned_fragments"</span><span class="fu">:</span> <span class="dv">11994681</span><span class="fu">,</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="dt">"num_frags_with_concordant_consistent_mappings"</span><span class="fu">:</span> <span class="dv">10472924</span><span class="fu">,</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="dt">"num_frags_with_inconsistent_or_orphan_mappings"</span><span class="fu">:</span> <span class="dv">2280227</span><span class="fu">,</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="dt">"strand_mapping_bias"</span><span class="fu">:</span> <span class="dv">0</span><span class="er">.</span><span class="dv">5082214861866657</span><span class="fu">,</span></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="dt">"MSF"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="dt">"OSF"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>    <span class="dt">"ISF"</span><span class="fu">:</span> <span class="dv">5322565</span><span class="fu">,</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>    <span class="dt">"MSR"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    <span class="dt">"OSR"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="dt">"ISR"</span><span class="fu">:</span> <span class="dv">5150359</span><span class="fu">,</span></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>    <span class="dt">"SF"</span><span class="fu">:</span> <span class="dv">1149290</span><span class="fu">,</span></span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>    <span class="dt">"SR"</span><span class="fu">:</span> <span class="dv">1130937</span><span class="fu">,</span></span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>    <span class="dt">"MU"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>    <span class="dt">"OU"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>    <span class="dt">"IU"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>    <span class="dt">"U"</span><span class="fu">:</span> <span class="dv">0</span></span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="fu">}</span></span></code></pre>
+<pre class="sourceCode json" tabindex="0"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="fu">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1" aria-label="code-block-2-2"></a>    <span class="dt">"read_files"</span><span class="fu">:</span> <span class="st">"[ data/WT_Bcell_mock_rep1_R1.fastq.gz, data/WT_Bcell_mock_rep1_R2.fastq.gz]"</span><span class="fu">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1" aria-label="code-block-2-3"></a>    <span class="dt">"expected_format"</span><span class="fu">:</span> <span class="st">"IU"</span><span class="fu">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1" aria-label="code-block-2-4"></a>    <span class="dt">"compatible_fragment_ratio"</span><span class="fu">:</span> <span class="fl">1.0</span><span class="fu">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1" aria-label="code-block-2-5"></a>    <span class="dt">"num_compatible_fragments"</span><span class="fu">:</span> <span class="dv">11994681</span><span class="fu">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1" aria-label="code-block-2-6"></a>    <span class="dt">"num_assigned_fragments"</span><span class="fu">:</span> <span class="dv">11994681</span><span class="fu">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1" aria-label="code-block-2-7"></a>    <span class="dt">"num_frags_with_concordant_consistent_mappings"</span><span class="fu">:</span> <span class="dv">10472924</span><span class="fu">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1" aria-label="code-block-2-8"></a>    <span class="dt">"num_frags_with_inconsistent_or_orphan_mappings"</span><span class="fu">:</span> <span class="dv">2280227</span><span class="fu">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1" aria-label="code-block-2-9"></a>    <span class="dt">"strand_mapping_bias"</span><span class="fu">:</span> <span class="dv">0</span><span class="er">.</span><span class="dv">5082214861866657</span><span class="fu">,</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1" aria-label="code-block-2-10"></a>    <span class="dt">"MSF"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1" aria-label="code-block-2-11"></a>    <span class="dt">"OSF"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1" aria-label="code-block-2-12"></a>    <span class="dt">"ISF"</span><span class="fu">:</span> <span class="dv">5322565</span><span class="fu">,</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1" aria-label="code-block-2-13"></a>    <span class="dt">"MSR"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1" aria-label="code-block-2-14"></a>    <span class="dt">"OSR"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1" aria-label="code-block-2-15"></a>    <span class="dt">"ISR"</span><span class="fu">:</span> <span class="dv">5150359</span><span class="fu">,</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1" aria-label="code-block-2-16"></a>    <span class="dt">"SF"</span><span class="fu">:</span> <span class="dv">1149290</span><span class="fu">,</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1" aria-label="code-block-2-17"></a>    <span class="dt">"SR"</span><span class="fu">:</span> <span class="dv">1130937</span><span class="fu">,</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1" aria-label="code-block-2-18"></a>    <span class="dt">"MU"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1" aria-label="code-block-2-19"></a>    <span class="dt">"OU"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1" aria-label="code-block-2-20"></a>    <span class="dt">"IU"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1" aria-label="code-block-2-21"></a>    <span class="dt">"U"</span><span class="fu">:</span> <span class="dv">0</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1" aria-label="code-block-2-22"></a><span class="fu">}</span></span></code></pre>
 </div>
 <blockquote>
 <h3 id="interpreting-lib_format_counts.json">Interpreting
@@ -601,38 +601,38 @@ index. Create a file named <code>index_genome.sh</code> in
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#SBATCH --nodes=1</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=20</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#SBATCH --account=rcac-rnaseq</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#SBATCH --qos=standby</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#SBATCH --partition=cpu</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#SBATCH --time=1:00:00</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#SBATCH --job-name=star_index</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#SBATCH --output=cluster-%x.%j.out</span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#SBATCH --error=cluster-%x.%j.err</span></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="ex">module</span> load star</span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="va">data_dir</span><span class="op">=</span><span class="st">"</span><span class="va">${SCRATCH}</span><span class="st">/rnaseq-workshop/data"</span></span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="va">genome</span><span class="op">=</span><span class="st">"</span><span class="va">${data_dir}</span><span class="st">/GRCm39.primary_assembly.genome.fa"</span></span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="va">gtf</span><span class="op">=</span><span class="st">"</span><span class="va">${data_dir}</span><span class="st">/gencode.vM38.primary_assembly.basic.annotation.gtf"</span></span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="va">indexdir</span><span class="op">=</span><span class="st">"</span><span class="va">${data_dir}</span><span class="st">/star_index"</span></span>
-<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a></span>
-<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="ex">STAR</span> <span class="dt">\</span></span>
-<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>    <span class="at">--runMode</span> genomeGenerate <span class="dt">\</span></span>
-<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>    <span class="at">--runThreadN</span> <span class="va">${SLURM_CPUS_ON_NODE}</span> <span class="dt">\</span></span>
-<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>    <span class="at">--genomeDir</span> <span class="va">${indexdir}</span> <span class="dt">\</span></span>
-<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>    <span class="at">--genomeFastaFiles</span> <span class="va">${genome}</span> <span class="dt">\</span></span>
-<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>    <span class="at">--sjdbGTFfile</span> <span class="va">${gtf}</span></span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1" aria-label="code-block-3-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1" aria-label="code-block-3-2"></a><span class="co">#SBATCH --nodes=1</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1" aria-label="code-block-3-3"></a><span class="co">#SBATCH --ntasks=1</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1" aria-label="code-block-3-4"></a><span class="co">#SBATCH --cpus-per-task=20</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1" aria-label="code-block-3-5"></a><span class="co">#SBATCH --account=rcac-rnaseq</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1" aria-label="code-block-3-6"></a><span class="co">#SBATCH --qos=standby</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1" aria-label="code-block-3-7"></a><span class="co">#SBATCH --partition=cpu</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1" aria-label="code-block-3-8"></a><span class="co">#SBATCH --time=1:00:00</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1" aria-label="code-block-3-9"></a><span class="co">#SBATCH --job-name=star_index</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1" aria-label="code-block-3-10"></a><span class="co">#SBATCH --output=cluster-%x.%j.out</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1" aria-label="code-block-3-11"></a><span class="co">#SBATCH --error=cluster-%x.%j.err</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1" aria-label="code-block-3-12"></a></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1" aria-label="code-block-3-13"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1" aria-label="code-block-3-14"></a><span class="ex">module</span> load star</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1" aria-label="code-block-3-15"></a></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1" aria-label="code-block-3-16"></a><span class="va">data_dir</span><span class="op">=</span><span class="st">"</span><span class="va">${SCRATCH}</span><span class="st">/rnaseq-workshop/data"</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1" aria-label="code-block-3-17"></a><span class="va">genome</span><span class="op">=</span><span class="st">"</span><span class="va">${data_dir}</span><span class="st">/GRCm39.primary_assembly.genome.fa"</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1" aria-label="code-block-3-18"></a><span class="va">gtf</span><span class="op">=</span><span class="st">"</span><span class="va">${data_dir}</span><span class="st">/gencode.vM38.primary_assembly.basic.annotation.gtf"</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1" aria-label="code-block-3-19"></a><span class="va">indexdir</span><span class="op">=</span><span class="st">"</span><span class="va">${data_dir}</span><span class="st">/star_index"</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1" aria-label="code-block-3-20"></a></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1" aria-label="code-block-3-21"></a><span class="ex">STAR</span> <span class="dt">\</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1" aria-label="code-block-3-22"></a>    <span class="at">--runMode</span> genomeGenerate <span class="dt">\</span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1" aria-label="code-block-3-23"></a>    <span class="at">--runThreadN</span> <span class="va">${SLURM_CPUS_ON_NODE}</span> <span class="dt">\</span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1" aria-label="code-block-3-24"></a>    <span class="at">--genomeDir</span> <span class="va">${indexdir}</span> <span class="dt">\</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1" aria-label="code-block-3-25"></a>    <span class="at">--genomeFastaFiles</span> <span class="va">${genome}</span> <span class="dt">\</span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1" aria-label="code-block-3-26"></a>    <span class="at">--sjdbGTFfile</span> <span class="va">${gtf}</span></span></code></pre>
 </div>
 <p>Submit the job:</p>
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">sbatch</span> index_genome.sh</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1" aria-label="code-block-4-1"></a><span class="ex">sbatch</span> index_genome.sh</span></code></pre>
 </div>
 <p>Indexing requires about 30 to 45 minutes.</p>
 <div id="accordionSpoiler2" class="accordion spoiler-accordion accordion-flush">
@@ -648,23 +648,23 @@ Contents of <code>star_index/</code>:</p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">star_index/</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="ex">├──</span> chrLength.txt</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="ex">├──</span> chrNameLength.txt</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="ex">├──</span> chrName.txt</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="ex">├──</span> chrStart.txt</span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="ex">├──</span> exonGeTrInfo.tab</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="ex">├──</span> exonInfo.tab</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="ex">├──</span> geneInfo.tab</span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="ex">├──</span> Genome</span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="ex">├──</span> genomeParameters.txt</span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="ex">├──</span> Log.out</span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="ex">├──</span> SA</span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="ex">├──</span> SAindex</span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="ex">├──</span> sjdbInfo.txt</span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="ex">├──</span> sjdbList.fromGTF.out.tab</span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="ex">├──</span> sjdbList.out.tab</span>
-<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="ex">└──</span> transcriptInfo.tab</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a><span class="ex">star_index/</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1" aria-label="code-block-5-2"></a><span class="ex">├──</span> chrLength.txt</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1" aria-label="code-block-5-3"></a><span class="ex">├──</span> chrNameLength.txt</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1" aria-label="code-block-5-4"></a><span class="ex">├──</span> chrName.txt</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1" aria-label="code-block-5-5"></a><span class="ex">├──</span> chrStart.txt</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1" aria-label="code-block-5-6"></a><span class="ex">├──</span> exonGeTrInfo.tab</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1" aria-label="code-block-5-7"></a><span class="ex">├──</span> exonInfo.tab</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1" aria-label="code-block-5-8"></a><span class="ex">├──</span> geneInfo.tab</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1" aria-label="code-block-5-9"></a><span class="ex">├──</span> Genome</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1" aria-label="code-block-5-10"></a><span class="ex">├──</span> genomeParameters.txt</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1" aria-label="code-block-5-11"></a><span class="ex">├──</span> Log.out</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1" aria-label="code-block-5-12"></a><span class="ex">├──</span> SA</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1" aria-label="code-block-5-13"></a><span class="ex">├──</span> SAindex</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1" aria-label="code-block-5-14"></a><span class="ex">├──</span> sjdbInfo.txt</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1" aria-label="code-block-5-15"></a><span class="ex">├──</span> sjdbList.fromGTF.out.tab</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1" aria-label="code-block-5-16"></a><span class="ex">├──</span> sjdbList.out.tab</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1" aria-label="code-block-5-17"></a><span class="ex">└──</span> transcriptInfo.tab</span></code></pre>
 </div>
 </div>
 </div>
@@ -721,14 +721,14 @@ paired FASTQ files.</p>
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">STAR</span> <span class="dt">\</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>    <span class="at">--runThreadN</span> 12 <span class="dt">\</span></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>    <span class="at">--genomeDir</span> data/star_index <span class="dt">\</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>    <span class="at">--readFilesIn</span> data/SRR1234567_1.fastq.gz data/SRR1234567_2.fastq.gz <span class="dt">\</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>    <span class="at">--readFilesCommand</span> zcat <span class="dt">\</span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>    <span class="at">--outFileNamePrefix</span> results/mapping/SRR1234567 <span class="dt">\</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>    <span class="at">--outSAMtype</span> BAM SortedByCoordinate <span class="dt">\</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    <span class="at">--outSAMunmapped</span> Within</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1" aria-label="code-block-6-1"></a><span class="ex">STAR</span> <span class="dt">\</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1" aria-label="code-block-6-2"></a>    <span class="at">--runThreadN</span> 12 <span class="dt">\</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1" aria-label="code-block-6-3"></a>    <span class="at">--genomeDir</span> data/star_index <span class="dt">\</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1" aria-label="code-block-6-4"></a>    <span class="at">--readFilesIn</span> data/SRR1234567_1.fastq.gz data/SRR1234567_2.fastq.gz <span class="dt">\</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1" aria-label="code-block-6-5"></a>    <span class="at">--readFilesCommand</span> zcat <span class="dt">\</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1" aria-label="code-block-6-6"></a>    <span class="at">--outFileNamePrefix</span> results/mapping/SRR1234567 <span class="dt">\</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1" aria-label="code-block-6-7"></a>    <span class="at">--outSAMtype</span> BAM SortedByCoordinate <span class="dt">\</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1" aria-label="code-block-6-8"></a>    <span class="at">--outSAMunmapped</span> Within</span></code></pre>
 </div>
 </div>
 </div>
@@ -742,53 +742,53 @@ sample names</p>
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/data</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span>_R1.fastq.gz <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/_R1.fastq.gz//'</span> <span class="op">&gt;</span> <span class="va">${SCRATCH}</span>/rnaseq-workshop/scripts/samples.txt</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/data</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1" aria-label="code-block-7-2"></a><span class="fu">ls</span> <span class="pp">*</span>_R1.fastq.gz <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/_R1.fastq.gz//'</span> <span class="op">&gt;</span> <span class="va">${SCRATCH}</span>/rnaseq-workshop/scripts/samples.txt</span></code></pre>
 </div>
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#SBATCH --nodes=1</span></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=20</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#SBATCH --account=rcac-rnaseq</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#SBATCH --qos=standby</span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#SBATCH --partition=cpu</span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#SBATCH --time=8:00:00</span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#SBATCH --job-name=read_mapping</span></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#SBATCH --array=1-8</span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#SBATCH --output=cluster-%x.%j.out</span></span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#SBATCH --error=cluster-%x.%j.err</span></span>
-<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a></span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="ex">module</span> load star</span>
-<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a></span>
-<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="va">FASTQ_DIR</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/data"</span></span>
-<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="va">GENOME_INDEX</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/data/star_index"</span></span>
-<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="va">OUTDIR</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/results/mapping"</span></span>
-<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a></span>
-<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$OUTDIR</span></span>
-<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a></span>
-<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="va">SAMPLE</span><span class="op">=</span><span class="va">$(</span><span class="fu">sed</span> <span class="at">-n</span> <span class="st">"</span><span class="va">${SLURM_ARRAY_TASK_ID}</span><span class="st">p"</span> samples.txt<span class="va">)</span></span>
-<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a></span>
-<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="va">R1</span><span class="op">=</span><span class="va">${FASTQ_DIR}</span>/<span class="va">${SAMPLE}</span>_R1.fastq.gz</span>
-<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="va">R2</span><span class="op">=</span><span class="va">${FASTQ_DIR}</span>/<span class="va">${SAMPLE}</span>_R2.fastq.gz</span>
-<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a></span>
-<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="ex">STAR</span> <span class="dt">\</span></span>
-<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a>    <span class="at">--runThreadN</span> <span class="va">${SLURM_CPUS_ON_NODE}</span> <span class="dt">\</span></span>
-<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a>    <span class="at">--genomeDir</span> <span class="va">$GENOME_INDEX</span> <span class="dt">\</span></span>
-<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a>    <span class="at">--readFilesIn</span> <span class="va">$R1</span> <span class="va">$R2</span> <span class="dt">\</span></span>
-<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a>    <span class="at">--readFilesCommand</span> zcat <span class="dt">\</span></span>
-<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a>    <span class="at">--outFileNamePrefix</span> <span class="va">$OUTDIR</span>/<span class="va">$SAMPLE</span> <span class="dt">\</span></span>
-<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a>    <span class="at">--outSAMunmapped</span> Within <span class="dt">\</span></span>
-<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a>    <span class="at">--outSAMtype</span> BAM SortedByCoordinate</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1" aria-label="code-block-8-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1" aria-label="code-block-8-2"></a><span class="co">#SBATCH --nodes=1</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1" aria-label="code-block-8-3"></a><span class="co">#SBATCH --ntasks=1</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1" aria-label="code-block-8-4"></a><span class="co">#SBATCH --cpus-per-task=20</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1" aria-label="code-block-8-5"></a><span class="co">#SBATCH --account=rcac-rnaseq</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1" aria-label="code-block-8-6"></a><span class="co">#SBATCH --qos=standby</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1" aria-label="code-block-8-7"></a><span class="co">#SBATCH --partition=cpu</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1" aria-label="code-block-8-8"></a><span class="co">#SBATCH --time=8:00:00</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1" aria-label="code-block-8-9"></a><span class="co">#SBATCH --job-name=read_mapping</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1" aria-label="code-block-8-10"></a><span class="co">#SBATCH --array=1-8</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1" aria-label="code-block-8-11"></a><span class="co">#SBATCH --output=cluster-%x.%j.out</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1" aria-label="code-block-8-12"></a><span class="co">#SBATCH --error=cluster-%x.%j.err</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1" aria-label="code-block-8-13"></a></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1" aria-label="code-block-8-14"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1" aria-label="code-block-8-15"></a><span class="ex">module</span> load star</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1" aria-label="code-block-8-16"></a></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1" aria-label="code-block-8-17"></a><span class="va">FASTQ_DIR</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/data"</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1" aria-label="code-block-8-18"></a><span class="va">GENOME_INDEX</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/data/star_index"</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1" aria-label="code-block-8-19"></a><span class="va">OUTDIR</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/results/mapping"</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1" aria-label="code-block-8-20"></a></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1" aria-label="code-block-8-21"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$OUTDIR</span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1" aria-label="code-block-8-22"></a></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1" aria-label="code-block-8-23"></a><span class="va">SAMPLE</span><span class="op">=</span><span class="va">$(</span><span class="fu">sed</span> <span class="at">-n</span> <span class="st">"</span><span class="va">${SLURM_ARRAY_TASK_ID}</span><span class="st">p"</span> samples.txt<span class="va">)</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1" aria-label="code-block-8-24"></a></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1" aria-label="code-block-8-25"></a><span class="va">R1</span><span class="op">=</span><span class="va">${FASTQ_DIR}</span>/<span class="va">${SAMPLE}</span>_R1.fastq.gz</span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1" aria-label="code-block-8-26"></a><span class="va">R2</span><span class="op">=</span><span class="va">${FASTQ_DIR}</span>/<span class="va">${SAMPLE}</span>_R2.fastq.gz</span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1" aria-label="code-block-8-27"></a></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1" aria-label="code-block-8-28"></a><span class="ex">STAR</span> <span class="dt">\</span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1" aria-label="code-block-8-29"></a>    <span class="at">--runThreadN</span> <span class="va">${SLURM_CPUS_ON_NODE}</span> <span class="dt">\</span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1" aria-label="code-block-8-30"></a>    <span class="at">--genomeDir</span> <span class="va">$GENOME_INDEX</span> <span class="dt">\</span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1" aria-label="code-block-8-31"></a>    <span class="at">--readFilesIn</span> <span class="va">$R1</span> <span class="va">$R2</span> <span class="dt">\</span></span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1" aria-label="code-block-8-32"></a>    <span class="at">--readFilesCommand</span> zcat <span class="dt">\</span></span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1" aria-label="code-block-8-33"></a>    <span class="at">--outFileNamePrefix</span> <span class="va">$OUTDIR</span>/<span class="va">$SAMPLE</span> <span class="dt">\</span></span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1" aria-label="code-block-8-34"></a>    <span class="at">--outSAMunmapped</span> Within <span class="dt">\</span></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1" aria-label="code-block-8-35"></a>    <span class="at">--outSAMtype</span> BAM SortedByCoordinate</span></code></pre>
 </div>
 <p>Submit:</p>
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="ex">sbatch</span> map_reads.sh</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1" aria-label="code-block-9-1"></a><span class="ex">sbatch</span> map_reads.sh</span></code></pre>
 </div>
 <div id="why-use-an-array-job" class="callout discussion">
 <div class="callout-square">
@@ -828,11 +828,11 @@ Ready for downstream quantification.</p></li>
 <div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="ex">module</span> load multiqc</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="ex">multiqc</span> results/mapping <span class="at">-o</span> results/qc_alignment</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1" aria-label="code-block-10-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1" aria-label="code-block-10-2"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1" aria-label="code-block-10-3"></a><span class="ex">module</span> load multiqc</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1" aria-label="code-block-10-4"></a></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1" aria-label="code-block-10-5"></a><span class="ex">multiqc</span> results/mapping <span class="at">-o</span> results/qc_alignment</span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="key-metrics-to-review">Key metrics to review<a class="anchor" aria-label="anchor" href="#key-metrics-to-review"></a></h3>
@@ -917,47 +917,47 @@ stranded.</p>
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/scripts</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/results/counts</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1" aria-label="code-block-11-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/scripts</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1" aria-label="code-block-11-2"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/results/counts</span></code></pre>
 </div>
 <p>Below is an example SLURM script to count all BAM files at once.</p>
 <div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#SBATCH --nodes=1</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1</span></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=16</span></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#SBATCH --account=rcac-rnaseq</span></span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#SBATCH --qos=standby</span></span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#SBATCH --partition=cpu</span></span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#SBATCH --time=1:00:00</span></span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#SBATCH --job-name=featurecounts</span></span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#SBATCH --output=cluster-%x.%j.out</span></span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#SBATCH --error=cluster-%x.%j.err</span></span>
-<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a></span>
-<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="ex">module</span> load subread</span>
-<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a></span>
-<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="va">GTF</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/data/gencode.vM38.primary_assembly.basic.annotation.gtf"</span></span>
-<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="va">BAMS</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/results/mapping/*.bam"</span></span>
-<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a><span class="va">output_dir</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/results/counts"</span></span>
-<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a></span>
-<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a><span class="ex">featureCounts</span> <span class="dt">\</span></span>
-<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a>  <span class="at">-T</span> <span class="va">${SLURM_CPUS_PER_TASK}</span> <span class="dt">\</span></span>
-<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a>  <span class="at">-p</span> <span class="dt">\</span></span>
-<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a>  <span class="at">-s</span> 0 <span class="dt">\</span></span>
-<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a>  <span class="at">-t</span> exon <span class="dt">\</span></span>
-<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a>  <span class="at">-g</span> gene_id <span class="dt">\</span></span>
-<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a>  <span class="at">-a</span> <span class="va">${GTF}</span> <span class="dt">\</span></span>
-<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a>  <span class="at">-o</span> <span class="va">${output_dir}</span>/gene_counts.txt <span class="dt">\</span></span>
-<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a>  <span class="va">${BAMS}</span></span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1" aria-label="code-block-12-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1" aria-label="code-block-12-2"></a><span class="co">#SBATCH --nodes=1</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1" aria-label="code-block-12-3"></a><span class="co">#SBATCH --ntasks=1</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1" aria-label="code-block-12-4"></a><span class="co">#SBATCH --cpus-per-task=16</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1" aria-label="code-block-12-5"></a><span class="co">#SBATCH --account=rcac-rnaseq</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1" aria-label="code-block-12-6"></a><span class="co">#SBATCH --qos=standby</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1" aria-label="code-block-12-7"></a><span class="co">#SBATCH --partition=cpu</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1" aria-label="code-block-12-8"></a><span class="co">#SBATCH --time=1:00:00</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1" aria-label="code-block-12-9"></a><span class="co">#SBATCH --job-name=featurecounts</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1" aria-label="code-block-12-10"></a><span class="co">#SBATCH --output=cluster-%x.%j.out</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1" aria-label="code-block-12-11"></a><span class="co">#SBATCH --error=cluster-%x.%j.err</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1" aria-label="code-block-12-12"></a></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1" aria-label="code-block-12-13"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1" aria-label="code-block-12-14"></a><span class="ex">module</span> load subread</span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1" aria-label="code-block-12-15"></a></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1" aria-label="code-block-12-16"></a><span class="va">GTF</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/data/gencode.vM38.primary_assembly.basic.annotation.gtf"</span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1" aria-label="code-block-12-17"></a><span class="va">BAMS</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/results/mapping/*.bam"</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1" aria-label="code-block-12-18"></a><span class="va">output_dir</span><span class="op">=</span><span class="st">"</span><span class="va">$SCRATCH</span><span class="st">/rnaseq-workshop/results/counts"</span></span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1" aria-label="code-block-12-19"></a></span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1" aria-label="code-block-12-20"></a><span class="ex">featureCounts</span> <span class="dt">\</span></span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1" aria-label="code-block-12-21"></a>  <span class="at">-T</span> <span class="va">${SLURM_CPUS_PER_TASK}</span> <span class="dt">\</span></span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1" aria-label="code-block-12-22"></a>  <span class="at">-p</span> <span class="dt">\</span></span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1" aria-label="code-block-12-23"></a>  <span class="at">-s</span> 0 <span class="dt">\</span></span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1" aria-label="code-block-12-24"></a>  <span class="at">-t</span> exon <span class="dt">\</span></span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1" aria-label="code-block-12-25"></a>  <span class="at">-g</span> gene_id <span class="dt">\</span></span>
+<span id="cb12-26"><a href="#cb12-26" tabindex="-1" aria-label="code-block-12-26"></a>  <span class="at">-a</span> <span class="va">${GTF}</span> <span class="dt">\</span></span>
+<span id="cb12-27"><a href="#cb12-27" tabindex="-1" aria-label="code-block-12-27"></a>  <span class="at">-o</span> <span class="va">${output_dir}</span>/gene_counts.txt <span class="dt">\</span></span>
+<span id="cb12-28"><a href="#cb12-28" tabindex="-1" aria-label="code-block-12-28"></a>  <span class="va">${BAMS}</span></span></code></pre>
 </div>
 <p>Submit the job:</p>
 <div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="ex">sbatch</span> count_features.sh</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" tabindex="-1" aria-label="code-block-13-1"></a><span class="ex">sbatch</span> count_features.sh</span></code></pre>
 </div>
 <p><code>gene_counts.txt</code> will contain:</p>
 <ul><li>one row per gene</li>
@@ -973,12 +973,12 @@ stranded.</p>
 <div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/results/counts</span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 1,7- gene_counts.txt <span class="kw">|</span><span class="dt">\</span></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  <span class="fu">sed</span> <span class="st">'s+/scratch/negishi/'</span><span class="va">$USER</span><span class="st">'/rnaseq-workshop/results/mapping/++g'</span> <span class="kw">|</span><span class="dt">\</span></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="fu">grep</span> <span class="at">-v</span> <span class="st">"^#"</span> <span class="kw">|</span><span class="dt">\</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>  <span class="fu">sed</span> <span class="st">'s/Aligned.sortedByCoord.out.bam//g'</span> <span class="dt">\</span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  <span class="op">&gt;</span> gene_counts_clean.txt</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1" aria-label="code-block-14-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop/results/counts</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1" aria-label="code-block-14-2"></a><span class="fu">cut</span> <span class="at">-f</span> 1,7- gene_counts.txt <span class="kw">|</span><span class="dt">\</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1" aria-label="code-block-14-3"></a>  <span class="fu">sed</span> <span class="st">'s+/scratch/negishi/'</span><span class="va">$USER</span><span class="st">'/rnaseq-workshop/results/mapping/++g'</span> <span class="kw">|</span><span class="dt">\</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1" aria-label="code-block-14-4"></a>  <span class="fu">grep</span> <span class="at">-v</span> <span class="st">"^#"</span> <span class="kw">|</span><span class="dt">\</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1" aria-label="code-block-14-5"></a>  <span class="fu">sed</span> <span class="st">'s/Aligned.sortedByCoord.out.bam//g'</span> <span class="dt">\</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1" aria-label="code-block-14-6"></a>  <span class="op">&gt;</span> gene_counts_clean.txt</span></code></pre>
 </div>
 </div>
 </div>
@@ -991,11 +991,11 @@ featureCounts statistics:</p>
 <div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/qc_counts</span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="ex">module</span> load multiqc</span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="ex">multiqc</span> results/counts <span class="at">-o</span> results/qc_counts</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" tabindex="-1" aria-label="code-block-15-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1" aria-label="code-block-15-2"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/qc_counts</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1" aria-label="code-block-15-3"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1" aria-label="code-block-15-4"></a><span class="ex">module</span> load multiqc</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1" aria-label="code-block-15-5"></a><span class="ex">multiqc</span> results/counts <span class="at">-o</span> results/qc_counts</span></code></pre>
 </div>
 <div id="exercise-examine-your-counting-metrics" class="callout challenge">
 <div class="callout-square">
@@ -1108,7 +1108,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.20.0" class="external-link">sandpaper (0.20.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/aec0ff169ecf0863c0882e93bd191b19f2e7ff1e" class="external-link">varnish (1.0.7)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.20.1" class="external-link">sandpaper (0.20.1)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/aec0ff169ecf0863c0882e93bd191b19f2e7ff1e" class="external-link">varnish (1.0.7)</a></p>
 		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -1130,8 +1130,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/04a-genome-based-quantification.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/04a-genome-based-quantification.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-04-14",
-  "datePublished": "2026-04-14"
+  "dateModified": "2026-04-21",
+  "datePublished": "2026-04-21"
 }
 
   </script><script>

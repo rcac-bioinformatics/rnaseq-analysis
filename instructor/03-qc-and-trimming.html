@@ -223,7 +223,7 @@
       </button>
     </div><!--/div.accordion-header-->
 
-    <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
+    <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#introduction">Introduction</a></li>
 <li><a href="#running-fastqc">Running FastQC</a></li>
@@ -342,7 +342,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Quality control of RNA-seq reads</h1>
-        <p>Last updated on 2026-04-14 |
+        <p>Last updated on 2026-04-21 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/03-qc-and-trimming.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -426,51 +426,51 @@ FASTQ files.</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/qc_fastq/</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="ex">sinteractive</span> <span class="at">-A</span> rcac-rnaseq <span class="at">-q</span> standby <span class="at">-p</span> cpu <span class="at">-N</span> 1 <span class="at">-n</span> 4 <span class="at">--time</span><span class="op">=</span>1:00:00</span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="ex">module</span> load fastqc</span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="ex">fastqc</span> data/<span class="pp">*</span>.fastq.gz <span class="at">--outdir</span> results/qc_fastq/ <span class="at">--threads</span> 4</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1" aria-label="code-block-1-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1" aria-label="code-block-1-2"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/qc_fastq/</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1" aria-label="code-block-1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1" aria-label="code-block-1-4"></a><span class="ex">sinteractive</span> <span class="at">-A</span> rcac-rnaseq <span class="at">-q</span> standby <span class="at">-p</span> cpu <span class="at">-N</span> 1 <span class="at">-n</span> 4 <span class="at">--time</span><span class="op">=</span>1:00:00</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1" aria-label="code-block-1-5"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1" aria-label="code-block-1-6"></a><span class="ex">module</span> load fastqc</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1" aria-label="code-block-1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1" aria-label="code-block-1-8"></a><span class="ex">fastqc</span> data/<span class="pp">*</span>.fastq.gz <span class="at">--outdir</span> results/qc_fastq/ <span class="at">--threads</span> 4</span></code></pre>
 </div>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">results/qc_fastq/</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R1_fastqc.html</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R1_fastqc.zip</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R2_fastqc.html</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R2_fastqc.zip</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R1_fastqc.html</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R1_fastqc.zip</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R2_fastqc.html</span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R2_fastqc.zip</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R1_fastqc.html</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R1_fastqc.zip</span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R2_fastqc.html</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R2_fastqc.zip</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R1_fastqc.html</span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R1_fastqc.zip</span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R2_fastqc.html</span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R2_fastqc.zip</span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R1_fastqc.html</span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R1_fastqc.zip</span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R2_fastqc.html</span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R2_fastqc.zip</span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R1_fastqc.html</span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R1_fastqc.zip</span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R2_fastqc.html</span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R2_fastqc.zip</span>
-<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R1_fastqc.html</span>
-<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R1_fastqc.zip</span>
-<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R2_fastqc.html</span>
-<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R2_fastqc.zip</span>
-<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R1_fastqc.html</span>
-<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R1_fastqc.zip</span>
-<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R2_fastqc.html</span>
-<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="ex">└──</span> WT_Bcell_IR_rep4_R2_fastqc.zip</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="ex">results/qc_fastq/</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1" aria-label="code-block-2-2"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R1_fastqc.html</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1" aria-label="code-block-2-3"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R1_fastqc.zip</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1" aria-label="code-block-2-4"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R2_fastqc.html</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1" aria-label="code-block-2-5"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R2_fastqc.zip</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1" aria-label="code-block-2-6"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R1_fastqc.html</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1" aria-label="code-block-2-7"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R1_fastqc.zip</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1" aria-label="code-block-2-8"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R2_fastqc.html</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1" aria-label="code-block-2-9"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R2_fastqc.zip</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1" aria-label="code-block-2-10"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R1_fastqc.html</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1" aria-label="code-block-2-11"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R1_fastqc.zip</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1" aria-label="code-block-2-12"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R2_fastqc.html</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1" aria-label="code-block-2-13"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R2_fastqc.zip</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1" aria-label="code-block-2-14"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R1_fastqc.html</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1" aria-label="code-block-2-15"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R1_fastqc.zip</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1" aria-label="code-block-2-16"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R2_fastqc.html</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1" aria-label="code-block-2-17"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R2_fastqc.zip</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1" aria-label="code-block-2-18"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R1_fastqc.html</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1" aria-label="code-block-2-19"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R1_fastqc.zip</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1" aria-label="code-block-2-20"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R2_fastqc.html</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1" aria-label="code-block-2-21"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R2_fastqc.zip</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1" aria-label="code-block-2-22"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R1_fastqc.html</span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1" aria-label="code-block-2-23"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R1_fastqc.zip</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1" aria-label="code-block-2-24"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R2_fastqc.html</span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1" aria-label="code-block-2-25"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R2_fastqc.zip</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1" aria-label="code-block-2-26"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R1_fastqc.html</span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1" aria-label="code-block-2-27"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R1_fastqc.zip</span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1" aria-label="code-block-2-28"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R2_fastqc.html</span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1" aria-label="code-block-2-29"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R2_fastqc.zip</span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1" aria-label="code-block-2-30"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R1_fastqc.html</span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1" aria-label="code-block-2-31"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R1_fastqc.zip</span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1" aria-label="code-block-2-32"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R2_fastqc.html</span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1" aria-label="code-block-2-33"></a><span class="ex">└──</span> WT_Bcell_IR_rep4_R2_fastqc.zip</span></code></pre>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="understanding-the-fastqc-report">Understanding the FastQC report<a class="anchor" aria-label="anchor" href="#understanding-the-fastqc-report"></a></h2>
@@ -601,12 +601,12 @@ consolidates all reports and allows easy comparison of replicates.</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="bu">cd</span> rnaseq-workshop</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="ex">module</span> load multiqc</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="ex">multiqc</span> results/qc_fastq/ <span class="at">-o</span> results/qc_fastq/</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1" aria-label="code-block-3-1"></a><span class="bu">cd</span> rnaseq-workshop</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1" aria-label="code-block-3-2"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1" aria-label="code-block-3-3"></a><span class="ex">module</span> load multiqc</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1" aria-label="code-block-3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1" aria-label="code-block-3-5"></a><span class="bu">cd</span> <span class="va">$SCRATCH</span>/rnaseq-workshop</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1" aria-label="code-block-3-6"></a><span class="ex">multiqc</span> results/qc_fastq/ <span class="at">-o</span> results/qc_fastq/</span></code></pre>
 </div>
 <figure style="text-align: center"><img src="../fig/02_qc/multiqc-summary.png" alt="Example MultiQC summary across all samples" class="figure mx-auto d-block"><figcaption>
 Example MultiQC summary across all samples
@@ -677,7 +677,7 @@ number of reads, quality, duplication, or GC percentage?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Typical interpretation for this dataset (students should compare with
 their own):</p>
@@ -695,7 +695,7 @@ selected samples and is less than 4 percent.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What if trimming is required? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p><em>Optional reference: how to trim adapters with <code>fastp</code>
 (not part of the hands-on)</em></p>
@@ -713,18 +713,18 @@ reports.</p>
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">module</span> load biocontainers</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="ex">module</span> load fastp</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="ex">fastp</span> <span class="dt">\</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">-i</span> SRRXXXXXXX_1.fastq.gz <span class="dt">\</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="at">-I</span> SRRXXXXXXX_2.fastq.gz <span class="dt">\</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="at">-o</span> SRRXXXXXXX_1.trimmed.fastq.gz <span class="dt">\</span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="at">-O</span> SRRXXXXXXX_2.trimmed.fastq.gz <span class="dt">\</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="at">--detect_adapter_for_pe</span> <span class="dt">\</span></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  <span class="at">--thread</span> 8 <span class="dt">\</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>  <span class="at">--html</span> fastp_report.html <span class="dt">\</span></span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  <span class="at">--json</span> fastp_report.json</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1" aria-label="code-block-4-1"></a><span class="ex">module</span> load biocontainers</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1" aria-label="code-block-4-2"></a><span class="ex">module</span> load fastp</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1" aria-label="code-block-4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1" aria-label="code-block-4-4"></a><span class="ex">fastp</span> <span class="dt">\</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1" aria-label="code-block-4-5"></a>  <span class="at">-i</span> SRRXXXXXXX_1.fastq.gz <span class="dt">\</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1" aria-label="code-block-4-6"></a>  <span class="at">-I</span> SRRXXXXXXX_2.fastq.gz <span class="dt">\</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1" aria-label="code-block-4-7"></a>  <span class="at">-o</span> SRRXXXXXXX_1.trimmed.fastq.gz <span class="dt">\</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1" aria-label="code-block-4-8"></a>  <span class="at">-O</span> SRRXXXXXXX_2.trimmed.fastq.gz <span class="dt">\</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1" aria-label="code-block-4-9"></a>  <span class="at">--detect_adapter_for_pe</span> <span class="dt">\</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1" aria-label="code-block-4-10"></a>  <span class="at">--thread</span> 8 <span class="dt">\</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1" aria-label="code-block-4-11"></a>  <span class="at">--html</span> fastp_report.html <span class="dt">\</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1" aria-label="code-block-4-12"></a>  <span class="at">--json</span> fastp_report.json</span></code></pre>
 </div>
 </div>
 <div class="section level3">
@@ -810,7 +810,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.20.0" class="external-link">sandpaper (0.20.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/aec0ff169ecf0863c0882e93bd191b19f2e7ff1e" class="external-link">varnish (1.0.7)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.20.1" class="external-link">sandpaper (0.20.1)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/aec0ff169ecf0863c0882e93bd191b19f2e7ff1e" class="external-link">varnish (1.0.7)</a></p>
 		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -832,8 +832,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/03-qc-and-trimming.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/03-qc-and-trimming.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-04-14",
-  "datePublished": "2026-04-14"
+  "dateModified": "2026-04-21",
+  "datePublished": "2026-04-21"
 }
 
   </script><script>

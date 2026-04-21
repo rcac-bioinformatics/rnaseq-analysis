@@ -268,7 +268,7 @@
       </button>
     </div><!--/div.accordion-header-->
 
-    <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
+    <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#introduction">Introduction</a></li>
 <li><a href="#background-understanding-over-representation-analysis">Background: Understanding over-representation analysis</a></li>
@@ -346,7 +346,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Gene set enrichment analysis</h1>
-        <p>Last updated on 2026-04-14 |
+        <p>Last updated on 2026-04-21 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/06-gene-set-enrichment-analyses.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -1439,12 +1439,12 @@ change or a signed significance score):</p>
 <div class="codewrapper sourceCode" id="cb44">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="fu">head</span>(gene_list)</span>
-<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a>   <span class="dv">20343</span>   <span class="dv">108105</span>    <span class="dv">12481</span>    <span class="dv">66222</span>    <span class="dv">23943</span>    <span class="dv">15002</span> </span>
-<span id="cb44-3"><a href="#cb44-3" tabindex="-1"></a><span class="fl">261.1024</span> <span class="fl">126.5745</span> <span class="fl">124.5315</span> <span class="fl">108.3381</span> <span class="fl">103.0995</span> <span class="fl">101.4362</span> </span>
-<span id="cb44-4"><a href="#cb44-4" tabindex="-1"></a><span class="fu">tail</span>(gene_list)</span>
-<span id="cb44-5"><a href="#cb44-5" tabindex="-1"></a>   <span class="dv">230784</span>    <span class="dv">217882</span>     <span class="dv">17246</span>     <span class="dv">65964</span>     <span class="dv">12519</span>     <span class="dv">27015</span> </span>
-<span id="cb44-6"><a href="#cb44-6" tabindex="-1"></a><span class="sc">-</span><span class="fl">211.2999</span> <span class="sc">-</span><span class="fl">212.3574</span> <span class="sc">-</span><span class="fl">213.2033</span> <span class="sc">-</span><span class="fl">231.8965</span> <span class="sc">-</span><span class="fl">244.4231</span> <span class="sc">-</span><span class="fl">250.3965</span> </span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1" aria-label="code-block-44-1"></a><span class="fu">head</span>(gene_list)</span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1" aria-label="code-block-44-2"></a>   <span class="dv">20343</span>   <span class="dv">108105</span>    <span class="dv">12481</span>    <span class="dv">66222</span>    <span class="dv">23943</span>    <span class="dv">15002</span> </span>
+<span id="cb44-3"><a href="#cb44-3" tabindex="-1" aria-label="code-block-44-3"></a><span class="fl">261.1024</span> <span class="fl">126.5745</span> <span class="fl">124.5315</span> <span class="fl">108.3381</span> <span class="fl">103.0995</span> <span class="fl">101.4362</span> </span>
+<span id="cb44-4"><a href="#cb44-4" tabindex="-1" aria-label="code-block-44-4"></a><span class="fu">tail</span>(gene_list)</span>
+<span id="cb44-5"><a href="#cb44-5" tabindex="-1" aria-label="code-block-44-5"></a>   <span class="dv">230784</span>    <span class="dv">217882</span>     <span class="dv">17246</span>     <span class="dv">65964</span>     <span class="dv">12519</span>     <span class="dv">27015</span> </span>
+<span id="cb44-6"><a href="#cb44-6" tabindex="-1" aria-label="code-block-44-6"></a><span class="sc">-</span><span class="fl">211.2999</span> <span class="sc">-</span><span class="fl">212.3574</span> <span class="sc">-</span><span class="fl">213.2033</span> <span class="sc">-</span><span class="fl">231.8965</span> <span class="sc">-</span><span class="fl">244.4231</span> <span class="sc">-</span><span class="fl">250.3965</span> </span></code></pre>
 </div>
 </div>
 <div class="section level3">
@@ -1741,7 +1741,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.20.0" class="external-link">sandpaper (0.20.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/aec0ff169ecf0863c0882e93bd191b19f2e7ff1e" class="external-link">varnish (1.0.7)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.20.1" class="external-link">sandpaper (0.20.1)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/aec0ff169ecf0863c0882e93bd191b19f2e7ff1e" class="external-link">varnish (1.0.7)</a></p>
 		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -1763,8 +1763,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/06-gene-set-enrichment-analyses.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/06-gene-set-enrichment-analyses.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-04-14",
-  "datePublished": "2026-04-14"
+  "dateModified": "2026-04-21",
+  "datePublished": "2026-04-21"
 }
 
   </script><script>
