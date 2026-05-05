@@ -342,7 +342,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>A. Genome-based quantification (STAR + featureCounts)</h1>
-        <p>Last updated on 2026-04-28 |
+        <p>Last updated on 2026-05-05 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04a-genome-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -456,7 +456,7 @@ library types.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What does this file look like? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">JSON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -469,7 +469,7 @@ library types.</p>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1" aria-label="code-block-2-6"></a>    <span class="dt">"num_assigned_fragments"</span><span class="fu">:</span> <span class="dv">11994681</span><span class="fu">,</span></span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1" aria-label="code-block-2-7"></a>    <span class="dt">"num_frags_with_concordant_consistent_mappings"</span><span class="fu">:</span> <span class="dv">10472924</span><span class="fu">,</span></span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1" aria-label="code-block-2-8"></a>    <span class="dt">"num_frags_with_inconsistent_or_orphan_mappings"</span><span class="fu">:</span> <span class="dv">2280227</span><span class="fu">,</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1" aria-label="code-block-2-9"></a>    <span class="dt">"strand_mapping_bias"</span><span class="fu">:</span> <span class="dv">0</span><span class="er">.</span><span class="dv">5082214861866657</span><span class="fu">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1" aria-label="code-block-2-9"></a>    <span class="dt">"strand_mapping_bias"</span><span class="fu">:</span> <span class="fl">0.5082214861866657</span><span class="fu">,</span></span>
 <span id="cb2-10"><a href="#cb2-10" tabindex="-1" aria-label="code-block-2-10"></a>    <span class="dt">"MSF"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
 <span id="cb2-11"><a href="#cb2-11" tabindex="-1" aria-label="code-block-2-11"></a>    <span class="dt">"OSF"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
 <span id="cb2-12"><a href="#cb2-12" tabindex="-1" aria-label="code-block-2-12"></a>    <span class="dt">"ISF"</span><span class="fu">:</span> <span class="dv">5322565</span><span class="fu">,</span></span>
@@ -506,17 +506,17 @@ Because these values are almost equal, they confirm the ~50/50 split
 seen in the strand bias.</li>
 </ul></blockquote>
 <p>Common results:</p>
-<table class="table"><thead><tr class="header"><th>Code</th>
+<table class="table"><thead><tr><th>Code</th>
 <th>Meaning</th>
-</tr></thead><tbody><tr class="odd"><td>IU</td>
+</tr></thead><tbody><tr><td>IU</td>
 <td>unstranded</td>
-</tr><tr class="even"><td>ISR</td>
+</tr><tr><td>ISR</td>
 <td>stranded reverse (paired end)</td>
-</tr><tr class="odd"><td>ISF</td>
+</tr><tr><td>ISF</td>
 <td>stranded forward (paired end)</td>
-</tr><tr class="even"><td>SR</td>
+</tr><tr><td>SR</td>
 <td>stranded reverse (single end)</td>
-</tr><tr class="odd"><td>SF</td>
+</tr><tr><td>SF</td>
 <td>stranded forward (single end)</td>
 </tr></tbody></table><p><strong>Conclusion:</strong> The data is <strong>unstranded</strong>.
 We will record this and supply it to STAR/featureCounts.</p>
@@ -573,7 +573,7 @@ manual</a></p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Key options:</p>
 <ul><li>
@@ -640,7 +640,7 @@ index. Create a file named <code>index_genome.sh</code> in
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What will the output look like? </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <p>The index directory is now ready for use in mapping and should have
 contents like this: Location: <code>$SCRATCH/rcac_rnaseq/data</code>
@@ -716,7 +716,7 @@ paired FASTQ files.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -868,7 +868,7 @@ contamination issues</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>Example interpretation for this dataset:</p>
 <ul><li>All samples have ~80% uniquely mapped reads.</li>
@@ -1024,7 +1024,7 @@ expression?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <p>Example interpretation for this dataset:</p>
 <ol style="list-style-type: decimal"><li>The sample with the lowest assignment rate may vary. Causes include
@@ -1130,8 +1130,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/04a-genome-based-quantification.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/04a-genome-based-quantification.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-04-28",
-  "datePublished": "2026-04-28"
+  "dateModified": "2026-05-05",
+  "datePublished": "2026-05-05"
 }
 
   </script><script>

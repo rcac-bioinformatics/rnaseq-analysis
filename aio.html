@@ -384,7 +384,7 @@
         
 <section id="aio-01-intro-to-rnaseq"><p>Content from <a href="01-intro-to-rnaseq.html">Introduction to RNA-seq</a></p>
 <hr>
-<p>Last updated on 2026-04-28 |
+<p>Last updated on 2026-05-05 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/01-intro-to-rnaseq.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -731,7 +731,7 @@ any links that you are not going to use.
  -->
 </div></section><section id="aio-02-downloading-and-organizing-files"><p>Content from <a href="02-downloading-and-organizing-files.html">Downloading and organizing files</a></p>
 <hr>
-<p>Last updated on 2026-04-28 |
+<p>Last updated on 2026-05-05 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/02-downloading-and-organizing-files.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -875,21 +875,21 @@ cells only</strong>:</p>
 <col width="20%">
 <col width="26%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Condition</th>
 <th>Description</th>
 <th>Samples</th>
 <th>Replicates</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>
 <strong>WT_mock</strong> (control)</td>
 <td>Wild-type B cells, no radiation</td>
 <td>4</td>
 <td>SRR2121778-81</td>
 </tr>
-<tr class="even">
+<tr>
 <td>
 <strong>WT_IR</strong> (treatment)</td>
 <td>Wild-type B cells, 4h post 7Gy IR</td>
@@ -991,7 +991,7 @@ outputs</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1099,7 +1099,7 @@ why?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Use the <strong>basic gene annotation in GTF format</strong> (e.g.,
 <code>gencode.vM38.primary_assembly.basic.annotation.gtf.gz</code>).<br>
@@ -1131,7 +1131,7 @@ FASTA</strong> (e.g.,
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <figure style="text-align: center"><img src="fig/01_fq2counts/gencode-genome.png" alt="Reference genome file in FASTA format" class="figure mx-auto d-block"><figcaption>
 Reference genome file in FASTA format
@@ -1165,7 +1165,7 @@ for all transcripts in GRCm39
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <p>The transcript FASTA file is available in the same release directory
 as the genome and annotation files (under FASTA files). It is named
@@ -1263,7 +1263,7 @@ of sequencing runs?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
 <div class="accordion-body">
 <p>Navigate to the SRA page for the BioProject and use <strong>Run
 Selector</strong> to list runs.<br>
@@ -1338,7 +1338,7 @@ statistical power and may affect differential expression results.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Workshop-only: How reads were subsampled </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p>For reference, here is how the workshop data was prepared.
 <strong>You do not need to run this</strong>—the pre-downloaded data is
@@ -1455,7 +1455,7 @@ any links that you are not going to use.
 </div>
 </section></section><section id="aio-03-qc-and-trimming"><p>Content from <a href="03-qc-and-trimming.html">Quality control of RNA-seq reads</a></p>
 <hr>
-<p>Last updated on 2026-04-28 |
+<p>Last updated on 2026-05-05 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/03-qc-and-trimming.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1837,7 +1837,7 @@ number of reads, quality, duplication, or GC percentage?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Typical interpretation for this dataset (students should compare with
 their own):</p>
@@ -1857,7 +1857,7 @@ selected samples and is less than 4 percent.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What if trimming is required? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p><em>Optional reference: how to trim adapters with <code>fastp</code>
 (not part of the hands-on)</em></p>
@@ -1947,7 +1947,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-04a-genome-based-quantification"><p>Content from <a href="04a-genome-based-quantification.html">A. Genome-based quantification (STAR + featureCounts)</a></p>
 <hr>
-<p>Last updated on 2026-04-28 |
+<p>Last updated on 2026-05-05 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04a-genome-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -2068,7 +2068,7 @@ library types.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What does this file look like? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">JSON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -2081,7 +2081,7 @@ library types.</p>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1" aria-label="code-block-2-6"></a>    <span class="dt">"num_assigned_fragments"</span><span class="fu">:</span> <span class="dv">11994681</span><span class="fu">,</span></span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1" aria-label="code-block-2-7"></a>    <span class="dt">"num_frags_with_concordant_consistent_mappings"</span><span class="fu">:</span> <span class="dv">10472924</span><span class="fu">,</span></span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1" aria-label="code-block-2-8"></a>    <span class="dt">"num_frags_with_inconsistent_or_orphan_mappings"</span><span class="fu">:</span> <span class="dv">2280227</span><span class="fu">,</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1" aria-label="code-block-2-9"></a>    <span class="dt">"strand_mapping_bias"</span><span class="fu">:</span> <span class="dv">0</span><span class="er">.</span><span class="dv">5082214861866657</span><span class="fu">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1" aria-label="code-block-2-9"></a>    <span class="dt">"strand_mapping_bias"</span><span class="fu">:</span> <span class="fl">0.5082214861866657</span><span class="fu">,</span></span>
 <span id="cb2-10"><a href="#cb2-10" tabindex="-1" aria-label="code-block-2-10"></a>    <span class="dt">"MSF"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
 <span id="cb2-11"><a href="#cb2-11" tabindex="-1" aria-label="code-block-2-11"></a>    <span class="dt">"OSF"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
 <span id="cb2-12"><a href="#cb2-12" tabindex="-1" aria-label="code-block-2-12"></a>    <span class="dt">"ISF"</span><span class="fu">:</span> <span class="dv">5322565</span><span class="fu">,</span></span>
@@ -2121,28 +2121,28 @@ seen in the strand bias.</li>
 </blockquote>
 <p>Common results:</p>
 <table class="table">
-<thead><tr class="header">
+<thead><tr>
 <th>Code</th>
 <th>Meaning</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>IU</td>
 <td>unstranded</td>
 </tr>
-<tr class="even">
+<tr>
 <td>ISR</td>
 <td>stranded reverse (paired end)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>ISF</td>
 <td>stranded forward (paired end)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>SR</td>
 <td>stranded reverse (single end)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>SF</td>
 <td>stranded forward (single end)</td>
 </tr>
@@ -2213,7 +2213,7 @@ manual</a></p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Key options:</p>
 <ul>
@@ -2288,7 +2288,7 @@ index. Create a file named <code>index_genome.sh</code> in
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What will the output look like? </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <p>The index directory is now ready for use in mapping and should have
 contents like this: Location: <code>$SCRATCH/rcac_rnaseq/data</code>
@@ -2368,7 +2368,7 @@ paired FASTQ files.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -2545,7 +2545,7 @@ contamination issues</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>Example interpretation for this dataset:</p>
 <ul>
@@ -2716,7 +2716,7 @@ expression?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <p>Example interpretation for this dataset:</p>
 <ol style="list-style-type: decimal">
@@ -2770,7 +2770,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-04b-transcript-based-quantification"><p>Content from <a href="04b-transcript-based-quantification.html">B. Transcript-based quantification (Kallisto)</a></p>
 <hr>
-<p>Last updated on 2026-04-28 |
+<p>Last updated on 2026-05-05 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04b-transcript-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -3321,7 +3321,7 @@ were used?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Example interpretation for this dataset:</p>
 <ol style="list-style-type: decimal">
@@ -3371,7 +3371,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-05-deseq2-expression-analyses"><p>Content from <a href="05-deseq2-expression-analyses.html">Gene-level QC and differential expression (DESeq2)</a></p>
 <hr>
-<p>Last updated on 2026-04-28 |
+<p>Last updated on 2026-05-05 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/05-deseq2-expression-analyses.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -4469,7 +4469,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-05b-deseq2-expression-analyses-kallisto"><p>Content from <a href="05b-deseq2-expression-analyses-kallisto.html">B. Differential expression using DESeq2 (Kallisto pathway)</a></p>
 <hr>
-<p>Last updated on 2026-04-28 |
+<p>Last updated on 2026-05-05 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/05b-deseq2-expression-analyses-kallisto.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -5383,38 +5383,38 @@ confidence in the results.</p>
 choose?</h3>
 <div class="callout-content">
 <table class="table">
-<thead><tr class="header">
+<thead><tr>
 <th>Aspect</th>
 <th>Genome-based (Ep 05)</th>
 <th>Transcript-based (Ep 05b)</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Input</td>
 <td>BAM files</td>
 <td>FASTQ files</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Speed</td>
 <td>Slower (alignment + counting)</td>
 <td>Faster (pseudo-alignment)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Storage</td>
 <td>Large (BAM files)</td>
 <td>Small (abundance.tsv files)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Bias correction</td>
 <td>Limited</td>
 <td>Sequence + GC bias</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Novel transcripts</td>
 <td>Can detect</td>
 <td>Cannot detect</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Visualization</td>
 <td>IGV compatible</td>
 <td>No BAM files</td>
@@ -5460,7 +5460,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-06-gene-set-enrichment-analyses"><p>Content from <a href="06-gene-set-enrichment-analyses.html">Gene set enrichment analysis</a></p>
 <hr>
-<p>Last updated on 2026-04-28 |
+<p>Last updated on 2026-05-05 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/06-gene-set-enrichment-analyses.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -5642,43 +5642,43 @@ inappropriate universe leads to misleading results.</p>
 <col width="39%">
 <col width="30%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Database</th>
 <th>Description</th>
 <th>Best for</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>GO BP</td>
 <td>Biological Process ontology</td>
 <td>Functional processes</td>
 </tr>
-<tr class="even">
+<tr>
 <td>GO MF</td>
 <td>Molecular Function ontology</td>
 <td>Protein activities</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>GO CC</td>
 <td>Cellular Component ontology</td>
 <td>Subcellular localization</td>
 </tr>
-<tr class="even">
+<tr>
 <td>KEGG</td>
 <td>Curated pathways</td>
 <td>Metabolic/signaling pathways</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Reactome</td>
 <td>Detailed pathway reactions</td>
 <td>Mechanistic understanding</td>
 </tr>
-<tr class="even">
+<tr>
 <td>MSigDB Hallmark</td>
 <td>50 curated signatures</td>
 <td>High-level biological states</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>MSigDB C2</td>
 <td>Curated gene sets</td>
 <td>Canonical pathways</td>
@@ -6600,28 +6600,28 @@ gene list without cutoffs.</p>
 <col width="26%">
 <col width="31%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Aspect</th>
 <th>ORA</th>
 <th>GSEA</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Input</td>
 <td>List of significant genes</td>
 <td>All genes, ranked by fold change</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Cutoff</td>
 <td>Required (padj, LFC)</td>
 <td>None</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Sensitivity</td>
 <td>May miss coordinated small changes</td>
 <td>Detects subtle but consistent shifts</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Gene weights</td>
 <td>All DE genes treated equally</td>
 <td>Magnitude of change matters</td>
@@ -7003,8 +7003,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/aio.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/aio.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-04-28",
-  "datePublished": "2026-04-28"
+  "dateModified": "2026-05-05",
+  "datePublished": "2026-05-05"
 }
 
   </script><script>
