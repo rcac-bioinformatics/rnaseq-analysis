@@ -9,7 +9,7 @@ title: Setup
 2. **Michael Carlson**, Ph.D.: Michael is a Senior Computational Scientist at Purdue University's Rosen Center for Advanced Computing (RCAC). Michael has a background in computational physics, specifically hypersonic materials. He also leads many introductory workshops in the High-Performance Computing domain.
 
 
-## Schedule (01/22/2026)
+## Schedule (10/06/2026)
 
 
 | **Time**     | **Session**                                                                                                                                                                                          |
@@ -37,15 +37,77 @@ title: Setup
 
 ---
 
-## Pre-requisites
+## Prerequisites
 
-1. Basic understanding of genomics concepts (genes, transcripts, and genome structure)
-2. Familiarity with the command line interface (Linux/Unix shell)
-3. Prior exposure to basic bioinformatics tools and file formats (FASTA, GFF, FASTQ)
+This workshop assumes:
 
----
+- **Basic Linux/command-line skills**: navigating directories, running commands, editing files
+- **Basic R skills**: installing packages, reading/writing data, creating plots
+- **A Purdue HPC account**: access to the Negishi cluster or Scholar (provided)
+- **An SSH client**: terminal (macOS/Linux) or PuTTY/MobaXterm (Windows)
+- **Genomics knowledge**: understanding of genes, transcripts, and genome structure
 
-## Data sets
+No prior experience with single-cell RNA-seq is required.
+
+## SSH Setup
+
+You need SSH access to the Negishi cluster for Episode 2 (raw data processing) and to copy the workshop data. Follow the instructions for your operating system below.
+
+::::::::::::::::::::::::::::::::::::::: discussion
+
+## Connecting to the Cluster
+
+You will need SSH access to the Negishi cluster at Purdue. Choose the instructions for your operating system below.
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::: solution
+
+### Windows
+
+1. Download and install [MobaXterm](https://mobaxterm.mobatek.net/) (recommended) or [PuTTY](https://www.putty.org/)
+2. Open MobaXterm and click **Session > SSH**
+3. Set **Remote host** to `negishi.rcac.purdue.edu`
+4. Check **Specify username** and enter your Purdue career account username
+5. Click **OK** and enter your password when prompted
+6. Complete Microsoft two-factor authentication
+
+:::::::::::::::::::::::::
+
+:::::::::::::::: solution
+
+### macOS
+
+1. Open **Terminal** (Applications > Utilities > Terminal)
+2. Connect to the cluster:
+
+```bash
+ssh your_username@negishi.rcac.purdue.edu
+```
+
+1. Enter your password (characters may not appear, but your password is being entered)
+2. Complete Microsoft two-factor authentication
+
+:::::::::::::::::::::::::
+
+:::::::::::::::: solution
+
+### Linux
+
+1. Open your terminal emulator
+2. Connect to the cluster:
+
+```bash
+ssh your_username@negishi.rcac.purdue.edu
+```
+
+1. Enter your password (characters may not appear, but your password is being entered)
+2. Complete Microsoft two-factor authentication
+
+:::::::::::::::::::::::::
+
+
+## Data Setup
 
 To copy only the training data:
 
@@ -69,55 +131,3 @@ Use this folder **only if you are unable to complete the exercises during the wo
 
 
 
----
-
-## Software setup
-
-::::::::::::::::::::::::::::::::::::::: discussion
-
-## Details
-
-
-SSH key setup for different systems is provided in the expandable sections below.
-Follow the instructions for your operating system to configure passwordless access.
-
-:::::::::::::::::::::::::::::::::::::::::::::::::::
-
-:::::::::::::::: solution
-
-### Windows
-
-Open **PowerShell** or **Git Bash** and run:
-
-```bash
-ssh-keygen -b 4096 -t rsa
-type .ssh\id_rsa.pub | ssh boiler@scholar.rcac.purdue.edu "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
-```
-
-:::::::::::::::::::::::::
-
-:::::::::::::::: solution
-
-### macOS
-
-Open **Terminal** and run:
-
-```bash
-ssh-keygen -b 4096 -t rsa
-cat .ssh/id_rsa.pub | ssh boiler@scholar.rcac.purdue.edu "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
-```
-
-:::::::::::::::::::::::::
-
-:::::::::::::::: solution
-
-### Linux
-
-Open a terminal and run:
-
-```bash
-ssh-keygen -b 4096 -t rsa
-cat .ssh/id_rsa.pub | ssh boiler@scholar.rcac.purdue.edu "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
-```
-
-:::::::::::::::::::::::::

@@ -52,3 +52,5 @@ po/*~
 # renv sandbox needed for renv version 0.16.0
 renv/sandbox # OPTIONAL
 instructor-notes/
+CLAUDE.md
+new-prompts/
