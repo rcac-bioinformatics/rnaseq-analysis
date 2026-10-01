@@ -6,9 +6,7 @@ title: Setup
 
 1. **Arun Seetharam, Ph.D.**: Arun is a lead bioinformatics scientist at Purdue University’s Rosen Center for Advanced Computing. With extensive expertise in comparative genomics, genome assembly, annotation, single-cell genomics,  NGS data analysis, metagenomics, proteomics, and metabolomics. Arun supports a diverse range of bioinformatics projects across various organisms, including human model systems.
 
-2. **Tomas Ratkus**: is a Research Solutions Engineer with Rosen Center for Advanced Computing (RCAC), and a Senior Laboratory Operations Specialist in the Department of Earth, Atmospheric, and Planetary Sciences (EAPS). He primarily supports earth system and climate modeling researchers through high performance computing, software environments, and workflow support.
-
-3. **Rose Wilfong**: is a senior research data facilitator with Rosen Center for Advanced Computing and works jointly with the Bindley Bioscience Center on campus. She mainly supports data management workflows and automation with the facilities. Prior to joining RCAC, she did graduate research in bioinformatics, cheminformatics, and cryo-ET.
+2. **Michael Carlson**, Ph.D.: Michael is a Senior Computational Scientist at Purdue University's Rosen Center for Advanced Computing (RCAC). Michael has a background in computational physics, specifically hypersonic materials. He also leads many introductory workshops in the High-Performance Computing domain.
 
 
 ## Schedule (01/22/2026)
