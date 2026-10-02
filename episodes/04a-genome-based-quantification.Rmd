@@ -80,13 +80,12 @@ salmon quant --index data/salmon_index \
              --output results/strand_check \
              --threads 4
 ```
-Building the Salmon index and running the check takes about TBD minutes on 4 cores <!-- NEGISHI:04a-time-salmon -->. The important output is in `results/strand_check/lib_format_counts.json`:
+Building the Salmon index and running the check takes about 8 minutes on 4 cores. The important output is in `results/strand_check/lib_format_counts.json`:
 
 ::::::::::::::::::::::::::::::::::::: spoiler
 
 ## What does this file look like?
 
-<!-- NEGISHI:04a-out-libformat -->
 ```json
 {
     "read_files": "[ data/WT_Bcell_mock_rep1_R1.fastq.gz, data/WT_Bcell_mock_rep1_R2.fastq.gz]",
@@ -110,7 +109,6 @@ Building the Salmon index and running the check takes about TBD minutes on 4 cor
     "IU": 0,
     "U": 0
 }
-
 ```
 
 
@@ -119,8 +117,8 @@ Building the Salmon index and running the check takes about TBD minutes on 4 cor
 > This JSON file reports Salmon's automatic library type detection.
 >
 > - **`"expected_format": "IU"`**: This is Salmon's conclusion. "I" means **Inward** (correct for paired-end reads) and "U" means **Unstranded**.
-> - **`"strand_mapping_bias"`** (TBD here <!-- NEGISHI:04a-txt-strand-bias -->): This is the key evidence. A value near 0.5 (50%) indicates that reads mapped equally to both the sense and antisense strands, the definitive sign of an **unstranded** library.
-> - **`"ISF"`** and **`"ISR"`**: These are the counts of inward-facing fragments whose first read maps to the forward strand of the transcript (ISF) or to the reverse strand (ISR): TBD and TBD million here <!-- NEGISHI:04a-txt-isf-isr -->. Because these values are almost equal, they confirm the ~50/50 split seen in the strand bias.
+> - **`"strand_mapping_bias"`** (0.508 here): This is the key evidence. A value near 0.5 (50%) indicates that reads mapped equally to both the sense and antisense strands, the definitive sign of an **unstranded** library.
+> - **`"ISF"`** and **`"ISR"`**: These are the counts of inward-facing fragments whose first read maps to the forward strand of the transcript (ISF) or to the reverse strand (ISR): 5.3 and 5.2 million here. Because these values are almost equal, they confirm the ~50/50 split seen in the strand bias.
 
 Common results:
 
@@ -197,8 +195,7 @@ Below is a minimal SLURM job script for building the STAR genome index. Create a
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=20
-#SBATCH --mem=48G
+#SBATCH --cpus-per-task=48
 #SBATCH --account=rcac-rnaseq
 #SBATCH --qos=standby
 #SBATCH --partition=cpu
@@ -231,7 +228,7 @@ cd $SCRATCH/rnaseq-workshop/scripts
 sbatch index_genome.sh
 ```
 
-Indexing takes about TBD minutes on 20 cores and needs about TBD GB of memory <!-- NEGISHI:04a-time-star-index -->, which is why the script requests 48 GB. Check progress with `squeue -u $USER`; the job log is written to `cluster-star_index.<jobid>.out` in the `scripts` directory.
+Indexing takes about 15 minutes and needs about 30 GB of memory. On Negishi, memory comes with the cores you request (there is no separate memory request), so the script asks for 48 cores to get enough memory for indexing a mammalian genome. Check progress with `squeue -u $USER`; the job log is written to `cluster-star_index.<jobid>.out` in the `scripts` directory.
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
@@ -255,25 +252,23 @@ The index directory is now ready for use in mapping and should have contents lik
 Location: `$SCRATCH/rnaseq-workshop/data`
 Contents of `star_index/`:
 
-<!-- NEGISHI:04a-out-star-index-ls -->
 ```text
-star_index/
-├── chrLength.txt
-├── chrNameLength.txt
-├── chrName.txt
-├── chrStart.txt
-├── exonGeTrInfo.tab
-├── exonInfo.tab
-├── geneInfo.tab
-├── Genome
-├── genomeParameters.txt
-├── Log.out
-├── SA
-├── SAindex
-├── sjdbInfo.txt
-├── sjdbList.fromGTF.out.tab
-├── sjdbList.out.tab
-└── transcriptInfo.tab
+chrLength.txt
+chrNameLength.txt
+chrName.txt
+chrStart.txt
+exonGeTrInfo.tab
+exonInfo.tab
+geneInfo.tab
+Genome
+genomeParameters.txt
+Log.out
+SA
+SAindex
+sjdbInfo.txt
+sjdbList.fromGTF.out.tab
+sjdbList.out.tab
+transcriptInfo.tab
 ```
 :::::::::::::::::::::::::::::::::::::::
 
@@ -347,7 +342,6 @@ Save the array job below as `$SCRATCH/rnaseq-workshop/scripts/map_reads.sh`. Eac
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
-#SBATCH --mem=40G
 #SBATCH --account=rcac-rnaseq
 #SBATCH --qos=standby
 #SBATCH --partition=cpu
@@ -388,7 +382,7 @@ cd $SCRATCH/rnaseq-workshop/scripts
 sbatch map_reads.sh
 ```
 
-Each sample takes about TBD minutes on 20 cores and up to TBD GB of memory <!-- NEGISHI:04a-time-star-map -->. The eight tasks run in parallel when the queue allows.
+Each sample takes about 2 to 3 minutes on 20 cores and up to 28 GB of memory. The eight tasks run in parallel when the queue allows.
 
 
 ::::::::::::::::::::::::::::::::::::::: discussion
@@ -460,9 +454,9 @@ Using your MultiQC alignment report:
 
 Interpretation for this dataset:
 
-1. Uniquely mapped reads range from TBD to TBD percent <!-- NEGISHI:04a-sol-unique-range -->; TBD has the highest <!-- NEGISHI:04a-sol-unique-max -->.
-2. TBD <!-- NEGISHI:04a-sol-unique-outliers --> These rates are within the 60 to 90 percent range given above, so no sample fails, but the spread is worth recording. When one condition maps systematically worse, check whether the difference also shows up in the PCA in Episode 05.
-3. Most unmapped reads are classified as "too short" (TBD to TBD million per sample <!-- NEGISHI:04a-sol-too-short -->): STAR could align only part of the read pair. With 51 bp reads this usually reflects low quality read ends (see the FastQC report in Episode 03), rRNA or other sequence absent from the primary assembly, and reads spanning unannotated junctions.
+1. Uniquely mapped reads range from about 62 to 83 percent; mock_rep4 has the highest (83 percent).
+2. IR_rep1 and IR_rep2 are lowest (62 and 64 percent), and IR_rep3, IR_rep4, and mock_rep4 highest (77 to 83 percent): the same split as the read quality groups in Episode 03. The two conditions map about equally well on average (70 percent for IR, 73 percent for mock). These rates are within the 60 to 90 percent range given above, so no sample fails, but the spread is worth recording. When one condition maps systematically worse, check whether the difference also shows up in the PCA in Episode 05.
+3. Most unmapped reads are classified as "too short" (1.4 to 4.6 million pairs per sample): STAR could align only part of the read pair. With 51 bp reads this usually reflects low quality read ends (see the FastQC report in Episode 03), rRNA or other sequence absent from the primary assembly, and reads spanning unannotated junctions.
 
 :::::::::::::::::::::::::::::::::::
 
@@ -519,7 +513,6 @@ Below is an example SLURM script to count all BAM files at once. Save it as `$SC
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
-#SBATCH --mem=16G
 #SBATCH --account=rcac-rnaseq
 #SBATCH --qos=standby
 #SBATCH --partition=cpu
@@ -552,7 +545,7 @@ Submit the job from the `scripts` directory (the previous block left you there):
 sbatch count_features.sh
 ```
 
-Counting all eight BAM files takes about TBD minutes <!-- NEGISHI:04a-time-featurecounts -->.
+Counting all eight BAM files takes about 7 minutes.
 
 `gene_counts.txt` will contain:
 
@@ -598,11 +591,11 @@ Using your MultiQC featureCounts report:
 
 ::::::::::::::::::::::::::::::::::: solution
 
-Interpretation for this dataset. Assigned fragments are TBD to TBD percent of the total <!-- NEGISHI:04a-sol-assigned-range -->. This looks low, but the total in the featureCounts summary includes every record in the BAM file: STAR kept unmapped pairs (`--outSAMunmapped Within`) and multimapping pairs, and featureCounts reports both as unassigned. Measured against uniquely mapped pairs only, the assignment rate is much higher.
+Interpretation for this dataset. Assigned fragments are about 32 to 40 percent of the total. This looks low, but the total in the featureCounts summary includes every record in the BAM file: STAR kept unmapped pairs (`--outSAMunmapped Within`) and multimapping pairs, and featureCounts reports both as unassigned. Measured against uniquely mapped pairs only, the assignment rate is much higher.
 
-1. The sample with the lowest assignment rate here is TBD <!-- NEGISHI:04a-sol-assigned-min -->. Causes include low complexity, incomplete annotation, or more intronic reads.
-2. The largest unassigned category is TBD <!-- NEGISHI:04a-sol-unassigned-largest -->. Unmapped pairs did not align at all; No Features pairs aligned outside annotated exons; MultiMapping pairs aligned to several loci and are not counted by default.
-3. TBD <!-- NEGISHI:04a-sol-assigned-vs-depth --> In general they need not agree: total assigned reads depend on sequencing depth, while percent assigned reflects library and mapping quality.
+1. The sample with the lowest assignment rate here is mock_rep2 (32 percent). Causes include low complexity, incomplete annotation, or more intronic reads.
+2. It differs between samples: Unmapped is largest for IR_rep1 and IR_rep2 (about 25 percent), MultiMapping for IR_rep3, IR_rep4, and mock_rep3 (24 to 26 percent), and No Features for mock_rep1, mock_rep2, and mock_rep4 (23 to 35 percent). Unmapped pairs did not align at all; No Features pairs aligned outside annotated exons; MultiMapping pairs aligned to several loci and are not counted by default.
+3. Here it does: IR_rep4 has both the most assigned pairs (9.6 million) and the highest percentage (40 percent). In general they need not agree: total assigned reads depend on sequencing depth, while percent assigned reflects library and mapping quality.
 4. Reads mapped outside annotated exons, often from intronic regions, unannotated transcripts, or incomplete annotation.
 5. Multi-mapping is expected for paralogs and repeats. It is usually fine as long as the rate is consistent across samples.
 

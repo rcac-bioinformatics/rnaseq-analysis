@@ -2,7 +2,7 @@
 source: Rmd
 title: "B. Transcript-based quantification (Kallisto)"
 teaching: 30
-exercises: 40
+exercises: 30
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions
@@ -43,7 +43,7 @@ This workflow is faster, uses less storage, and models transcript-level uncertai
 
 Kallisto uses pseudo-alignment to rapidly quantify transcript abundances without traditional read mapping. Key advantages include:
 
-- **Speed**: Kallisto is fast; on this dataset one sample takes about TBD minutes on 16 cores <!-- NEGISHI:04b-time-quant-intro -->.
+- **Speed**: Kallisto is fast; on this dataset one sample takes 1 to 2 minutes on 16 cores (without bootstraps).
 - **Accuracy**: Comparable accuracy to alignment-based methods for quantification.
 - **Bootstrap support**: Optional uncertainty estimation via bootstraps (needed for sleuth, not for DESeq2).
 - **Low resource usage**: No large BAM files generated, minimal storage requirements.
@@ -84,23 +84,40 @@ Missing or incorrect transcripts → biased TPM estimates.
 
 ### Building the Kallisto index
 
-Building the index is too heavy for a login node, so start an interactive job first:
+Building the index for the mouse transcriptome needs more memory than a small job provides, so we run it as a batch job, like the STAR index in Episode 04a. This version of Kallisto builds the index with a single thread, but on Negishi memory comes with the cores you request, so the script asks for 48 cores. Save it as `$SCRATCH/rnaseq-workshop/scripts/index_kallisto.sh`:
 
 ```bash
-sinteractive -A rcac-rnaseq -q standby -p cpu -N 1 -n 4 --time=1:00:00
-
-cd $SCRATCH/rnaseq-workshop
-mkdir -p data/kallisto_index
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=48
+#SBATCH --account=rcac-rnaseq
+#SBATCH --qos=standby
+#SBATCH --partition=cpu
+#SBATCH --time=2:00:00
+#SBATCH --job-name=kallisto_index
+#SBATCH --output=cluster-%x.%j.out
+#SBATCH --error=cluster-%x.%j.err
 
 module load biocontainers
 module load kallisto
+
+cd $SCRATCH/rnaseq-workshop
+mkdir -p data/kallisto_index
 
 kallisto index \
     -i data/kallisto_index/transcripts.idx \
     data/gencode.vM38.transcripts-clean.fa
 ```
 
-This creates an index file that Kallisto uses for pseudo-alignment. Building it for the GENCODE mouse transcriptome takes about TBD minutes and TBD GB of memory <!-- NEGISHI:04b-time-index -->. Stay in this interactive session for the next steps.
+Submit it from the `scripts` directory:
+
+```bash
+cd $SCRATCH/rnaseq-workshop/scripts
+sbatch index_kallisto.sh
+```
+
+This creates an index file that Kallisto uses for pseudo-alignment. Building it for the GENCODE mouse transcriptome takes about 5 minutes and about 7.5 GB of memory. In our tests a 4-core job, which gets about the same amount of memory on Negishi, was killed for running out of it. Check progress with `squeue -u $USER`; the log is written to `cluster-kallisto_index.<jobid>.out` in the `scripts` directory. Wait for the job to finish before quantifying.
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
@@ -123,14 +140,14 @@ The core Kallisto command is `kallisto quant`. We use the transcript index and p
 mkdir -p $SCRATCH/rnaseq-workshop/results/kallisto_quant
 ```
 
-Example command:
+For one sample, the command looks like this. You do not need to run it yourself: the array job in Step 3 runs it for every sample.
 
 ```bash
 kallisto quant \
     -i data/kallisto_index/transcripts.idx \
     -o results/kallisto_quant/WT_Bcell_mock_rep1 \
     -b 0 \
-    -t 4 \
+    -t 16 \
     data/WT_Bcell_mock_rep1_R1.fastq.gz \
     data/WT_Bcell_mock_rep1_R2.fastq.gz
 ```
@@ -140,7 +157,7 @@ Important flags:
 * `-i` → path to the Kallisto index
 * `-o` → output directory for this sample
 * `-b 0` → number of bootstrap samples (none here; see the callout below)
-* `-t 4` → number of threads to use (match the cores of your interactive job)
+* `-t 16` → number of threads to use (the array job uses the cores it requests, `${SLURM_CPUS_ON_NODE}`)
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
@@ -186,7 +203,6 @@ Save the array job below as `$SCRATCH/rnaseq-workshop/scripts/quant_kallisto.sh`
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
-#SBATCH --mem=16G
 #SBATCH --account=rcac-rnaseq
 #SBATCH --qos=standby
 #SBATCH --partition=cpu
@@ -225,7 +241,7 @@ cd $SCRATCH/rnaseq-workshop/scripts
 sbatch quant_kallisto.sh
 ```
 
-Each sample takes about TBD minutes on 16 cores <!-- NEGISHI:04b-time-quant -->.
+Each sample takes 1 to 2 minutes on 16 cores.
 
 ::::::::::::::::::::::::::::::::::::::: discussion
 
@@ -239,12 +255,11 @@ Kallisto runs very quickly and produces small output. The advantage of array job
 
 After Kallisto finishes, each sample directory contains a small set of output files (plus the `.log` file that our array script writes):
 
-<!-- NEGISHI:04b-out-kallisto-dir -->
 ```text
-WT_Bcell_mock_rep1/
-├── abundance.tsv          # IMPORTANT: transcript-level TPM, counts, effective lengths
-├── abundance.h5           # IMPORTANT: the same estimates in HDF5 format (plus bootstraps if -b > 0)
-└── run_info.json          # IMPORTANT: run parameters and mapping statistics
+abundance.h5
+abundance.tsv
+run_info.json
+WT_Bcell_mock_rep1.log
 ```
 
 ### What is inside *abundance.tsv*?
@@ -259,14 +274,13 @@ This file contains the transcript-level quantification results:
 
 Example:
 
-<!-- NEGISHI:04b-out-abundance -->
 ```text
-target_id                  length  eff_length  est_counts  tpm
-ENSMUST00000193812.2       1070    775.000     0.000       0.000000
-ENSMUST00000082908.3       110     110.000     0.000       0.000000
-ENSMUST00000162897.2       4153    3483.630    1.000       0.013994
-ENSMUST00000159265.2       2989    2694.000    0.000       0.000000
-ENSMUST00000070533.5       3634    3339.000    0.000       0.000000
+target_id	length	eff_length	est_counts	tpm
+ENSMUST00000193812.2	1070	902.888	0	0
+ENSMUST00000082908.3	110	10.4106	0	0
+ENSMUST00000162897.2	4153	3985.89	0	0
+ENSMUST00000159265.2	2989	2821.89	1	0.0101594
+ENSMUST00000070533.5	3634	3466.89	0	0
 ```
 
 ### Key QC metrics to review
@@ -293,7 +307,7 @@ Most differential expression tools (DESeq2, edgeR) require **gene-level** counts
 
 ### Prepare tx2gene mapping
 
-We need a mapping file that links transcript IDs to gene IDs. It must cover every transcript in the Kallisto index, so we build it from the headers of the same transcript FASTA: field 1 is the transcript ID and field 2 the gene ID. The basic GTF lists only TBD of these TBD transcripts <!-- NEGISHI:04b-txt-tx2gene-coverage --> (the transcript FASTA is the comprehensive set, with extra isoforms); with a GTF-based map, tximport would silently drop the rest, together with the reads Kallisto assigned to them.
+We need a mapping file that links transcript IDs to gene IDs. It must cover every transcript in the Kallisto index, so we build it from the headers of the same transcript FASTA: field 1 is the transcript ID and field 2 the gene ID. The basic GTF lists only 127,934 of these 278,396 transcripts (46 percent) (the transcript FASTA is the comprehensive set, with extra isoforms); with a GTF-based map, tximport would silently drop the rest, together with the reads Kallisto assigned to them.
 
 ```bash
 cd $SCRATCH/rnaseq-workshop/data
@@ -301,12 +315,13 @@ grep ">" gencode.vM38.transcripts.fa | cut -c2- | cut -d "|" -f 1,2 | tr "|" "\t
 head -3 tx2gene.tsv
 ```
 
-<!-- NEGISHI:04b-out-tx2gene-head -->
 ```text
-TBD
+ENSMUST00000193812.2	ENSMUSG00000102693.2
+ENSMUST00000082908.3	ENSMUSG00000064842.3
+ENSMUST00000162897.2	ENSMUSG00000051951.6
 ```
 
-Next, we process this mapping in R. If you left the interactive session from Step 1, start a new one; then load the modules and start R:
+Next, we process this mapping in R. Reading eight Kallisto results takes a few GB of memory, more than a login node allows, so start a short interactive session, then load the modules and start R:
 
 ```bash
 sinteractive -A rcac-rnaseq -q standby -p cpu -N 1 -n 4 --time=1:00:00
@@ -339,9 +354,28 @@ saveRDS(txi, file = "results/kallisto_quant/txi.rds")
 head(txi$counts)
 ```
 
-<!-- NEGISHI:04b-out-txi-head -->
 ```text
-TBD
+                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3
+ENSMUSG00000000001.5         387.39815        329.43564        737.97318
+ENSMUSG00000000003.16          0.00000          1.00000          0.00000
+ENSMUSG00000000028.16         37.73844         23.20617         39.45979
+ENSMUSG00000000031.20          2.00000          1.00000          1.00000
+ENSMUSG00000000037.18          2.00000          4.00000          3.00000
+ENSMUSG00000000049.12          0.00000          0.00000          1.00000
+                      WT_Bcell_IR_rep4 WT_Bcell_mock_rep1 WT_Bcell_mock_rep2
+ENSMUSG00000000001.5         654.17550           687.1189          620.35065
+ENSMUSG00000000003.16          0.00000             0.0000            0.00000
+ENSMUSG00000000028.16         29.71743            55.0000           39.20456
+ENSMUSG00000000031.20          0.00000             0.0000            0.00000
+ENSMUSG00000000037.18          8.00000             1.0000            1.00000
+ENSMUSG00000000049.12          0.00000             0.0000            2.00000
+                      WT_Bcell_mock_rep3 WT_Bcell_mock_rep4
+ENSMUSG00000000001.5            661.3541          704.88506
+ENSMUSG00000000003.16             0.0000            0.00000
+ENSMUSG00000000028.16            40.0984           41.44387
+ENSMUSG00000000031.20             0.0000            0.00000
+ENSMUSG00000000037.18             2.0000            1.00000
+ENSMUSG00000000049.12             0.0000            1.00000
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
@@ -402,9 +436,9 @@ Using your MultiQC summary and Kallisto outputs:
 
 Interpretation for this dataset:
 
-1. Pseudoalignment rates range from TBD to TBD percent <!-- NEGISHI:04b-sol-pseudo-range -->. That is lower than the 80 to 90 percent often quoted for well-annotated transcriptomes: Kallisto only counts reads compatible with annotated mature transcripts, so reads from introns (pre-mRNA), intergenic regions, and rRNA not in the transcript FASTA are not pseudoaligned. Compare with the STAR unique mapping rates from Episode 04a, which include intronic reads.
-2. TBD <!-- NEGISHI:04b-sol-pseudo-consistency -->
-3. TBD <!-- NEGISHI:04b-sol-fraglen -->
+1. Pseudoalignment rates range from about 51 to 64 percent; none is an outlier. That is lower than the 80 to 90 percent often quoted for well-annotated transcriptomes: Kallisto only counts reads compatible with annotated mature transcripts, so reads from introns (pre-mRNA), intergenic regions, and rRNA not in the transcript FASTA are not pseudoaligned. Compare with the STAR unique mapping rates from Episode 04a, which include intronic reads.
+2. Reasonably consistent: they span about 14 percentage points (standard deviation about 5), from mock_rep2 (51 percent) to IR_rep3 and IR_rep4 (64 percent). Every sample had 20 million read pairs processed.
+3. The estimated mean fragment length is 159 to 168 bp in the mock samples and 181 to 201 bp in the IR samples. Within a group the samples agree, but the groups differ. This may reflect library preparation done in separate batches. Note such differences: when they line up with the experimental groups, their effect cannot be separated from the treatment.
 4. `run_info.json` records the Kallisto and index versions, `n_bootstraps` (0 here), `n_processed`, `n_pseudoaligned`, `p_pseudoaligned`, and the exact command line in `call`.
 
 :::::::::::::::::::::::::::::::::::

@@ -238,7 +238,6 @@ sum(is.na(cts_annot$gene_biotype))
 
 Output:
 
-<!-- NEGISHI:05-out-na-biotype -->
 ```text
 [1] 0
 ```
@@ -300,9 +299,8 @@ cts_coding <- cts_pc %>%
 dim(cts_coding)
 ```
 
-<!-- NEGISHI:05-out-dim-coding -->
 ```text
-[1] TBD     8
+[1] 11330     8
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
@@ -532,7 +530,7 @@ PCA is one of the most powerful tools for detecting **batch effects**—unwanted
 
 3. **Never simply remove batch-affected samples** without understanding the underlying cause.
 
-In this dataset, samples cluster cleanly by condition, indicating no obvious batch effects <!-- NEGISHI:05-txt-pca-batch -->.
+In this dataset, PC1 (95 percent of the variance) separates the IR samples from the mock samples. A much smaller pattern within the groups follows read quality, as the exercise below shows.
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -549,12 +547,12 @@ Using the library size, distance heatmap, and PCA:
 
 ::::::::::::::::::::::::::::::::::: solution
 
-Interpretation for this dataset <!-- NEGISHI:05-sol-exploratory -->:
+Interpretation for this dataset:
 
-1. Library sizes are comparable across samples and fall within a narrow range.
-2. Samples cluster by condition (mock vs IR-treated) in both distance heatmaps and PCA.
-3. No sample appears as a clear outlier relative to its group.
-4. No batch effects are apparent—PC1 separates by experimental condition, not technical factors.
+1. No. Library sizes (assigned read pairs on protein-coding genes) range from 3.4 to 5.1 million, and the size factors from 0.78 to 1.19, so no sample has abnormally low depth.
+2. Yes. The distance heatmap splits the samples into a mock and an IR cluster, and PC1, which explains 95 percent of the variance, separates the two conditions.
+3. No. Every sample is closest to the other samples with its own label.
+4. Not one that matters here. The condition dominates, but within each group there is a small, consistent pattern: IR_rep3 and IR_rep4 pair up apart from IR_rep1 and IR_rep2, and mock_rep4 sits apart from the other mock samples on PC2 (under 2 percent of the variance). These are the samples with the cleanest reads in Episode 03, so this is a technical effect of read quality. It is small next to the treatment effect and does not need correction in this analysis, but it is worth recording.
 
 :::::::::::::::::::::::::::::::::::
 
@@ -592,23 +590,17 @@ Above three steps can be run together using the `DESeq` function:
 dds <- DESeq(dds)
 ```
 
-<!-- NEGISHI:05-out-deseq-messages -->
 ```text
-estimating size factors
-  Note: levels of factors in the design contain characters other than
-  letters, numbers, '_' and '.'. It is recommended (but not required) to use
-  only letters, numbers, and delimiters '_' or '.', as these are safe characters
-  for column names in R. [This is a message, not a warning or an error]
+using pre-existing size factors
 estimating dispersions
+found already estimated dispersions, replacing these
 gene-wise dispersion estimates
 mean-dispersion relationship
-  Note: levels of factors in the design contain characters other than
-  letters, numbers, '_' and '.'. It is recommended (but not required) to use
-  only letters, numbers, and delimiters '_' or '.', as these are safe characters
-  for column names in R. [This is a message, not a warning or an error]
 final dispersion estimates
 fitting model and testing
 ```
+
+Because the three steps above already ran on `dds`, `DESeq()` reuses the size factors and replaces the dispersions, as its messages say. On a new object it estimates both itself.
 :::::::::::::::::::::::::::::::::::
 
 
@@ -640,12 +632,11 @@ res <-
 summary(res)
 ```
 
-<!-- NEGISHI:05-out-summary-res -->
 ```text
-out of TBD with nonzero total read count
+out of 11330 with nonzero total read count
 adjusted p-value < 0.1
-LFC > 0 (up)       : TBD
-LFC < 0 (down)     : TBD
+LFC > 0 (up)       : 3317, 29%
+LFC < 0 (down)     : 3260, 29%
 outliers [1]       : 0, 0%
 low counts [2]     : 0, 0%
 (mean count < 7)
@@ -674,19 +665,26 @@ Order the results by p value to see the top DE genes:
 head(res[order(res$pvalue), ])
 ```
 
-<!-- NEGISHI:05-out-top-res -->
 ```text
 log2 fold change (MLE): condition WT_IR vs WT_mock 
-Wald test p-value: condition WT_IR vs WT_mock 
+Wald test p-value: condition WT IR vs WT mock 
 DataFrame with 6 rows and 6 columns
-                       baseMean log2FoldChange     lfcSE      stat       pvalue         padj
-                      <numeric>      <numeric> <numeric> <numeric>    <numeric>    <numeric>
-ENSMUSG00000026581.15  2412.406       -2.80863 0.0812517  -34.5671 7.89898e-262 8.94955e-258
-ENSMUSG00000021668.16   869.712        3.75461 0.1109288   33.8470 4.01308e-251 2.27341e-247
-ENSMUSG00000075122.6    614.418        4.47065 0.1336974   33.4386 3.77523e-245 1.42578e-241
-ENSMUSG00000004085.15   833.506        4.21081 0.1293034   32.5654 1.26916e-232 3.59488e-229
-ENSMUSG00000020184.16  1619.577        2.82923 0.0906311   31.2170 6.26193e-214 1.41895e-210
-ENSMUSG00000072825.13   724.296        4.73072 0.1518464   31.1546 4.39181e-213 8.29321e-210
+                       baseMean log2FoldChange     lfcSE      stat       pvalue
+                      <numeric>      <numeric> <numeric> <numeric>    <numeric>
+ENSMUSG00000026581.15  2412.406       -2.80863 0.0812517  -34.5671 7.89921e-262
+ENSMUSG00000021668.16   869.712        3.75461 0.1109288   33.8470 4.01297e-251
+ENSMUSG00000075122.6    614.418        4.47065 0.1336974   33.4386 3.77513e-245
+ENSMUSG00000004085.15   833.506        4.21081 0.1293034   32.5654 1.26912e-232
+ENSMUSG00000020184.16  1619.577        2.82923 0.0906311   31.2170 6.26176e-214
+ENSMUSG00000072825.13   724.296        4.73072 0.1518464   31.1546 4.39168e-213
+                              padj
+                         <numeric>
+ENSMUSG00000026581.15 8.94981e-258
+ENSMUSG00000021668.16 2.27335e-247
+ENSMUSG00000075122.6  1.42574e-241
+ENSMUSG00000004085.15 3.59478e-229
+ENSMUSG00000020184.16 1.41891e-210
+ENSMUSG00000072825.13 8.29296e-210
 ```
 
 Each row represents one gene.
@@ -706,9 +704,8 @@ First, check the available coefficient names:
 resultsNames(dds)
 ```
 
-<!-- NEGISHI:05-out-resultsnames -->
 ```text
-TBD
+[1] "Intercept"                  "condition_WT_IR_vs_WT_mock"
 ```
 
 Apply shrinkage using `apeglm` (recommended for standard two-group comparisons):
@@ -723,12 +720,16 @@ res_shrunk <- lfcShrink(
 summary(res_shrunk)
 ```
 
-<!-- NEGISHI:05-out-summary-shrunk -->
 ```text
-out of TBD with nonzero total read count
+using 'apeglm' for LFC shrinkage. If used in published research, please cite:
+    Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
+    sequence count data: removing the noise and preserving large differences.
+    Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895
+
+out of 11330 with nonzero total read count
 adjusted p-value < 0.1
-LFC > 0 (up)       : TBD
-LFC < 0 (down)     : TBD
+LFC > 0 (up)       : 3317, 29%
+LFC < 0 (down)     : 3260, 29%
 outliers [1]       : 0, 0%
 low counts [2]     : 0, 0%
 (mean count < 7)
@@ -779,12 +780,11 @@ print(summary_table)
 
 Output:
 
-<!-- NEGISHI:05-out-summary-table -->
 ```text
 # A tibble: 1 × 4
   total_genes   sig    up  down
         <int> <int> <int> <int>
-1         TBD   TBD   TBD   TBD
+1       11330  5967  1797  1801
 ```
 
 
@@ -945,9 +945,9 @@ Using `sig_res`:
 
 Interpretation for this dataset:
 
-* The largest positive fold changes include TBD <!-- NEGISHI:05-sol-top-up -->. Canonical p53 targets are strongly upregulated after IR: *Cdkn1a* (p21), *Mdm2*, *Bax*, *Bbc3* (Puma), and *Pmaip1* (Noxa).
-* The largest negative fold changes include TBD <!-- NEGISHI:05-sol-top-down -->.
-* *Gadd45a*, a DNA damage response gene, TBD <!-- NEGISHI:05-sol-gadd45a -->. Look it up with `dplyr::filter(res_annot, external_gene_name == "Gadd45a")`: a gene can be significant without passing the fold change cutoff used for `sig_res`.
+* The largest positive fold changes (log2 fold change 7.4 to 9.7) are *Ddit4l*, *Ckmt1*, *Syt12*, *Plb1*, *Celf5*, *Phlda3*, *Pierce1*, *Tnfsf4*, *Eda2r*, and *Cdkn1a*; *Phlda3*, *Eda2r*, and *Cdkn1a* are well-known p53 targets. Canonical p53 targets are strongly upregulated after IR: *Cdkn1a* (p21), *Mdm2*, *Bax*, *Bbc3* (Puma), and *Pmaip1* (Noxa).
+* The largest negative fold changes (log2 fold change -3.3 to -4.5) are *Rag1*, *Car1*, *Crisp3*, *Sele*, *Serpinb1a*, *Itih5*, *Hba-a1*, *Spns2*, *Loxl1*, and *S1pr3*. Downregulation is weaker than upregulation, consistent with a response driven mainly by p53, a transcriptional activator.
+* *Gadd45a*, a DNA damage response gene, goes up slightly after IR (log2 fold change 0.45) but is not significant here (padj 0.07), so it is not in `sig_res`. Look it up with `dplyr::filter(res_annot, external_gene_name == "Gadd45a")`. With 4 replicates and 20 million read pairs per sample, a small change in a modestly expressed gene can miss the cutoff; that is a statement about power, not evidence that the gene does not respond.
 * Finding the known p53 targets among the top upregulated genes is a positive control: it confirms the contrast direction and the analysis are correct.
 
 :::::::::::::::::::::::::::::::::::

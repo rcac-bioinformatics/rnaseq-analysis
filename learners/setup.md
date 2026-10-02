@@ -185,7 +185,7 @@ echo $SCRATCH
 The workshop data is pre-staged on Negishi. Copy it to your scratch directory:
 
 ```bash
-rsync -avP /scratch/negishi/aseethar/rnaseq-workshop ${RCAC_SCRATCH}/
+rsync -avP /depot/DEPOT_PATH/rnaseq-workshop ${RCAC_SCRATCH}/
 ```
 
 This creates `${RCAC_SCRATCH}/rnaseq-workshop`, the working directory every episode uses. It will copy:
@@ -215,7 +215,7 @@ ls ${RCAC_SCRATCH}/rnaseq-workshop/data/*.fastq.gz | wc -l
 du -sh ${RCAC_SCRATCH}/rnaseq-workshop/data
 ```
 
-The FASTQ count must be `16`. The total size of `data/` should be about TBD GB <!-- NEGISHI:setup-data-size -->.
+The FASTQ count must be `16`. The total size of `data/` should be about 19 GB.
 
 <!-- TODO(instructor): the data/ size above is filled from the Negishi run kit (01_learner_setup.sh records `du -sh`). -->
 
@@ -296,7 +296,7 @@ The job waits in the queue briefly. Once its status changes to **Running**, clic
 
 ## R package installation (skip this section if using OOD)
 
-The packages are provided by the RStudio (bioconductor) app on Open OnDemand. Install them yourself only if you want to run the R episodes on your own computer or in a different R installation. The list below is every package the episodes load, grouped by purpose. The same list is load-tested in the OOD app (R 4.4.0, Bioconductor 3.20) before each delivery; last checked TBD <!-- NEGISHI:setup-pkg-test -->.
+The packages are provided by the RStudio (bioconductor) app on Open OnDemand. Install them yourself only if you want to run the R episodes on your own computer or in a different R installation. The list below is every package the episodes load, grouped by purpose. The same list is load-tested in the OOD app (R 4.4.0, Bioconductor 3.20) before each delivery; last checked on 2026-10-02 (all 19 packages load, R 4.4.0, Bioconductor 3.20).
 
 ```r
 # Install BiocManager if not already installed
