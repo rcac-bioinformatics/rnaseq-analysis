@@ -109,11 +109,11 @@
   RNA-seq in practice: Hands-on workshop on RCAC systems
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 17%" class="percentage">
-    17%
+<aside class="col-md-12 lesson-progress"><div style="width: 18%" class="percentage">
+    18%
   </div>
   <div class="progress rcac">
-    <div class="progress-bar rcac" role="progressbar" style="width: 17%" aria-valuenow="17" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar rcac" role="progressbar" style="width: 18%" aria-valuenow="18" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
@@ -341,7 +341,7 @@ radiation</a></li>
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Downloading and organizing files</h1>
-        <p>Last updated on 2026-09-29 |
+        <p>Last updated on 2026-10-02 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/02-downloading-and-organizing-files.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -435,7 +435,7 @@ sequences. Overly aggressive trimming can reduce mapping rates or
 distort read length distributions. Trimming is needed only for specific
 applications such as transcript assembly where uniform read lengths are
 important.<br>
-More information: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4766705/" class="external-link uri">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4766705/</a></p>
+More information: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4766705/" class="external-link uri">https://pmc.ncbi.nlm.nih.gov/articles/PMC4766705/</a></p>
 </div>
 </div>
 </div>
@@ -490,6 +490,243 @@ cells only</strong>:</p>
 <td>SRR2121786-89</td>
 </tr></tbody></table><p>This balanced design (n=4 per group) allows us to identify genes that
 respond to ionizing radiation in cells with functional p53.</p>
+<div id="the-full-gse71176-series-has-24-samples" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="the-full-gse71176-series-has-24-samples" class="callout-inner">
+<h3 class="callout-title">The full GSE71176 series has 24 samples</h3>
+<div class="callout-content">
+<p>GSE71176 (SRA study SRP061386; Illumina HiSeq 2000, paired-end reads)
+profiles splenic B cells and splenic non-B cells from wild-type
+(<em>Trp53+/+</em>) and p53-knockout (<em>Trp53-/-</em>) mice,
+mock-treated or 4 hours after 7 Gy whole-body irradiation:</p>
+<table class="table"><thead><tr><th>Genotype</th>
+<th>Cell type</th>
+<th>Mock</th>
+<th>IR (7 Gy, 4 h)</th>
+</tr></thead><tbody><tr><td>Wild type</td>
+<td>B cells</td>
+<td>4 (used here)</td>
+<td>4 (used here)</td>
+</tr><tr><td>Wild type</td>
+<td>non-B cells</td>
+<td>4</td>
+<td>4</td>
+</tr><tr><td><em>Trp53-/-</em></td>
+<td>B cells</td>
+<td>2</td>
+<td>2</td>
+</tr><tr><td><em>Trp53-/-</em></td>
+<td>non-B cells</td>
+<td>2</td>
+<td>2</td>
+</tr></tbody></table><p>The workshop uses only the 8 wild-type B-cell samples. A single
+two-group comparison with 4 replicates per group is the simplest design
+that teaches the whole workflow, and the IR response in wild-type cells
+gives clear positive controls. The knockout groups have only 2
+replicates each, and bringing in genotype or cell type would need a
+multi-factor design (for example
+<code>~ genotype + treatment + genotype:treatment</code> to ask whether
+the IR response depends on p53). Those samples make a good exercise
+after the workshop.</p>
+</div>
+</div>
+</div>
+<div id="pick-the-workshop-samples-from-the-full-series" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="pick-the-workshop-samples-from-the-full-series" class="callout-inner">
+<h3 class="callout-title">Pick the workshop samples from the full
+series</h3>
+<div class="callout-content">
+<p>The table below lists all 24 runs of SRP061386 (GEO sample
+characteristics and SRA run information, retrieved 2026-10-02). Which 8
+runs make up the workshop dataset, and which of them are the
+controls?</p>
+</div>
+</div>
+</div>
+<div id="accordionSpoiler1" class="accordion spoiler-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
+  <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> All 24 runs </h3>
+</button>
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div class="accordion-body">
+<table style="width:100%;" class="table"><colgroup><col width="16%"><col width="16%"><col width="16%"><col width="16%"><col width="16%"><col width="16%"></colgroup><thead><tr><th>Run</th>
+<th>GEO sample</th>
+<th>Genotype</th>
+<th>Cell type</th>
+<th>Treatment</th>
+<th>Read pairs (millions)</th>
+</tr></thead><tbody><tr><td>SRR2121770</td>
+<td>GSM1828861</td>
+<td>Trp53-/-</td>
+<td>B cells</td>
+<td>mock</td>
+<td>118</td>
+</tr><tr><td>SRR2121771</td>
+<td>GSM1828862</td>
+<td>Trp53-/-</td>
+<td>B cells</td>
+<td>mock</td>
+<td>103</td>
+</tr><tr><td>SRR2121772</td>
+<td>GSM1828863</td>
+<td>Trp53-/-</td>
+<td>non-B cells</td>
+<td>mock</td>
+<td>131</td>
+</tr><tr><td>SRR2121773</td>
+<td>GSM1828864</td>
+<td>Trp53-/-</td>
+<td>non-B cells</td>
+<td>mock</td>
+<td>128</td>
+</tr><tr><td>SRR2121774</td>
+<td>GSM1828865</td>
+<td>Trp53-/-</td>
+<td>B cells</td>
+<td>7 Gy IR, 4 h</td>
+<td>91</td>
+</tr><tr><td>SRR2121775</td>
+<td>GSM1828866</td>
+<td>Trp53-/-</td>
+<td>B cells</td>
+<td>7 Gy IR, 4 h</td>
+<td>109</td>
+</tr><tr><td>SRR2121776</td>
+<td>GSM1828867</td>
+<td>Trp53-/-</td>
+<td>non-B cells</td>
+<td>7 Gy IR, 4 h</td>
+<td>110</td>
+</tr><tr><td>SRR2121777</td>
+<td>GSM1828868</td>
+<td>Trp53-/-</td>
+<td>non-B cells</td>
+<td>7 Gy IR, 4 h</td>
+<td>76</td>
+</tr><tr><td>SRR2121778</td>
+<td>GSM1828869</td>
+<td>Trp53+/+</td>
+<td>B cells</td>
+<td>mock</td>
+<td>137</td>
+</tr><tr><td>SRR2121779</td>
+<td>GSM1828870</td>
+<td>Trp53+/+</td>
+<td>B cells</td>
+<td>mock</td>
+<td>124</td>
+</tr><tr><td>SRR2121780</td>
+<td>GSM1828871</td>
+<td>Trp53+/+</td>
+<td>B cells</td>
+<td>mock</td>
+<td>100</td>
+</tr><tr><td>SRR2121781</td>
+<td>GSM1828872</td>
+<td>Trp53+/+</td>
+<td>B cells</td>
+<td>mock</td>
+<td>106</td>
+</tr><tr><td>SRR2121782</td>
+<td>GSM1828873</td>
+<td>Trp53+/+</td>
+<td>non-B cells</td>
+<td>mock</td>
+<td>103</td>
+</tr><tr><td>SRR2121783</td>
+<td>GSM1828874</td>
+<td>Trp53+/+</td>
+<td>non-B cells</td>
+<td>mock</td>
+<td>109</td>
+</tr><tr><td>SRR2121784</td>
+<td>GSM1828875</td>
+<td>Trp53+/+</td>
+<td>non-B cells</td>
+<td>mock</td>
+<td>98</td>
+</tr><tr><td>SRR2121785</td>
+<td>GSM1828876</td>
+<td>Trp53+/+</td>
+<td>non-B cells</td>
+<td>mock</td>
+<td>105</td>
+</tr><tr><td>SRR2121786</td>
+<td>GSM1828877</td>
+<td>Trp53+/+</td>
+<td>B cells</td>
+<td>7 Gy IR, 4 h</td>
+<td>100</td>
+</tr><tr><td>SRR2121787</td>
+<td>GSM1828878</td>
+<td>Trp53+/+</td>
+<td>B cells</td>
+<td>7 Gy IR, 4 h</td>
+<td>75</td>
+</tr><tr><td>SRR2121788</td>
+<td>GSM1828879</td>
+<td>Trp53+/+</td>
+<td>B cells</td>
+<td>7 Gy IR, 4 h</td>
+<td>83</td>
+</tr><tr><td>SRR2121789</td>
+<td>GSM1828880</td>
+<td>Trp53+/+</td>
+<td>B cells</td>
+<td>7 Gy IR, 4 h</td>
+<td>92</td>
+</tr><tr><td>SRR2121790</td>
+<td>GSM1828881</td>
+<td>Trp53+/+</td>
+<td>non-B cells</td>
+<td>7 Gy IR, 4 h</td>
+<td>80</td>
+</tr><tr><td>SRR2121791</td>
+<td>GSM1828882</td>
+<td>Trp53+/+</td>
+<td>non-B cells</td>
+<td>7 Gy IR, 4 h</td>
+<td>83</td>
+</tr><tr><td>SRR2121792</td>
+<td>GSM1828883</td>
+<td>Trp53+/+</td>
+<td>non-B cells</td>
+<td>7 Gy IR, 4 h</td>
+<td>94</td>
+</tr><tr><td>SRR2121793</td>
+<td>GSM1828884</td>
+<td>Trp53+/+</td>
+<td>non-B cells</td>
+<td>7 Gy IR, 4 h</td>
+<td>157</td>
+</tr></tbody></table></div>
+</div>
+</div>
+</div>
+<div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
+  <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
+</button>
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div class="accordion-body">
+<p>The wild-type B-cell runs: SRR2121778 to SRR2121781 are the mock
+controls (WT_Bcell_mock_rep1 to rep4) and SRR2121786 to SRR2121789 are
+the irradiated samples (WT_Bcell_IR_rep1 to rep4). In the SRA Run
+Selector you would filter on genotype and cell type, then download the
+accession list for just these 8 runs.</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="expected-biological-results">Expected biological results<a class="anchor" aria-label="anchor" href="#expected-biological-results"></a></h3>
@@ -505,16 +742,25 @@ pro-apoptotic</li>
 <li>
 <em>Mdm2</em> - negative feedback regulator of p53</li>
 <li>
-<em>Gadd45a</em> - DNA damage response</li>
+<em>Gadd45a</em> - DNA damage response (in the subsampled workshop
+data only a small increase that is not statistically significant)</li>
 <li>
 <em>Fas</em>, <em>Tnfrsf10b</em> (DR5) - death receptor
 signaling</li>
-</ul><p><strong>Pathways expected to be enriched:</strong></p>
-<ul><li>p53 signaling pathway</li>
-<li>Apoptosis</li>
-<li>Cell cycle</li>
-<li>DNA damage response</li>
-</ul><p>The presence of these expected results serves as a positive control
+</ul><p><strong>Pathways expected to be enriched</strong> (all among genes
+that go up after IR, on both analysis tracks):</p>
+<ul><li>p53 signaling: the KEGG p53 signaling pathway and the MSigDB
+Hallmark p53 pathway (Episode 06, over-representation analysis)</li>
+<li>DNA damage response: GO terms for DNA damage signal transduction by
+p53 (over-representation of upregulated genes and GSEA)</li>
+<li>Apoptosis: GO intrinsic apoptotic signaling in response to DNA
+damage (GSEA)</li>
+<li>Cell cycle: GO DNA damage and mitotic cell cycle checkpoint
+signaling (GSEA)</li>
+</ul><p>At 20 million read pairs, the broader Hallmark apoptosis and cell
+cycle (G2M, E2F) sets do not reach significance; the more specific GO
+terms do.</p>
+<p>The presence of these expected results serves as a positive control
 that our analysis pipeline is working correctly.</p>
 </div>
 <div class="section level3">
@@ -549,7 +795,7 @@ for raw data, scripts, mapping outputs, and count files.</p>
 episode</h3>
 <div class="callout-content">
 <p>Create a working directory for the workshop (e.g.,
-<code>rnaseq-workshop</code>). Inside it, create four
+<code>rnaseq-workshop</code>). Inside it, create three
 subdirectories:</p>
 <ul><li>
 <code>data</code> : raw FASTQ files, reference genome,
@@ -562,12 +808,12 @@ outputs</li>
 </ul></div>
 </div>
 </div>
-<div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
-  <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
+  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -576,17 +822,10 @@ outputs</li>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1" aria-label="code-block-1-2"></a><span class="fu">mkdir</span> <span class="at">-p</span> rnaseq-workshop/<span class="dt">{data</span><span class="op">,</span><span class="dt">scripts</span><span class="op">,</span><span class="dt">results}</span></span></code></pre>
 </div>
 <p>The resulting directory structure should look like this:</p>
-<div class="codewrapper sourceCode" id="cb2">
-<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="ex">aseethar@scholar-fe03:[aseethar]</span> $ pwd</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1" aria-label="code-block-2-2"></a><span class="ex">/scratch/scholar/aseethar</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1" aria-label="code-block-2-3"></a><span class="ex">aseethar@scholar-fe03:[aseethar]</span> $ tree rnaseq-workshop/</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1" aria-label="code-block-2-4"></a><span class="ex">rnaseq-workshop/</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1" aria-label="code-block-2-5"></a><span class="ex">├──</span> results</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1" aria-label="code-block-2-6"></a><span class="ex">├──</span> data</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1" aria-label="code-block-2-7"></a><span class="ex">└──</span> scripts</span></code></pre>
-</div>
+<pre class="text"><code>rnaseq-workshop/
+├── data
+├── results
+└── scripts</code></pre>
 </div>
 </div>
 </div>
@@ -648,12 +887,12 @@ why?</p>
 </div>
 </div>
 </div>
-<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution3" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
-  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
+  <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>Use the <strong>basic gene annotation in GTF format</strong> (e.g.,
 <code>gencode.vM38.primary_assembly.basic.annotation.gtf.gz</code>).<br>
@@ -679,12 +918,12 @@ FASTA</strong> (e.g.,
 </div>
 </div>
 </div>
-<div id="accordionSolution3" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution4" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
-  <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
+  <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <figure style="text-align: center"><img src="../fig/01_fq2counts/gencode-genome.png" alt="Reference genome file in FASTA format" class="figure mx-auto d-block"><figcaption>
 Reference genome file in FASTA format
@@ -711,12 +950,12 @@ for all transcripts in GRCm39
 </div>
 </div>
 </div>
-<div id="accordionSolution4" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution5" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
-  <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
+  <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
 <div class="accordion-body">
 <p>The transcript FASTA file is available in the same release directory
 as the genome and annotation files (under FASTA files). It is named
@@ -730,6 +969,24 @@ Transcript sequences file in FASTA format
 </div>
 <div class="section level3">
 <h3 id="downloading-all-reference-files">Downloading all reference files<a class="anchor" aria-label="anchor" href="#downloading-all-reference-files"></a></h3>
+<div id="already-done-if-you-copied-the-workshop-data" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="already-done-if-you-copied-the-workshop-data" class="callout-inner">
+<h3 class="callout-title">Already done if you copied the workshop
+data</h3>
+<div class="callout-content">
+<p>The workshop copy you made in <a href="index.html#data-setup">Setup</a> already contains these reference
+files, uncompressed, in <code>data/</code>. If you run this block in
+that directory, <code>gunzip</code> stops with “already exists; not
+overwritten” because the <code>.fa</code> and <code>.gtf</code> files
+are present. Read the commands here; run them only when you set up a
+project from scratch.</p>
+</div>
+</div>
+</div>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -802,12 +1059,12 @@ of sequencing runs?</p>
 </div>
 </div>
 </div>
-<div id="accordionSolution5" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution6" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
-  <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
+  <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
 <div class="accordion-body">
 <p>Navigate to the SRA page for the BioProject and use <strong>Run
 Selector</strong> to list runs.<br>
@@ -866,29 +1123,31 @@ space.</p>
 <h3 class="callout-title">Workshop data is subsampled</h3>
 <div class="callout-content">
 <p>The FASTQ files provided for this workshop have been
-<strong>subsampled to 20 million reads per sample</strong>. The original
-samples contain 100+ million reads each, and running the full pipeline
-would take many hours—far exceeding our workshop session time.</p>
+<strong>subsampled to 20 million read pairs per sample</strong>. The
+original samples contain 75 to 137 million read pairs each, and running
+the full pipeline would take many hours—far exceeding our workshop
+session time.</p>
 <p><strong>Never subsample your real experimental data.</strong> This is
 done exclusively for workshop time constraints. Subsampling reduces
 statistical power and may affect differential expression results.</p>
 </div>
 </div>
 </div>
-<div id="accordionSpoiler1" class="accordion spoiler-accordion accordion-flush">
+<div id="accordionSpoiler2" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
-  <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Workshop-only: How reads were subsampled </h3>
+<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
+  <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Workshop-only: How reads were subsampled </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <p>For reference, here is how the workshop data was prepared.
 <strong>You do not need to run this</strong>—the pre-downloaded data is
 already subsampled.</p>
-<p>The original samples from SRA contain 80-100+ million paired-end
-reads each. To enable completion of the full analysis pipeline within a
-single workshop day, we subsample to 20 million read pairs per sample
-using <code>seqtk</code>.</p>
+<p>The original samples from SRA contain 75 to 137 million read pairs
+each (SRA run info for SRR2121778-81 and SRR2121786-89). To enable
+completion of the full analysis pipeline within a single workshop day,
+we subsample to 20 million read pairs per sample using
+<code>seqtk</code>.</p>
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -896,29 +1155,24 @@ using <code>seqtk</code>.</p>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1" aria-label="code-block-6-2"></a><span class="ex">module</span> load biocontainers</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1" aria-label="code-block-6-3"></a><span class="ex">module</span> load seqtk</span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1" aria-label="code-block-6-4"></a></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1" aria-label="code-block-6-5"></a><span class="cf">for</span> sample <span class="kw">in</span> WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4 <span class="dt">\</span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1" aria-label="code-block-6-6"></a>              WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1" aria-label="code-block-6-7"></a>    <span class="co"># Use same seed for R1 and R2 to maintain pairing</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1" aria-label="code-block-6-8"></a>    <span class="ex">seqtk</span> sample <span class="at">-s</span> 42 <span class="va">${sample}</span>_R1.fastq.gz 20000000 <span class="kw">|</span> <span class="fu">gzip</span> <span class="op">&gt;</span> <span class="va">${sample}</span>_sub_R1.fastq.gz</span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1" aria-label="code-block-6-9"></a>    <span class="ex">seqtk</span> sample <span class="at">-s</span> 42 <span class="va">${sample}</span>_R2.fastq.gz 20000000 <span class="kw">|</span> <span class="fu">gzip</span> <span class="op">&gt;</span> <span class="va">${sample}</span>_sub_R2.fastq.gz</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1" aria-label="code-block-6-10"></a><span class="cf">done</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1" aria-label="code-block-6-11"></a></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1" aria-label="code-block-6-12"></a><span class="co"># Archive original files</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1" aria-label="code-block-6-13"></a><span class="fu">mkdir</span> <span class="at">-p</span> original_reads</span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1" aria-label="code-block-6-14"></a><span class="fu">mv</span> <span class="pp">*</span>_R1.fastq.gz <span class="pp">*</span>_R2.fastq.gz original_reads/</span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1" aria-label="code-block-6-15"></a></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1" aria-label="code-block-6-16"></a><span class="co"># Rename subsampled files to original names for pipeline compatibility</span></span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1" aria-label="code-block-6-17"></a><span class="cf">for</span> sample <span class="kw">in</span> WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4 <span class="dt">\</span></span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1" aria-label="code-block-6-18"></a>              WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1" aria-label="code-block-6-19"></a>    <span class="fu">mv</span> <span class="va">${sample}</span>_sub_R1.fastq.gz <span class="va">${sample}</span>_R1.fastq.gz</span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1" aria-label="code-block-6-20"></a>    <span class="fu">mv</span> <span class="va">${sample}</span>_sub_R2.fastq.gz <span class="va">${sample}</span>_R2.fastq.gz</span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1" aria-label="code-block-6-21"></a><span class="cf">done</span></span></code></pre>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1" aria-label="code-block-6-5"></a><span class="fu">mkdir</span> <span class="at">-p</span> subsampled</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1" aria-label="code-block-6-6"></a><span class="cf">for</span> sample <span class="kw">in</span> WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4 <span class="dt">\</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1" aria-label="code-block-6-7"></a>              WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1" aria-label="code-block-6-8"></a>    <span class="co"># Use same seed for R1 and R2 to maintain pairing</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1" aria-label="code-block-6-9"></a>    <span class="ex">seqtk</span> sample <span class="at">-s</span> 42 <span class="va">${sample}</span>_R1.fastq.gz 20000000 <span class="kw">|</span> <span class="fu">gzip</span> <span class="op">&gt;</span> subsampled/<span class="va">${sample}</span>_R1.fastq.gz</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1" aria-label="code-block-6-10"></a>    <span class="ex">seqtk</span> sample <span class="at">-s</span> 42 <span class="va">${sample}</span>_R2.fastq.gz 20000000 <span class="kw">|</span> <span class="fu">gzip</span> <span class="op">&gt;</span> subsampled/<span class="va">${sample}</span>_R2.fastq.gz</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1" aria-label="code-block-6-11"></a><span class="cf">done</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1" aria-label="code-block-6-12"></a></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1" aria-label="code-block-6-13"></a><span class="co"># Archive original files, then move the subsampled files into place</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1" aria-label="code-block-6-14"></a><span class="fu">mkdir</span> <span class="at">-p</span> original_reads</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1" aria-label="code-block-6-15"></a><span class="fu">mv</span> <span class="pp">*</span>_R1.fastq.gz <span class="pp">*</span>_R2.fastq.gz original_reads/</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1" aria-label="code-block-6-16"></a><span class="fu">mv</span> subsampled/<span class="pp">*</span>.fastq.gz .</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1" aria-label="code-block-6-17"></a><span class="fu">rmdir</span> subsampled</span></code></pre>
 </div>
 <p><strong>Why 20 million reads?</strong></p>
 <ul><li>Sufficient depth for differential expression analysis of moderately
 expressed genes</li>
-<li>Reduces alignment time from ~30 minutes to ~5-10 minutes per
-sample</li>
+<li>Keeps STAR alignment to 2 to 3 minutes per sample on 20 cores</li>
 <li>Allows completion of the full workshop pipeline in a single day</li>
 <li>Still produces biologically meaningful results for well-expressed
 p53 target genes</li>
@@ -936,32 +1190,33 @@ preferred.</p>
 </div>
 </div>
 <p>The directory, after downloading, should look like this:</p>
-<div class="codewrapper sourceCode" id="cb7">
-<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a><span class="ex">data</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1" aria-label="code-block-7-2"></a><span class="ex">├──</span> gencode.vM38.primary_assembly.basic.annotation.gtf</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1" aria-label="code-block-7-3"></a><span class="ex">├──</span> gencode.vM38.transcripts.fa</span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1" aria-label="code-block-7-4"></a><span class="ex">├──</span> gencode.vM38.transcripts-clean.fa</span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1" aria-label="code-block-7-5"></a><span class="ex">├──</span> GRCm39.primary_assembly.genome.fa</span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1" aria-label="code-block-7-6"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R1.fastq.gz</span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1" aria-label="code-block-7-7"></a><span class="ex">├──</span> WT_Bcell_mock_rep1_R2.fastq.gz</span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1" aria-label="code-block-7-8"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R1.fastq.gz</span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1" aria-label="code-block-7-9"></a><span class="ex">├──</span> WT_Bcell_mock_rep2_R2.fastq.gz</span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1" aria-label="code-block-7-10"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R1.fastq.gz</span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1" aria-label="code-block-7-11"></a><span class="ex">├──</span> WT_Bcell_mock_rep3_R2.fastq.gz</span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1" aria-label="code-block-7-12"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R1.fastq.gz</span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1" aria-label="code-block-7-13"></a><span class="ex">├──</span> WT_Bcell_mock_rep4_R2.fastq.gz</span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1" aria-label="code-block-7-14"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R1.fastq.gz</span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1" aria-label="code-block-7-15"></a><span class="ex">├──</span> WT_Bcell_IR_rep1_R2.fastq.gz</span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1" aria-label="code-block-7-16"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R1.fastq.gz</span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1" aria-label="code-block-7-17"></a><span class="ex">├──</span> WT_Bcell_IR_rep2_R2.fastq.gz</span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1" aria-label="code-block-7-18"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R1.fastq.gz</span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1" aria-label="code-block-7-19"></a><span class="ex">├──</span> WT_Bcell_IR_rep3_R2.fastq.gz</span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1" aria-label="code-block-7-20"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R1.fastq.gz</span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1" aria-label="code-block-7-21"></a><span class="ex">├──</span> WT_Bcell_IR_rep4_R2.fastq.gz</span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1" aria-label="code-block-7-22"></a><span class="ex">└──</span> SRR_Acc_List.txt</span></code></pre>
-</div>
+<pre class="text"><code>data
+├── annot.tsv
+├── gencode.vM38.primary_assembly.basic.annotation.gtf
+├── gencode.vM38.transcripts-clean.fa
+├── gencode.vM38.transcripts.fa
+├── GRCm39.primary_assembly.genome.fa
+├── mart.tsv
+├── SRR_Acc_List.txt
+├── tx2gene.tsv
+├── WT_Bcell_IR_rep1_R1.fastq.gz
+├── WT_Bcell_IR_rep1_R2.fastq.gz
+├── WT_Bcell_IR_rep2_R1.fastq.gz
+├── WT_Bcell_IR_rep2_R2.fastq.gz
+├── WT_Bcell_IR_rep3_R1.fastq.gz
+├── WT_Bcell_IR_rep3_R2.fastq.gz
+├── WT_Bcell_IR_rep4_R1.fastq.gz
+├── WT_Bcell_IR_rep4_R2.fastq.gz
+├── WT_Bcell_mock_rep1_R1.fastq.gz
+├── WT_Bcell_mock_rep1_R2.fastq.gz
+├── WT_Bcell_mock_rep2_R1.fastq.gz
+├── WT_Bcell_mock_rep2_R2.fastq.gz
+├── WT_Bcell_mock_rep3_R1.fastq.gz
+├── WT_Bcell_mock_rep3_R2.fastq.gz
+├── WT_Bcell_mock_rep4_R1.fastq.gz
+└── WT_Bcell_mock_rep4_R2.fastq.gz
+
+0 directories, 24 files</code></pre>
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
@@ -1027,7 +1282,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.21.0" class="external-link">sandpaper (0.21.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/aec0ff169ecf0863c0882e93bd191b19f2e7ff1e" class="external-link">varnish (1.0.7)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.21.1" class="external-link">sandpaper (0.21.1)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/aec0ff169ecf0863c0882e93bd191b19f2e7ff1e" class="external-link">varnish (1.0.7)</a></p>
 		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -1049,8 +1304,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/02-downloading-and-organizing-files.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/02-downloading-and-organizing-files.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-09-29",
-  "datePublished": "2026-09-29"
+  "dateModified": "2026-10-02",
+  "datePublished": "2026-10-02"
 }
 
   </script><script>

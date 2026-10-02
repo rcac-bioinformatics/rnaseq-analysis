@@ -199,11 +199,14 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#instructors">Instructors</a></li>
-<li><a href="#schedule-01222026">Schedule (01/22/2026)</a></li>
+<li><a href="#schedule-10062026">Schedule (10/06/2026)</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#scope-of-this-workshop">Scope of this workshop</a></li>
 <li><a href="#what-is-not-covered">What is not covered</a></li>
-<li><a href="#pre-requisites">Pre-requisites</a></li>
-<li><a href="#data-sets">Data sets</a></li>
-<li><a href="#software-setup">Software setup</a></li>
+<li><a href="#ssh-setup">SSH Setup</a></li>
+<li><a href="#data-setup">Data Setup</a></li>
+<li><a href="#starting-rstudio-on-open-ondemand">Starting RStudio on Open OnDemand</a></li>
+<li><a href="#r-package-installation-skip-this-section-if-using-ood">R package installation (skip this section if using OOD)</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
 
@@ -342,51 +345,48 @@ any links that you are not going to use.
 
 
       <section id="setup"><section><h2 class="section-heading" id="instructors">Instructors<a class="anchor" aria-label="anchor" href="#instructors"></a></h2>
-<hr class="half-width"><ol style="list-style-type: decimal"><li><p><strong>Arun Seetharam, Ph.D.</strong>: Arun is a lead
+<hr class="half-width"><!-- TODO(instructor): confirm the instructor roster for the 2026-10-06 delivery. --><ol style="list-style-type: decimal"><li><p><strong>Arun Seetharam, Ph.D.</strong>: Arun is a lead
 bioinformatics scientist at Purdue University’s Rosen Center for
 Advanced Computing. With extensive expertise in comparative genomics,
 genome assembly, annotation, single-cell genomics, NGS data analysis,
 metagenomics, proteomics, and metabolomics. Arun supports a diverse
 range of bioinformatics projects across various organisms, including
 human model systems.</p></li>
-<li><p><strong>Tomas Ratkus</strong>: is a Research Solutions Engineer
-with Rosen Center for Advanced Computing (RCAC), and a Senior Laboratory
-Operations Specialist in the Department of Earth, Atmospheric, and
-Planetary Sciences (EAPS). He primarily supports earth system and
-climate modeling researchers through high performance computing,
-software environments, and workflow support.</p></li>
-<li><p><strong>Rose Wilfong</strong>: is a senior research data
-facilitator with Rosen Center for Advanced Computing and works jointly
-with the Bindley Bioscience Center on campus. She mainly supports data
-management workflows and automation with the facilities. Prior to
-joining RCAC, she did graduate research in bioinformatics,
-cheminformatics, and cryo-ET.</p></li>
-</ol></section><section><h2 class="section-heading" id="schedule-01222026">Schedule (01/22/2026)<a class="anchor" aria-label="anchor" href="#schedule-01222026"></a></h2>
+<li><p><strong>Michael Carlson</strong>, Ph.D.: Michael is a Senior
+Computational Scientist at Purdue University’s Rosen Center for Advanced
+Computing (RCAC). Michael has a background in computational physics,
+specifically hypersonic materials. He also leads many introductory
+workshops in the High-Performance Computing domain.</p></li>
+</ol></section><section><h2 class="section-heading" id="schedule-10062026">Schedule (10/06/2026)<a class="anchor" aria-label="anchor" href="#schedule-10062026"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="23%"><col width="76%"></colgroup><thead><tr><th align="left"><strong>Time</strong></th>
 <th><strong>Session</strong></th>
 </tr></thead><tbody><tr><td align="left"><strong>8:30 AM</strong></td>
 <td>Arrival &amp; Setup</td>
 </tr><tr><td align="left"><strong>9:00 AM</strong></td>
 <td>
-<strong>Introduction to RNA-seq Analysis:</strong> Experimental
-design, biological replicates, sequencing depth, and overview of the
-analysis workflow (QC → alignment → quantification → DE)</td>
+<strong>Introduction to RNA-seq Analysis (Episode 01):</strong> What
+RNA-seq measures, experimental design and biological replicates,
+quantification strategies, and an overview of the workflow (QC →
+alignment → quantification → DE)</td>
 </tr><tr><td align="left"><strong>9:45 AM</strong></td>
 <td>
-<strong>Data Preparation &amp; Quality Control:</strong> Inspecting
-raw FASTQ files, running FastQC and MultiQC, trimming with fastp</td>
+<strong>Data Preparation &amp; Quality Control (Episodes
+02-03):</strong> Project layout, reference genome, annotation and FASTQ
+files, running FastQC and MultiQC, and deciding whether trimming is
+needed (fastp shown for reference only)</td>
 </tr><tr><td align="left"><strong>10:30 AM</strong></td>
 <td><strong>Break</strong></td>
 </tr><tr><td align="left"><strong>10:45 AM</strong></td>
 <td>
-<strong>Read Alignment &amp; Quantification:</strong> Mapping with
-STAR, building indices, generating gene-level counts with featureCounts
-(Kallisto covered conceptually only)</td>
+<strong>Read Alignment &amp; Quantification (Episode 04a):</strong>
+Checking strandedness with Salmon, building a STAR index, mapping with a
+SLURM array job, and generating gene-level counts with featureCounts
+(Episode 04b, Kallisto, covered conceptually only)</td>
 </tr><tr><td align="left"><strong>12:00 PM</strong></td>
 <td><strong>Lunch Break</strong></td>
 </tr><tr><td align="left"><strong>1:00 PM</strong></td>
 <td>
-<strong>Differential Expression Analysis (DESeq2):</strong>
+<strong>Differential Expression Analysis (Episode 05):</strong>
 Importing counts into R, normalization, exploratory plots (VST, distance
 heatmaps, PCA), and identifying significantly differentially expressed
 genes</td>
@@ -394,61 +394,163 @@ genes</td>
 <td><strong>Break</strong></td>
 </tr><tr><td align="left"><strong>2:30 PM</strong></td>
 <td>
-<strong>Visualization &amp; Interpretation:</strong> Volcano plots,
-heatmaps, PCA review, summary tables. Introduction to gene set
-enrichment methods (ORA/GSEA) with pointers to explore
-independently.</td>
+<strong>Visualization &amp; Interpretation (Episodes
+05-06):</strong> Volcano plots, summary tables, and exporting annotated
+results. Introduction to gene set enrichment methods (ORA/GSEA) with
+pointers to explore independently.</td>
 </tr><tr><td align="left"><strong>3:30 PM</strong></td>
 <td>
 <strong>Wrap-Up &amp; Discussion:</strong> Review of workflow,
 troubleshooting common issues, recommended next steps</td>
 </tr><tr><td align="left"><strong>4:00 PM</strong></td>
 <td>End of Workshop</td>
-</tr></tbody></table></section><section><h2 class="section-heading" id="what-is-not-covered">What is not covered<a class="anchor" aria-label="anchor" href="#what-is-not-covered"></a></h2>
-<hr class="half-width"><ol style="list-style-type: decimal"><li>Raw data generation, library preparation, or experimental design
-optimization</li>
-<li>De novo transcriptome assembly (e.g., Trinity) or genome-guided
-transcript reconstruction</li>
-<li>Single-cell RNA-seq or spatial transcriptomics analysis</li>
-<li>Alternative splicing, isoform quantification, or long-read
-transcript analysis</li>
-<li>Advanced visualization dashboards or interactive analysis tools
-(e.g., Shiny, iDEP)</li>
-</ol><hr></section><section><h2 class="section-heading" id="pre-requisites">Pre-requisites<a class="anchor" aria-label="anchor" href="#pre-requisites"></a></h2>
-<hr class="half-width"><ol style="list-style-type: decimal"><li>Basic understanding of genomics concepts (genes, transcripts, and
-genome structure)</li>
-<li>Familiarity with the command line interface (Linux/Unix shell)</li>
-<li>Prior exposure to basic bioinformatics tools and file formats
-(FASTA, GFF, FASTQ)</li>
-</ol><hr></section><section><h2 class="section-heading" id="data-sets">Data sets<a class="anchor" aria-label="anchor" href="#data-sets"></a></h2>
-<hr class="half-width"><p>To copy only the training data:</p>
-<div class="codewrapper sourceCode" id="cb1">
-<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1" aria-label="code-block-1-1"></a><span class="fu">rsync</span> <span class="at">-avP</span> /scratch/negishi/aseethar/rnaseq-workshop <span class="va">${RCAC_SCRATCH}</span>/</span></code></pre>
+</tr></tbody></table><p>The full lesson is longer than one day. Episodes 04b (Kallisto), 05b
+(DESeq2 on Kallisto output), and the remainder of Episode 06 are
+self-paced: they are published on this site and use the same data and
+setup as the live sessions.</p>
+</section><section><h2 class="section-heading" id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a></h2>
+<hr class="half-width"><p>This workshop assumes:</p>
+<ul><li>
+<strong>Basic Linux/command-line skills</strong>: navigating
+directories, running commands, editing files</li>
+<li>
+<strong>Basic R skills</strong>: installing packages,
+reading/writing data, creating plots</li>
+<li><strong>A Purdue career account with access to the Negishi
+cluster</strong></li>
+<li>
+<strong>An SSH client</strong>: terminal (macOS/Linux) or
+MobaXterm/PuTTY (Windows)</li>
+<li>
+<strong>Genomics knowledge</strong>: understanding of genes,
+transcripts, and genome structure</li>
+</ul><!-- TODO(instructor): confirm how registrants get Negishi access for 2026-10-06 (membership in the rcac-rnaseq SLURM account, a reservation, or their own group's account) and state it here. --><p>No prior RNA-seq analysis experience is required.</p>
+</section><section><h2 class="section-heading" id="scope-of-this-workshop">Scope of this workshop<a class="anchor" aria-label="anchor" href="#scope-of-this-workshop"></a></h2>
+<hr class="half-width"><p>This workshop teaches a standard bulk RNA-seq workflow, from raw
+reads to differentially expressed genes and enriched pathways, using a
+specific dataset and toolset:</p>
+<ul><li>
+<strong>Platform and library type:</strong> Illumina HiSeq 2000,
+paired-end 51 bp reads. The library is <strong>unstranded</strong>:
+Salmon reports library type <code>IU</code> in Episode 04a, so
+featureCounts runs with <code>-s 0</code> and Kallisto runs without a
+strand flag.</li>
+<li>
+<strong>Organism and reference:</strong> Mouse (<em>Mus
+musculus</em>, C57BL/6). GRCm39 primary assembly genome, GENCODE vM38
+basic gene annotation (GTF), and GENCODE vM38 transcript sequences.</li>
+<li>
+<strong>Dataset:</strong> GEO <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176" class="external-link">GSE71176</a>,
+the p53-mediated response to ionizing radiation in mouse B cells (<a href="https://doi.org/10.18632/oncotarget.5232" class="external-link">Tonelli et
+al. 2015</a>). We use 8 wild-type samples: 4 mock (SRR2121778-81) and 4
+irradiated, 7 Gy and harvested 4 hours later (SRR2121786-89). Each
+sample is subsampled to 20 million read pairs so that every step
+finishes within the workshop.</li>
+</ul><div class="section level3">
+<h3 id="toolchain">Toolchain<a class="anchor" aria-label="anchor" href="#toolchain"></a></h3>
+<table class="table"><colgroup><col width="16%"><col width="18%"><col width="40%"><col width="24%"></colgroup><thead><tr><th align="left">Step</th>
+<th align="left">Tools</th>
+<th align="left">Where it runs</th>
+<th align="left">Episode</th>
+</tr></thead><tbody><tr><td align="left">Download reference and reads</td>
+<td align="left">
+<code>wget</code>, SRA Toolkit
+(<code>fasterq-dump</code>, shown but not run)</td>
+<td align="left">Negishi shell</td>
+<td align="left">02</td>
+</tr><tr><td align="left">Read quality control</td>
+<td align="left">FastQC, MultiQC (fastp shown for reference)</td>
+<td align="left">Negishi, interactive job</td>
+<td align="left">03</td>
+</tr><tr><td align="left">Strandedness check</td>
+<td align="left">Salmon (<code>--libType A</code>)</td>
+<td align="left">Negishi, interactive job</td>
+<td align="left">04a</td>
+</tr><tr><td align="left">Genome-based quantification</td>
+<td align="left">STAR, featureCounts (Subread), MultiQC</td>
+<td align="left">Negishi, SLURM batch jobs</td>
+<td align="left">04a</td>
+</tr><tr><td align="left">Transcript-based quantification</td>
+<td align="left">Kallisto, tximport</td>
+<td align="left">Negishi, SLURM batch jobs and R (<code>r-rnaseq</code>
+module)</td>
+<td align="left">04b</td>
+</tr><tr><td align="left">Differential expression</td>
+<td align="left">DESeq2 (with apeglm shrinkage), vsn, pheatmap,
+ggplot2</td>
+<td align="left">RStudio on Open OnDemand</td>
+<td align="left">05, 05b</td>
+</tr><tr><td align="left">Gene set enrichment</td>
+<td align="left">clusterProfiler, enrichplot, org.Mm.eg.db, msigdbr (GO,
+KEGG, MSigDB Hallmark, GSEA)</td>
+<td align="left">RStudio on Open OnDemand</td>
+<td align="left">06</td>
+</tr></tbody></table><p>Command-line tools are loaded as modules with
+<code>module load biocontainers</code> followed by the tool module (for
+example <code>module load star</code>).</p>
+<!-- TODO(instructor): record the module versions (biocontainers, fastqc, multiqc, salmon, star, subread, kallisto, r-rnaseq) used for this delivery; the episodes load module defaults. -->
 </div>
-<p>A completed version of the workshop data is available at:</p>
-<pre><code>/scratch/negishi/aseethar/rnaseq-workshop_results</code></pre>
-<p>You can copy it to your scratch space using:</p>
-<div class="codewrapper sourceCode" id="cb3">
-<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1" aria-label="code-block-3-1"></a><span class="fu">rsync</span> <span class="at">-avP</span> /scratch/negishi/aseethar/rnaseq-workshop_results <span class="va">${RCAC_SCRATCH}</span>/</span></code></pre>
+<div class="section level3">
+<h3 id="two-quantification-tracks">Two quantification tracks<a class="anchor" aria-label="anchor" href="#two-quantification-tracks"></a></h3>
+<p>Episodes 01-03 and 06 are shared. After QC the lesson splits into two
+parallel tracks that both end in a DESeq2 analysis:</p>
+<table class="table"><colgroup><col width="21%"><col width="31%"><col width="46%"></colgroup><thead><tr><th align="left">Track</th>
+<th align="left">Episodes</th>
+<th align="left">On 10/06/2026</th>
+</tr></thead><tbody><tr><td align="left">Genome-based: STAR + featureCounts, then DESeq2</td>
+<td align="left">04a, 05</td>
+<td align="left">Taught live, hands-on</td>
+</tr><tr><td align="left">Transcript-based: Kallisto + tximport, then DESeq2</td>
+<td align="left">04b, 05b</td>
+<td align="left">04b introduced conceptually; 04b and 05b are
+self-paced</td>
+</tr></tbody></table><p>Episode 06 runs on the DESeq2 results from either track.</p>
 </div>
-<p>Use this folder <strong>only if you are unable to complete the
-exercises during the workshop</strong>.</p>
-<hr></section><section><h2 class="section-heading" id="software-setup">Software setup<a class="anchor" aria-label="anchor" href="#software-setup"></a></h2>
-<hr class="half-width"><div id="details" class="callout discussion">
+<div class="section level3">
+<h3 id="what-you-will-be-able-to-do">What you will be able to do<a class="anchor" aria-label="anchor" href="#what-you-will-be-able-to-do"></a></h3>
+<p>By the end of the workshop you will be able to:</p>
+<ul><li>Organize an RNA-seq project on an HPC cluster and obtain matching
+reference files.</li>
+<li>Assess read quality with FastQC and MultiQC and decide whether
+trimming is needed.</li>
+<li>Determine library strandedness, map reads with STAR, and count reads
+per gene with featureCounts using SLURM batch and array jobs.</li>
+<li>Run a DESeq2 analysis in R: exploratory QC (VST, sample distances,
+PCA), testing, fold change shrinkage, volcano plots, and an annotated
+results table.</li>
+<li>Run and interpret over-representation analysis and GSEA on your DE
+results.</li>
+</ul></div>
+</section><section><h2 class="section-heading" id="what-is-not-covered">What is not covered<a class="anchor" aria-label="anchor" href="#what-is-not-covered"></a></h2>
+<hr class="half-width"><ol style="list-style-type: decimal"><li>Wet-lab work: sample collection, library preparation, and
+sequencing</li>
+<li>De novo transcriptome assembly (for example Trinity) or
+genome-guided transcript reconstruction</li>
+<li>Isoform-level analysis: differential transcript usage, alternative
+splicing, and transcript-level DE with sleuth</li>
+<li>Long-read, single-cell, or spatial transcriptomics</li>
+<li>Batch correction methods (ComBat-seq, sva) beyond a brief
+mention</li>
+<li>Interactive analysis tools and dashboards (for example Shiny apps or
+iDEP)</li>
+</ol><p>See the <a href="reference.html">Reference</a> page for papers and
+resources on these topics.</p>
+</section><section><h2 class="section-heading" id="ssh-setup">SSH Setup<a class="anchor" aria-label="anchor" href="#ssh-setup"></a></h2>
+<hr class="half-width"><p>You need SSH access to Negishi to copy the workshop data and to run
+the command-line steps in Episodes 02 to 04b. Follow the instructions
+for your operating system below.</p>
+<div id="connecting-to-the-cluster" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <span class="callout-header">Discussion</span>
-<div id="details" class="callout-inner">
-<h3 class="callout-title">Details</h3>
+<div id="connecting-to-the-cluster" class="callout-inner">
+<h3 class="callout-title">Connecting to the Cluster</h3>
 <div class="callout-content">
-<p>SSH key setup for different systems is provided in the expandable
-sections below. Follow the instructions for your operating system to
-configure passwordless access.</p>
+<p>You will connect to <code>negishi.rcac.purdue.edu</code> with your
+Purdue career account username and password, followed by Purdue
+two-factor authentication. Choose the instructions for your operating
+system below.</p>
 </div>
 </div>
 </div>
@@ -461,15 +563,31 @@ configure passwordless access.</p>
 </button>
 <div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
-<p>Open <strong>PowerShell</strong> or <strong>Git Bash</strong> and
-run:</p>
-<div class="codewrapper sourceCode" id="cb4">
-<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1" aria-label="code-block-4-1"></a><span class="fu">ssh-keygen</span> <span class="at">-b</span> 4096 <span class="at">-t</span> rsa</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1" aria-label="code-block-4-2"></a><span class="bu">type</span> .ssh<span class="dt">\i</span>d_rsa.pub <span class="kw">|</span> <span class="fu">ssh</span> boiler@scholar.rcac.purdue.edu <span class="st">"mkdir -p ~/.ssh; cat &gt;&gt; ~/.ssh/authorized_keys"</span></span></code></pre>
-</div>
-</div>
+<p><strong>MobaXterm (recommended)</strong></p>
+<ol style="list-style-type: decimal"><li>Download and install <a href="https://mobaxterm.mobatek.net/" class="external-link">MobaXterm</a>
+</li>
+<li>Open MobaXterm and click <strong>Session &gt; SSH</strong>
+</li>
+<li>Set <strong>Remote host</strong> to
+<code>negishi.rcac.purdue.edu</code>
+</li>
+<li>Check <strong>Specify username</strong> and enter your Purdue career
+account username</li>
+<li>Click <strong>OK</strong> and enter your password when prompted</li>
+<li>Complete Purdue two-factor authentication</li>
+</ol><p><strong>PuTTY</strong></p>
+<ol style="list-style-type: decimal"><li>Download and install <a href="https://www.putty.org/" class="external-link">PuTTY</a>
+</li>
+<li>Set <strong>Host Name</strong> to
+<code>negishi.rcac.purdue.edu</code>, <strong>Port</strong> to
+<code>22</code>, and <strong>Connection type</strong> to
+<strong>SSH</strong>
+</li>
+<li>Click <strong>Open</strong>, then enter your Purdue career account
+username at the <code>login as:</code> prompt</li>
+<li>Enter your password and complete Purdue two-factor
+authentication</li>
+</ol></div>
 </div>
 </div>
 </div>
@@ -482,14 +600,18 @@ run:</p>
 </button>
 <div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
-<p>Open <strong>Terminal</strong> and run:</p>
-<div class="codewrapper sourceCode" id="cb5">
+<ol style="list-style-type: decimal"><li>Open <strong>Terminal</strong> (Applications &gt; Utilities &gt;
+Terminal)</li>
+<li>Connect to the cluster:</li>
+</ol><div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a><span class="fu">ssh-keygen</span> <span class="at">-b</span> 4096 <span class="at">-t</span> rsa</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1" aria-label="code-block-5-2"></a><span class="fu">cat</span> .ssh/id_rsa.pub <span class="kw">|</span> <span class="fu">ssh</span> boiler@scholar.rcac.purdue.edu <span class="st">"mkdir -p ~/.ssh; cat &gt;&gt; ~/.ssh/authorized_keys"</span></span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1" aria-label="code-block-1-1"></a><span class="fu">ssh</span> your_username@negishi.rcac.purdue.edu</span></code></pre>
 </div>
-</div>
+<ol start="3" style="list-style-type: decimal"><li>Enter your password (characters do not appear as you type, but your
+password is being entered)</li>
+<li>Complete Purdue two-factor authentication</li>
+</ol></div>
 </div>
 </div>
 </div>
@@ -502,12 +624,314 @@ run:</p>
 </button>
 <div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
-<p>Open a terminal and run:</p>
+<ol style="list-style-type: decimal"><li>Open your terminal emulator</li>
+<li>Connect to the cluster:</li>
+</ol><div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="fu">ssh</span> your_username@negishi.rcac.purdue.edu</span></code></pre>
+</div>
+<ol start="3" style="list-style-type: decimal"><li>Enter your password (characters do not appear as you type, but your
+password is being entered)</li>
+<li>Complete Purdue two-factor authentication</li>
+</ol></div>
+</div>
+</div>
+</div>
+<p>Once logged in, check that your scratch directory variables are set.
+The episodes use <code>$SCRATCH</code> and this page uses
+<code>$RCAC_SCRATCH</code>; both should print your scratch path:</p>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1" aria-label="code-block-3-1"></a><span class="bu">echo</span> <span class="va">$RCAC_SCRATCH</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1" aria-label="code-block-3-2"></a><span class="bu">echo</span> <span class="va">$SCRATCH</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>/scratch/negishi/your_username
+/scratch/negishi/your_username</code></pre>
+</div>
+</section><section><h2 class="section-heading" id="data-setup">Data Setup<a class="anchor" aria-label="anchor" href="#data-setup"></a></h2>
+<hr class="half-width"><div class="section level3">
+<h3 id="copying-the-workshop-data">Copying the workshop data<a class="anchor" aria-label="anchor" href="#copying-the-workshop-data"></a></h3>
+<p>The workshop data is pre-staged on Negishi. Copy it to your scratch
+directory:</p>
+<div class="codewrapper sourceCode" id="cb5">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a><span class="fu">rsync</span> <span class="at">-avP</span> /depot/workshop/data/rnaseq-workshop <span class="va">${RCAC_SCRATCH}</span>/</span></code></pre>
+</div>
+<p>This creates <code>${RCAC_SCRATCH}/rnaseq-workshop</code>, the
+working directory every episode uses. It will copy:</p>
+<!-- TODO(instructor): this list is derived from the episodes. Verify it against the re-staged copy (including whether scripts/, results/, prebuilt indexes, and data/tx2gene.tsv are present) and fill in the expected size below. -->
+<ul><li>
+<strong><code>data/</code>, raw reads</strong>: 16 FASTQ files, one
+R1 and one R2 per sample, subsampled to 20 million read pairs each:
+<ul><li>
+<code>WT_Bcell_mock_rep1_R1.fastq.gz</code> …
+<code>WT_Bcell_mock_rep4_R2.fastq.gz</code> (mock, 8 files)</li>
+<li>
+<code>WT_Bcell_IR_rep1_R1.fastq.gz</code> …
+<code>WT_Bcell_IR_rep4_R2.fastq.gz</code> (irradiated, 8 files)</li>
+</ul></li>
+<li>
+<strong><code>data/</code>, reference files</strong> (uncompressed,
+GENCODE vM38 on GRCm39):
+<ul><li>
+<code>GRCm39.primary_assembly.genome.fa</code>: genome sequence,
+used to build the STAR index</li>
+<li>
+<code>gencode.vM38.primary_assembly.basic.annotation.gtf</code>:
+gene annotation, used by STAR, featureCounts, and to build
+<code>tx2gene.tsv</code>
+</li>
+<li>
+<code>gencode.vM38.transcripts.fa</code>: transcript sequences as
+downloaded</li>
+<li>
+<code>gencode.vM38.transcripts-clean.fa</code>: transcript sequences
+with simplified headers, used by Salmon and Kallisto</li>
+</ul></li>
+<li>
+<strong><code>data/</code>, sample and annotation tables</strong>:
+<ul><li>
+<code>SRR_Acc_List.txt</code>: the 8 SRA run accessions</li>
+<li>
+<code>mart.tsv</code> and <code>annot.tsv</code>: Ensembl gene
+annotation (symbols, biotypes, descriptions) loaded in Episodes 05 and
+05b</li>
+</ul></li>
+</ul><p>You will create <code>scripts/</code>, <code>results/</code>, the
+indexes, and all analysis outputs yourself as you work through the
+episodes.</p>
+</div>
+<div class="section level3">
+<h3 id="verifying-the-data">Verifying the data<a class="anchor" aria-label="anchor" href="#verifying-the-data"></a></h3>
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1" aria-label="code-block-6-1"></a><span class="fu">ssh-keygen</span> <span class="at">-b</span> 4096 <span class="at">-t</span> rsa</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1" aria-label="code-block-6-2"></a><span class="fu">cat</span> .ssh/id_rsa.pub <span class="kw">|</span> <span class="fu">ssh</span> boiler@scholar.rcac.purdue.edu <span class="st">"mkdir -p ~/.ssh; cat &gt;&gt; ~/.ssh/authorized_keys"</span></span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1" aria-label="code-block-6-1"></a><span class="fu">ls</span> <span class="va">${RCAC_SCRATCH}</span>/rnaseq-workshop/</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1" aria-label="code-block-6-2"></a><span class="fu">ls</span> <span class="va">${RCAC_SCRATCH}</span>/rnaseq-workshop/data/</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1" aria-label="code-block-6-3"></a><span class="fu">ls</span> <span class="va">${RCAC_SCRATCH}</span>/rnaseq-workshop/data/<span class="pp">*</span>.fastq.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1" aria-label="code-block-6-4"></a><span class="fu">du</span> <span class="at">-sh</span> <span class="va">${RCAC_SCRATCH}</span>/rnaseq-workshop/data</span></code></pre>
+</div>
+<p>The FASTQ count must be <code>16</code>. The total size of
+<code>data/</code> should be about 19 GB.</p>
+<!-- TODO(instructor): the data/ size above is filled from the Negishi run kit (01_learner_setup.sh records `du -sh`). -->
+<div id="scratch-is-temporary" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="scratch-is-temporary" class="callout-inner">
+<h3 class="callout-title">Scratch is temporary</h3>
+<div class="callout-content">
+<p>Negishi scratch is not backed up, and files that are not accessed for
+a while are purged automatically. Copy the data shortly before the
+workshop, and move anything you want to keep (count tables, DE results,
+plots) to your home directory or your group’s Depot space
+afterwards.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="completed-results-backup">Completed results (backup)<a class="anchor" aria-label="anchor" href="#completed-results-backup"></a></h3>
+<p>A completed version of the workshop directory is available at:</p>
+<pre><code>/scratch/negishi/aseethar/rnaseq-workshop_results</code></pre>
+<p>You can copy it to your scratch space using:</p>
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1" aria-label="code-block-8-1"></a><span class="fu">rsync</span> <span class="at">-avP</span> /scratch/negishi/aseethar/rnaseq-workshop_results <span class="va">${RCAC_SCRATCH}</span>/</span></code></pre>
+</div>
+<p>Use this folder <strong>only if you are unable to complete the
+exercises during the workshop</strong>. It is copied to
+<code>${RCAC_SCRATCH}/rnaseq-workshop_results</code>, so it does not
+overwrite your own work. To continue from it, copy the specific files
+you need (for example <code>results/counts/gene_counts_clean.txt</code>
+for Episode 05) into the matching location under
+<code>${RCAC_SCRATCH}/rnaseq-workshop</code>.</p>
+</div>
+</section><section><h2 class="section-heading" id="starting-rstudio-on-open-ondemand">Starting RStudio on Open OnDemand<a class="anchor" aria-label="anchor" href="#starting-rstudio-on-open-ondemand"></a></h2>
+<hr class="half-width"><p>Episodes 05, 05b, and 06 run in RStudio through Negishi’s Open
+OnDemand (OOD) web portal.</p>
+<div class="section level3">
+<h3 id="step-1-log-in-to-open-ondemand">Step 1: Log in to Open OnDemand<a class="anchor" aria-label="anchor" href="#step-1-log-in-to-open-ondemand"></a></h3>
+<p>Open your browser and go to <a href="https://gateway.negishi.rcac.purdue.edu/" class="external-link">gateway.negishi.rcac.purdue.edu</a>.
+Log in with your Purdue career account and complete Purdue two-factor
+authentication.</p>
+</div>
+<div class="section level3">
+<h3 id="step-2-launch-rstudio-bioconductor">Step 2: Launch RStudio (Bioconductor)<a class="anchor" aria-label="anchor" href="#step-2-launch-rstudio-bioconductor"></a></h3>
+<p>From the top menu bar, click <strong>Interactive Apps</strong>. Under
+<strong>Bioinformatics Apps</strong>, select <strong>RStudio
+(bioconductor)</strong>.</p>
+<div id="choose-the-correct-app" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="choose-the-correct-app" class="callout-inner">
+<h3 class="callout-title">Choose the correct app</h3>
+<div class="callout-content">
+<p>Select <strong>RStudio (bioconductor)</strong> under
+<strong>Bioinformatics Apps</strong>, <em>not</em> <strong>RStudio
+Server</strong> under the <strong>GUIs</strong> section. The
+Bioconductor app provides the packages used in Episodes 05, 05b, and
+06.</p>
+<figure><img src="fig/ood_rstudio_dropdown.png" alt="Negishi Open OnDemand Interactive Apps menu with RStudio (bioconductor) highlighted under Bioinformatics Apps and RStudio Server under GUIs marked as the wrong choice" width="800px" class="figure mx-auto d-block"></figure></div>
+</div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="step-3-fill-in-the-resource-request">Step 3: Fill in the resource request<a class="anchor" aria-label="anchor" href="#step-3-fill-in-the-resource-request"></a></h3>
+<table class="table"><thead><tr><th align="left">Field</th>
+<th align="left">Value</th>
+</tr></thead><tbody><tr><td align="left">Partition</td>
+<td align="left"><code>cpu</code></td>
+</tr><tr><td align="left">Account</td>
+<td align="left"><code>rcac-rnaseq</code></td>
+</tr><tr><td align="left">QoS</td>
+<td align="left"><code>standby</code></td>
+</tr><tr><td align="left">Wall Time (hours)</td>
+<td align="left"><code>4</code></td>
+</tr><tr><td align="left">Cores</td>
+<td align="left"><code>4</code></td>
+</tr><tr><td align="left">R version</td>
+<td align="left"><code>4.4.0-bioconductor</code></td>
+</tr><tr><td align="left">Load extra RCAC site library (advanced)</td>
+<td align="left">☑️</td>
+</tr></tbody></table><figure><img src="fig/ood_rstudio_resources.png" alt="Open OnDemand resource request form filled in with the workshop settings" width="800px" class="figure mx-auto d-block"></figure><p>Why these values:</p>
+<ul><li>
+<strong>Account, partition, and QoS</strong> match the SLURM jobs in
+Episodes 02 to 04b, so all your work runs under the same
+allocation.</li>
+<li>
+<strong>4 hours</strong> is the longest wall time the
+<code>standby</code> QoS allows on the <code>cpu</code> partition, and
+covers the afternoon session. For self-paced work, start a new session
+when one expires.</li>
+<li>
+<strong>4 cores</strong> gives about 8 GB of memory (the form
+allocates roughly 2 GB per core), which is enough for DESeq2 on 8
+samples, tximport on 8 Kallisto runs, and the enrichment analyses in
+Episode 06. If R reports that it cannot allocate memory (most likely
+during <code>simplify()</code> or <code>gseGO()</code> in Episode 06),
+relaunch with 8 cores (about 16 GB).</li>
+</ul><p>After the workshop, if you no longer have access to
+<code>rcac-rnaseq</code>, use your own group’s account.</p>
+<p>Click <strong>Launch</strong> to submit the job.</p>
+</div>
+<div class="section level3">
+<h3 id="step-4-connect-to-the-session">Step 4: Connect to the session<a class="anchor" aria-label="anchor" href="#step-4-connect-to-the-session"></a></h3>
+<p>The job waits in the queue briefly. Once its status changes to
+<strong>Running</strong>, click <strong>Connect to RStudio
+Server</strong> to open RStudio in a new browser tab. Then run the
+package check at the end of the next section in the RStudio console; it
+should print <code>All packages load</code>.</p>
+</div>
+</section><section><h2 class="section-heading" id="r-package-installation-skip-this-section-if-using-ood">R package installation (skip this section if using OOD)<a class="anchor" aria-label="anchor" href="#r-package-installation-skip-this-section-if-using-ood"></a></h2>
+<hr class="half-width"><p>The packages are provided by the RStudio (bioconductor) app on Open
+OnDemand. Install them yourself only if you want to run the R episodes
+on your own computer or in a different R installation. The list below is
+every package the episodes load, grouped by purpose. The same list is
+load-tested in the OOD app (R 4.4.0, Bioconductor 3.20) before each
+delivery; last checked on 2026-10-02 (all 19 packages load, R 4.4.0,
+Bioconductor 3.20).</p>
+<div class="codewrapper sourceCode" id="cb9">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Install BiocManager if not already installed</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">requireNamespace</span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu">install.packages</span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># CRAN packages</span></span>
+<span><span class="fu">install.packages</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span></span>
+<span>    <span class="st">"tidyverse"</span>,     <span class="co"># readr, dplyr, ggplot2, tibble (Episodes 04b, 05, 05b, 06)</span></span>
+<span>    <span class="st">"RColorBrewer"</span>,  <span class="co"># heatmap colors (05, 05b)</span></span>
+<span>    <span class="st">"pheatmap"</span>,      <span class="co"># sample distance heatmaps (05, 05b)</span></span>
+<span>    <span class="st">"ggrepel"</span>,       <span class="co"># labels on PCA and volcano plots (05, 05b)</span></span>
+<span>    <span class="st">"reshape2"</span>,      <span class="co"># reshaping counts for plotting (05b)</span></span>
+<span>    <span class="st">"hexbin"</span>,        <span class="co"># meanSdPlot() in vsn (05)</span></span>
+<span>    <span class="st">"msigdbr"</span>        <span class="co"># MSigDB Hallmark gene sets (06)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Bioconductor packages</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span></span>
+<span>    <span class="co"># Transcript-level import (04b)</span></span>
+<span>    <span class="st">"tximport"</span>,</span>
+<span>    <span class="co"># Reading Kallisto abundance.h5 files with tximport (04b)</span></span>
+<span>    <span class="st">"rhdf5"</span>,</span>
+<span>    <span class="co"># Differential expression and QC plots (05, 05b)</span></span>
+<span>    <span class="st">"DESeq2"</span>, <span class="st">"apeglm"</span>, <span class="st">"vsn"</span>,</span>
+<span>    <span class="co"># Gene annotation (05, optional biomaRt spoiler)</span></span>
+<span>    <span class="st">"biomaRt"</span>,</span>
+<span>    <span class="co"># Enrichment analysis (06)</span></span>
+<span>    <span class="st">"clusterProfiler"</span>, <span class="st">"enrichplot"</span>, <span class="st">"org.Mm.eg.db"</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Check that every package loads</span></span>
+<span><span class="va">pkgs</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="st">"tidyverse"</span>, <span class="st">"RColorBrewer"</span>, <span class="st">"pheatmap"</span>, <span class="st">"ggrepel"</span>, <span class="st">"reshape2"</span>, <span class="st">"hexbin"</span>, <span class="st">"msigdbr"</span>,</span>
+<span>          <span class="st">"tximport"</span>, <span class="st">"rhdf5"</span>, <span class="st">"DESeq2"</span>, <span class="st">"apeglm"</span>, <span class="st">"vsn"</span>, <span class="st">"biomaRt"</span>,</span>
+<span>          <span class="st">"clusterProfiler"</span>, <span class="st">"enrichplot"</span>, <span class="st">"org.Mm.eg.db"</span><span class="op">)</span></span>
+<span><span class="va">missing</span> <span class="op">&lt;-</span> <span class="va">pkgs</span><span class="op">[</span><span class="op">!</span><span class="fu">vapply</span><span class="op">(</span><span class="va">pkgs</span>, <span class="va">requireNamespace</span>, <span class="fu">logical</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu">length</span><span class="op">(</span><span class="va">missing</span><span class="op">)</span><span class="op">)</span> <span class="fu">message</span><span class="op">(</span><span class="st">"Missing: "</span>, <span class="fu">paste</span><span class="op">(</span><span class="va">missing</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span><span class="op">)</span> <span class="kw">else</span> <span class="fu">message</span><span class="op">(</span><span class="st">"All packages load"</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>All packages load</code></pre>
+</div>
+<div id="version-notes" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="version-notes" class="callout-inner">
+<h3 class="callout-title">Version notes</h3>
+<div class="callout-content">
+<ul><li>
+<strong>msigdbr</strong>: Episode 06 uses the current interface,
+<code>msigdbr(species = "Mus musculus", collection = "H")</code> and the
+<code>ncbi_gene</code> column, which needs msigdbr 10 or later (the OOD
+app has 26.1.1). Older tutorials use <code>category = "H"</code> and
+<code>entrez_gene</code>. msigdbr downloads the gene set data the first
+time it runs, so it needs internet access.</li>
+<li>
+<strong>KEGG and biomaRt</strong> query online services
+(<code>enrichKEGG()</code> in Episode 06, the annotation spoiler in
+Episode 05), so those steps need internet access from wherever R is
+running.</li>
+</ul></div>
+</div>
+</div>
+<div id="accordionSpoiler1" class="accordion spoiler-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
+  <h3 class="accordion-header" id="headingSpoiler1">
+  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div>
+  Packages mentioned but not used in the code
+  </h3>
+</button>
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div class="accordion-body">
+<p>These packages appear in the episode text but no episode code calls
+them. Install them only if you want to explore those topics.</p>
+<div class="codewrapper sourceCode" id="cb11">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Shiny app for the experimental design challenge in Episode 01 (GitHub only)</span></span>
+<span><span class="fu">install.packages</span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"csoneson/ConfoundingExplorer"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Alternatives and follow-ups mentioned in Episodes 01, 04b, and 05</span></span>
+<span><span class="fu">install.packages</span><span class="op">(</span><span class="st">"ashr"</span><span class="op">)</span>                                <span class="co"># lfcShrink(type = "ashr")</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="st">"Biostrings"</span>, <span class="st">"sva"</span>, <span class="st">"edgeR"</span><span class="op">)</span><span class="op">)</span>   <span class="co"># readDNAStringSet(), ComBat-seq, edgeR</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -546,7 +970,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.21.0" class="external-link">sandpaper (0.21.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/aec0ff169ecf0863c0882e93bd191b19f2e7ff1e" class="external-link">varnish (1.0.7)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.21.1" class="external-link">sandpaper (0.21.1)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/aec0ff169ecf0863c0882e93bd191b19f2e7ff1e" class="external-link">varnish (1.0.7)</a></p>
 		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -568,8 +992,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/index.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/index.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-09-29",
-  "datePublished": "2026-09-29"
+  "dateModified": "2026-10-02",
+  "datePublished": "2026-10-02"
 }
 
   </script><script>

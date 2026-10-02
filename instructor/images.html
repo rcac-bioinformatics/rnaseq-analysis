@@ -431,104 +431,191 @@ FASTQ files from SRA Run Selector
 </figcaption></figure><hr></section><section id="03-qc-and-trimming"><h2 class="section-heading"><a href="03-qc-and-trimming.html">Quality control of RNA-seq reads</a></h2>
 <hr class="half-width">
 <h3 id="03-qc-and-trimming-figure-1">Figure 1</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Per base sequence quality for a typical RNA-seq dataset’</p>
-<figure style="text-align: center"><img src="../fig/02_qc/fastqc_sequence_quality_histogram.png" alt="Per base sequence quality for a typical RNA-seq dataset" class="figure mx-auto d-block"><figcaption>
-Per base sequence quality for a typical RNA-seq dataset
+<p aria-hidden="true">Image 1 of 1: ‘Your output: mean quality per position for the 16 workshop FASTQ files (MultiQC)’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/fastqc_sequence_quality_histogram.png" alt="Your output: mean quality per position for the 16 workshop FASTQ files (MultiQC)" class="figure mx-auto d-block"><figcaption>
+Your output: mean quality per position for the 16 workshop FASTQ files
+(MultiQC)
 </figcaption></figure><hr>
 <h3 id="03-qc-and-trimming-figure-2">Figure 2</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Per tile sequence quality plot’</p>
-<figure style="text-align: center"><img src="../fig/02_qc/fastqc_per_base_sequence_content.png" alt="Per tile sequence quality plot" class="figure mx-auto d-block"><figcaption>
-Per tile sequence quality plot
+<p aria-hidden="true">Image 1 of 1: ‘Three cartoon quality plots: read 2 quality collapsing while read 1 stays high, a short quality bump followed by a drop, and a stable high profile’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/examples/fastqc_sequence_quality_histogram.png" alt="Three cartoon quality plots: read 2 quality collapsing while read 1 stays high, a short quality bump followed by a drop, and a stable high profile" class="figure mx-auto d-block"><figcaption>
+Contrast example, schematic and not data: one read of a pair failing, a
+chemistry problem during the run, and a good profile. Cartoon by Zandra
+Selina, CC BY 4.0.
 </figcaption></figure><hr>
 <h3 id="03-qc-and-trimming-figure-3">Figure 3</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Distribution of per sequence quality scores’</p>
-<figure style="text-align: center"><img src="../fig/02_qc/fastqc_per_sequence_quality_score.png" alt="Distribution of per sequence quality scores" class="figure mx-auto d-block"><figcaption>
-Distribution of per sequence quality scores
+<p aria-hidden="true">Image 1 of 1: ‘FastQC per base sequence quality plot from another dataset with 150 bp reads, mean quality flat near 39 for every position’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/fastqc-qual.png" alt="FastQC per base sequence quality plot from another dataset with 150 bp reads, mean quality flat near 39 for every position" class="figure mx-auto d-block"><figcaption>
+Contrast example from a different dataset (150 bp reads): per base
+quality that stays near Q39 across the whole read, which is what an
+excellent run looks like.
 </figcaption></figure><hr>
 <h3 id="03-qc-and-trimming-figure-4">Figure 4</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Per base sequence content for RNA-seq reads’</p>
-<figure style="text-align: center"><img src="../fig/02_qc/fastqc_per_base_atgc_content.png" alt="Per base sequence content for RNA-seq reads" class="figure mx-auto d-block"><figcaption>
-Per base sequence content for RNA-seq reads
+<p aria-hidden="true">Image 1 of 1: ‘Your output: per tile sequence quality for WT_Bcell_IR_rep1_R1, one of the 12 files that fail this module’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/fastqc_per_tile_quality.png" alt="Your output: per tile sequence quality for WT_Bcell_IR_rep1_R1, one of the 12 files that fail this module" class="figure mx-auto d-block"><figcaption>
+Your output: per tile sequence quality for WT_Bcell_IR_rep1_R1, one of
+the 12 files that fail this module
 </figcaption></figure><hr>
 <h3 id="03-qc-and-trimming-figure-5">Figure 5</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Per sequence GC content distribution’</p>
-<figure style="text-align: center"><img src="../fig/02_qc/fastqc_per_sequence_GC_content.png" alt="Per sequence GC content distribution" class="figure mx-auto d-block"><figcaption>
-Per sequence GC content distribution
+<p aria-hidden="true">Image 1 of 1: ‘Three cartoon flowcell heat maps: all tiles turning yellow toward the end of the run, one lane yellow while the others stay blue, and all tiles blue’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/fastqc_per_base_sequence_content.png" alt="Three cartoon flowcell heat maps: all tiles turning yellow toward the end of the run, one lane yellow while the others stay blue, and all tiles blue" class="figure mx-auto d-block"><figcaption>
+Contrast example, schematic and not data: tile-level patterns, from
+quality loss toward the end of the run on every tile, to a single failed
+lane, to a clean flowcell. The cartoon is titled Per base sequence
+content, but its panels show tile patterns. Cartoon by Zandra Selina, CC
+BY 4.0.
 </figcaption></figure><hr>
 <h3 id="03-qc-and-trimming-figure-6">Figure 6</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Per base N content plot’</p>
-<figure style="text-align: center"><img src="../fig/02_qc/fastqc_per_base_n_content.png" alt="Per base N content plot" class="figure mx-auto d-block"><figcaption>
-Per base N content plot
+<p aria-hidden="true">Image 1 of 1: ‘Your output: per sequence quality scores for the 16 workshop FASTQ files (MultiQC)’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/fastqc_per_sequence_quality_score.png" alt="Your output: per sequence quality scores for the 16 workshop FASTQ files (MultiQC)" class="figure mx-auto d-block"><figcaption>
+Your output: per sequence quality scores for the 16 workshop FASTQ files
+(MultiQC)
 </figcaption></figure><hr>
 <h3 id="03-qc-and-trimming-figure-7">Figure 7</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Sequence length distribution for RNA-seq data’</p>
-<figure style="text-align: center"><img src="../fig/02_qc/fastqc_length_distribution.png" alt="Sequence length distribution for RNA-seq data" class="figure mx-auto d-block"><figcaption>
-Sequence length distribution for RNA-seq data
+<p aria-hidden="true">Image 1 of 1: ‘Three cartoon histograms of per read quality: a single peak at low quality, two peaks, and one sharp peak at high quality’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/examples/fastqc_per_sequence_quality_score.png" alt="Three cartoon histograms of per read quality: a single peak at low quality, two peaks, and one sharp peak at high quality" class="figure mx-auto d-block"><figcaption>
+Contrast example, schematic and not data: most reads of low quality (a
+bad run), a bimodal distribution (often a flowcell location artifact),
+and a good single peak at high quality. Cartoon by Zandra Selina, CC BY
+4.0.
 </figcaption></figure><hr>
 <h3 id="03-qc-and-trimming-figure-8">Figure 8</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Sequence duplication levels’</p>
-<figure style="text-align: center"><img src="../fig/02_qc/fastqc_sequence_duplication_level.png" alt="Sequence duplication levels" class="figure mx-auto d-block"><figcaption>
-Sequence duplication levels
+<p aria-hidden="true">Image 1 of 1: ‘Your output: per base sequence content for WT_Bcell_IR_rep3_R1’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/fastqc_per_base_atgc_content.png" alt="Your output: per base sequence content for WT_Bcell_IR_rep3_R1" class="figure mx-auto d-block"><figcaption>
+Your output: per base sequence content for WT_Bcell_IR_rep3_R1
 </figcaption></figure><hr>
 <h3 id="03-qc-and-trimming-figure-9">Figure 9</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Adapter content across the read’</p>
-<figure style="text-align: center"><img src="../fig/02_qc/fastqc_adapter_content.png" alt="Adapter content across the read" class="figure mx-auto d-block"><figcaption>
-Adapter content across the read
+<p aria-hidden="true">Image 1 of 1: ‘FastQC per base sequence content plot from another dataset with 40 bp reads, where the A, C, G, and T lines diverge in the first few cycles and then run nearly flat’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/examples/fastqc_per_base_atgc_content.png" alt="FastQC per base sequence content plot from another dataset with 40 bp reads, where the A, C, G, and T lines diverge in the first few cycles and then run nearly flat" class="figure mx-auto d-block"><figcaption>
+Contrast example from a different RNA-seq dataset (40 bp reads): the
+same uneven base composition in the first cycles, caused by biased
+priming. FastQC flags it, but it is normal for RNA-seq.
 </figcaption></figure><hr>
 <h3 id="03-qc-and-trimming-figure-10">Figure 10</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Example MultiQC summary across all samples’</p>
-<figure style="text-align: center"><img src="../fig/02_qc/multiqc-summary.png" alt="Example MultiQC summary across all samples" class="figure mx-auto d-block"><figcaption>
-Example MultiQC summary across all samples
+<p aria-hidden="true">Image 1 of 1: ‘Your output: per sequence GC content for the 16 workshop FASTQ files (MultiQC)’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/fastqc_per_sequence_GC_content.png" alt="Your output: per sequence GC content for the 16 workshop FASTQ files (MultiQC)" class="figure mx-auto d-block"><figcaption>
+Your output: per sequence GC content for the 16 workshop FASTQ files
+(MultiQC)
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-11">Figure 11</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Three cartoon GC content plots: two shifted peaks, one skewed peak, and an observed peak matching the expected curve’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/examples/fastqc_per_sequence_GC_content.png" alt="Three cartoon GC content plots: two shifted peaks, one skewed peak, and an observed peak matching the expected curve" class="figure mx-auto d-block"><figcaption>
+Contrast example, schematic and not data: libraries with different GC
+content (fine across species, a warning within one), a non-normal
+distribution that suggests a lab artifact, and a good match to the
+expected curve. Cartoon by Zandra Selina, CC BY 4.0.
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-12">Figure 12</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Your output: per base N content for the 16 workshop FASTQ files (MultiQC)’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/fastqc_per_base_n_content.png" alt="Your output: per base N content for the 16 workshop FASTQ files (MultiQC)" class="figure mx-auto d-block"><figcaption>
+Your output: per base N content for the 16 workshop FASTQ files
+(MultiQC)
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-13">Figure 13</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Three cartoon N content plots: a curve rising at the end of the read, a flat line above zero, and a flat line at zero’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/examples/fastqc_per_base_n_content.png" alt="Three cartoon N content plots: a curve rising at the end of the read, a flat line above zero, and a flat line at zero" class="figure mx-auto d-block"><figcaption>
+Contrast example, schematic and not data: N bases rising toward the end
+of the read (chemistry running out), a constant N level (a failed lane
+or masked reads), and no N bases. Cartoon by Zandra Selina, CC BY 4.0.
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-14">Figure 14</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Your output: sequence length distribution for WT_Bcell_IR_rep3_R1, where every read is 51 bp’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/fastqc_length_distribution.png" alt="Your output: sequence length distribution for WT_Bcell_IR_rep3_R1, where every read is 51 bp" class="figure mx-auto d-block"><figcaption>
+Your output: sequence length distribution for WT_Bcell_IR_rep3_R1, where
+every read is 51 bp
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-15">Figure 15</h3>
+<p aria-hidden="true">Image 1 of 1: ‘FastQC sequence length distribution from another dataset, a single sharp peak at 150 bp’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/examples/fastqc_length_distribution.png" alt="FastQC sequence length distribution from another dataset, a single sharp peak at 150 bp" class="figure mx-auto d-block"><figcaption>
+Contrast example from a different dataset sequenced with 150 bp reads:
+still a single narrow peak, only at a different read length. Nothing is
+wrong here; a broad distribution would point to trimming or a small RNA
+protocol.
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-16">Figure 16</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Your output: sequence duplication levels for the 16 workshop FASTQ files (MultiQC)’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/fastqc_sequence_duplication_level.png" alt="Your output: sequence duplication levels for the 16 workshop FASTQ files (MultiQC)" class="figure mx-auto d-block"><figcaption>
+Your output: sequence duplication levels for the 16 workshop FASTQ files
+(MultiQC)
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-17">Figure 17</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Three cartoon duplication plots: a slowly decaying curve, a wavy pattern, and a single spike at duplication level one’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/examples/fastqc_sequence_duplication_level.png" alt="Three cartoon duplication plots: a slowly decaying curve, a wavy pattern, and a single spike at duplication level one" class="figure mx-auto d-block"><figcaption>
+Contrast example, schematic and not data: high duplication from a
+low-complexity or over-amplified library, a periodic pattern that can be
+fine for amplicon data, and a library dominated by unique reads. Cartoon
+by Zandra Selina, CC BY 4.0.
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-18">Figure 18</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Your output: adapter content for the 16 workshop FASTQ files (MultiQC)’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/fastqc_adapter_content.png" alt="Your output: adapter content for the 16 workshop FASTQ files (MultiQC)" class="figure mx-auto d-block"><figcaption>
+Your output: adapter content for the 16 workshop FASTQ files (MultiQC)
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-19">Figure 19</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Two cartoon adapter content plots: a curve rising toward the end of the read, and a flat line at zero’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/examples/fastqc_adapter_content.png" alt="Two cartoon adapter content plots: a curve rising toward the end of the read, and a flat line at zero" class="figure mx-auto d-block"><figcaption>
+Contrast example, schematic and not data: adapter content rising toward
+the read end (short inserts, acceptable only for fragmented ancient DNA)
+and a flat line near zero. Cartoon by Zandra Selina, CC BY 4.0.
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-20">Figure 20</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Your output: MultiQC summary of the FastQC status checks for the 16 workshop FASTQ files’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/multiqc-summary.png" alt="Your output: MultiQC summary of the FastQC status checks for the 16 workshop FASTQ files" class="figure mx-auto d-block"><figcaption>
+Your output: MultiQC summary of the FastQC status checks for the 16
+workshop FASTQ files
+</figcaption></figure><hr>
+<h3 id="03-qc-and-trimming-figure-21">Figure 21</h3>
+<p aria-hidden="true">Image 1 of 1: ‘MultiQC FastQC status heat map from another dataset with six runs, where the per base sequence content and sequence duplication columns are red for every file and most other columns are green’</p>
+<figure style="text-align: center"><img src="../fig/02_qc/examples/multiqc-summary.png" alt="MultiQC FastQC status heat map from another dataset with six runs, where the per base sequence content and sequence duplication columns are red for every file and most other columns are green" class="figure mx-auto d-block"><figcaption>
+Contrast example from a different dataset (runs SRR33253285 to
+SRR33253290): per base sequence content and sequence duplication fail in
+every file. In RNA-seq both are common and are not by themselves a
+reason to discard data; read the plots, not only the colors.
 </figcaption></figure><hr></section><section id="04a-genome-based-quantification"><h2 class="section-heading"><a href="04a-genome-based-quantification.html">A. Genome-based quantification (STAR + featureCounts)</a></h2>
 <hr class="half-width"></section><section id="04b-transcript-based-quantification"><h2 class="section-heading"><a href="04b-transcript-based-quantification.html">B. Transcript-based quantification (Kallisto)</a></h2>
 <hr class="half-width"></section><section id="05-deseq2-expression-analyses"><h2 class="section-heading"><a href="05-deseq2-expression-analyses.html">Gene-level QC and differential expression (DESeq2)</a></h2>
 <hr class="half-width">
 <h3 id="05-deseq2-expression-analyses-figure-1">Figure 1</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Open OnDemand interface’</p>
-<figure style="text-align: center"><img src="../fig/05_deseq/open-on-demand.png" alt="Open OnDemand interface" class="figure mx-auto d-block"><figcaption>
-Open OnDemand interface
-</figcaption></figure><hr>
-<h3 id="05-deseq2-expression-analyses-figure-2">Figure 2</h3>
 <p aria-hidden="true">Image 1 of 1: ‘Distribution of gene biotypes in annotation’</p>
 <figure style="text-align: center"><img src="../fig/05_deseq/gene-biotypes.png" alt="Distribution of gene biotypes in annotation" class="figure mx-auto d-block"><figcaption>
 Distribution of gene biotypes in annotation
 </figcaption></figure><hr>
-<h3 id="05-deseq2-expression-analyses-figure-3">Figure 3</h3>
+<h3 id="05-deseq2-expression-analyses-figure-2">Figure 2</h3>
 <p aria-hidden="true">Image 1 of 1: ‘Total assigned reads per sample’</p>
 <figure style="text-align: center"><img src="../fig/05_deseq/libsize-difference.png" alt="Total assigned reads per sample" class="figure mx-auto d-block"><figcaption>
 Total assigned reads per sample
 </figcaption></figure><hr>
-<h3 id="05-deseq2-expression-analyses-figure-4">Figure 4</h3>
+<h3 id="05-deseq2-expression-analyses-figure-3">Figure 3</h3>
 <p aria-hidden="true">Image 1 of 1: ‘Size factors vs library size’</p>
 <figure style="text-align: center"><img src="../fig/05_deseq/size-factors-vs-lib-size.png" alt="Size factors vs library size" class="figure mx-auto d-block"><figcaption>
 Size factors vs library size
 </figcaption></figure><hr>
-<h3 id="05-deseq2-expression-analyses-figure-5">Figure 5</h3>
+<h3 id="05-deseq2-expression-analyses-figure-4">Figure 4</h3>
 <p aria-hidden="true">Image 1 of 1: ‘Average counts vs variance before transformation’</p>
 <figure style="text-align: center"><img src="../fig/05_deseq/before-vsd.png" alt="Average counts vs variance before transformation" class="figure mx-auto d-block"><figcaption>
 Average counts vs variance before transformation
 </figcaption></figure><hr>
-<h3 id="05-deseq2-expression-analyses-figure-6">Figure 6</h3>
+<h3 id="05-deseq2-expression-analyses-figure-5">Figure 5</h3>
 <p aria-hidden="true">Image 1 of 1: ‘average counts vs variance after transformation’</p>
 <figure style="text-align: center"><img src="../fig/05_deseq/after-vsd.png" alt="average counts vs variance after transformation" class="figure mx-auto d-block"><figcaption>
 average counts vs variance after transformation
 </figcaption></figure><hr>
-<h3 id="05-deseq2-expression-analyses-figure-7">Figure 7</h3>
+<h3 id="05-deseq2-expression-analyses-figure-6">Figure 6</h3>
 <p aria-hidden="true">Image 1 of 1: ‘Euclidean distance heatmap’</p>
 <figure style="text-align: center"><img src="../fig/05_deseq/clustering.png" alt="Euclidean distance heatmap" class="figure mx-auto d-block"><figcaption>
 Euclidean distance heatmap
 </figcaption></figure><hr>
-<h3 id="05-deseq2-expression-analyses-figure-8">Figure 8</h3>
+<h3 id="05-deseq2-expression-analyses-figure-7">Figure 7</h3>
 <p aria-hidden="true">Image 1 of 1: ‘PCA plot showing sample clustering’</p>
 <figure style="text-align: center"><img src="../fig/05_deseq/pca-plot.png" alt="PCA plot showing sample clustering" class="figure mx-auto d-block"><figcaption>
 PCA plot showing sample clustering
 </figcaption></figure><hr>
-<h3 id="05-deseq2-expression-analyses-figure-9">Figure 9</h3>
+<h3 id="05-deseq2-expression-analyses-figure-8">Figure 8</h3>
 <p aria-hidden="true">Image 1 of 1: ‘Dispersion estimates from DESeq2’</p>
 <figure style="text-align: center"><img src="../fig/05_deseq/dispersion-plot.png" alt="Dispersion estimates from DESeq2" class="figure mx-auto d-block"><figcaption>
 Dispersion estimates from DESeq2
 </figcaption></figure><hr>
-<h3 id="05-deseq2-expression-analyses-figure-10">Figure 10</h3>
+<h3 id="05-deseq2-expression-analyses-figure-9">Figure 9</h3>
 <p aria-hidden="true">Image 1 of 1: ‘Volcano plot of differential expression results’</p>
 <figure style="text-align: center"><img src="../fig/05_deseq/volcano-plot.png" alt="Volcano plot of differential expression results" class="figure mx-auto d-block"><figcaption>
 Volcano plot of differential expression results
@@ -555,9 +642,9 @@ Sample distance heatmap
 PCA plot of Kallisto-quantified samples
 </figcaption></figure><hr>
 <h3 id="05b-deseq2-expression-analyses-kallisto-figure-5">Figure 5</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Volcano plot of differential expression results’</p>
-<figure style="text-align: center"><img src="../fig/05_deseq/plotdispests-k.png" alt="Volcano plot of differential expression results" class="figure mx-auto d-block"><figcaption>
-Volcano plot of differential expression results
+<p aria-hidden="true">Image 1 of 1: ‘Dispersion estimates from DESeq2 (Kallisto pathway)’</p>
+<figure style="text-align: center"><img src="../fig/05_deseq/plotdispests-k.png" alt="Dispersion estimates from DESeq2 (Kallisto pathway)" class="figure mx-auto d-block"><figcaption>
+Dispersion estimates from DESeq2 (Kallisto pathway)
 </figcaption></figure><hr>
 <h3 id="05b-deseq2-expression-analyses-kallisto-figure-6">Figure 6</h3>
 <p aria-hidden="true">Image 1 of 1: ‘Volcano plot of differential expression results’</p>
@@ -566,14 +653,14 @@ Volcano plot of differential expression results
 </figcaption></figure><hr></section><section id="06-gene-set-enrichment-analyses"><h2 class="section-heading"><a href="06-gene-set-enrichment-analyses.html">Gene set enrichment analysis</a></h2>
 <hr class="half-width">
 <h3 id="06-gene-set-enrichment-analyses-figure-1">Figure 1</h3>
-<p aria-hidden="true">Image 1 of 1: ‘GO Biological Process enrichment dotplot for upregulated genes’</p>
-<figure style="text-align: center"><img src="../fig/06-enrich/go-bp-up.png" alt="GO Biological Process enrichment dotplot for upregulated genes" class="figure mx-auto d-block"><figcaption>
-GO Biological Process enrichment dotplot for upregulated genes
+<p aria-hidden="true">Image 1 of 1: ‘GO Biological Process enrichment dotplot for all significant genes’</p>
+<figure style="text-align: center"><img src="../fig/06-enrich/go-bp-up.png" alt="GO Biological Process enrichment dotplot for all significant genes" class="figure mx-auto d-block"><figcaption>
+GO Biological Process enrichment dotplot for all significant genes
 </figcaption></figure><hr>
 <h3 id="06-gene-set-enrichment-analyses-figure-2">Figure 2</h3>
-<p aria-hidden="true">Image 1 of 1: ‘GO Biological Process enrichment barplot for upregulated genes’</p>
-<figure style="text-align: center"><img src="../fig/06-enrich/go-bp-up-bar.png" alt="GO Biological Process enrichment barplot for upregulated genes" class="figure mx-auto d-block"><figcaption>
-GO Biological Process enrichment barplot for upregulated genes
+<p aria-hidden="true">Image 1 of 1: ‘GO Biological Process enrichment barplot for all significant genes’</p>
+<figure style="text-align: center"><img src="../fig/06-enrich/go-bp-up-bar.png" alt="GO Biological Process enrichment barplot for all significant genes" class="figure mx-auto d-block"><figcaption>
+GO Biological Process enrichment barplot for all significant genes
 </figcaption></figure><hr>
 <h3 id="06-gene-set-enrichment-analyses-figure-3">Figure 3</h3>
 <p aria-hidden="true">Image 1 of 1: ‘Simplified GO Biological Process enrichment dotplot’</p>
@@ -637,7 +724,7 @@ GSEA enrichment plot showing running enrichment score for top gene set
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.21.0" class="external-link">sandpaper (0.21.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/aec0ff169ecf0863c0882e93bd191b19f2e7ff1e" class="external-link">varnish (1.0.7)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.21.1" class="external-link">sandpaper (0.21.1)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/aec0ff169ecf0863c0882e93bd191b19f2e7ff1e" class="external-link">varnish (1.0.7)</a></p>
 		</div>
 		</footer>
 </div> <!-- / div.container -->
@@ -660,8 +747,8 @@ GSEA enrichment plot showing running enrichment score for top gene set
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/images.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/images.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-09-29",
-  "datePublished": "2026-09-29"
+  "dateModified": "2026-10-02",
+  "datePublished": "2026-10-02"
 }
 
   </script><script>

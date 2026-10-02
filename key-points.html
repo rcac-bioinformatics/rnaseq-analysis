@@ -434,7 +434,8 @@ splice detection.</li>
 <li>Mapping is efficiently performed using SLURM array jobs.</li>
 <li>Alignment statistics (from <code>Log.final.out</code> + MultiQC)
 must be reviewed.</li>
-<li>Strandness should be inferred using aligned BAM files.</li>
+<li>Strandness should be determined before counting; Salmon infers it
+directly from a sample of FASTQ reads.</li>
 <li>Final BAM files are ready for downstream counting.</li>
 <li>
 <code>featureCounts</code> is used to obtain gene-level counts for
@@ -540,7 +541,7 @@ reproducibility.</li>
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.21.0" class="external-link">sandpaper (0.21.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/aec0ff169ecf0863c0882e93bd191b19f2e7ff1e" class="external-link">varnish (1.0.7)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.21.1" class="external-link">sandpaper (0.21.1)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/aseetharam/varnish/tree/aec0ff169ecf0863c0882e93bd191b19f2e7ff1e" class="external-link">varnish (1.0.7)</a></p>
 		</div>
 		</footer>
 </div> <!-- / div.container -->
@@ -563,8 +564,8 @@ reproducibility.</li>
   "url": "https://rcac_rnaseq_workshop.github.io/NA/key-points.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/key-points.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-09-29",
-  "datePublished": "2026-09-29"
+  "dateModified": "2026-10-02",
+  "datePublished": "2026-10-02"
 }
 
   </script><script>
