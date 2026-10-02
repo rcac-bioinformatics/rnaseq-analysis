@@ -44,7 +44,7 @@ The workflow has four parts:
 
 - `gene_counts_clean.txt` generated from featureCounts  
 - a `samples.csv` file describing the experimental groups  
-- RStudio session on Scholar using Open OnDemand
+- RStudio session on Negishi using Open OnDemand
 
 While we created the count matrix in the previous episode, we still need to create a sample metadata file. This file should contain at least two columns: sample names matching the count matrix column names, and the experimental condition (e.g., control vs treatment). Simply copy/paste the following into a text file and save it in your `scripts` directory as `samples.csv`:
 
@@ -59,11 +59,7 @@ WT_Bcell_IR_rep2,WT_IR
 WT_Bcell_IR_rep3,WT_IR
 WT_Bcell_IR_rep4,WT_IR
 ```
-Also, create a direcotry for DESeq2 results:
-
-```bash
-mkdir -p results/deseq2
-```
+The R code below creates the `results/deseq2` directory for the output.
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -72,23 +68,7 @@ All analyses are performed in R through Open OnDemand
 ## Step 1: Start Open OnDemand R session and prepare data
 
 
-We will be using the OOD to start an interactive session on Scholar:
-[https://gateway.negishi.rcac.purdue.edu](https://gateway.negishi.rcac.purdue.edu/)
-
-1. Login using your Purdue credentials after clicking the above link
-2. Click on "Interactive Apps" in the top menu, and select "RStudio (Bioconductor)"
-3. Fill the job submission form as follows:
-   - queue: `rcac-rnaseq`
-   - Walltime: `4`
-   - Number of cores: `4`
-4. Click "Launch" and wait for the RStudio session to start
-5. Once the session starts, you'll will be able to click on "Connect to RStudio server" which will open the RStudio interface.
-
-
-<div class="figure" style="text-align: center">
-<img src="fig/05_deseq/open-on-demand.png" alt="Open OnDemand interface"  />
-<p class="caption">Open OnDemand interface</p>
-</div>
+Start RStudio on Negishi's Open OnDemand portal, [gateway.negishi.rcac.purdue.edu](https://gateway.negishi.rcac.purdue.edu/), exactly as described in [Starting RStudio on Open OnDemand](../learners/setup.md#starting-rstudio-on-open-ondemand) on the Setup page: **Interactive Apps > RStudio (bioconductor)**, partition `cpu`, account `rcac-rnaseq`, QoS `standby`, 4 hours, 4 cores, R version `4.4.0-bioconductor`. Once the job is running, click **Connect to RStudio Server**.
 
 Once in RStudio, load the necessary libraries:
 
@@ -96,20 +76,19 @@ Once in RStudio, load the necessary libraries:
 
 ```r
 library(RColorBrewer)
-library(EnsDb.Mmusculus.v79)
-library(ensembldb)
 library(tidyverse)
 library(DESeq2)
 library(ggplot2)
 library(pheatmap)
 library(readr)
 library(dplyr)
-library(ComplexHeatmap)
 library(ggrepel)
 library(vsn)
 # Construct the path dynamically
 work_dir <- file.path("/scratch/negishi", Sys.getenv("USER"), "rnaseq-workshop")
 setwd(work_dir)
+# output directory for this episode
+dir.create("results/deseq2", recursive = TRUE, showWarnings = FALSE)
 
 countsFile <- "results/counts/gene_counts_clean.txt"
 # prepare this file first!
@@ -123,11 +102,13 @@ coldata <-
     stringsAsFactors = TRUE
   )
 coldata$condition <- as.factor(coldata$condition)
+# make WT_mock the reference (denominator) level; see "Name your contrast" below
+coldata$condition <- relevel(coldata$condition, ref = "WT_mock")
 
 cts <- as.matrix(read.delim(countsFile, row.names = 1, header = TRUE))
 ```
 
-We also load gene level annotation tables prepared earlier.
+We also load gene level annotation tables that were prepared for the workshop and copied with the data (`data/mart.tsv` and `data/annot.tsv`). The spoiler below shows how they were made with biomaRt.
 
 ```r
 mart <-
@@ -150,7 +131,7 @@ annot <-
 ## How were these data prepared?
 
 
-Since the gene IDs in the count matrix are Ensembl IDs, it will be hard to interpret the results without annotation. We will need to use the `org.Mm.eg.db` package for attaching gene symbols, so we can interpret the results better.0
+Since the gene IDs in the count matrix are Ensembl IDs, it will be hard to interpret the results without annotation. We query Ensembl BioMart with the `biomaRt` package for gene symbols, biotypes, and descriptions. Run this after the setup block above, so that `cts` exists. It writes to `data/mart_biomart.tsv` and `data/annot_biomart.tsv`, so it does not overwrite the workshop copies.
 
 ```r
 library(biomaRt)
@@ -170,7 +151,7 @@ listFilters(ensembl) %>%
 # so we will now set the filter type accordingly
 filterType <- "ensembl_gene_id_version"
 # from our counts data, get the list of gene IDs
-filterValues <- rownames(counts)
+filterValues <- rownames(cts)
 # take a look at the available attributes (first 20)
 listAttributes(ensembl) %>%
      head(20)
@@ -181,30 +162,42 @@ attributeNames <- c('ensembl_gene_id',
                     'gene_biotype',
                     'description')
 # get the annotation
-annot <- getBM(
+mart <- getBM(
   attributes = attributeNames,
   filters = filterType,
   values = filterValues,
   mart = ensembl
 )
-saveRDS(annot, file = "results/counts/gene_annotation.rds")
+saveRDS(mart, file = "results/counts/gene_annotation.rds")
 # also save as tsv for future use
 write.table(
-  annot,
-  file = "data/mart.tsv",
+  mart,
+  file = "data/mart_biomart.tsv",
   sep = "\t",
   quote = FALSE,
   row.names = FALSE
 )
-# save a simplified annotation file with only essential columns
-mart %>% 
-select(ensembl_gene_id, ensembl_gene_id_version, external_gene_name) %>%
-  write.table(
-    file = "data/annot.tsv",
-    sep = "\t",
-    quote = FALSE,
-    row.names = FALSE
+# save a simplified annotation table with only the identifier columns
+annot <- mart %>%
+  dplyr::select(ensembl_gene_id, ensembl_gene_id_version, external_gene_name)
+write.table(
+  annot,
+  file = "data/annot_biomart.tsv",
+  sep = "\t",
+  quote = FALSE,
+  row.names = FALSE
+)
 ```
+
+`mart` from this query has the same columns as `data/mart.tsv` (`ensembl_gene_id`, `ensembl_gene_id_version`, `external_gene_name`, `gene_biotype`, `description`), so the rest of the episode runs the same with either source.
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## If BioMart is unavailable
+
+BioMart is an online service and is sometimes down or redirected (for example to `status.ensembl.org`) during Ensembl releases. If `useMart()` or `getBM()` fails, keep the `mart` and `annot` objects read from `data/mart.tsv` and `data/annot.tsv` in the block above; they were made with this same query and cover every gene in the GENCODE vM38 annotation. The current Ensembl release can also be newer than GENCODE vM38 (Ensembl 115), in which case some versioned gene IDs do not match and come back without annotation.
+
+:::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -261,7 +254,7 @@ Summarize gene biotypes:
 
 ```r
 biotype_df <- cts_annot %>%
-  filter(rowSums(select(., starts_with("WT_Bcell"))) > 10) %>%
+  filter(rowSums(dplyr::select(., starts_with("WT_Bcell"))) > 10) %>%
   dplyr::count(gene_biotype, name = "n") %>%
   arrange(desc(n))
 
@@ -306,7 +299,8 @@ cts_coding <- cts_pc %>%
 
 dim(cts_coding)
 ```
-```
+
+```text
 [1] 11330     8
 ```
 
@@ -337,7 +331,7 @@ We summarize total counts per sample for protein coding genes.
 libSize <- colSums(cts_coding) %>%
   as.data.frame() %>%
   rownames_to_column("sample") %>%
-  rename(total_counts = 2) %>%
+  dplyr::rename(total_counts = 2) %>%
   mutate(total_millions = total_counts / 1e6)
 
 ggplot(libSize, aes(x = sample, y = total_counts)) +
@@ -415,6 +409,14 @@ meanSdPlot(assay(dds), ranks = FALSE)
 <img src="fig/05_deseq/before-vsd.png" alt="Average counts vs variance before transformation"  />
 <p class="caption">Average counts vs variance before transformation</p>
 </div>
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Deprecation warnings from packages
+
+`meanSdPlot()` may print a warning such as `` `aes_string()` was deprecated in ggplot2 3.0.0 ``. It comes from code inside the vsn package, not from your commands, and does not change the plot. You will see similar warnings from enrichplot in Episode 06. Warnings are worth reading, but this kind can be ignored.
+
+:::::::::::::::::::::::::::::::::::::::
 
 Apply variance stabilizing transform (VST):
 
@@ -535,7 +537,7 @@ PCA is one of the most powerful tools for detecting **batch effects**—unwanted
 
 3. **Never simply remove batch-affected samples** without understanding the underlying cause.
 
-In this dataset, samples cluster cleanly by condition, indicating no obvious batch effects.
+In this dataset, PC1 (95 percent of the variance) separates the IR samples from the mock samples. A much smaller pattern within the groups follows read quality, as the exercise below shows.
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -552,12 +554,12 @@ Using the library size, distance heatmap, and PCA:
 
 ::::::::::::::::::::::::::::::::::: solution
 
-Example interpretation:
+Interpretation for this dataset:
 
-1. Library sizes are comparable across samples and fall within a narrow range.
-2. Samples cluster by condition (mock vs IR-treated) in both distance heatmaps and PCA.
-3. No sample appears as a clear outlier relative to its group.
-4. No batch effects are apparent—PC1 separates by experimental condition, not technical factors.
+1. No. Library sizes (assigned read pairs on protein-coding genes) range from 3.4 to 5.1 million, and the size factors from 0.78 to 1.19, so no sample has abnormally low depth.
+2. Yes. The distance heatmap splits the samples into a mock and an IR cluster, and PC1, which explains 95 percent of the variance, separates the two conditions.
+3. No. Every sample is closest to the other samples with its own label.
+4. Not one that matters here. The condition dominates, but within each group there is a small, consistent pattern: IR_rep3 and IR_rep4 pair up apart from IR_rep1 and IR_rep2, and mock_rep4 sits apart from the other mock samples on PC2 (under 2 percent of the variance). These are the samples with the cleanest reads in Episode 03, so this is a technical effect of read quality. It is small next to the treatment effect and does not need correction in this analysis, but it is worth recording.
 
 :::::::::::::::::::::::::::::::::::
 
@@ -566,8 +568,8 @@ Example interpretation:
 
 ## Differential gene expression analysis
 
-For DE testing we use the **full count matrix** (`cts`) without filtering by biotype.
-This preserves all features counted by featureCounts.
+For DE testing we use the same filtered protein-coding matrix (`cts_coding`) as for the exploratory plots.
+This keeps the analysis focused on the genes we inspected above and avoids testing thousands of barely expressed noncoding features.
 
 ```r
 dds <- DESeqDataSetFromMatrix(
@@ -596,21 +598,16 @@ dds <- DESeq(dds)
 ```
 
 ```text
-estimating size factors
-  Note: levels of factors in the design contain characters other than
-  letters, numbers, '_' and '.'. It is recommended (but not required) to use
-  only letters, numbers, and delimiters '_' or '.', as these are safe characters
-  for column names in R. [This is a message, not a warning or an error]
+using pre-existing size factors
 estimating dispersions
+found already estimated dispersions, replacing these
 gene-wise dispersion estimates
 mean-dispersion relationship
-  Note: levels of factors in the design contain characters other than
-  letters, numbers, '_' and '.'. It is recommended (but not required) to use
-  only letters, numbers, and delimiters '_' or '.', as these are safe characters
-  for column names in R. [This is a message, not a warning or an error]
 final dispersion estimates
 fitting model and testing
 ```
+
+Because the three steps above already ran on `dds`, `DESeq()` reuses the size factors and replaces the dispersions, as its messages say. On a new object it estimates both itself.
 :::::::::::::::::::::::::::::::::::
 
 
@@ -627,7 +624,7 @@ plotDispEsts(dds)
 
 
 
-Obtain results for the contrast of interest (`WT_IR` vs `WT_mock`):
+Obtain results for the contrast of interest. The `contrast` argument names the factor, then the numerator level, then the denominator level, so positive log2 fold changes mean higher in `WT_IR` than in `WT_mock`:
 
 ```r
 res <-
@@ -643,7 +640,7 @@ res <-
 summary(res)
 ```
 
-```txt
+```text
 out of 11330 with nonzero total read count
 adjusted p-value < 0.1
 LFC > 0 (up)       : 3317, 29%
@@ -655,6 +652,21 @@ low counts [2]     : 0, 0%
 [2] see 'independentFiltering' argument of ?results
 ```
 
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Name your contrast
+
+DESeq2 compares factor levels, and R orders levels alphabetically unless told otherwise. Here that puts `WT_IR` before `WT_mock`, so by default `WT_IR` would be the reference level and any result taken from the second model coefficient would be **mock vs IR**: every fold change would have the opposite sign, p53 targets would look downregulated, and the volcano plot and enrichment results would be mirrored.
+
+Two habits prevent this:
+
+- Pass an explicit `contrast = c("condition", "WT_IR", "WT_mock")` to `results()`. The direction is then stated in the code and does not depend on level order.
+- When a function needs a coefficient name instead (as `lfcShrink(type = "apeglm")` does below), set the reference level with `relevel()` and check `resultsNames(dds)` before using it. The coefficient `condition_WT_IR_vs_WT_mock` exists only if the levels are set up the way you intend; if they are not, the call fails instead of silently returning flipped results.
+
+The first line of a printed results table, `log2 fold change (MLE): condition WT_IR vs WT_mock`, confirms the direction.
+
+:::::::::::::::::::::::::::::::::::::::
+
 Order the results by p value to see the top DE genes:
 
 ```r
@@ -663,16 +675,24 @@ head(res[order(res$pvalue), ])
 
 ```text
 log2 fold change (MLE): condition WT_IR vs WT_mock 
-Wald test p-value: condition WT_IR vs WT_mock 
+Wald test p-value: condition WT IR vs WT mock 
 DataFrame with 6 rows and 6 columns
-                       baseMean log2FoldChange     lfcSE      stat       pvalue         padj
-                      <numeric>      <numeric> <numeric> <numeric>    <numeric>    <numeric>
-ENSMUSG00000026581.15  2412.406       -2.80863 0.0812517  -34.5671 7.89898e-262 8.94955e-258
-ENSMUSG00000021668.16   869.712        3.75461 0.1109288   33.8470 4.01308e-251 2.27341e-247
-ENSMUSG00000075122.6    614.418        4.47065 0.1336974   33.4386 3.77523e-245 1.42578e-241
-ENSMUSG00000004085.15   833.506        4.21081 0.1293034   32.5654 1.26916e-232 3.59488e-229
-ENSMUSG00000020184.16  1619.577        2.82923 0.0906311   31.2170 6.26193e-214 1.41895e-210
-ENSMUSG00000072825.13   724.296        4.73072 0.1518464   31.1546 4.39181e-213 8.29321e-210
+                       baseMean log2FoldChange     lfcSE      stat       pvalue
+                      <numeric>      <numeric> <numeric> <numeric>    <numeric>
+ENSMUSG00000026581.15  2412.406       -2.80863 0.0812517  -34.5671 7.89921e-262
+ENSMUSG00000021668.16   869.712        3.75461 0.1109288   33.8470 4.01297e-251
+ENSMUSG00000075122.6    614.418        4.47065 0.1336974   33.4386 3.77513e-245
+ENSMUSG00000004085.15   833.506        4.21081 0.1293034   32.5654 1.26912e-232
+ENSMUSG00000020184.16  1619.577        2.82923 0.0906311   31.2170 6.26176e-214
+ENSMUSG00000072825.13   724.296        4.73072 0.1518464   31.1546 4.39168e-213
+                              padj
+                         <numeric>
+ENSMUSG00000026581.15 8.94981e-258
+ENSMUSG00000021668.16 2.27335e-247
+ENSMUSG00000075122.6  1.42574e-241
+ENSMUSG00000004085.15 3.59478e-229
+ENSMUSG00000020184.16 1.41891e-210
+ENSMUSG00000072825.13 8.29296e-210
 ```
 
 Each row represents one gene.
@@ -692,8 +712,8 @@ First, check the available coefficient names:
 resultsNames(dds)
 ```
 
-```
-[1] "Intercept"                  "condition_WT_mock_vs_WT_IR"
+```text
+[1] "Intercept"                  "condition_WT_IR_vs_WT_mock"
 ```
 
 Apply shrinkage using `apeglm` (recommended for standard two-group comparisons):
@@ -701,7 +721,7 @@ Apply shrinkage using `apeglm` (recommended for standard two-group comparisons):
 ```r
 res_shrunk <- lfcShrink(
     dds,
-    coef = "condition_WT_mock_vs_WT_IR",
+    coef = "condition_WT_IR_vs_WT_mock",
     type = "apeglm"
 )
 
@@ -709,10 +729,15 @@ summary(res_shrunk)
 ```
 
 ```text
+using 'apeglm' for LFC shrinkage. If used in published research, please cite:
+    Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
+    sequence count data: removing the noise and preserving large differences.
+    Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895
+
 out of 11330 with nonzero total read count
 adjusted p-value < 0.1
-LFC > 0 (up)       : 3260, 29%
-LFC < 0 (down)     : 3317, 29%
+LFC > 0 (up)       : 3317, 29%
+LFC < 0 (down)     : 3260, 29%
 outliers [1]       : 0, 0%
 low counts [2]     : 0, 0%
 (mean count < 7)
@@ -767,7 +792,7 @@ Output:
 # A tibble: 1 × 4
   total_genes   sig    up  down
         <int> <int> <int> <int>
-1       11330  5967  1802  1795
+1       11330  5967  1797  1801
 ```
 
 
@@ -911,7 +936,7 @@ readr::write_tsv(
 Save the DESeq2 object for downstream analysis:
 
 ```r
-saveRDS(dds, "results/deseq2_results/dds_featurecounts.rds")
+saveRDS(dds, "results/deseq2/dds_featurecounts.rds")
 ```
 
 
@@ -927,11 +952,12 @@ Using `sig_res`:
 
 ::::::::::::::::::::::::::::::::::: solution
 
-Example interpretation:
+Interpretation for this dataset:
 
-* Strongly upregulated genes should include canonical p53 targets such as *Cdkn1a* (p21), *Mdm2*, *Bax*, and *Bbc3* (Puma).
-* DNA damage response genes like *Gadd45a* should be upregulated.
-* Cross-referencing top hits with p53 target databases confirms our analysis is working correctly.
+* The largest positive fold changes (log2 fold change 7.4 to 9.7) are *Ddit4l*, *Ckmt1*, *Syt12*, *Plb1*, *Celf5*, *Phlda3*, *Pierce1*, *Tnfsf4*, *Eda2r*, and *Cdkn1a*; *Phlda3*, *Eda2r*, and *Cdkn1a* are well-known p53 targets. Canonical p53 targets are strongly upregulated after IR: *Cdkn1a* (p21), *Mdm2*, *Bax*, *Bbc3* (Puma), and *Pmaip1* (Noxa).
+* The largest negative fold changes (log2 fold change -3.3 to -4.5) are *Rag1*, *Car1*, *Crisp3*, *Sele*, *Serpinb1a*, *Itih5*, *Hba-a1*, *Spns2*, *Loxl1*, and *S1pr3*. Downregulation is weaker than upregulation, consistent with a response driven mainly by p53, a transcriptional activator.
+* *Gadd45a*, a DNA damage response gene, goes up slightly after IR (log2 fold change 0.45) but is not significant here (padj 0.07), so it is not in `sig_res`. Look it up with `dplyr::filter(res_annot, external_gene_name == "Gadd45a")`. With 4 replicates and 20 million read pairs per sample, a small change in a modestly expressed gene can miss the cutoff; that is a statement about power, not evidence that the gene does not respond.
+* Finding the known p53 targets among the top upregulated genes is a positive control: it confirms the contrast direction and the analysis are correct.
 
 :::::::::::::::::::::::::::::::::::
 

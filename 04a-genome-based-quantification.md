@@ -61,7 +61,7 @@ Salmon can infer strandness directly from raw FASTQ files without any alignment.
 We run Salmon with `-l A`, which tells it to explore all library types.
 
 ```bash
-sinteractive -A rcac-workshop -q standby -p cpu -N 1 -n 4 --time=1:00:00
+sinteractive -A rcac-rnaseq -q standby -p cpu -N 1 -n 4 --time=2:00:00
 
 cd $SCRATCH/rnaseq-workshop
 mkdir -p results/strand_check
@@ -80,7 +80,7 @@ salmon quant --index data/salmon_index \
              --output results/strand_check \
              --threads 4
 ```
-The important output is in `results/strand_check/lib_format_counts.json`:
+Building the Salmon index and running the check takes about 8 minutes on 4 cores. The important output is in `results/strand_check/lib_format_counts.json`:
 
 ::::::::::::::::::::::::::::::::::::: spoiler
 
@@ -109,7 +109,6 @@ The important output is in `results/strand_check/lib_format_counts.json`:
     "IU": 0,
     "U": 0
 }
-
 ```
 
 
@@ -118,8 +117,8 @@ The important output is in `results/strand_check/lib_format_counts.json`:
 > This JSON file reports Salmon's automatic library type detection.
 >
 > - **`"expected_format": "IU"`**: This is Salmon's conclusion. "I" means **Inward** (correct for paired-end reads) and "U" means **Unstranded**.
-> - **`"strand_mapping_bias": 0.508`**: This is the key evidence. A value near 0.5 (50%) indicates that reads mapped equally to both the sense and antisense strands, the definitive sign of an **unstranded** library.
-> - **`"ISF"`** and **`"ISR"`**: These are the counts for Inward-Sense-Forward (36.4M) and Inward-Sense-Reverse (35.2M) fragments. Because these values are almost equal, they confirm the ~50/50 split seen in the strand bias.
+> - **`"strand_mapping_bias"`** (0.508 here): This is the key evidence. A value near 0.5 (50%) indicates that reads mapped equally to both the sense and antisense strands, the definitive sign of an **unstranded** library.
+> - **`"ISF"`** and **`"ISR"`**: These are the counts of inward-facing fragments whose first read maps to the forward strand of the transcript (ISF) or to the reverse strand (ISR): 5.3 and 5.2 million here. Because these values are almost equal, they confirm the ~50/50 split seen in the strand bias.
 
 Common results:
 
@@ -190,17 +189,17 @@ Key options:
 
 ### Indexing the Genome with STAR
 
-Below is a minimal SLURM job script for building the STAR genome index. Create a file named `index_genome.sh` in `$SCRATCH/rcac_rnaseq/scripts` with this content:
+Below is a minimal SLURM job script for building the STAR genome index. Create a file named `index_genome.sh` in `$SCRATCH/rnaseq-workshop/scripts` with this content:
 
 ```bash
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=20
+#SBATCH --cpus-per-task=48
 #SBATCH --account=rcac-rnaseq
 #SBATCH --qos=standby
 #SBATCH --partition=cpu
-#SBATCH --time=1:00:00
+#SBATCH --time=2:00:00
 #SBATCH --job-name=star_index
 #SBATCH --output=cluster-%x.%j.out
 #SBATCH --error=cluster-%x.%j.err
@@ -222,40 +221,54 @@ STAR \
 
 ```
 
-Submit the job:
+Submit the job from the `scripts` directory:
 
 ```bash
+cd $SCRATCH/rnaseq-workshop/scripts
 sbatch index_genome.sh
 ```
 
-Indexing requires about 30 to 45 minutes.
+Indexing takes about 15 minutes and needs about 30 GB of memory. On Negishi, memory comes with the cores you request (there is no separate memory request), so the script asks for 48 cores to get enough memory for indexing a mammalian genome. Check progress with `squeue -u $USER`; the job log is written to `cluster-star_index.<jobid>.out` in the `scripts` directory.
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Short on time during the workshop?
+
+If your index job is still waiting in the queue when we reach the mapping step, use the prebuilt index from the completed results copy instead of your own:
+
+```bash
+ln -s /scratch/negishi/aseethar/rnaseq-workshop_results/data/star_index $SCRATCH/rnaseq-workshop/data/star_index
+```
+
+Run this only if `$SCRATCH/rnaseq-workshop/data/star_index` does not exist yet (cancel your index job first with `scancel <jobid>`). The mapping script below works the same with either index.
+
+:::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::: spoiler
 
 ## What will the output look like?
 
 The index directory is now ready for use in mapping and should have contents like this:
-Location: `$SCRATCH/rcac_rnaseq/data`
+Location: `$SCRATCH/rnaseq-workshop/data`
 Contents of `star_index/`:
 
-```bash
-star_index/
-├── chrLength.txt
-├── chrNameLength.txt
-├── chrName.txt
-├── chrStart.txt
-├── exonGeTrInfo.tab
-├── exonInfo.tab
-├── geneInfo.tab
-├── Genome
-├── genomeParameters.txt
-├── Log.out
-├── SA
-├── SAindex
-├── sjdbInfo.txt
-├── sjdbList.fromGTF.out.tab
-├── sjdbList.out.tab
-└── transcriptInfo.tab
+```text
+chrLength.txt
+chrNameLength.txt
+chrName.txt
+chrStart.txt
+exonGeTrInfo.tab
+exonInfo.tab
+geneInfo.tab
+Genome
+genomeParameters.txt
+Log.out
+SA
+SAindex
+sjdbInfo.txt
+sjdbList.fromGTF.out.tab
+sjdbList.out.tab
+transcriptInfo.tab
 ```
 :::::::::::::::::::::::::::::::::::::::
 
@@ -322,6 +335,8 @@ cd $SCRATCH/rnaseq-workshop/data
 ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' > ${SCRATCH}/rnaseq-workshop/scripts/samples.txt
 ```
 
+Save the array job below as `$SCRATCH/rnaseq-workshop/scripts/map_reads.sh`. Each array task reads its sample name from line `${SLURM_ARRAY_TASK_ID}` of `samples.txt`, which the script looks for in the directory you submit from, so always submit it from `scripts/`.
+
 ```bash
 #!/bin/bash
 #SBATCH --nodes=1
@@ -330,7 +345,7 @@ ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' > ${SCRATCH}/rnaseq-workshop/scripts/s
 #SBATCH --account=rcac-rnaseq
 #SBATCH --qos=standby
 #SBATCH --partition=cpu
-#SBATCH --time=8:00:00
+#SBATCH --time=1:00:00
 #SBATCH --job-name=read_mapping
 #SBATCH --array=1-8
 #SBATCH --output=cluster-%x.%j.out
@@ -360,11 +375,14 @@ STAR \
     --outSAMtype BAM SortedByCoordinate
 ```
 
-Submit:
+Submit from the `scripts` directory:
 
 ```bash
+cd $SCRATCH/rnaseq-workshop/scripts
 sbatch map_reads.sh
 ```
+
+Each sample takes about 2 to 3 minutes on 20 cores and up to 28 GB of memory. The eight tasks run in parallel when the queue allows.
 
 
 ::::::::::::::::::::::::::::::::::::::: discussion
@@ -434,11 +452,11 @@ Using your MultiQC alignment report:
 
 ::::::::::::::::::::::::::::::::::: solution
 
-Example interpretation for this dataset:
+Interpretation for this dataset:
 
-- All samples have ~80% uniquely mapped reads.
-- No sample is an outlier.
-- mapped/unmapped reads consistent across samples
+1. Uniquely mapped reads range from about 62 to 83 percent; mock_rep4 has the highest (83 percent).
+2. IR_rep1 and IR_rep2 are lowest (62 and 64 percent), and IR_rep3, IR_rep4, and mock_rep4 highest (77 to 83 percent): the same split as the read quality groups in Episode 03. The two conditions map about equally well on average (70 percent for IR, 73 percent for mock). These rates are within the 60 to 90 percent range given above, so no sample fails, but the spread is worth recording. When one condition maps systematically worse, check whether the difference also shows up in the PCA in Episode 05.
+3. Most unmapped reads are classified as "too short" (1.4 to 4.6 million pairs per sample): STAR could align only part of the read pair. With 51 bp reads this usually reflects low quality read ends (see the FastQC report in Episode 03), rRNA or other sequence absent from the primary assembly, and reads spanning unannotated junctions.
 
 :::::::::::::::::::::::::::::::::::
 
@@ -448,7 +466,7 @@ Example interpretation for this dataset:
 
 ## Step 5: Quantifying gene counts with featureCounts
 
-Once the reads have been aligned and sorted, we can quantify how many read pairs map to each gene. This gives us gene-level counts that we will later use for differential expression. For alignment-based RNA-seq workflows, `featureCounts` is the recommended tool because it is fast, robust, and compatible with most gene annotation formats.
+Once the reads have been aligned and sorted, we can quantify how many read pairs (fragments) map to each gene. This gives us gene-level counts that we will later use for differential expression. For alignment-based RNA-seq workflows, `featureCounts` is the recommended tool because it is fast, robust, and compatible with most gene annotation formats.
 
 `featureCounts` uses two inputs:
 
@@ -471,6 +489,14 @@ From our Salmon strandness check, this dataset behaves as **unstranded**, so we 
 
 :::::::::::::::::::::::::::::::::::::::
 
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Counting reads or read pairs?
+
+With paired-end data, each fragment produces two reads. Counting fragments (read pairs) counts each cDNA molecule once; counting reads counts most fragments twice and makes the counts look larger and more precise than they are. `-p` tells featureCounts that the BAM files are paired-end. In Subread 2.0.1, the version on Negishi, `-p` alone counts fragments. From Subread 2.0.2 onward, `-p` alone counts reads, and you must add `--countReadPairs` to count fragments; check your version with `featureCounts -v` before reusing this script elsewhere.
+
+:::::::::::::::::::::::::::::::::::::::
+
 ### Running featureCounts
 
 We will create a new directory for count output:
@@ -480,7 +506,7 @@ cd $SCRATCH/rnaseq-workshop/scripts
 mkdir -p $SCRATCH/rnaseq-workshop/results/counts
 ```
 
-Below is an example SLURM script to count all BAM files at once.
+Below is an example SLURM script to count all BAM files at once. Save it as `$SCRATCH/rnaseq-workshop/scripts/count_features.sh`.
 
 ```bash
 #!/bin/bash
@@ -490,7 +516,7 @@ Below is an example SLURM script to count all BAM files at once.
 #SBATCH --account=rcac-rnaseq
 #SBATCH --qos=standby
 #SBATCH --partition=cpu
-#SBATCH --time=1:00:00
+#SBATCH --time=0:30:00
 #SBATCH --job-name=featurecounts
 #SBATCH --output=cluster-%x.%j.out
 #SBATCH --error=cluster-%x.%j.err
@@ -513,11 +539,13 @@ featureCounts \
   ${BAMS}
 ```
 
-Submit the job:
+Submit the job from the `scripts` directory (the previous block left you there):
 
 ```bash
 sbatch count_features.sh
 ```
+
+Counting all eight BAM files takes about 7 minutes.
 
 `gene_counts.txt` will contain:
 
@@ -563,11 +591,11 @@ Using your MultiQC featureCounts report:
 
 ::::::::::::::::::::::::::::::::::: solution
 
-Example interpretation for this dataset:
+Interpretation for this dataset. Assigned fragments are about 32 to 40 percent of the total. This looks low, but the total in the featureCounts summary includes every record in the BAM file: STAR kept unmapped pairs (`--outSAMunmapped Within`) and multimapping pairs, and featureCounts reports both as unassigned. Measured against uniquely mapped pairs only, the assignment rate is much higher.
 
-1. The sample with the lowest assignment rate may vary. Causes include low complexity, incomplete annotation, or more intronic reads.
-2. Unmapped or No Features dominate. These reflect reads that do not align or do not overlap annotated exons.
-3. No. Total assigned reads depend on depth, while percent assigned reflects library quality.
+1. The sample with the lowest assignment rate here is mock_rep2 (32 percent). Causes include low complexity, incomplete annotation, or more intronic reads.
+2. It differs between samples: Unmapped is largest for IR_rep1 and IR_rep2 (about 25 percent), MultiMapping for IR_rep3, IR_rep4, and mock_rep3 (24 to 26 percent), and No Features for mock_rep1, mock_rep2, and mock_rep4 (23 to 35 percent). Unmapped pairs did not align at all; No Features pairs aligned outside annotated exons; MultiMapping pairs aligned to several loci and are not counted by default.
+3. Here it does: IR_rep4 has both the most assigned pairs (9.6 million) and the highest percentage (40 percent). In general they need not agree: total assigned reads depend on sequencing depth, while percent assigned reflects library and mapping quality.
 4. Reads mapped outside annotated exons, often from intronic regions, unannotated transcripts, or incomplete annotation.
 5. Multi-mapping is expected for paralogs and repeats. It is usually fine as long as the rate is consistent across samples.
 
@@ -585,7 +613,7 @@ Example interpretation for this dataset:
 - Genome indexing requires FASTA and optionally GTF for improved splice detection.
 - Mapping is efficiently performed using SLURM array jobs.
 - Alignment statistics (from `Log.final.out` + MultiQC) must be reviewed.
-- Strandness should be inferred using aligned BAM files.
+- Strandness should be determined before counting; Salmon infers it directly from a sample of FASTQ reads.
 - Final BAM files are ready for downstream counting.
 - `featureCounts` is used to obtain gene-level counts for differential expression.
 - Exons are counted and summed per gene.

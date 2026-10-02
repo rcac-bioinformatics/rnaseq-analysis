@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alternative splicing in 30 seconds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#ECEBF7; --ink:#1B1D3C; --muted:#5C5F8A;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --page:#0C0D1D; --ink:#EEEDFF; --muted:#9A9EC6; }
+}
+:root[data-theme="dark"]{ --page:#0C0D1D; --ink:#EEEDFF; --muted:#9A9EC6; }
+html{ scroll-padding-top:env(safe-area-inset-top,0px); }
+*,*::before,*::after{ box-sizing:inherit; }
+body{
+  margin:0; background:var(--page); color:var(--ink);
+  font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  min-height:100vh;
+}
+.wrap{ max-width:1200px; margin:0 auto; padding:20px 16px 28px; }
+header{ margin:0 auto 14px; width:min(100%, calc((100vh - 270px) * 1.7778)); min-width:min(100%,320px); }
+h1{
+  font-family:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  font-weight:700; font-size:clamp(22px,3vw,34px); letter-spacing:-0.01em; margin:0 0 2px;
+}
+header p{ margin:0; color:var(--muted); font-size:clamp(13px,1.5vw,16px); }
+.card{
+  margin:0 auto; background:#13152B; border:1px solid #2B2F57; border-radius:14px; overflow:hidden;
+  width:min(100%, calc((100vh - 270px) * 1.7778)); min-width:min(100%,320px);
+  color:#EEEDFF;
+}
+svg{ display:block; width:100%; height:auto; }
+.caption{ padding:14px 22px 6px; min-height:98px; }
+.caption .main{
+  font-family:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif; font-weight:700;
+  font-size:clamp(18px,2.5vw,30px); letter-spacing:-0.01em; line-height:1.15; margin:0 0 6px;
+}
+.caption .sub{ color:#9296BF; font-size:clamp(13px,1.5vw,17px); line-height:1.4; margin:0; max-width:70ch; }
+.controls{ display:flex; align-items:center; gap:14px; padding:10px 22px 16px; }
+button{
+  font:inherit; font-weight:500; border:0; cursor:pointer; border-radius:999px;
+  padding:8px 18px; background:#EEEDFF; color:#13152B; min-width:84px;
+}
+button:focus-visible, input:focus-visible{ outline:3px solid #8B7BFF; outline-offset:3px; }
+input[type=range]{ flex:1; accent-color:#8B7BFF; height:24px; }
+.time{ font-variant-numeric:tabular-nums; color:#9296BF; font-size:14px; min-width:92px; text-align:right; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Alternative splicing</h1>
+    <p>One gene, many proteins. A 30 second explainer.</p>
+  </header>
+  <div class="card">
+    <svg id="stage" viewBox="0 0 1280 720" role="img"
+         aria-label="Animation: a gene with five exons is transcribed into pre-mRNA, spliced three different ways into three mRNAs, and translated into three different proteins."></svg>
+    <div class="caption" aria-live="off">
+      <p class="main" id="capMain"></p>
+      <p class="sub" id="capSub"></p>
+    </div>
+    <div class="controls">
+      <button id="play" type="button">Pause</button>
+      <input id="scrub" type="range" min="0" max="3000" value="0" aria-label="Timeline position">
+      <span class="time" id="time">0.0 / 30 s</span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var NS="http://www.w3.org/2000/svg";
+var C=["#FFB938","#2FD3C0","#FF5D8F","#8B7BFF","#8FD14F"];
+var W=[120,150,100,140,110], INTRON=75, X0=180, GAP=6;
+var BG="#13152B", GREY="#4B5088", INTRON_C="#6D72AD", INK="#EEEDFF", MUTED="#9296BF";
+var HEAD='"Bricolage Grotesque","Avenir Next",system-ui,sans-serif';
+var BODY='"DM Sans",system-ui,sans-serif';
+var DNA_Y=150, PRE_Y=270, LANES=[410,510,610], COMPACT_X=140, DUR=30;
+var SETS=[[0,1,2,3,4],[0,1,3,4],[0,1,2,4]];
+var NAMES=["A","B","C"];
+var SX=[]; (function(){var x=X0;for(var i=0;i<5;i++){SX.push(x);x+=W[i]+INTRON;}})();
+var END=SX[4]+W[4];
+
+function clamp(v,a,b){a=a===undefined?0:a;b=b===undefined?1:b;return Math.min(b,Math.max(a,v));}
+function prog(t,a,b){return clamp((t-a)/(b-a));}
+function eio(p){return p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;}
+function back(p){var c1=1.70158,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2);}
+function lerp(a,b,p){return a+(b-a)*p;}
+function el(tag,attrs,parent){
+  var e=document.createElementNS(NS,tag);
+  for(var k in attrs){e.setAttribute(k,attrs[k]);}
+  if(parent){parent.appendChild(e);}
+  return e;
+}
+function txt(parent,attrs,str){var e=el("text",attrs,parent);e.textContent=str;return e;}
+
+var svg=document.getElementById("stage");
+el("rect",{x:0,y:0,width:1280,height:720,fill:BG},svg);
+
+/* row labels */
+var lblDNA=txt(svg,{x:24,y:DNA_Y,"dominant-baseline":"central","font-family":BODY,"font-size":18,fill:MUTED,opacity:0},"DNA");
+var lblPre=txt(svg,{x:24,y:PRE_Y,"dominant-baseline":"central","font-family":BODY,"font-size":18,fill:MUTED,opacity:0},"pre-mRNA");
+var lblM=txt(svg,{x:24,y:LANES[1],"dominant-baseline":"central","font-family":BODY,"font-size":18,fill:MUTED,opacity:0},"mRNA");
+
+/* DNA double helix */
+var gDNA=el("g",{},svg);
+var greyA=el("path",{fill:"none",stroke:GREY,"stroke-width":4,"stroke-linecap":"round"},gDNA);
+var greyB=el("path",{fill:"none",stroke:GREY,"stroke-width":4,"stroke-linecap":"round"},gDNA);
+var rungG=el("g",{stroke:GREY,"stroke-width":2,opacity:.55},gDNA);
+var rungs=[];
+for(var rx0=X0+6;rx0<=END-6;rx0+=12){rungs.push({x:rx0,line:el("line",{},rungG)});}
+var HA=15,HK=0.045;
+function hy(x,s,ph){return DNA_Y+s*HA*Math.sin(x*HK+ph);}
+function hpath(x0,x1,s,ph){
+  if(x1-x0<1){return "M0 0";}
+  var d="";
+  for(var x=x0;x<=x1+0.01;x+=5){d+=(d?"L":"M")+x.toFixed(1)+" "+hy(x,s,ph).toFixed(1);}
+  return d;
+}
+var exDNA=C.map(function(c,i){
+  var g=el("g",{opacity:0},gDNA);
+  var a=el("path",{fill:"none",stroke:c,"stroke-width":6,"stroke-linecap":"round"},g);
+  var b=el("path",{fill:"none",stroke:c,"stroke-width":6,"stroke-linecap":"round"},g);
+  var rg=el("g",{stroke:c,"stroke-width":3,opacity:.85},g);
+  var rs=rungs.filter(function(r){return r.x>SX[i]&&r.x<SX[i]+W[i];}).map(function(r){return {x:r.x,line:el("line",{},rg)};});
+  return {g:g,a:a,b:b,rs:rs};
+});
+var chips=C.map(function(c,i){
+  var g=el("g",{opacity:0},gDNA);
+  el("circle",{r:16,fill:c},g);
+  txt(g,{"text-anchor":"middle","dominant-baseline":"central","font-family":HEAD,"font-weight":700,"font-size":18,fill:BG},String(i+1));
+  return g;
+});
+var intronLbl=txt(gDNA,{x:SX[0]+W[0]+INTRON/2,y:98,"text-anchor":"middle","dominant-baseline":"central","font-family":BODY,"font-size":16,fill:MUTED,opacity:0},"intron");
+
+/* strands (pre-mRNA and mRNA lanes share one drawing routine) */
+function makeStrand(parent){
+  var g=el("g",{},parent);
+  var ins=[0,1,2,3].map(function(){return el("line",{stroke:INTRON_C,"stroke-width":4,"stroke-linecap":"round"},g);});
+  var ex=C.map(function(c,i){
+    var r=el("rect",{fill:c,height:30,rx:8},g);
+    var tx=el("text",{"text-anchor":"middle","dominant-baseline":"central","font-family":HEAD,"font-weight":700,"font-size":17,fill:BG},g);
+    tx.textContent=String(i+1);
+    return {r:r,tx:tx};
+  });
+  return {g:g,ins:ins,ex:ex};
+}
+function drawStrand(s,y,x,w,o,dy,io,rx){
+  var i;
+  for(i=0;i<5;i++){
+    var wv=Math.min(Math.max(rx-x[i],0),w[i]);
+    var e=s.ex[i];
+    if(wv<1){e.r.setAttribute("display","none");e.tx.setAttribute("display","none");continue;}
+    e.r.removeAttribute("display");
+    e.r.setAttribute("x",x[i]);
+    e.r.setAttribute("y",y+dy[i]-15);
+    e.r.setAttribute("width",wv);
+    e.r.setAttribute("rx",Math.min(8,wv/2));
+    e.r.setAttribute("opacity",o[i]);
+    if(wv>=w[i]-0.5&&w[i]>=34){
+      e.tx.removeAttribute("display");
+      e.tx.setAttribute("x",x[i]+wv/2);
+      e.tx.setAttribute("y",y+dy[i]);
+      e.tx.setAttribute("opacity",o[i]);
+    }else{e.tx.setAttribute("display","none");}
+  }
+  for(i=0;i<4;i++){
+    var x1=x[i]+w[i], x2=Math.min(x[i+1],rx), l=s.ins[i];
+    if(x2-x1<0.5||io[i]<0.02){l.setAttribute("display","none");}
+    else{
+      l.removeAttribute("display");
+      l.setAttribute("x1",x1);l.setAttribute("x2",x2);
+      l.setAttribute("y1",y);l.setAttribute("y2",y);
+      l.setAttribute("opacity",io[i]);
+    }
+  }
+}
+
+/* pre-mRNA */
+var pre=makeStrand(svg);
+var zeros=[0,0,0,0,0], ones=[1,1,1,1,1], ones4=[1,1,1,1];
+
+/* branch guides */
+var guides=LANES.map(function(ly){
+  return el("path",{d:"M172 "+PRE_Y+" C 96 "+PRE_Y+", 96 "+ly+", 172 "+ly,fill:"none",stroke:"#5A5FA0","stroke-width":3,"stroke-linecap":"round",opacity:0},svg);
+});
+
+/* polymerase */
+var pol=el("g",{opacity:0},svg);
+var polLink=el("line",{x1:0,x2:0,y1:236,y2:PRE_Y-4,stroke:"#B5B1F5","stroke-width":3,"stroke-dasharray":"3 5"},svg);
+el("ellipse",{cx:0,cy:215,rx:36,ry:22,fill:"#D9D6FF"},pol);
+el("ellipse",{cx:-9,cy:211,rx:19,ry:12,fill:"#B5B1F5"},pol);
+txt(pol,{x:0,y:182,"text-anchor":"middle","font-family":BODY,"font-size":15,fill:MUTED},"RNA polymerase");
+
+/* lanes */
+var lanes=SETS.map(function(inc,k){
+  var cur=COMPACT_X, endX=[], keep=[], i;
+  for(i=0;i<5;i++){var kp=inc.indexOf(i)>=0;keep.push(kp);endX.push(cur);if(kp){cur+=W[i]+GAP;}}
+  var len=cur-GAP-COMPACT_X;
+  var s=makeStrand(svg);
+  s.g.setAttribute("opacity",0);
+  var tag=el("text",{x:COMPACT_X,y:LANES[k]-30,"font-family":BODY,"font-size":22,fill:MUTED,opacity:0},svg);
+  if(k===0){tag.textContent="All five exons kept";}
+  else{
+    tag.appendChild(document.createTextNode("Exon "));
+    var ts=el("tspan",{fill:C[inc.indexOf(k===1?2:3)>=0?0:(k===1?2:3)],"font-weight":700},tag);
+    ts.textContent=String(k===1?3:4);
+    ts.setAttribute("fill",C[k===1?2:3]);
+    tag.appendChild(document.createTextNode(" skipped"));
+  }
+  var ring=el("circle",{r:20,fill:"rgba(255,255,255,0.10)",stroke:"#FFFFFF","stroke-width":3,opacity:0},svg);
+  /* protein beads */
+  var beads=[], n=0, amp=[14,20,17][k], ph=[0.3,1.7,3.1][k];
+  for(i=0;i<5;i++){
+    if(!keep[i]){continue;}
+    var r=12+W[i]/12;
+    var bx=940+n*44, by=LANES[k]+amp*Math.sin(n*1.25+ph);
+    var g=el("g",{opacity:0},svg);
+    el("circle",{cx:0,cy:0,r:r,fill:C[i],stroke:BG,"stroke-width":3},g);
+    el("circle",{cx:-r*0.3,cy:-r*0.32,r:r*0.32,fill:"#FFFFFF",opacity:0.28},g);
+    beads.push({g:g,x:bx,y:by,r:r,idx:i,trig:0,n:n});
+    n++;
+  }
+  var back_=el("path",{fill:"none",stroke:MUTED,"stroke-width":3,"stroke-linecap":"round","stroke-linejoin":"round",opacity:0.8},svg);
+  svg.insertBefore(back_,beads[0].g);
+  var pl=txt(svg,{x:940,y:LANES[k]+54,"font-family":BODY,"font-size":20,fill:MUTED,opacity:0},"Protein "+NAMES[k]);
+  /* ribosome */
+  var rb=el("g",{opacity:0},svg);
+  el("ellipse",{cx:0,cy:-14,rx:26,ry:17,fill:"#D9D6FF"},rb);
+  el("ellipse",{cx:0,cy:2,rx:21,ry:9,fill:"#B5B1F5"},rb);
+  return {inc:inc,keep:keep,endX:endX,len:len,s:s,tag:tag,ring:ring,beads:beads,bb:back_,pl:pl,rb:rb};
+});
+var ARR0=[10.8,11.3,11.8], ARRD=1.5;
+var SP0=[13.6,15.3,17.0], SPD=1.8;
+var TR0=[19.4,20.2,21.0], TRD=3.2;
+lanes.forEach(function(L,k){
+  L.beads.forEach(function(b){
+    b.trig=TR0[k]+TRD*((L.endX[b.idx]+W[b.idx]/2-COMPACT_X)/L.len);
+  });
+});
+
+/* captions */
+var SCENES=[
+  {a:0.3,b:6.0,m:"A gene is a stretch of DNA",s:"Five exons (colored) carry the code. Introns sit between them."},
+  {a:6.0,b:10.2,m:"Transcription copies the gene",s:"RNA polymerase reads the DNA and builds a pre-mRNA containing every exon and intron."},
+  {a:10.2,b:13.4,m:"One pre-mRNA, three ways to splice it",s:"Different cells can process the same transcript in different ways."},
+  {a:13.4,b:19.2,m:"Splicing removes introns and can skip exons",s:"The spliceosome joins the exons it keeps. Skipped exons are discarded."},
+  {a:19.2,b:25.4,m:"Ribosomes translate each mRNA",s:"Different exon combinations give different proteins."},
+  {a:25.4,b:31,m:"One gene. Three mRNAs. Three proteins.",s:"This is how alternative splicing lets a single gene produce more than one protein.",hold:true}
+];
+var capMain=document.getElementById("capMain"), capSub=document.getElementById("capSub");
+var capIdx=-2;
+function renderCaption(t){
+  var idx=-1,i;
+  for(i=0;i<SCENES.length;i++){if(t>=SCENES[i].a&&t<SCENES[i].b){idx=i;break;}}
+  if(idx!==capIdx){
+    capIdx=idx;
+    capMain.textContent=idx>=0?SCENES[idx].m:"";
+    capSub.textContent=idx>=0?SCENES[idx].s:"";
+  }
+  if(idx<0){capMain.style.opacity=0;capSub.style.opacity=0;return;}
+  var sc=SCENES[idx];
+  var o=prog(t,sc.a,sc.a+0.5);
+  if(!sc.hold){o=Math.min(o,1-prog(t,sc.b-0.4,sc.b));}
+  capMain.style.opacity=o;
+  capSub.style.opacity=o;
+}
+
+/* render */
+function render(t){
+  var i,k;
+  /* labels */
+  lblDNA.setAttribute("opacity",prog(t,0.4,1.0)*0.9*lerp(1,0.5,eio(prog(t,9.8,10.8))));
+  lblPre.setAttribute("opacity",prog(t,6.4,7.0)*0.9*lerp(1,0.5,eio(prog(t,10.8,12))));
+  lblM.setAttribute("opacity",prog(t,11.2,12.0)*0.9);
+
+  /* DNA */
+  var ph=t*0.9;
+  var r=eio(prog(t,0.4,1.8)), rxv=lerp(X0,END,r);
+  greyA.setAttribute("d",hpath(X0,rxv,1,ph));
+  greyB.setAttribute("d",hpath(X0,rxv,-1,ph));
+  for(i=0;i<rungs.length;i++){
+    var rg=rungs[i], ln=rg.line;
+    if(rg.x<=rxv){
+      ln.removeAttribute("visibility");
+      ln.setAttribute("x1",rg.x);ln.setAttribute("x2",rg.x);
+      ln.setAttribute("y1",hy(rg.x,1,ph));ln.setAttribute("y2",hy(rg.x,-1,ph));
+    }else{ln.setAttribute("visibility","hidden");}
+  }
+  for(i=0;i<5;i++){
+    var tl=1.6+0.6*i, op=eio(prog(t,tl,tl+0.5)), ex=exDNA[i];
+    ex.g.setAttribute("opacity",op);
+    if(op>0.001){
+      ex.a.setAttribute("d",hpath(SX[i],SX[i]+W[i],1,ph));
+      ex.b.setAttribute("d",hpath(SX[i],SX[i]+W[i],-1,ph));
+      for(var j=0;j<ex.rs.length;j++){
+        var q=ex.rs[j];
+        q.line.setAttribute("x1",q.x);q.line.setAttribute("x2",q.x);
+        q.line.setAttribute("y1",hy(q.x,1,ph));q.line.setAttribute("y2",hy(q.x,-1,ph));
+      }
+    }
+    chips[i].setAttribute("opacity",op);
+    chips[i].setAttribute("transform","translate("+(SX[i]+W[i]/2)+","+(98-(1-op)*10)+")");
+  }
+  intronLbl.setAttribute("opacity",prog(t,4.3,4.9));
+  gDNA.setAttribute("opacity",lerp(1,0.38,eio(prog(t,9.8,10.8))));
+
+  /* transcription */
+  var tp=prog(t,6.4,9.6), prx=lerp(X0,END,tp);
+  var polO=Math.min(prog(t,6.0,6.4),1-prog(t,9.6,10.0));
+  pol.setAttribute("opacity",polO);
+  pol.setAttribute("transform","translate("+prx+",0)");
+  polLink.setAttribute("opacity",polO);
+  polLink.setAttribute("x1",prx);polLink.setAttribute("x2",prx);
+  drawStrand(pre,PRE_Y,SX,W,ones,zeros,ones4,t<6.4?X0:(tp>=1?Infinity:prx));
+  if(t<6.4){drawStrand(pre,PRE_Y,SX,W,ones,zeros,ones4,X0);}
+  pre.g.setAttribute("opacity",lerp(1,0.35,eio(prog(t,10.8,12.0))));
+
+  /* branch guides */
+  for(k=0;k<3;k++){
+    var g=guides[k];
+    var d0=ARR0[k]-0.8, gp=prog(t,d0,d0+0.9);
+    var fade=1-prog(t,13.0,14.0);
+    g.setAttribute("opacity",gp*0.8*fade);
+    var L0=g.getTotalLength?g.getTotalLength():400;
+    g.setAttribute("stroke-dasharray",L0);
+    g.setAttribute("stroke-dashoffset",L0*(1-eio(gp)));
+  }
+
+  /* lanes */
+  for(k=0;k<3;k++){
+    var L=lanes[k];
+    var arr=prog(t,ARR0[k],ARR0[k]+ARRD);
+    var y=lerp(PRE_Y,LANES[k],eio(arr));
+    var sp=prog(t,SP0[k],SP0[k]+SPD), e=eio(sp);
+    var xs=[],ws=[],os=[],dys=[],ios=[];
+    for(i=0;i<5;i++){
+      xs.push(lerp(SX[i],L.endX[i],e));
+      if(L.keep[i]){ws.push(W[i]);os.push(1);dys.push(0);}
+      else{ws.push(W[i]*(1-e));os.push(1-clamp(e*1.4));dys.push(-e*40);}
+    }
+    for(i=0;i<4;i++){ios.push(1-clamp(e*1.6));}
+    L.s.g.setAttribute("opacity",clamp(arr*3));
+    drawStrand(L.s,y,xs,ws,os,dys,ios,Infinity);
+    L.tag.setAttribute("opacity",prog(t,SP0[k]-0.2,SP0[k]+0.4));
+    var ringO=(sp>0&&sp<1)?Math.sqrt(Math.sin(Math.PI*sp)):0;
+    L.ring.setAttribute("opacity",ringO);
+    L.ring.setAttribute("cx",lerp(COMPACT_X-20,COMPACT_X+L.len+20,sp));
+    L.ring.setAttribute("cy",LANES[k]);
+
+    /* ribosome */
+    var q=prog(t,TR0[k],TR0[k]+TRD);
+    var rbO=Math.min(prog(t,TR0[k]-0.3,TR0[k]),1-prog(t,TR0[k]+TRD,TR0[k]+TRD+0.5));
+    L.rb.setAttribute("opacity",rbO*0.9);
+    L.rb.setAttribute("transform","translate("+(COMPACT_X+q*L.len)+","+(LANES[k]-6)+")");
+
+    /* protein beads */
+    var pts=[], bob=prog(t,25,26), lastTrig=0;
+    for(i=0;i<L.beads.length;i++){
+      var b=L.beads[i];
+      var pp=prog(t,b.trig,b.trig+0.5);
+      var sc=pp>0?back(pp):0;
+      var by=b.y+Math.sin(t*2.2+b.n+k)*2.5*bob;
+      b.g.setAttribute("opacity",clamp(pp*3));
+      b.g.setAttribute("transform","translate("+b.x+","+by+") scale("+Math.max(sc,0.001)+")");
+      if(pp>0.3){pts.push((pts.length?"L":"M")+b.x+" "+by);}
+      lastTrig=b.trig;
+    }
+    L.bb.setAttribute("d",pts.length>1?pts.join(" "):"M0 0");
+    L.pl.setAttribute("opacity",prog(t,lastTrig+0.3,lastTrig+0.9));
+  }
+  renderCaption(t);
+}
+
+/* clock and controls */
+var t=0, playing=false, last=0, dirty=true;
+var playBtn=document.getElementById("play"), scrub=document.getElementById("scrub"), timeEl=document.getElementById("time");
+function ui(){
+  scrub.value=Math.round(t*100);
+  timeEl.textContent=t.toFixed(1)+" / "+DUR+" s";
+  playBtn.textContent=t>=DUR?"Replay":(playing?"Pause":"Play");
+}
+function frame(now){
+  if(playing){
+    t=Math.min(DUR,t+(now-last)/1000);
+    if(t>=DUR){playing=false;}
+    dirty=true;
+  }
+  last=now;
+  if(dirty){render(t);ui();dirty=false;}
+  requestAnimationFrame(frame);
+}
+playBtn.addEventListener("click",function(){
+  if(t>=DUR){t=0;}
+  playing=!playing;
+  last=performance.now();
+  dirty=true;
+});
+scrub.addEventListener("input",function(){
+  t=clamp(parseInt(scrub.value,10)/100,0,DUR);
+  playing=false;
+  dirty=true;
+});
+var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if(reduce){t=DUR;playing=false;}else{playing=true;}
+last=performance.now();
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

@@ -45,7 +45,7 @@ The workflow follows the same general pattern as Episode 05 (genome-based), but 
 
 1. **Input data**: We use the `txi` object from tximport rather than raw counts from featureCounts.
 2. **Count handling**: Kallisto estimates are model-based (not integer counts), and DESeq2 handles this appropriately via `DESeqDataSetFromTximport()`.
-3. **Bootstrap support**: Kallisto's uncertainty estimates (from bootstraps) can be used with sleuth for transcript-level DE.
+3. **Bootstrap support**: if you run Kallisto with bootstraps (`-b`), the uncertainty estimates can be used with sleuth for transcript-level DE. DESeq2 does not use them, which is why Episode 04b runs with `-b 0`.
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
@@ -83,11 +83,7 @@ WT_Bcell_IR_rep3,WT_IR
 WT_Bcell_IR_rep4,WT_IR
 ```
 
-Create a results directory:
-
-```bash
-mkdir -p results/deseq2_kallisto
-```
+The R code below creates the `results/deseq2_kallisto` directory for the output.
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -97,7 +93,6 @@ Start your RStudio session via Open OnDemand as described in Episode 05, then lo
 
 ```r
 library(DESeq2)
-library(tximportData)
 library(ggplot2)
 library(reshape2)
 library(pheatmap)
@@ -108,6 +103,8 @@ library(dplyr)
 # Construct the path dynamically
 work_dir <- file.path("/scratch/negishi", Sys.getenv("USER"), "rnaseq-workshop")
 setwd(work_dir)
+# output directory for this episode
+dir.create("results/deseq2_kallisto", recursive = TRUE, showWarnings = FALSE)
 ```
 
 Load the tximport object created in Episode 04b:
@@ -122,8 +119,9 @@ Examine the structure of the tximport object:
 names(txi)
 ```
 
-```
-[1] "abundance"           "counts"              "infReps"             "length"              "countsFromAbundance"
+```text
+[1] "abundance"           "counts"              "length"             
+[4] "countsFromAbundance"
 ```
 
 ```r
@@ -131,20 +129,27 @@ head(txi$counts)
 ```
 
 ```text
-                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4 WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3
-ENSMUSG00000000001.5         387.39815         329.4356     737.97311964        654.17550           687.1189          620.35065          661.35411
-ENSMUSG00000000003.16          0.00000           1.0000       0.00000000          0.00000             0.0000            0.00000            0.00000
-ENSMUSG00000000028.16         32.81579          20.0000      36.63144821         29.71743            53.5750           36.92104           39.00000
-ENSMUSG00000000031.20          0.00000           0.0000       0.09733145          0.00000             0.0000            0.00000            0.00000
-ENSMUSG00000000037.18          2.00000           3.0000       1.28018005          8.00000             1.0000            0.00000            1.58711
-ENSMUSG00000000049.12          0.00000           0.0000       0.00000000          0.00000             0.0000            0.00000            0.00000
-                      WT_Bcell_mock_rep4
-ENSMUSG00000000001.5            704.8851
-ENSMUSG00000000003.16             0.0000
-ENSMUSG00000000028.16            36.0000
-ENSMUSG00000000031.20             0.0000
-ENSMUSG00000000037.18             0.0000
-ENSMUSG00000000049.12             0.0000
+                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3
+ENSMUSG00000000001.5         387.39815        329.43564        737.97318
+ENSMUSG00000000003.16          0.00000          1.00000          0.00000
+ENSMUSG00000000028.16         37.73844         23.20617         39.45979
+ENSMUSG00000000031.20          2.00000          1.00000          1.00000
+ENSMUSG00000000037.18          2.00000          4.00000          3.00000
+ENSMUSG00000000049.12          0.00000          0.00000          1.00000
+                      WT_Bcell_IR_rep4 WT_Bcell_mock_rep1 WT_Bcell_mock_rep2
+ENSMUSG00000000001.5         654.17550           687.1189          620.35065
+ENSMUSG00000000003.16          0.00000             0.0000            0.00000
+ENSMUSG00000000028.16         29.71743            55.0000           39.20456
+ENSMUSG00000000031.20          0.00000             0.0000            0.00000
+ENSMUSG00000000037.18          8.00000             1.0000            1.00000
+ENSMUSG00000000049.12          0.00000             0.0000            2.00000
+                      WT_Bcell_mock_rep3 WT_Bcell_mock_rep4
+ENSMUSG00000000001.5            661.3541          704.88506
+ENSMUSG00000000003.16             0.0000            0.00000
+ENSMUSG00000000028.16            40.0984           41.44387
+ENSMUSG00000000031.20             0.0000            0.00000
+ENSMUSG00000000037.18             2.0000            1.00000
+ENSMUSG00000000049.12             0.0000            1.00000
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
@@ -172,11 +177,13 @@ coldata <- read.csv(
     stringsAsFactors = TRUE
 )
 coldata$condition <- as.factor(coldata$condition)
+# make WT_mock the reference (denominator) level, as in Episode 05
+coldata$condition <- relevel(coldata$condition, ref = "WT_mock")
 coldata <- coldata[colnames(txi$counts), , drop = FALSE]
 coldata
 ```
 
-```
+```text
                    condition
 WT_Bcell_IR_rep1       WT_IR
 WT_Bcell_IR_rep2       WT_IR
@@ -194,7 +201,7 @@ Verify that sample names match between tximport and metadata:
 all(colnames(txi$counts) == rownames(coldata))
 ```
 
-```
+```text
 [1] TRUE
 ```
 
@@ -224,7 +231,28 @@ Using `DESeqDataSetFromMatrix()` with tximport counts would lose this informatio
 
 :::::::::::::::::::::::::::::::::::::::
 
-Filter lowly expressed genes using group-aware filtering:
+Keep protein-coding genes, as in Episode 05, so that both tracks test the same kind of genes and their results can be compared directly. Load the gene annotation tables copied with the workshop data (the same files as in Episode 05; its "How were these data prepared?" spoiler shows how they were made):
+
+```r
+mart <-
+  read.csv(
+    "data/mart.tsv",
+    sep = "\t",
+    header = TRUE
+  )
+
+annot <-
+  read.csv(
+    "data/annot.tsv",
+    sep = "\t",
+    header = TRUE
+  )
+
+protein_coding <- mart$ensembl_gene_id_version[mart$gene_biotype == "protein_coding"]
+dds <- dds[rownames(dds) %in% protein_coding, ]
+```
+
+Then filter lowly expressed genes using group-aware filtering:
 
 ```r
 # Group-aware filtering: keep genes with >= 10 counts in at least 4 samples
@@ -236,8 +264,8 @@ dds <- dds[keep, ]
 dim(dds)
 ```
 
-```
-[1] 18924     8
+```text
+[1] 12768     8
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
@@ -262,24 +290,31 @@ Estimate size factors:
 ```r
 dds <- estimateSizeFactors(dds)
 head(normalizationFactors(dds))
-
 ```
 
-```
-                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4 WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3
-ENSMUSG00000000001.5         0.8578693        0.8520842         1.099577        1.0524525           1.059461          0.9946634          0.9552297
-ENSMUSG00000000028.16        0.9455555        0.7479666         1.149805        0.9882356           1.071439          1.0191038          0.9154327
-ENSMUSG00000000056.8         0.8580737        0.8528464         1.101744        1.0540656           1.058546          0.9930345          0.9540278
-ENSMUSG00000000078.8         0.8580503        0.8527592         1.101496        1.0538811           1.058650          0.9932207          0.9541651
-ENSMUSG00000000085.17        0.7941016        0.7697798         1.199288        1.0181546           1.163680          0.9580967          1.0675296
-ENSMUSG00000000088.8         0.8537054        0.8364591         1.055812        1.0199231           1.078562          1.0286198          0.9803416
-                      WT_Bcell_mock_rep4
-ENSMUSG00000000001.5            1.174355
-ENSMUSG00000000028.16           1.244899
-ENSMUSG00000000056.8            1.173333
-ENSMUSG00000000078.8            1.173450
-ENSMUSG00000000085.17           1.125634
-ENSMUSG00000000088.8            1.195682
+```text
+using 'avgTxLength' from assays(dds), correcting for library size
+                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3
+ENSMUSG00000000001.5         0.8537247        0.8469403         1.126820
+ENSMUSG00000000028.16        0.9221633        0.6861075         1.193100
+ENSMUSG00000000056.8         0.9521929        1.0820695         1.132853
+ENSMUSG00000000078.8         0.9499078        0.8589537         1.212266
+ENSMUSG00000000085.17        0.8137271        0.6687624         1.202663
+ENSMUSG00000000088.8         0.8598602        0.9017598         1.051854
+                      WT_Bcell_IR_rep4 WT_Bcell_mock_rep1 WT_Bcell_mock_rep2
+ENSMUSG00000000001.5          1.168215           1.042938          0.9615182
+ENSMUSG00000000028.16         1.145844           1.054745          1.0064376
+ENSMUSG00000000056.8          1.148567           1.236721          0.8908183
+ENSMUSG00000000078.8          1.177931           1.000095          0.9125703
+ENSMUSG00000000085.17         1.255550           1.264048          0.9614268
+ENSMUSG00000000088.8          1.116178           1.025893          0.9896438
+                      WT_Bcell_mock_rep3 WT_Bcell_mock_rep4
+ENSMUSG00000000001.5           0.9378961          1.1170726
+ENSMUSG00000000028.16          0.9312717          1.1694632
+ENSMUSG00000000056.8           0.7157949          0.9458896
+ENSMUSG00000000078.8           0.9205824          1.0215522
+ENSMUSG00000000085.17          0.8347515          1.1995943
+ENSMUSG00000000088.8           0.9490056          1.1400986
 ```
 
 ## Step 3: Exploratory data analysis
@@ -410,11 +445,11 @@ Using the distance heatmap and PCA plot:
 
 ::::::::::::::::::::::::::::::::::: solution
 
-Example interpretation:
+Interpretation for this dataset:
 
-1. Samples should cluster by condition (WT_mock vs WT_IR) in both the heatmap and PCA.
-2. If all replicates cluster together, there are no obvious outliers.
-3. PC1 typically captures the largest source of variation. If it separates conditions, the experimental treatment is the dominant signal.
+1. Yes. The heatmap and the PCA both separate the mock and IR samples.
+2. No. Each sample groups with its own condition. Within the IR group, IR_rep3 and IR_rep4 sit apart from IR_rep1 and IR_rep2 on PC2 (3 percent of the variance), the same read-quality pattern seen in Episode 05.
+3. PC1 explains 90 percent of the variance and separates IR from mock: the radiation response is by far the largest signal in the data.
 
 :::::::::::::::::::::::::::::::::::
 
@@ -428,14 +463,16 @@ Run the full DESeq2 pipeline:
 dds <- DESeq(dds)
 ```
 
-```
-estimating size factors
+```text
+using pre-existing normalization factors
 estimating dispersions
 gene-wise dispersion estimates
 mean-dispersion relationship
 final dispersion estimates
 fitting model and testing
 ```
+
+"Using pre-existing normalization factors" refers to the gene-specific factors that `estimateSizeFactors()` computed above from the tximport transcript lengths.
 
 Inspect dispersion estimates:
 
@@ -444,8 +481,8 @@ plotDispEsts(dds)
 ```
 
 <div class="figure" style="text-align: center">
-<img src="fig/05_deseq/plotdispests-k.png" alt="Volcano plot of differential expression results"  />
-<p class="caption">Volcano plot of differential expression results</p>
+<img src="fig/05_deseq/plotdispests-k.png" alt="Dispersion estimates from DESeq2 (Kallisto pathway)"  />
+<p class="caption">Dispersion estimates from DESeq2 (Kallisto pathway)</p>
 </div>
 
 
@@ -462,25 +499,25 @@ A good fit shows the red line passing through the center of the black cloud, wit
 
 :::::::::::::::::::::::::::::::::::::::
 
-Extract results for the contrast of interest:
+Extract results for the contrast of interest, naming the numerator (`WT_IR`) and denominator (`WT_mock`) explicitly so that positive log2 fold changes mean higher after IR (see "Name your contrast" in Episode 05):
 
 ```r
 res <- results(
     dds,
-    contrast = c("condition", "WT_mock", "WT_IR")
+    contrast = c("condition", "WT_IR", "WT_mock")
 )
 
 summary(res)
 ```
 
-```
-out of 19693 with nonzero total read count
+```text
+out of 12768 with nonzero total read count
 adjusted p-value < 0.1
-LFC > 0 (up)       : 3482, 18%
-LFC < 0 (down)     : 3675, 19%
-outliers [1]       : 10, 0.051%
+LFC > 0 (up)       : 2942, 23%
+LFC < 0 (down)     : 2858, 22%
+outliers [1]       : 3, 0.023%
 low counts [2]     : 0, 0%
-(mean count < 6)
+(mean count < 7)
 [1] see 'cooksCutoff' argument of ?results
 [2] see 'independentFiltering' argument of ?results
 ```
@@ -496,16 +533,24 @@ Output:
 
 ```text
 log2 fold change (MLE): condition WT_IR vs WT_mock 
-Wald test p-value: condition WT_IR vs WT_mock 
+Wald test p-value: condition WT IR vs WT mock 
 DataFrame with 6 rows and 6 columns
-                       baseMean log2FoldChange     lfcSE      stat       pvalue         padj
-                      <numeric>      <numeric> <numeric> <numeric>    <numeric>    <numeric>
-ENSMUSG00000004085.15   795.499        4.10779  0.157888   26.0172 3.16645e-149 6.23252e-145
-ENSMUSG00000021701.9    840.251        6.34293  0.253829   24.9889 8.06388e-138 7.93607e-134
-ENSMUSG00000072825.13   705.733        4.70979  0.190927   24.6680 2.35896e-134 1.54771e-130
-ENSMUSG00000048458.9    820.666        5.79808  0.238203   24.3409 7.24251e-131 3.56386e-127
-ENSMUSG00000028893.9    680.824        4.28171  0.179531   23.8495 1.02517e-125 4.03570e-122
-ENSMUSG00000075122.6    836.194        3.74860  0.158501   23.6502 1.17375e-123 3.85048e-120
+                       baseMean log2FoldChange     lfcSE      stat       pvalue
+                      <numeric>      <numeric> <numeric> <numeric>    <numeric>
+ENSMUSG00000021668.16   969.739        3.93425  0.139284   28.2462 1.58373e-175
+ENSMUSG00000030609.19  1614.126        3.93126  0.139829   28.1148 6.45948e-174
+ENSMUSG00000021701.9   1025.821        6.35432  0.228657   27.7897 5.77184e-170
+ENSMUSG00000020184.16  1787.889        2.94186  0.106658   27.5823 1.81422e-167
+ENSMUSG00000048458.9    791.676        5.69856  0.212540   26.8118 2.35666e-158
+ENSMUSG00000002083.14   464.032        5.73884  0.217511   26.3842 2.08072e-153
+                              padj
+                         <numeric>
+ENSMUSG00000021668.16 2.02163e-171
+ENSMUSG00000030609.19 4.12276e-170
+ENSMUSG00000021701.9  2.45592e-166
+ENSMUSG00000020184.16 5.78964e-164
+ENSMUSG00000048458.9  6.01656e-155
+ENSMUSG00000002083.14 4.42674e-150
 ```
 
 ### Apply log fold change shrinkage
@@ -518,8 +563,8 @@ First, check the available coefficients:
 resultsNames(dds)
 ```
 
-```
-[1] "Intercept"        "condition_WT_mock_vs_WT_IR"
+```text
+[1] "Intercept"                  "condition_WT_IR_vs_WT_mock"
 ```
 
 Apply shrinkage using `apeglm` (recommended for standard contrasts):
@@ -527,7 +572,7 @@ Apply shrinkage using `apeglm` (recommended for standard contrasts):
 ```r
 res_shrunk <- lfcShrink(
     dds,
-    coef = "condition_WT_mock_vs_WT_IR",
+    coef = "condition_WT_IR_vs_WT_mock",
     type = "apeglm"
 )
 ```
@@ -563,7 +608,7 @@ Create a summary table:
 log2fc_cut <- log2(1.5)
 
 res_df <- as.data.frame(res_shrunk)
-res_df$gene_id <- rownames(res_df)
+res_df$ensembl_gene_id_version <- rownames(res_df)
 
 summary_table <- tibble(
     total_genes = nrow(res_df),
@@ -580,34 +625,10 @@ output:
 # A tibble: 1 × 4
   total_genes   sig    up  down
         <int> <int> <int> <int>
-1       19693  6078  2296  2448
+1       12768  5086  1740  1672
 ```
 
-We will attach annotations so that results are interpretable. Load gene annotation data (from Episode 02):
-
-
-```r
-mart <-
-  read.csv(
-    "data/mart.tsv",
-    sep = "\t",
-    header = TRUE
-  )
-
-annot <-
-  read.csv(
-    "data/annot.tsv",
-    sep = "\t",
-    header = TRUE
-  )
-```
-
-```r
-res_df <- as.data.frame(res)
-res_df$ensembl_gene_id_version <- rownames(res_df)
-```
-
-Join DE results, normalized counts, and annotation:
+We attach the annotation loaded in Step 2 so that results are interpretable. Join the shrunken DE results (`res_df`, built above) with it:
 
 ```r
 res_annot <- res_df %>%
@@ -615,8 +636,8 @@ res_annot <- res_df %>%
                    by = "ensembl_gene_id_version")
 ```
 
-Joining normalized counts and annotation makes the output biologically interpretable.
-The final table becomes a comprehensive results object containing:
+Joining the annotation makes the output biologically interpretable.
+The final table contains:
 
 - `gene identifiers`
 - `gene symbols`
@@ -704,11 +725,11 @@ If you also ran Episode 05 (genome-based workflow):
 
 ::::::::::::::::::::::::::::::::::: solution
 
-Expected observations:
+Observations for this dataset (padj at most 0.05 and fold change at least 1.5):
 
-1. The number of DE genes should be broadly similar, though not identical.
-2. Most top DE genes should overlap between methods.
-3. Kallisto may produce slightly different LFC estimates due to its different quantification algorithm.
+1. Similar: 3,598 significant genes on the genome track and 3,412 on the Kallisto track, 2,795 of them in both.
+2. Largely: 38 of the 50 genes with the smallest padj are the same on both tracks, and the canonical p53 targets (*Cdkn1a*, *Mdm2*, *Bax*, *Bbc3*, *Pmaip1*) are strongly upregulated on both.
+3. The fold changes agree well (Spearman correlation 0.93 over the 11,289 genes tested on both tracks); the differences come from how each method handles reads shared between genes and isoforms.
 
 Both approaches are valid; consistency between them increases confidence in the results.
 
@@ -722,15 +743,17 @@ Save the full results table:
 
 ```r
 write_tsv(
-    res_df,
+    res_annot,
     "results/deseq2_kallisto/DESeq2_kallisto_results.tsv"
 )
 ```
 
+Episode 06 can start from this file instead of the Episode 05 table; it has the same `ensembl_gene_id_version`, `log2FoldChange`, `pvalue`, and `padj` columns.
+
 Save significant genes only:
 
 ```r
-sig_res <- res_df %>%
+sig_res <- res_annot %>%
     filter(
         padj <= 0.05,
         abs(log2FoldChange) >= log2fc_cut

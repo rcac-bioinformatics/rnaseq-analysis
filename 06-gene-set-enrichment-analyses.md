@@ -37,9 +37,9 @@ This episode covers **over-representation analysis (ORA)**, the most common appr
 
 ## What you need for this episode
 
-- DE results from Episode 05 or 05b (`DESeq2_results_joined.tsv` or `DESeq2_kallisto_results.tsv`)
+- DE results from Episode 05 (`results/deseq2/DESeq2_results_joined.tsv`) or Episode 05b (`results/deseq2_kallisto/DESeq2_kallisto_results.tsv`)
 - RStudio session via Open OnDemand
-- Internet connection (for KEGG queries)
+- Internet access from the RStudio session: `enrichKEGG()` queries the KEGG REST service, and `msigdbr()` downloads the MSigDB gene sets the first time it runs
 
 ## Required packages
 
@@ -155,27 +155,33 @@ work_dir <- file.path("/scratch/negishi", Sys.getenv("USER"), "rnaseq-workshop")
 setwd(work_dir)
 ```
 
-Load DESeq2 results from Episode 05:
+Load DESeq2 results from Episode 05. If you followed the Kallisto track (Episodes 04b and 05b), read the Episode 05b table instead, using the commented line; everything after this step is the same for both tracks.
 
 ```r
 res <- read_tsv("results/deseq2/DESeq2_results_joined.tsv", show_col_types = FALSE)
+# Kallisto track (Episode 05b): use this line instead of the one above
+# res <- read_tsv("results/deseq2_kallisto/DESeq2_kallisto_results.tsv", show_col_types = FALSE)
 head(res)
 ```
 
 Output:
 
-```
+```text
 # A tibble: 6 × 20
-  baseMean log2FoldChange  lfcSE        pvalue         padj ensembl_gene_id_version WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4
-     <dbl>          <dbl>  <dbl>         <dbl>        <dbl> <chr>                                <dbl>              <dbl>              <dbl>              <dbl>
-1     259.         -0.703 0.123  0.00000000431 0.0000000268 ENSMUSG00000033845.14                 195.               212.               202.               174.
-2     142.          0.244 0.192  0.177         0.256        ENSMUSG00000025903.15                 157.               141.               167.               160.
-3     305.         -0.218 0.121  0.0652        0.111        ENSMUSG00000033813.16                 293.               269.               321.               242.
-4     241.          0.224 0.129  0.0741        0.123        ENSMUSG00000033793.13                 279.               250.               291.               224.
-5     773.          0.231 0.0952 0.0140        0.0286       ENSMUSG00000025907.15                 831.               760.               887.               865.
-6     556.          0.126 0.0892 0.152         0.226        ENSMUSG00000051285.18                 608.               616.               560.               540.
-# ℹ 10 more variables: WT_Bcell_IR_rep1 <dbl>, WT_Bcell_IR_rep2 <dbl>, WT_Bcell_IR_rep3 <dbl>, WT_Bcell_IR_rep4 <dbl>, ensembl_gene_id <chr>,
-#   external_gene_name <chr>, gene_biotype <chr>, description <chr>, label <chr>, sig <chr>
+  baseMean log2FoldChange  lfcSE        pvalue       padj ensembl_gene_id_vers…¹
+     <dbl>          <dbl>  <dbl>         <dbl>      <dbl> <chr>                 
+1     259.          0.704 0.123  0.00000000431    2.68e-8 ENSMUSG00000033845.14 
+2     142.         -0.244 0.192  0.177            2.56e-1 ENSMUSG00000025903.15 
+3     305.          0.218 0.121  0.0652           1.11e-1 ENSMUSG00000033813.16 
+4     241.         -0.224 0.129  0.0741           1.23e-1 ENSMUSG00000033793.13 
+5     773.         -0.230 0.0952 0.0140           2.86e-2 ENSMUSG00000025907.15 
+6     556.         -0.126 0.0892 0.152            2.26e-1 ENSMUSG00000051285.18 
+# ℹ abbreviated name: ¹​ensembl_gene_id_version
+# ℹ 14 more variables: WT_Bcell_mock_rep1 <dbl>, WT_Bcell_mock_rep2 <dbl>,
+#   WT_Bcell_mock_rep3 <dbl>, WT_Bcell_mock_rep4 <dbl>, WT_Bcell_IR_rep1 <dbl>,
+#   WT_Bcell_IR_rep2 <dbl>, WT_Bcell_IR_rep3 <dbl>, WT_Bcell_IR_rep4 <dbl>,
+#   ensembl_gene_id <chr>, external_gene_name <chr>, gene_biotype <chr>,
+#   description <chr>, label <chr>, sig <chr>
 ```
 
 Define the gene lists:
@@ -194,9 +200,9 @@ length(universe)
 length(sig_genes)
 ```
 
-```
+```text
 [1] 11330
-[1] 3597
+[1] 3598
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
@@ -232,7 +238,10 @@ id_map <- bitr(
 head(id_map)
 ```
 
-```
+```text
+'select()' returned 1:many mapping between keys and columns
+Warning message:
+0.29% of input gene IDs are fail to map...
              ENSEMBL ENTREZID
 1 ENSMUSG00000033845    27395
 2 ENSMUSG00000025903    18777
@@ -252,17 +261,18 @@ Not all genes map successfully:
 - ID mapping databases may be outdated.
 - Multi-mapping (one Ensembl → multiple Entrez) can occur.
 
-`bitr()` drops unmapped genes silently. Check how many genes were lost:
+`bitr()` warns how many IDs failed to map ("x% of input gene IDs are fail to map") and drops them. It can also return more than one Entrez ID for an Ensembl ID, so count unique Ensembl IDs, not rows:
 
 ```r
-message(sprintf("Mapped %d of %d genes (%.1f%%)",
-    nrow(id_map), length(universe_clean),
-    100 * nrow(id_map) / length(universe_clean)))
+n_mapped <- length(unique(id_map$ENSEMBL))
+message(sprintf("Mapped %d of %d genes (%.1f%%); %d rows in id_map",
+    n_mapped, length(universe_clean),
+    100 * n_mapped / length(universe_clean), nrow(id_map)))
 ```
  Output:
 
-```
-Mapped 11358 of 11330 genes (100.2%)
+```text
+Mapped 11297 of 11330 genes (99.7%); 11358 rows in id_map
 ```
 
 :::::::::::::::::::::::::::::::::::::::
@@ -270,19 +280,20 @@ Mapped 11358 of 11330 genes (100.2%)
 Create final gene lists with Entrez IDs:
 
 ```r
-# Universe with Entrez IDs
-universe_entrez <- id_map$ENTREZID
+# Universe with Entrez IDs (unique: one Ensembl ID can map to several Entrez IDs)
+universe_entrez <- unique(id_map$ENTREZID)
 
 # Significant genes with Entrez IDs
 sig_entrez <- id_map %>%
     filter(ENSEMBL %in% sig_clean) %>%
-    pull(ENTREZID)
+    pull(ENTREZID) %>%
+    unique()
 
 length(sig_entrez)
 ```
 Output:
 
-```
+```text
 [1] 3608
 ```
 
@@ -306,7 +317,8 @@ up_genes <- res %>%
 up_clean <- gsub("\\.\\d+$", "", up_genes)
 up_entrez <- id_map %>%
     filter(ENSEMBL %in% up_clean) %>%
-    pull(ENTREZID)
+    pull(ENTREZID) %>%
+    unique()
 
 # Down-regulated genes
 down_genes <- res %>%
@@ -315,22 +327,25 @@ down_genes <- res %>%
 down_clean <- gsub("\\.\\d+$", "", down_genes)
 down_entrez <- id_map %>%
     filter(ENSEMBL %in% down_clean) %>%
-    pull(ENTREZID)
+    pull(ENTREZID) %>%
+    unique()
 ```
 Check number of genes:
 
 ```r
 length(up_entrez)
 ```
-```
-[1] 1810
+
+```text
+[1] 1800
 ```
 
 ```r
 length(down_entrez)
 ```
-```
-[1] 1798
+
+```text
+[1] 1808
 ```
 
 
@@ -364,18 +379,51 @@ head(ego_bp, 10)
 
 Output (columns truncated for brevity):
 
-```
-                   ID                                    Description GeneRatio   BgRatio RichFactor FoldEnrichment   zScore       pvalue    p.adjust      qvalue
-GO:0002683 GO:0002683   negative regulation of immune system process  174/3494 405/10989  0.4296296       1.351231 4.917337 1.003906e-06 0.005247415 0.004941330
-GO:0042100 GO:0042100                           B cell proliferation   44/3494  77/10989  0.5714286       1.797203 4.792888 3.631972e-06 0.009166217 0.008631545
-GO:0032943 GO:0032943                 mononuclear cell proliferation  119/3494 266/10989  0.4473684       1.407021 4.588117 5.260886e-06 0.009166217 0.008631545
-GO:0051250 GO:0051250   negative regulation of lymphocyte activation   65/3494 130/10989  0.5000000       1.572553 4.483605 1.087013e-05 0.012782384 0.012036778
-GO:0046651 GO:0046651                       lymphocyte proliferation  115/3494 260/10989  0.4423077       1.391105 4.357475 1.428670e-05 0.012782384 0.012036778
-GO:0002698 GO:0002698 negative regulation of immune effector process   51/3494  97/10989  0.5257732       1.653612 4.414558 1.636446e-05 0.012782384 0.012036778
-GO:0042254 GO:0042254                            ribosome biogenesis  131/3494 304/10989  0.4309211       1.355292 4.289141 1.808829e-05 0.012782384 0.012036778
-GO:0042113 GO:0042113                              B cell activation  107/3494 241/10989  0.4439834       1.396375 4.248012 2.305909e-05 0.012782384 0.012036778
-GO:0006364 GO:0006364                                rRNA processing   95/3494 210/10989  0.4523810       1.422786 4.223534 2.665078e-05 0.012782384 0.012036778
-GO:0002694 GO:0002694             regulation of leukocyte activation  189/3494 466/10989  0.4055794       1.275590 4.150705 2.844730e-05 0.012782384 0.012036778
+```text
+                   ID                                    Description GeneRatio
+GO:0002683 GO:0002683   negative regulation of immune system process  174/3495
+GO:0042100 GO:0042100                           B cell proliferation   44/3495
+GO:0032943 GO:0032943                 mononuclear cell proliferation  119/3495
+GO:0051250 GO:0051250   negative regulation of lymphocyte activation   65/3495
+GO:0046651 GO:0046651                       lymphocyte proliferation  115/3495
+GO:0002698 GO:0002698 negative regulation of immune effector process   51/3495
+GO:0042254 GO:0042254                            ribosome biogenesis  131/3495
+GO:0042113 GO:0042113                              B cell activation  107/3495
+GO:0006364 GO:0006364                                rRNA processing   95/3495
+GO:0002694 GO:0002694             regulation of leukocyte activation  189/3495
+             BgRatio RichFactor FoldEnrichment   zScore       pvalue
+GO:0002683 405/10989  0.4296296       1.350844 4.912955 1.024580e-06
+GO:0042100  77/10989  0.5714286       1.796689 4.790801 3.662826e-06
+GO:0032943 266/10989  0.4473684       1.406618 4.584541 5.342254e-06
+GO:0051250 130/10989  0.5000000       1.572103 4.481022 1.098366e-05
+GO:0046651 260/10989  0.4423077       1.390707 4.353953 1.449475e-05
+GO:0002698  97/10989  0.5257732       1.653139 4.412288 1.650933e-05
+GO:0042254 304/10989  0.4309211       1.354905 4.285359 1.836995e-05
+GO:0042113 241/10989  0.4439834       1.395975 4.244620 2.337432e-05
+GO:0006364 210/10989  0.4523810       1.422379 4.220352 2.698814e-05
+GO:0002694 466/10989  0.4055794       1.275225 4.146077 2.898551e-05
+              p.adjust      qvalue
+GO:0002683 0.005355478 0.005053874
+GO:0042100 0.009307986 0.008783790
+GO:0032943 0.009307986 0.008783790
+GO:0051250 0.013011580 0.012278808
+GO:0046651 0.013011580 0.012278808
+GO:0002698 0.013011580 0.012278808
+GO:0042254 0.013011580 0.012278808
+GO:0042113 0.013011580 0.012278808
+GO:0006364 0.013011580 0.012278808
+GO:0002694 0.013011580 0.012278808
+           Count
+GO:0002683   174
+GO:0042100    44
+GO:0032943   119
+GO:0051250    65
+GO:0046651   115
+GO:0002698    51
+GO:0042254   131
+GO:0042113   107
+GO:0006364    95
+GO:0002694   189
 ```
 
 
@@ -407,8 +455,8 @@ dotplot(ego_bp, showCategory = 20) +
 ```
 
 <div class="figure" style="text-align: center">
-<img src="fig/06-enrich/go-bp-up.png" alt="GO Biological Process enrichment dotplot for upregulated genes"  />
-<p class="caption">GO Biological Process enrichment dotplot for upregulated genes</p>
+<img src="fig/06-enrich/go-bp-up.png" alt="GO Biological Process enrichment dotplot for all significant genes"  />
+<p class="caption">GO Biological Process enrichment dotplot for all significant genes</p>
 </div>
 
 
@@ -426,8 +474,8 @@ barplot(ego_bp, showCategory = 15) +
 ```
 
 <div class="figure" style="text-align: center">
-<img src="fig/06-enrich/go-bp-up-bar.png" alt="GO Biological Process enrichment barplot for upregulated genes"  />
-<p class="caption">GO Biological Process enrichment barplot for upregulated genes</p>
+<img src="fig/06-enrich/go-bp-up-bar.png" alt="GO Biological Process enrichment barplot for all significant genes"  />
+<p class="caption">GO Biological Process enrichment barplot for all significant genes</p>
 </div>
 
 ### Reduce GO redundancy
@@ -450,6 +498,13 @@ dotplot(ego_bp_simple, showCategory = 15) +
 <img src="fig/06-enrich/go-bp-up-simple.png" alt="Simplified GO Biological Process enrichment dotplot"  />
 <p class="caption">Simplified GO Biological Process enrichment dotplot</p>
 </div>
+
+The same simplified result as a barplot:
+
+```r
+barplot(ego_bp_simple, showCategory = 15) +
+    ggtitle("GO BP enrichment (simplified) - Top 15 terms")
+```
 
 <div class="figure" style="text-align: center">
 <img src="fig/06-enrich/go-bp-up-bar-simple.png" alt="Simplified GO Biological Process enrichment barplot"  />
@@ -538,21 +593,37 @@ head(ekegg)
 
 Output (geneID column not shown for brevity):
 
-```
-                                    category                         subcategory       ID                              Description GeneRatio BgRatio RichFactor
-mmu04115                   Cellular Processes               Cell growth and death mmu04115                    p53 signaling pathway   41/1686 64/5208  0.6406250
-mmu05322                       Human Diseases                      Immune disease mmu05322             Systemic lupus erythematosus   46/1686 87/5208  0.5287356
-mmu04977                   Organismal Systems                    Digestive system mmu04977         Vitamin digestion and absorption   12/1686 15/5208  0.8000000
-mmu04514 Environmental Information Processing Signaling molecules and interaction mmu04514 Cell adhesion molecule (CAM) interaction   43/1686 85/5208  0.5058824
-mmu05150                       Human Diseases       Infectious disease: bacterial mmu05150          Staphylococcus aureus infection   19/1686 30/5208  0.6333333
-mmu04981                                 <NA>                                <NA> mmu04981          Folate transport and metabolism   13/1686 18/5208  0.7222222
+```text
+Reading KEGG annotation online: "https://rest.kegg.jp/link/mmu/pathway"...
+Reading KEGG annotation online: "https://rest.kegg.jp/list/pathway/mmu"...
+                                     category
+mmu04115                   Cellular Processes
+mmu05322                       Human Diseases
+mmu04977                   Organismal Systems
+mmu04514 Environmental Information Processing
+mmu05150                       Human Diseases
+mmu04981                                 <NA>
+                                 subcategory       ID
+mmu04115               Cell growth and death mmu04115
+mmu05322                      Immune disease mmu05322
+mmu04977                    Digestive system mmu04977
+mmu04514 Signaling molecules and interaction mmu04514
+mmu05150       Infectious disease: bacterial mmu05150
+mmu04981                                <NA> mmu04981
+                                      Description GeneRatio BgRatio RichFactor
+mmu04115                    p53 signaling pathway   41/1705 64/5322  0.6406250
+mmu05322             Systemic lupus erythematosus   46/1705 87/5322  0.5287356
+mmu04977         Vitamin digestion and absorption   12/1705 15/5322  0.8000000
+mmu04514 Cell adhesion molecule (CAM) interaction   43/1705 85/5322  0.5058824
+mmu05150          Staphylococcus aureus infection   19/1705 30/5322  0.6333333
+mmu04981          Folate transport and metabolism   13/1705 18/5322  0.7222222
          FoldEnrichment   zScore       pvalue     p.adjust       qvalue
-mmu04115       1.978870 5.451204 1.688415e-07 5.605537e-05 5.491791e-05
-mmu05322       1.633247 4.120819 5.329885e-05 8.847610e-03 8.668077e-03
-mmu04977       2.471174 3.947558 2.042589e-04 2.260466e-02 2.214597e-02
-mmu04514       1.562654 3.618403 3.393132e-04 2.816300e-02 2.759152e-02
-mmu05150       1.956346 3.634316 4.705801e-04 3.124652e-02 3.061248e-02
-mmu04981       2.230921 3.619185 6.082405e-04 3.365597e-02 3.297304e-02
+mmu04115       1.999652 5.523483 1.225915e-07 4.094557e-05 3.935833e-05
+mmu05322       1.650399 4.199195 3.991355e-05 6.665562e-03 6.407175e-03
+mmu04977       2.497126 3.986245 1.825880e-04 2.032813e-02 1.954012e-02
+mmu04514       1.579065 3.694708 2.631397e-04 2.197216e-02 2.112042e-02
+mmu05150       1.976891 3.683678 4.054504e-04 2.708409e-02 2.603418e-02
+mmu04981       2.254350 3.659635 5.427993e-04 3.021583e-02 2.904452e-02
          Count
 mmu04115    41
 mmu05322    46
@@ -590,6 +661,14 @@ barplot(ekegg, showCategory = 15) +
 <p class="caption">KEGG pathway enrichment barplot</p>
 </div>
 
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Warnings from the plotting functions
+
+enrichplot's `barplot()`, `dotplot()`, `emapplot()`, and `gseaplot2()` may print warnings such as `` `aes_string()` was deprecated in ggplot2 3.0.0 ``, `` Using `size` aesthetic for lines was deprecated ``, or `Arguments in ... must be used. Problematic argument: by = x`. They come from the package internals and the installed ggplot2 version, not from your code, and the plots are correct.
+
+:::::::::::::::::::::::::::::::::::::::
+
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
@@ -611,8 +690,8 @@ message(sprintf("KEGG analysis used %d of %d input genes",
 
 Output:
 
-```
-KEGG analysis used 3607 of 3608 input genes
+```text
+KEGG analysis used 3608 of 3608 input genes
 ```
 
 :::::::::::::::::::::::::::::::::::::::
@@ -624,32 +703,48 @@ MSigDB Hallmark gene sets are 50 curated signatures representing well-defined bi
 ### Load Hallmark gene sets
 
 ```r
-hallmark <- msigdbr(species = "Mus musculus", category = "H")
+hallmark <- msigdbr(species = "Mus musculus", collection = "H")
 head(hallmark)
 ```
 Output:
-```
-# A tibble: 6 × 26
-  gene_symbol ncbi_gene ensembl_gene       db_gene_symbol db_ncbi_gene db_ensembl_gene source_gene gs_id gs_name  gs_collection gs_subcollection gs_collection_name
-  <chr>       <chr>     <chr>              <chr>          <chr>        <chr>           <chr>       <chr> <chr>    <chr>         <chr>            <chr>             
-1 Abca1       11303     ENSMUSG00000015243 ABCA1          19           ENSG00000165029 ABCA1       M5905 HALLMAR… H             ""               Hallmark          
-2 Abcb8       74610     ENSMUSG00000028973 ABCB8          11194        ENSG00000197150 ABCB8       M5905 HALLMAR… H             ""               Hallmark          
-3 Acaa2       52538     ENSMUSG00000036880 ACAA2          10449        ENSG00000167315 ACAA2       M5905 HALLMAR… H             ""               Hallmark          
-4 Acadl       11363     ENSMUSG00000026003 ACADL          33           ENSG00000115361 ACADL       M5905 HALLMAR… H             ""               Hallmark          
-5 Acadm       11364     ENSMUSG00000062908 ACADM          34           ENSG00000117054 ACADM       M5905 HALLMAR… H             ""               Hallmark          
-6 Acads       11409     ENSMUSG00000029545 ACADS          35           ENSG00000122971 ACADS       M5905 HALLMAR… H             ""               Hallmark          
-# ℹ 14 more variables: gs_description <chr>, gs_source_species <chr>, gs_pmid <chr>, gs_geoid <chr>, gs_exact_source <chr>, gs_url <chr>, db_version <chr>,
-#   db_target_species <chr>, ortholog_taxon_id <int>, ortholog_sources <chr>, num_ortholog_sources <dbl>, entrez_gene <chr>, gs_cat <chr>, gs_subcat <chr>
+
+```text
+Using human MSigDB with ortholog mapping to mouse. Use `db_species = "MM"` for mouse-native gene sets.
+This message is displayed once per session.
+Downloading gene sets (first use only, may take a few minutes)...
+# A tibble: 6 × 23
+  gene_symbol ncbi_gene ensembl_gene db_gene_symbol db_ncbi_gene db_ensembl_gene
+  <chr>       <chr>     <chr>        <chr>          <chr>        <chr>          
+1 Abca1       11303     ENSMUSG0000… ABCA1          19           ENSG00000165029
+2 Abcb8       74610     ENSMUSG0000… ABCB8          11194        ENSG00000197150
+3 Acaa2       52538     ENSMUSG0000… ACAA2          10449        ENSG00000167315
+4 Acadl       11363     ENSMUSG0000… ACADL          33           ENSG00000115361
+5 Acadm       11364     ENSMUSG0000… ACADM          34           ENSG00000117054
+6 Acads       11409     ENSMUSG0000… ACADS          35           ENSG00000122971
+# ℹ 17 more variables: source_gene <chr>, gs_id <chr>, gs_name <chr>,
+#   gs_collection <chr>, gs_subcollection <chr>, gs_collection_name <chr>,
+#   gs_description <chr>, gs_source_species <chr>, gs_pmid <chr>,
+#   gs_geoid <chr>, gs_exact_source <chr>, gs_url <chr>, db_version <chr>,
+#   db_target_species <chr>, ortholog_taxon_id <int>, ortholog_sources <chr>,
+#   num_ortholog_sources <dbl>
 ```
 
 
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## About the msigdbr download
+
+MSigDB gene sets are curated for human. For mouse, msigdbr maps each human gene to its mouse ortholog, which is why the table has both mouse columns (`gene_symbol`, `ncbi_gene`) and human `db_*` columns. Recent msigdbr releases (version 10 and later) download the MSigDB data the first time you call `msigdbr()` and cache it under `~/.cache/R/msigdbr`. If you see a warning like `cannot rename file ... reason 'Invalid cross-device link'`, the cache could not be saved because the temporary directory and your home directory are on different file systems; the gene sets still load, but the next session downloads them again. Older tutorials use `category = "H"` and the `entrez_gene` column; current msigdbr uses `collection = "H"` and `ncbi_gene`.
+
+:::::::::::::::::::::::::::::::::::::::
 
 Prepare gene set list:
 
 ```r
 hallmark_list <- hallmark %>%
-    dplyr::select(gs_name, entrez_gene) %>%
-    dplyr::rename(term = gs_name, gene = entrez_gene)
+    dplyr::select(gs_name, ncbi_gene) %>%
+    dplyr::rename(term = gs_name, gene = ncbi_gene)
 ```
 
 ### Run Hallmark enrichment
@@ -667,10 +762,19 @@ head(ehall)
 ```
 Output (columns truncated for brevity):
 
-```
-                                             ID             Description GeneRatio  BgRatio RichFactor FoldEnrichment   zScore       pvalue     p.adjust
-HALLMARK_MYC_TARGETS_V2 HALLMARK_MYC_TARGETS_V2 HALLMARK_MYC_TARGETS_V2   40/1134  57/3216  0.7017544       1.990161 5.565765 6.573980e-08 3.286990e-06
-HALLMARK_P53_PATHWAY       HALLMARK_P53_PATHWAY    HALLMARK_P53_PATHWAY   86/1134 164/3216  0.5243902       1.487160 4.725607 2.814573e-06 7.036433e-05
+```text
+                                             ID             Description
+HALLMARK_MYC_TARGETS_V2 HALLMARK_MYC_TARGETS_V2 HALLMARK_MYC_TARGETS_V2
+HALLMARK_P53_PATHWAY       HALLMARK_P53_PATHWAY    HALLMARK_P53_PATHWAY
+                        GeneRatio  BgRatio RichFactor FoldEnrichment   zScore
+HALLMARK_MYC_TARGETS_V2   40/1135  57/3216  0.7017544       1.988407 5.559694
+HALLMARK_P53_PATHWAY      87/1135 164/3216  0.5304878       1.503127 4.883817
+                              pvalue     p.adjust       qvalue
+HALLMARK_MYC_TARGETS_V2 6.761005e-08 3.380503e-06 2.917908e-06
+HALLMARK_P53_PATHWAY    1.349008e-06 3.372520e-05 2.911017e-05
+                        Count
+HALLMARK_MYC_TARGETS_V2    40
+HALLMARK_P53_PATHWAY       87
 ```
 
 Visualize:
@@ -731,38 +835,100 @@ comparison
 
 Output:
 
-```
-                                 Database                                  Description     p.adjust Count
-GO:0002683                          GO BP negative regulation of immune system process 5.247415e-03   174
-GO:0042100                          GO BP                         B cell proliferation 9.166217e-03    44
-GO:0032943                          GO BP               mononuclear cell proliferation 9.166217e-03   119
-GO:0051250                          GO BP negative regulation of lymphocyte activation 1.278238e-02    65
-GO:0042254                          GO BP                          ribosome biogenesis 1.278238e-02   131
-GO:0042113                          GO BP                            B cell activation 1.278238e-02   107
-GO:0006364                          GO BP                              rRNA processing 1.278238e-02    95
-GO:0002252                          GO BP                      immune effector process 1.278238e-02   199
-GO:0002437                          GO BP  inflammatory response to antigenic stimulus 1.390022e-02    29
-GO:0016072                          GO BP                       rRNA metabolic process 1.390022e-02   106
-mmu04115                             KEGG                        p53 signaling pathway 5.605537e-05    41
-mmu05322                             KEGG                 Systemic lupus erythematosus 8.847610e-03    46
-mmu04977                             KEGG             Vitamin digestion and absorption 2.260466e-02    12
-mmu04514                             KEGG     Cell adhesion molecule (CAM) interaction 2.816300e-02    43
-mmu05150                             KEGG              Staphylococcus aureus infection 3.124652e-02    19
-mmu04981                             KEGG              Folate transport and metabolism 3.365597e-02    13
-mmu02010                             KEGG                             ABC transporters 4.462944e-02    18
-mmu03008                             KEGG            Ribosome biogenesis in eukaryotes 8.758267e-02    35
-mmu05202                             KEGG      Transcriptional misregulation in cancer 9.020508e-02    60
-mmu04068                             KEGG                       FoxO signaling pathway 1.135249e-01    48
-HALLMARK_MYC_TARGETS_V2          Hallmark                      HALLMARK_MYC_TARGETS_V2 3.286990e-06    40
-HALLMARK_P53_PATHWAY             Hallmark                         HALLMARK_P53_PATHWAY 7.036433e-05    86
-HALLMARK_XENOBIOTIC_METABOLISM   Hallmark               HALLMARK_XENOBIOTIC_METABOLISM 1.034831e-01    57
-HALLMARK_HEME_METABOLISM         Hallmark                     HALLMARK_HEME_METABOLISM 1.034831e-01    72
-HALLMARK_IL2_STAT5_SIGNALING     Hallmark                 HALLMARK_IL2_STAT5_SIGNALING 1.611589e-01    69
-HALLMARK_ALLOGRAFT_REJECTION     Hallmark                 HALLMARK_ALLOGRAFT_REJECTION 1.611589e-01    70
-HALLMARK_MYC_TARGETS_V1          Hallmark                      HALLMARK_MYC_TARGETS_V1 1.757524e-01    84
-HALLMARK_TNFA_SIGNALING_VIA_NFKB Hallmark             HALLMARK_TNFA_SIGNALING_VIA_NFKB 2.021817e-01    67
-HALLMARK_ESTROGEN_RESPONSE_EARLY Hallmark             HALLMARK_ESTROGEN_RESPONSE_EARLY 2.021817e-01    56
-HALLMARK_APOPTOSIS               Hallmark                           HALLMARK_APOPTOSIS 2.527274e-01    54
+```text
+                                 Database
+GO:0002683                          GO BP
+GO:0042100                          GO BP
+GO:0032943                          GO BP
+GO:0051250                          GO BP
+GO:0042254                          GO BP
+GO:0042113                          GO BP
+GO:0006364                          GO BP
+GO:0002252                          GO BP
+GO:0002437                          GO BP
+GO:0016072                          GO BP
+mmu04115                             KEGG
+mmu05322                             KEGG
+mmu04977                             KEGG
+mmu04514                             KEGG
+mmu05150                             KEGG
+mmu04981                             KEGG
+mmu02010                             KEGG
+mmu03008                             KEGG
+mmu05202                             KEGG
+mmu04068                             KEGG
+HALLMARK_MYC_TARGETS_V2          Hallmark
+HALLMARK_P53_PATHWAY             Hallmark
+HALLMARK_XENOBIOTIC_METABOLISM   Hallmark
+HALLMARK_HEME_METABOLISM         Hallmark
+HALLMARK_IL2_STAT5_SIGNALING     Hallmark
+HALLMARK_ALLOGRAFT_REJECTION     Hallmark
+HALLMARK_MYC_TARGETS_V1          Hallmark
+HALLMARK_TNFA_SIGNALING_VIA_NFKB Hallmark
+HALLMARK_ESTROGEN_RESPONSE_EARLY Hallmark
+HALLMARK_APOPTOSIS               Hallmark
+                                                                  Description
+GO:0002683                       negative regulation of immune system process
+GO:0042100                                               B cell proliferation
+GO:0032943                                     mononuclear cell proliferation
+GO:0051250                       negative regulation of lymphocyte activation
+GO:0042254                                                ribosome biogenesis
+GO:0042113                                                  B cell activation
+GO:0006364                                                    rRNA processing
+GO:0002252                                            immune effector process
+GO:0002437                        inflammatory response to antigenic stimulus
+GO:0016072                                             rRNA metabolic process
+mmu04115                                                p53 signaling pathway
+mmu05322                                         Systemic lupus erythematosus
+mmu04977                                     Vitamin digestion and absorption
+mmu04514                             Cell adhesion molecule (CAM) interaction
+mmu05150                                      Staphylococcus aureus infection
+mmu04981                                      Folate transport and metabolism
+mmu02010                                                     ABC transporters
+mmu03008                                    Ribosome biogenesis in eukaryotes
+mmu05202                              Transcriptional misregulation in cancer
+mmu04068                                               FoxO signaling pathway
+HALLMARK_MYC_TARGETS_V2                               HALLMARK_MYC_TARGETS_V2
+HALLMARK_P53_PATHWAY                                     HALLMARK_P53_PATHWAY
+HALLMARK_XENOBIOTIC_METABOLISM                 HALLMARK_XENOBIOTIC_METABOLISM
+HALLMARK_HEME_METABOLISM                             HALLMARK_HEME_METABOLISM
+HALLMARK_IL2_STAT5_SIGNALING                     HALLMARK_IL2_STAT5_SIGNALING
+HALLMARK_ALLOGRAFT_REJECTION                     HALLMARK_ALLOGRAFT_REJECTION
+HALLMARK_MYC_TARGETS_V1                               HALLMARK_MYC_TARGETS_V1
+HALLMARK_TNFA_SIGNALING_VIA_NFKB             HALLMARK_TNFA_SIGNALING_VIA_NFKB
+HALLMARK_ESTROGEN_RESPONSE_EARLY             HALLMARK_ESTROGEN_RESPONSE_EARLY
+HALLMARK_APOPTOSIS                                         HALLMARK_APOPTOSIS
+                                     p.adjust Count
+GO:0002683                       5.355478e-03   174
+GO:0042100                       9.307986e-03    44
+GO:0032943                       9.307986e-03   119
+GO:0051250                       1.301158e-02    65
+GO:0042254                       1.301158e-02   131
+GO:0042113                       1.301158e-02   107
+GO:0006364                       1.301158e-02    95
+GO:0002252                       1.301158e-02   199
+GO:0002437                       1.414184e-02    29
+GO:0016072                       1.414184e-02   106
+mmu04115                         4.094557e-05    41
+mmu05322                         6.665562e-03    46
+mmu04977                         2.032813e-02    12
+mmu04514                         2.197216e-02    43
+mmu05150                         2.708409e-02    19
+mmu04981                         3.021583e-02    13
+mmu02010                         3.907863e-02    18
+mmu03008                         6.905345e-02    35
+mmu05202                         6.905345e-02    60
+mmu04068                         9.044789e-02    48
+HALLMARK_MYC_TARGETS_V2          3.380503e-06    40
+HALLMARK_P53_PATHWAY             3.372520e-05    87
+HALLMARK_XENOBIOTIC_METABOLISM   1.059555e-01    57
+HALLMARK_HEME_METABOLISM         1.059555e-01    72
+HALLMARK_IL2_STAT5_SIGNALING     1.645802e-01    69
+HALLMARK_ALLOGRAFT_REJECTION     1.645802e-01    70
+HALLMARK_MYC_TARGETS_V1          1.797650e-01    84
+HALLMARK_TNFA_SIGNALING_VIA_NFKB 2.056196e-01    67
+HALLMARK_ESTROGEN_RESPONSE_EARLY 2.056196e-01    56
+HALLMARK_APOPTOSIS               2.567067e-01    54
 ```
 
 
@@ -812,7 +978,8 @@ up_genes <- res %>%
 up_clean <- gsub("\\.\\d+$", "", up_genes)
 up_entrez <- id_map %>%
     filter(ENSEMBL %in% up_clean) %>%
-    pull(ENTREZID)
+    pull(ENTREZID) %>%
+    unique()
 
 # Down-regulated genes
 down_genes <- res %>%
@@ -821,14 +988,15 @@ down_genes <- res %>%
 down_clean <- gsub("\\.\\d+$", "", down_genes)
 down_entrez <- id_map %>%
     filter(ENSEMBL %in% down_clean) %>%
-    pull(ENTREZID)
+    pull(ENTREZID) %>%
+    unique()
 
 message(sprintf("Up-regulated: %d genes, Down-regulated: %d genes",
     length(up_entrez), length(down_entrez)))
 ```
 
-```
-Up-regulated: 1810 genes, Down-regulated: 1798 genes
+```text
+Up-regulated: 1800 genes, Down-regulated: 1808 genes
 ```
 
 
@@ -872,28 +1040,70 @@ direction_comparison
 
 Output:
 
-```
-                Direction                                                                              Description     p.adjust Count
-GO:0002694   Up-regulated                                                       regulation of leukocyte activation 7.705961e-07   127
-GO:0002683   Up-regulated                                             negative regulation of immune system process 9.130747e-07   113
-GO:0050865   Up-regulated                                                            regulation of cell activation 1.389200e-06   131
-GO:0002252   Up-regulated                                                                  immune effector process 1.389200e-06   130
-GO:0007264   Up-regulated                                                small GTPase-mediated signal transduction 2.781020e-06    95
-GO:0051249   Up-regulated                                                      regulation of lymphocyte activation 4.543747e-06   111
-GO:0009617   Up-regulated                                                                    response to bacterium 4.720694e-06   120
-GO:0002697   Up-regulated                                                    regulation of immune effector process 1.175944e-05    88
-GO:0007186   Up-regulated                                             G protein-coupled receptor signaling pathway 1.175944e-05    97
-GO:0030036   Up-regulated                                                          actin cytoskeleton organization 3.108071e-05   123
-GO:0022613 Down-regulated                                                     ribonucleoprotein complex biogenesis 2.154137e-27   164
-GO:0042254 Down-regulated                                                                      ribosome biogenesis 3.115494e-25   128
-GO:0006364 Down-regulated                                                                          rRNA processing 4.368810e-19    92
-GO:0016072 Down-regulated                                                                   rRNA metabolic process 6.776964e-19   100
-GO:0042273 Down-regulated                                                       ribosomal large subunit biogenesis 1.090959e-08    33
-GO:0042274 Down-regulated                                                       ribosomal small subunit biogenesis 4.296891e-08    45
-GO:0006399 Down-regulated                                                                   tRNA metabolic process 1.002785e-06    62
-GO:0000470 Down-regulated                                                                   maturation of LSU-rRNA 2.496138e-05    17
-GO:0009451 Down-regulated                                                                         RNA modification 4.970122e-05    48
-GO:0000463 Down-regulated maturation of LSU-rRNA from tricistronic rRNA transcript (SSU-rRNA, 5.8S rRNA, LSU-rRNA) 7.457449e-05    13
+```text
+                Direction
+GO:0022613   Up-regulated
+GO:0042254   Up-regulated
+GO:0006364   Up-regulated
+GO:0016072   Up-regulated
+GO:0042273   Up-regulated
+GO:0042274   Up-regulated
+GO:0006399   Up-regulated
+GO:0000470   Up-regulated
+GO:0009451   Up-regulated
+GO:0000463   Up-regulated
+GO:0002694 Down-regulated
+GO:0002683 Down-regulated
+GO:0050865 Down-regulated
+GO:0002252 Down-regulated
+GO:0007264 Down-regulated
+GO:0051249 Down-regulated
+GO:0009617 Down-regulated
+GO:0002697 Down-regulated
+GO:0007186 Down-regulated
+GO:0030036 Down-regulated
+                                                                                        Description
+GO:0022613                                                     ribonucleoprotein complex biogenesis
+GO:0042254                                                                      ribosome biogenesis
+GO:0006364                                                                          rRNA processing
+GO:0016072                                                                   rRNA metabolic process
+GO:0042273                                                       ribosomal large subunit biogenesis
+GO:0042274                                                       ribosomal small subunit biogenesis
+GO:0006399                                                                   tRNA metabolic process
+GO:0000470                                                                   maturation of LSU-rRNA
+GO:0009451                                                                         RNA modification
+GO:0000463 maturation of LSU-rRNA from tricistronic rRNA transcript (SSU-rRNA, 5.8S rRNA, LSU-rRNA)
+GO:0002694                                                       regulation of leukocyte activation
+GO:0002683                                             negative regulation of immune system process
+GO:0050865                                                            regulation of cell activation
+GO:0002252                                                                  immune effector process
+GO:0007264                                                small GTPase-mediated signal transduction
+GO:0051249                                                      regulation of lymphocyte activation
+GO:0009617                                                                    response to bacterium
+GO:0002697                                                    regulation of immune effector process
+GO:0007186                                             G protein-coupled receptor signaling pathway
+GO:0030036                                                          actin cytoskeleton organization
+               p.adjust Count
+GO:0022613 2.480013e-27   164
+GO:0042254 3.493539e-25   128
+GO:0006364 4.747624e-19    92
+GO:0016072 7.399451e-19   100
+GO:0042273 1.126647e-08    33
+GO:0042274 4.470014e-08    45
+GO:0006399 1.050626e-06    62
+GO:0000470 2.540424e-05    17
+GO:0009451 5.152986e-05    48
+GO:0000463 7.562447e-05    13
+GO:0002694 7.414774e-07   127
+GO:0002683 8.815232e-07   113
+GO:0050865 1.337910e-06   131
+GO:0002252 1.337910e-06   130
+GO:0007264 2.698226e-06    95
+GO:0051249 4.396731e-06   111
+GO:0009617 4.561043e-06   120
+GO:0002697 1.142019e-05    88
+GO:0007186 1.142019e-05    97
+GO:0030036 3.006957e-05   123
 ```
 
 
@@ -955,11 +1165,14 @@ gene_list <- sort(gene_list, decreasing = TRUE)
 
 ```r
 head(gene_list)
-   20343   108105    12481    66222    23943    15002 
-261.1024 126.5745 124.5315 108.3381 103.0995 101.4362 
 tail(gene_list)
-   230784    217882     17246     65964     12519     27015 
--211.2999 -212.3574 -213.2033 -231.8965 -244.4231 -250.3965 
+```
+
+```text
+   27015    12519    65964    17246   217882   230784 
+250.3965 244.4231 231.8965 213.2033 212.3574 211.3000 
+    15002     23943     66222     12481    108105     20343 
+-101.4362 -103.0995 -108.3381 -124.5315 -126.5745 -261.1024 
 ```
 
 ### Run GSEA with clusterProfiler
@@ -970,10 +1183,12 @@ gene_list <- sort(gene_list, decreasing = TRUE)
 # 2. Remove duplicate Entrez IDs 
 # (Since we sorted by value, this keeps the instance with the highest absolute value)
 gene_list <- gene_list[!duplicated(names(gene_list))]
-# 3. Verify it is a numeric vector
-# (It should look like: 261.1, 126.5... with names "20343", "108105"...)
+# 3. Verify it is a named numeric vector
+# (large positive scores first, Entrez IDs as names)
 head(gene_list)
-# 4. Run GSEA
+# 4. Run GSEA. The p-values come from random permutations, so set a seed
+#    to get the same result every time you run it.
+set.seed(42)
 gsea_go <- gseGO(
     geneList     = gene_list,      # Pass the numeric vector, NOT names(gene_list)
     OrgDb        = org.Mm.eg.db,
@@ -981,6 +1196,8 @@ gsea_go <- gseGO(
     minGSSize    = 10,
     maxGSSize    = 500,
     pvalueCutoff = 0.05,
+    eps          = 0,              # estimate very small p-values exactly
+    seed         = TRUE,           # use the seed set above
     verbose      = FALSE
 )
 head(gsea_go)
@@ -988,15 +1205,42 @@ head(gsea_go)
 
 Output (columns truncated for brevity):
 
+```text
+   27015    12519    65964    17246   217882   230784 
+250.3965 244.4231 231.8965 213.2033 212.3574 211.3000 
+Warning message:
+There are ties in the preranked stats (0.52% of the list).
+The order of those tied genes will be arbitrary, which may produce unexpected results.
+                   ID                                   Description setSize
+GO:0042254 GO:0042254                           ribosome biogenesis     304
+GO:0022613 GO:0022613          ribonucleoprotein complex biogenesis     425
+GO:0006364 GO:0006364                               rRNA processing     210
+GO:0016072 GO:0016072                        rRNA metabolic process     241
+GO:0042274 GO:0042274            ribosomal small subunit biogenesis     106
+GO:0042770 GO:0042770 signal transduction in response to DNA damage     170
+           enrichmentScore      NES       pvalue     p.adjust       qvalue rank
+GO:0042254       0.7712952 2.029569 4.343010e-16 2.279212e-12 2.042129e-12 1867
+GO:0022613       0.7190404 1.928719 4.302215e-14 1.128901e-10 1.011473e-10 1867
+GO:0006364       0.7693857 1.984821 1.180550e-10 2.065175e-07 1.850357e-07 1867
+GO:0016072       0.7524483 1.951091 1.777747e-10 2.332404e-07 2.089788e-07 1867
+GO:0042274       0.7953617 1.917009 1.560185e-07 1.637571e-04 1.467231e-04  947
+GO:0042770       0.7420666 1.875837 4.473394e-07 3.912729e-04 3.505728e-04  891
+                             leading_edge
+GO:0042254 tags=50%, list=16%, signal=43%
+GO:0022613 tags=47%, list=16%, signal=41%
+GO:0006364 tags=53%, list=16%, signal=45%
+GO:0016072 tags=52%, list=16%, signal=44%
+GO:0042274  tags=37%, list=8%, signal=34%
+GO:0042770  tags=16%, list=8%, signal=15%
 ```
-                   ID                                   Description setSize enrichmentScore       NES       pvalue     p.adjust       qvalue rank
-GO:0042254 GO:0042254                           ribosome biogenesis     304      -0.7713857 -2.022231 1.000000e-10 0.0000001312 1.169211e-07 1867
-GO:0006364 GO:0006364                               rRNA processing     210      -0.7694754 -1.950534 1.000000e-10 0.0000001312 1.169211e-07 1867
-GO:0016072 GO:0016072                        rRNA metabolic process     241      -0.7525383 -1.933838 1.000000e-10 0.0000001312 1.169211e-07 1867
-GO:0022613 GO:0022613          ribonucleoprotein complex biogenesis     425      -0.7186644 -1.919595 1.000000e-10 0.0000001312 1.169211e-07 1867
-GO:0042770 GO:0042770 signal transduction in response to DNA damage     170      -0.7420666 -1.849975 1.315390e-07 0.0001380633 1.230374e-04  892
-GO:0042274 GO:0042274            ribosomal small subunit biogenesis     106      -0.7953618 -1.887333 2.644409e-07 0.0002312976 2.061247e-04  948
-```
+
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Messages from gseGO()
+
+You may see `There are ties in the preranked stats (x% of the list)`. Genes with identical scores (genes with the same p-value and direction) have no defined order between them; with ties in about 0.5 percent of the list here, the effect on the results is negligible. Setting `eps = 0` makes fgsea estimate very small p-values exactly instead of reporting them as `1e-10`, which avoids the message suggesting it. Because GSEA p-values come from permutations, results differ slightly between runs unless you set a seed as above.
+
+:::::::::::::::::::::::::::::::::::::::
 
 ### Visualize GSEA results
 
@@ -1058,12 +1302,12 @@ GSEA is particularly valuable when:
 
 ::::::::::::::::::::::::::::::::::::::: solution
 
-Expected observations:
+Observations for this dataset:
 
-- Many top pathways should overlap between ORA and GSEA.
-- GSEA may identify additional pathways where changes are subtle but coordinated.
-- The NES sign (positive/negative) should match whether the pathway was enriched in up- or down-regulated genes in ORA.
-- Discrepancies may indicate pathways where the signal comes from many small changes rather than a few large ones.
+- The strongest signals agree. Ribosome and rRNA biogenesis terms top both the up-regulated ORA and the GSEA table, and "signal transduction in response to DNA damage" is enriched among genes that go up after IR (NES about +1.9).
+- GSEA reports 74 significant GO terms, many of which the cutoff-based ORA does not, because it also uses genes with modest changes.
+- For the 25 terms found by both GSEA and the direction-specific ORA, the NES sign matches the ORA direction in all 25.
+- Where the two disagree, the signal usually comes from many small, consistent changes (seen by GSEA) rather than a few large ones (needed by ORA).
 
 :::::::::::::::::::::::::::::::::::
 

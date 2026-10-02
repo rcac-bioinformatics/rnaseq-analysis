@@ -46,7 +46,7 @@ Many library preparation protocols introduce adapter sequences at the ends of re
 ## Should I trim adapters for RNA seq analysis?
 
 In most cases, no. Aligners such as HISAT2 and STAR soft clip adapter sequences. Overly aggressive trimming can reduce mapping rates or distort read length distributions. Trimming is needed only for specific applications such as transcript assembly where uniform read lengths are important.  
-More information: <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4766705/>
+More information: <https://pmc.ncbi.nlm.nih.gov/articles/PMC4766705/>
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -76,6 +76,70 @@ The full dataset includes wild-type (WT) and p53-knockout (KO) mouse B cells, wi
 
 This balanced design (n=4 per group) allows us to identify genes that respond to ionizing radiation in cells with functional p53.
 
+::::::::::::::::::::::::::::::::::::::: callout
+
+## The full GSE71176 series has 24 samples
+
+GSE71176 (SRA study SRP061386; Illumina HiSeq 2000, paired-end reads) profiles splenic B cells and splenic non-B cells from wild-type (*Trp53+/+*) and p53-knockout (*Trp53-/-*) mice, mock-treated or 4 hours after 7 Gy whole-body irradiation:
+
+| Genotype | Cell type | Mock | IR (7 Gy, 4 h) |
+|----------|-----------|------|----------------|
+| Wild type | B cells | 4 (used here) | 4 (used here) |
+| Wild type | non-B cells | 4 | 4 |
+| *Trp53-/-* | B cells | 2 | 2 |
+| *Trp53-/-* | non-B cells | 2 | 2 |
+
+The workshop uses only the 8 wild-type B-cell samples. A single two-group comparison with 4 replicates per group is the simplest design that teaches the whole workflow, and the IR response in wild-type cells gives clear positive controls. The knockout groups have only 2 replicates each, and bringing in genotype or cell type would need a multi-factor design (for example `~ genotype + treatment + genotype:treatment` to ask whether the IR response depends on p53). Those samples make a good exercise after the workshop.
+
+:::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::: challenge
+
+## Pick the workshop samples from the full series
+
+The table below lists all 24 runs of SRP061386 (GEO sample characteristics and SRA run information, retrieved 2026-10-02). Which 8 runs make up the workshop dataset, and which of them are the controls?
+
+::::::::::::::::::::::::::::::::::: spoiler
+
+## All 24 runs
+
+| Run | GEO sample | Genotype | Cell type | Treatment | Read pairs (millions) |
+|---|---|---|---|---|---|
+| SRR2121770 | GSM1828861 | Trp53-/- | B cells | mock | 118 |
+| SRR2121771 | GSM1828862 | Trp53-/- | B cells | mock | 103 |
+| SRR2121772 | GSM1828863 | Trp53-/- | non-B cells | mock | 131 |
+| SRR2121773 | GSM1828864 | Trp53-/- | non-B cells | mock | 128 |
+| SRR2121774 | GSM1828865 | Trp53-/- | B cells | 7 Gy IR, 4 h | 91 |
+| SRR2121775 | GSM1828866 | Trp53-/- | B cells | 7 Gy IR, 4 h | 109 |
+| SRR2121776 | GSM1828867 | Trp53-/- | non-B cells | 7 Gy IR, 4 h | 110 |
+| SRR2121777 | GSM1828868 | Trp53-/- | non-B cells | 7 Gy IR, 4 h | 76 |
+| SRR2121778 | GSM1828869 | Trp53+/+ | B cells | mock | 137 |
+| SRR2121779 | GSM1828870 | Trp53+/+ | B cells | mock | 124 |
+| SRR2121780 | GSM1828871 | Trp53+/+ | B cells | mock | 100 |
+| SRR2121781 | GSM1828872 | Trp53+/+ | B cells | mock | 106 |
+| SRR2121782 | GSM1828873 | Trp53+/+ | non-B cells | mock | 103 |
+| SRR2121783 | GSM1828874 | Trp53+/+ | non-B cells | mock | 109 |
+| SRR2121784 | GSM1828875 | Trp53+/+ | non-B cells | mock | 98 |
+| SRR2121785 | GSM1828876 | Trp53+/+ | non-B cells | mock | 105 |
+| SRR2121786 | GSM1828877 | Trp53+/+ | B cells | 7 Gy IR, 4 h | 100 |
+| SRR2121787 | GSM1828878 | Trp53+/+ | B cells | 7 Gy IR, 4 h | 75 |
+| SRR2121788 | GSM1828879 | Trp53+/+ | B cells | 7 Gy IR, 4 h | 83 |
+| SRR2121789 | GSM1828880 | Trp53+/+ | B cells | 7 Gy IR, 4 h | 92 |
+| SRR2121790 | GSM1828881 | Trp53+/+ | non-B cells | 7 Gy IR, 4 h | 80 |
+| SRR2121791 | GSM1828882 | Trp53+/+ | non-B cells | 7 Gy IR, 4 h | 83 |
+| SRR2121792 | GSM1828883 | Trp53+/+ | non-B cells | 7 Gy IR, 4 h | 94 |
+| SRR2121793 | GSM1828884 | Trp53+/+ | non-B cells | 7 Gy IR, 4 h | 157 |
+
+:::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::: solution
+
+The wild-type B-cell runs: SRR2121778 to SRR2121781 are the mock controls (WT_Bcell_mock_rep1 to rep4) and SRR2121786 to SRR2121789 are the irradiated samples (WT_Bcell_IR_rep1 to rep4). In the SRA Run Selector you would filter on genotype and cell type, then download the accession list for just these 8 runs.
+
+:::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::
+
 ### Expected biological results
 
 Because p53 is a transcription factor activated by DNA damage, we expect to see upregulation of canonical p53 target genes in IR-treated samples:
@@ -85,15 +149,17 @@ Because p53 is a transcription factor activated by DNA damage, we expect to see 
 - *Cdkn1a* (p21) - cell cycle arrest
 - *Bax*, *Bbc3* (Puma), *Pmaip1* (Noxa) - pro-apoptotic
 - *Mdm2* - negative feedback regulator of p53
-- *Gadd45a* - DNA damage response
+- *Gadd45a* - DNA damage response (in the subsampled workshop data only a small increase that is not statistically significant)
 - *Fas*, *Tnfrsf10b* (DR5) - death receptor signaling
 
-**Pathways expected to be enriched:**
+**Pathways expected to be enriched** (all among genes that go up after IR, on both analysis tracks):
 
-- p53 signaling pathway
-- Apoptosis
-- Cell cycle
-- DNA damage response
+- p53 signaling: the KEGG p53 signaling pathway and the MSigDB Hallmark p53 pathway (Episode 06, over-representation analysis)
+- DNA damage response: GO terms for DNA damage signal transduction by p53 (over-representation of upregulated genes and GSEA)
+- Apoptosis: GO intrinsic apoptotic signaling in response to DNA damage (GSEA)
+- Cell cycle: GO DNA damage and mitotic cell cycle checkpoint signaling (GSEA)
+
+At 20 million read pairs, the broader Hallmark apoptosis and cell cycle (G2M, E2F) sets do not reach significance; the more specific GO terms do.
 
 The presence of these expected results serves as a positive control that our analysis pipeline is working correctly.
 
@@ -116,7 +182,7 @@ Before downloading files, we create a reproducible directory layout for raw data
 
 ## Create the directories needed for this episode
 
-Create a working directory for the workshop (e.g., `rnaseq-workshop`). Inside it, create four subdirectories:
+Create a working directory for the workshop (e.g., `rnaseq-workshop`). Inside it, create three subdirectories:
 
 - `data` : raw FASTQ files, reference genome, annotation  
 - `scripts` : custom scripts, SLURM job files  
@@ -133,13 +199,10 @@ mkdir -p rnaseq-workshop/{data,scripts,results}
 
 The resulting directory structure should look like this:
 
-```bash
-aseethar@scholar-fe03:[aseethar] $ pwd
-/scratch/scholar/aseethar
-aseethar@scholar-fe03:[aseethar] $ tree rnaseq-workshop/
+```text
 rnaseq-workshop/
-├── results
 ├── data
+├── results
 └── scripts
 ```
 :::::::::::::::::::::::::::::::::::
@@ -253,6 +316,14 @@ The transcript FASTA file is available in the same release directory as the geno
 
 ### Downloading all reference files
 
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Already done if you copied the workshop data
+
+The workshop copy you made in [Setup](../learners/setup.md#data-setup) already contains these reference files, uncompressed, in `data/`. If you run this block in that directory, `gunzip` stops with "already exists; not overwritten" because the `.fa` and `.gtf` files are present. Read the commands here; run them only when you set up a project from scratch.
+
+:::::::::::::::::::::::::::::::::::::::
+
 ```bash
 cd ${SCRATCH}/rnaseq-workshop
 
@@ -356,7 +427,7 @@ mv SRR2121789_2.fastq.gz WT_Bcell_IR_rep4_R2.fastq.gz
 
 ## Workshop data is subsampled
 
-The FASTQ files provided for this workshop have been **subsampled to 20 million reads per sample**. The original samples contain 100+ million reads each, and running the full pipeline would take many hours—far exceeding our workshop session time.
+The FASTQ files provided for this workshop have been **subsampled to 20 million read pairs per sample**. The original samples contain 75 to 137 million read pairs each, and running the full pipeline would take many hours—far exceeding our workshop session time.
 
 **Never subsample your real experimental data.** This is done exclusively for workshop time constraints. Subsampling reduces statistical power and may affect differential expression results.
 
@@ -368,36 +439,32 @@ The FASTQ files provided for this workshop have been **subsampled to 20 million 
 
 For reference, here is how the workshop data was prepared. **You do not need to run this**—the pre-downloaded data is already subsampled.
 
-The original samples from SRA contain 80-100+ million paired-end reads each. To enable completion of the full analysis pipeline within a single workshop day, we subsample to 20 million read pairs per sample using `seqtk`.
+The original samples from SRA contain 75 to 137 million read pairs each (SRA run info for SRR2121778-81 and SRR2121786-89). To enable completion of the full analysis pipeline within a single workshop day, we subsample to 20 million read pairs per sample using `seqtk`.
 
 ```bash
 # Subsample reads to 20 million per sample (WORKSHOP ONLY - do not do this with real data!)
 module load biocontainers
 module load seqtk
 
+mkdir -p subsampled
 for sample in WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4 \
               WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4; do
     # Use same seed for R1 and R2 to maintain pairing
-    seqtk sample -s 42 ${sample}_R1.fastq.gz 20000000 | gzip > ${sample}_sub_R1.fastq.gz
-    seqtk sample -s 42 ${sample}_R2.fastq.gz 20000000 | gzip > ${sample}_sub_R2.fastq.gz
+    seqtk sample -s 42 ${sample}_R1.fastq.gz 20000000 | gzip > subsampled/${sample}_R1.fastq.gz
+    seqtk sample -s 42 ${sample}_R2.fastq.gz 20000000 | gzip > subsampled/${sample}_R2.fastq.gz
 done
 
-# Archive original files
+# Archive original files, then move the subsampled files into place
 mkdir -p original_reads
 mv *_R1.fastq.gz *_R2.fastq.gz original_reads/
-
-# Rename subsampled files to original names for pipeline compatibility
-for sample in WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4 \
-              WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4; do
-    mv ${sample}_sub_R1.fastq.gz ${sample}_R1.fastq.gz
-    mv ${sample}_sub_R2.fastq.gz ${sample}_R2.fastq.gz
-done
+mv subsampled/*.fastq.gz .
+rmdir subsampled
 ```
 
 **Why 20 million reads?**
 
 - Sufficient depth for differential expression analysis of moderately expressed genes
-- Reduces alignment time from ~30 minutes to ~5-10 minutes per sample
+- Keeps STAR alignment to 2 to 3 minutes per sample on 20 cores
 - Allows completion of the full workshop pipeline in a single day
 - Still produces biologically meaningful results for well-expressed p53 target genes
 
@@ -414,20 +481,16 @@ For your own research, always use the full sequencing depth. Modern RNA-seq expe
 
 The directory, after downloading, should look like this:
 
-```bash
+```text
 data
+├── annot.tsv
 ├── gencode.vM38.primary_assembly.basic.annotation.gtf
-├── gencode.vM38.transcripts.fa
 ├── gencode.vM38.transcripts-clean.fa
+├── gencode.vM38.transcripts.fa
 ├── GRCm39.primary_assembly.genome.fa
-├── WT_Bcell_mock_rep1_R1.fastq.gz
-├── WT_Bcell_mock_rep1_R2.fastq.gz
-├── WT_Bcell_mock_rep2_R1.fastq.gz
-├── WT_Bcell_mock_rep2_R2.fastq.gz
-├── WT_Bcell_mock_rep3_R1.fastq.gz
-├── WT_Bcell_mock_rep3_R2.fastq.gz
-├── WT_Bcell_mock_rep4_R1.fastq.gz
-├── WT_Bcell_mock_rep4_R2.fastq.gz
+├── mart.tsv
+├── SRR_Acc_List.txt
+├── tx2gene.tsv
 ├── WT_Bcell_IR_rep1_R1.fastq.gz
 ├── WT_Bcell_IR_rep1_R2.fastq.gz
 ├── WT_Bcell_IR_rep2_R1.fastq.gz
@@ -436,7 +499,16 @@ data
 ├── WT_Bcell_IR_rep3_R2.fastq.gz
 ├── WT_Bcell_IR_rep4_R1.fastq.gz
 ├── WT_Bcell_IR_rep4_R2.fastq.gz
-└── SRR_Acc_List.txt
+├── WT_Bcell_mock_rep1_R1.fastq.gz
+├── WT_Bcell_mock_rep1_R2.fastq.gz
+├── WT_Bcell_mock_rep2_R1.fastq.gz
+├── WT_Bcell_mock_rep2_R2.fastq.gz
+├── WT_Bcell_mock_rep3_R1.fastq.gz
+├── WT_Bcell_mock_rep3_R2.fastq.gz
+├── WT_Bcell_mock_rep4_R1.fastq.gz
+└── WT_Bcell_mock_rep4_R2.fastq.gz
+
+0 directories, 24 files
 ```
 
 ::::::::::::::::::::::::::::::::::::: keypoints

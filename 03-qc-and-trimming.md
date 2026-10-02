@@ -70,40 +70,41 @@ module load fastqc
 fastqc data/*.fastq.gz --outdir results/qc_fastq/ --threads 4
 ```
 
-```bash
-results/qc_fastq/
-├── WT_Bcell_mock_rep1_R1_fastqc.html
-├── WT_Bcell_mock_rep1_R1_fastqc.zip
-├── WT_Bcell_mock_rep1_R2_fastqc.html
-├── WT_Bcell_mock_rep1_R2_fastqc.zip
-├── WT_Bcell_mock_rep2_R1_fastqc.html
-├── WT_Bcell_mock_rep2_R1_fastqc.zip
-├── WT_Bcell_mock_rep2_R2_fastqc.html
-├── WT_Bcell_mock_rep2_R2_fastqc.zip
-├── WT_Bcell_mock_rep3_R1_fastqc.html
-├── WT_Bcell_mock_rep3_R1_fastqc.zip
-├── WT_Bcell_mock_rep3_R2_fastqc.html
-├── WT_Bcell_mock_rep3_R2_fastqc.zip
-├── WT_Bcell_mock_rep4_R1_fastqc.html
-├── WT_Bcell_mock_rep4_R1_fastqc.zip
-├── WT_Bcell_mock_rep4_R2_fastqc.html
-├── WT_Bcell_mock_rep4_R2_fastqc.zip
-├── WT_Bcell_IR_rep1_R1_fastqc.html
-├── WT_Bcell_IR_rep1_R1_fastqc.zip
-├── WT_Bcell_IR_rep1_R2_fastqc.html
-├── WT_Bcell_IR_rep1_R2_fastqc.zip
-├── WT_Bcell_IR_rep2_R1_fastqc.html
-├── WT_Bcell_IR_rep2_R1_fastqc.zip
-├── WT_Bcell_IR_rep2_R2_fastqc.html
-├── WT_Bcell_IR_rep2_R2_fastqc.zip
-├── WT_Bcell_IR_rep3_R1_fastqc.html
-├── WT_Bcell_IR_rep3_R1_fastqc.zip
-├── WT_Bcell_IR_rep3_R2_fastqc.html
-├── WT_Bcell_IR_rep3_R2_fastqc.zip
-├── WT_Bcell_IR_rep4_R1_fastqc.html
-├── WT_Bcell_IR_rep4_R1_fastqc.zip
-├── WT_Bcell_IR_rep4_R2_fastqc.html
-└── WT_Bcell_IR_rep4_R2_fastqc.zip
+FastQC writes one HTML report and one zip archive per FASTQ file:
+
+```text
+WT_Bcell_IR_rep1_R1_fastqc.html
+WT_Bcell_IR_rep1_R1_fastqc.zip
+WT_Bcell_IR_rep1_R2_fastqc.html
+WT_Bcell_IR_rep1_R2_fastqc.zip
+WT_Bcell_IR_rep2_R1_fastqc.html
+WT_Bcell_IR_rep2_R1_fastqc.zip
+WT_Bcell_IR_rep2_R2_fastqc.html
+WT_Bcell_IR_rep2_R2_fastqc.zip
+WT_Bcell_IR_rep3_R1_fastqc.html
+WT_Bcell_IR_rep3_R1_fastqc.zip
+WT_Bcell_IR_rep3_R2_fastqc.html
+WT_Bcell_IR_rep3_R2_fastqc.zip
+WT_Bcell_IR_rep4_R1_fastqc.html
+WT_Bcell_IR_rep4_R1_fastqc.zip
+WT_Bcell_IR_rep4_R2_fastqc.html
+WT_Bcell_IR_rep4_R2_fastqc.zip
+WT_Bcell_mock_rep1_R1_fastqc.html
+WT_Bcell_mock_rep1_R1_fastqc.zip
+WT_Bcell_mock_rep1_R2_fastqc.html
+WT_Bcell_mock_rep1_R2_fastqc.zip
+WT_Bcell_mock_rep2_R1_fastqc.html
+WT_Bcell_mock_rep2_R1_fastqc.zip
+WT_Bcell_mock_rep2_R2_fastqc.html
+WT_Bcell_mock_rep2_R2_fastqc.zip
+WT_Bcell_mock_rep3_R1_fastqc.html
+WT_Bcell_mock_rep3_R1_fastqc.zip
+WT_Bcell_mock_rep3_R2_fastqc.html
+WT_Bcell_mock_rep3_R2_fastqc.zip
+WT_Bcell_mock_rep4_R1_fastqc.html
+WT_Bcell_mock_rep4_R1_fastqc.zip
+WT_Bcell_mock_rep4_R2_fastqc.html
+WT_Bcell_mock_rep4_R2_fastqc.zip
 ```
 
 ## Understanding the FastQC report
@@ -136,25 +137,46 @@ Warnings do not always indicate problems. Context and comparison across samples 
 
 Below are guidelines for interpreting the most useful modules.
 
+Each module below shows the plot from your own run of the workshop data ("your output"), followed by a contrast example: a schematic cartoon or a plot from a different dataset that shows what a problem, or a very clean run, looks like. The contrast examples are not from this workshop's samples.
+
 ### Per base sequence quality
 
 Shows the distribution of quality scores at each position across all reads.
 You want high and stable quality across the read. A small quality drop at the end of R2 is common and usually not a problem.
 
 <div class="figure" style="text-align: center">
-<img src="fig/02_qc/fastqc_sequence_quality_histogram.png" alt="Per base sequence quality for a typical RNA-seq dataset"  />
-<p class="caption">Per base sequence quality for a typical RNA-seq dataset</p>
+<img src="fig/02_qc/fastqc_sequence_quality_histogram.png" alt="Your output: mean quality per position for the 16 workshop FASTQ files (MultiQC)"  />
+<p class="caption">Your output: mean quality per position for the 16 workshop FASTQ files (MultiQC)</p>
 </div>
+
+In the workshop data, the ten files from flowcell C1PF5ACXX (IR_rep1, IR_rep2, and mock_rep1 to mock_rep3) sit lower and drop sharply at the last cycle. The six files from the other two flowcells stay high, apart from a dip at cycle 27 in IR_rep4 R2 and a weaker last cycle in mock_rep4 R1.
+
+<div class="figure" style="text-align: center">
+<img src="fig/02_qc/examples/fastqc_sequence_quality_histogram.png" alt="Three cartoon quality plots: read 2 quality collapsing while read 1 stays high, a short quality bump followed by a drop, and a stable high profile"  />
+<p class="caption">Contrast example, schematic and not data: one read of a pair failing, a chemistry problem during the run, and a good profile. Cartoon by Zandra Selina, CC BY 4.0.</p>
+</div>
+
+<div class="figure" style="text-align: center">
+<img src="fig/02_qc/fastqc-qual.png" alt="FastQC per base sequence quality plot from another dataset with 150 bp reads, mean quality flat near 39 for every position"  />
+<p class="caption">Contrast example from a different dataset (150 bp reads): per base quality that stays near Q39 across the whole read, which is what an excellent run looks like.</p>
+</div>
+
 
 ### Per tile sequence quality
 
 Reports whether specific regions of the flowcell produced lower quality reads.
-Uneven tiles can indicate instrument issues or bubble formation, but this module rarely shows problems in modern Illumina data.
+Uneven tiles can indicate instrument issues or bubble formation. In this workshop's data the module fails in 12 of 16 files: all ten from flowcell C1PF5ACXX, plus IR_rep4 R2 and mock_rep4 R1.
 
 <div class="figure" style="text-align: center">
-<img src="fig/02_qc/fastqc_per_base_sequence_content.png" alt="Per tile sequence quality plot"  />
-<p class="caption">Per tile sequence quality plot</p>
+<img src="fig/02_qc/fastqc_per_tile_quality.png" alt="Your output: per tile sequence quality for WT_Bcell_IR_rep1_R1, one of the 12 files that fail this module"  />
+<p class="caption">Your output: per tile sequence quality for WT_Bcell_IR_rep1_R1, one of the 12 files that fail this module</p>
 </div>
+
+<div class="figure" style="text-align: center">
+<img src="fig/02_qc/fastqc_per_base_sequence_content.png" alt="Three cartoon flowcell heat maps: all tiles turning yellow toward the end of the run, one lane yellow while the others stay blue, and all tiles blue"  />
+<p class="caption">Contrast example, schematic and not data: tile-level patterns, from quality loss toward the end of the run on every tile, to a single failed lane, to a clean flowcell. The cartoon is titled Per base sequence content, but its panels show tile patterns. Cartoon by Zandra Selina, CC BY 4.0.</p>
+</div>
+
 
 ### Per sequence quality scores
 
@@ -162,9 +184,15 @@ Shows how many reads have high or low overall quality.
 A good dataset has most reads with high scores and very few reads with low quality.
 
 <div class="figure" style="text-align: center">
-<img src="fig/02_qc/fastqc_per_sequence_quality_score.png" alt="Distribution of per sequence quality scores"  />
-<p class="caption">Distribution of per sequence quality scores</p>
+<img src="fig/02_qc/fastqc_per_sequence_quality_score.png" alt="Your output: per sequence quality scores for the 16 workshop FASTQ files (MultiQC)"  />
+<p class="caption">Your output: per sequence quality scores for the 16 workshop FASTQ files (MultiQC)</p>
 </div>
+
+<div class="figure" style="text-align: center">
+<img src="fig/02_qc/examples/fastqc_per_sequence_quality_score.png" alt="Three cartoon histograms of per read quality: a single peak at low quality, two peaks, and one sharp peak at high quality"  />
+<p class="caption">Contrast example, schematic and not data: most reads of low quality (a bad run), a bimodal distribution (often a flowcell location artifact), and a good single peak at high quality. Cartoon by Zandra Selina, CC BY 4.0.</p>
+</div>
+
 
 ### Per base sequence content
 
@@ -173,9 +201,15 @@ For genomic resequencing, all four lines should be close to 25 percent.
 RNA-seq usually shows imbalanced composition in early cycles due to biased priming and transcript composition. Mild imbalance at the start of the read is normal and does not require trimming.
 
 <div class="figure" style="text-align: center">
-<img src="fig/02_qc/fastqc_per_base_atgc_content.png" alt="Per base sequence content for RNA-seq reads"  />
-<p class="caption">Per base sequence content for RNA-seq reads</p>
+<img src="fig/02_qc/fastqc_per_base_atgc_content.png" alt="Your output: per base sequence content for WT_Bcell_IR_rep3_R1"  />
+<p class="caption">Your output: per base sequence content for WT_Bcell_IR_rep3_R1</p>
 </div>
+
+<div class="figure" style="text-align: center">
+<img src="fig/02_qc/examples/fastqc_per_base_atgc_content.png" alt="FastQC per base sequence content plot from another dataset with 40 bp reads, where the A, C, G, and T lines diverge in the first few cycles and then run nearly flat"  />
+<p class="caption">Contrast example from a different RNA-seq dataset (40 bp reads): the same uneven base composition in the first cycles, caused by biased priming. FastQC flags it, but it is normal for RNA-seq.</p>
+</div>
+
 
 ### Per sequence GC content
 
@@ -183,9 +217,15 @@ Shows the GC distribution across all reads.
 RNA-seq often fails this test because expressed transcripts are not GC neutral. Only pronounced multi-modal or extremely shifted distributions are concerning, for example when contamination from another organism is suspected.
 
 <div class="figure" style="text-align: center">
-<img src="fig/02_qc/fastqc_per_sequence_GC_content.png" alt="Per sequence GC content distribution"  />
-<p class="caption">Per sequence GC content distribution</p>
+<img src="fig/02_qc/fastqc_per_sequence_GC_content.png" alt="Your output: per sequence GC content for the 16 workshop FASTQ files (MultiQC)"  />
+<p class="caption">Your output: per sequence GC content for the 16 workshop FASTQ files (MultiQC)</p>
 </div>
+
+<div class="figure" style="text-align: center">
+<img src="fig/02_qc/examples/fastqc_per_sequence_GC_content.png" alt="Three cartoon GC content plots: two shifted peaks, one skewed peak, and an observed peak matching the expected curve"  />
+<p class="caption">Contrast example, schematic and not data: libraries with different GC content (fine across species, a warning within one), a non-normal distribution that suggests a lab artifact, and a good match to the expected curve. Cartoon by Zandra Selina, CC BY 4.0.</p>
+</div>
+
 
 ### Per base N content
 
@@ -193,9 +233,17 @@ Reports the percentage of unidentified bases (N) at each position.
 This should be near zero for modern Illumina runs. High N content indicates failed cycles or poor sequencing chemistry.
 
 <div class="figure" style="text-align: center">
-<img src="fig/02_qc/fastqc_per_base_n_content.png" alt="Per base N content plot"  />
-<p class="caption">Per base N content plot</p>
+<img src="fig/02_qc/fastqc_per_base_n_content.png" alt="Your output: per base N content for the 16 workshop FASTQ files (MultiQC)"  />
+<p class="caption">Your output: per base N content for the 16 workshop FASTQ files (MultiQC)</p>
 </div>
+
+In the workshop data, the R1 files from flowcell C1PF5ACXX have 38 to 44 percent N bases at the last cycle, their R2 files 13 to 22 percent at one early cycle, and IR_rep4 R2 52 percent at cycle 27. These are failed cycles on the sequencer, not a property of the libraries.
+
+<div class="figure" style="text-align: center">
+<img src="fig/02_qc/examples/fastqc_per_base_n_content.png" alt="Three cartoon N content plots: a curve rising at the end of the read, a flat line above zero, and a flat line at zero"  />
+<p class="caption">Contrast example, schematic and not data: N bases rising toward the end of the read (chemistry running out), a constant N level (a failed lane or masked reads), and no N bases. Cartoon by Zandra Selina, CC BY 4.0.</p>
+</div>
+
 
 ### Sequence length distribution
 
@@ -203,9 +251,15 @@ Shows the distribution of read lengths.
 Standard RNA-seq libraries should have a narrow peak at the expected read length. Variable lengths usually appear after trimming or for specialized protocols such as small RNA.
 
 <div class="figure" style="text-align: center">
-<img src="fig/02_qc/fastqc_length_distribution.png" alt="Sequence length distribution for RNA-seq data"  />
-<p class="caption">Sequence length distribution for RNA-seq data</p>
+<img src="fig/02_qc/fastqc_length_distribution.png" alt="Your output: sequence length distribution for WT_Bcell_IR_rep3_R1, where every read is 51 bp"  />
+<p class="caption">Your output: sequence length distribution for WT_Bcell_IR_rep3_R1, where every read is 51 bp</p>
 </div>
+
+<div class="figure" style="text-align: center">
+<img src="fig/02_qc/examples/fastqc_length_distribution.png" alt="FastQC sequence length distribution from another dataset, a single sharp peak at 150 bp"  />
+<p class="caption">Contrast example from a different dataset sequenced with 150 bp reads: still a single narrow peak, only at a different read length. Nothing is wrong here; a broad distribution would point to trimming or a small RNA protocol.</p>
+</div>
+
 
 ### Sequence duplication levels
 
@@ -213,9 +267,15 @@ Reports how many reads are exact duplicates.
 Some duplication is normal in RNA-seq because highly expressed genes produce many identical fragments. Very high duplication, especially combined with low library size, can indicate low library complexity or overamplification.
 
 <div class="figure" style="text-align: center">
-<img src="fig/02_qc/fastqc_sequence_duplication_level.png" alt="Sequence duplication levels"  />
-<p class="caption">Sequence duplication levels</p>
+<img src="fig/02_qc/fastqc_sequence_duplication_level.png" alt="Your output: sequence duplication levels for the 16 workshop FASTQ files (MultiQC)"  />
+<p class="caption">Your output: sequence duplication levels for the 16 workshop FASTQ files (MultiQC)</p>
 </div>
+
+<div class="figure" style="text-align: center">
+<img src="fig/02_qc/examples/fastqc_sequence_duplication_level.png" alt="Three cartoon duplication plots: a slowly decaying curve, a wavy pattern, and a single spike at duplication level one"  />
+<p class="caption">Contrast example, schematic and not data: high duplication from a low-complexity or over-amplified library, a periodic pattern that can be fine for amplicon data, and a library dominated by unique reads. Cartoon by Zandra Selina, CC BY 4.0.</p>
+</div>
+
 
 ### Overrepresented sequences
 
@@ -228,9 +288,15 @@ Shows whether any read cycles contain adapter sequences.
 Small amounts at the extreme ends are common and usually harmless. Consistently high adapter content across many cycles suggests short inserts or poorly prepared libraries.
 
 <div class="figure" style="text-align: center">
-<img src="fig/02_qc/fastqc_adapter_content.png" alt="Adapter content across the read"  />
-<p class="caption">Adapter content across the read</p>
+<img src="fig/02_qc/fastqc_adapter_content.png" alt="Your output: adapter content for the 16 workshop FASTQ files (MultiQC)"  />
+<p class="caption">Your output: adapter content for the 16 workshop FASTQ files (MultiQC)</p>
 </div>
+
+<div class="figure" style="text-align: center">
+<img src="fig/02_qc/examples/fastqc_adapter_content.png" alt="Two cartoon adapter content plots: a curve rising toward the end of the read, and a flat line at zero"  />
+<p class="caption">Contrast example, schematic and not data: adapter content rising toward the read end (short inserts, acceptable only for fragmented ancient DNA) and a flat line near zero. Cartoon by Zandra Selina, CC BY 4.0.</p>
+</div>
+
 
 
 ## Aggregating reports with MultiQC
@@ -242,7 +308,6 @@ FastQC generates a separate HTML file per sample. MultiQC consolidates all repor
 Generate a single combined report using MultiQC.
 
 ```bash
-cd rnaseq-workshop
 module load biocontainers
 module load multiqc
 
@@ -251,9 +316,15 @@ multiqc results/qc_fastq/ -o results/qc_fastq/
 ```
 
 <div class="figure" style="text-align: center">
-<img src="fig/02_qc/multiqc-summary.png" alt="Example MultiQC summary across all samples"  />
-<p class="caption">Example MultiQC summary across all samples</p>
+<img src="fig/02_qc/multiqc-summary.png" alt="Your output: MultiQC summary of the FastQC status checks for the 16 workshop FASTQ files"  />
+<p class="caption">Your output: MultiQC summary of the FastQC status checks for the 16 workshop FASTQ files</p>
 </div>
+
+<div class="figure" style="text-align: center">
+<img src="fig/02_qc/examples/multiqc-summary.png" alt="MultiQC FastQC status heat map from another dataset with six runs, where the per base sequence content and sequence duplication columns are red for every file and most other columns are green"  />
+<p class="caption">Contrast example from a different dataset (runs SRR33253285 to SRR33253290): per base sequence content and sequence duplication fail in every file. In RNA-seq both are common and are not by themselves a reason to discard data; read the plots, not only the colors.</p>
+</div>
+
 
 ## Trimming adapter sequences
 
@@ -301,12 +372,13 @@ Using the MultiQC HTML report, answer:
 
 ::::::::::::::::::::::::::::::::::: solution
 
-Typical interpretation for this dataset (students should compare with their own):
+Interpretation for this dataset (compare with your own report):
 
-- All replicates show high, stable sequence quality.
-- Adapter signal appears only at the extreme ends of reads for selected samples and is less than 4 percent.
-- No samples show concerning patterns or biases.
-- Trimming is therefore unnecessary for this dataset.
+1. No. The samples fall into two groups. IR_rep3, IR_rep4, and mock_rep4 have good quality along most of the read (mean about Q33 to Q35), apart from one cycle in IR_rep4 R2 that is about half N bases and a weak last cycle in mock_rep4 R1. The other five samples are lower (mean about Q26 to Q31), their last cycle collapses (the lower quartile drops to Q2 at position 51, with 38 to 44 percent N bases in R1), and their R2 files have 13 to 22 percent N at one early cycle. FastQC fails per base sequence quality in 12 of 16 files, per tile sequence quality in 12 of 16, and per base N content in 7 of 16. These five samples were sequenced on one flowcell (C1PF5ACXX, visible in the read names) and the clean three on two others, so these are problems of that sequencing run, not of the libraries. They show up again in Episode 04a: the three clean samples have the highest STAR mapping rates.
+2. No. Adapter content passes in all 16 files; with 51 bp reads, very few inserts are shorter than the read.
+3. Besides the quality groups, duplication differs: IR_rep2 and mock_rep3 are about 96 percent unique (FastQC "deduplicated percentage"), the other samples 53 to 79 percent. This is worth recording, but it is not a reason to drop a sample at this stage. Per sequence GC content fails in 8 of 16 files, which is common for RNA-seq, as explained above.
+
+Trimming is not needed for this dataset: adapters are absent and the aligner handles low quality read ends.
 
 :::::::::::::::::::::::::::::::::::
 
