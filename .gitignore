@@ -53,7 +53,10 @@ po/*~
 renv/sandbox # OPTIONAL
 instructor-notes/
 CLAUDE.md
-new-prompts/
+maintenance/prompts/
 local-test/
-negishi-run/
+negishi-run/generated/
+negishi-run/staged-data/
+negishi-run/*.tar.gz
+!negishi-run/docs/
 
