@@ -92,7 +92,7 @@ mv rnaseq-workshop_results.retired-2026-10-03 rnaseq-workshop_results
 
 ## Staging the learner copy on Depot
 
-The staged copy learners rsync in setup lives on Depot at `/depot/DEPOT_PATH/rnaseq-workshop` (`STAGED` in `config.sh`). Replace `DEPOT_PATH` in `config.sh`, `learners/setup.md`, and `.claude/CLAUDE.md` first; the kit refuses to run until you do.
+The staged copy learners rsync in setup lives on Depot at `/depot/workshop/data/rnaseq-workshop` (`STAGED` in `config.sh`; the same path is in `learners/setup.md` and `.claude/CLAUDE.md`). First staged and verified on 2026-10-02 (31 files, 0 problems).
 
 It must hold exactly what `staged_manifest.tsv` lists (31 files): the 16 FASTQ files, the four GENCODE vM38 references, `mart.tsv`, `annot.tsv`, `SRR_Acc_List.txt` (the 8 workshop runs; GSE71176 has 24, see Episode 02), `tx2gene.tsv` (built from the transcript FASTA, as Episode 04b does), and the seven files in `scripts/`. Nothing else: no indexes, `results/`, job logs, `README.md`, or `.ipynb_checkpoints/`, because learners would receive them and the kit would treat finished outputs as done.
 

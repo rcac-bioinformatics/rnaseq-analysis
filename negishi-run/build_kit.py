@@ -318,7 +318,7 @@ if SWAP_FROM not in b06_swap.text:
 
 # setup.md blocks for 01_learner_setup.sh
 bS_echo = find("setup", "echo $RCAC_SCRATCH", "bash")
-bS_rsync = find("setup", "rsync -avP /depot/DEPOT_PATH/rnaseq-workshop ${RCAC_SCRATCH}/", "bash")
+bS_rsync = find("setup", "rsync -avP /depot/workshop/data/rnaseq-workshop ${RCAC_SCRATCH}/", "bash")
 bS_verify = find("setup", "ls ${RCAC_SCRATCH}/rnaseq-workshop/data/*.fastq.gz | wc -l", "bash")
 
 # -------- step table

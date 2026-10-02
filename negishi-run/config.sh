@@ -9,8 +9,8 @@ KIT_PARTITION=${KIT_PARTITION:-cpu}
 KIT_QOS_DEFAULT=${KIT_QOS_DEFAULT:-standby}
 
 # Staged workshop data on Depot (read only for the kit; written only by restage.sh).
-# Replace DEPOT_PATH (also in learners/setup.md and .claude/CLAUDE.md); the kit refuses to run until then.
-STAGED=${STAGED:-/depot/DEPOT_PATH/rnaseq-workshop}
+# The same path appears in learners/setup.md and .claude/CLAUDE.md; keep them in sync.
+STAGED=${STAGED:-/depot/workshop/data/rnaseq-workshop}
 # Permission model of the staged copy: group (Depot group-readable) or other (world-readable)
 STAGED_PERM=${STAGED_PERM:-group}
 # Previous staging location, the default source for restage.sh

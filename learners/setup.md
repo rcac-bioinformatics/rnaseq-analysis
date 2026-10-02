@@ -185,7 +185,7 @@ echo $SCRATCH
 The workshop data is pre-staged on Negishi. Copy it to your scratch directory:
 
 ```bash
-rsync -avP /depot/DEPOT_PATH/rnaseq-workshop ${RCAC_SCRATCH}/
+rsync -avP /depot/workshop/data/rnaseq-workshop ${RCAC_SCRATCH}/
 ```
 
 This creates `${RCAC_SCRATCH}/rnaseq-workshop`, the working directory every episode uses. It will copy:

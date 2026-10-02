@@ -18,6 +18,11 @@ if [ -e "$RUN/markers/01.done" ] && kit_is_done 01 2>/dev/null; then
   exit 0
 fi
 [ -d "$STAGED" ] || kit_die "staged data $STAGED not found; run 00_preflight.sh"
+# the setup.md copy command (generated from learners/setup.md) must read from STAGED in config.sh
+if ! grep -qF "rsync -avP $STAGED " "$KIT_GEN/setup/02-rsync.sh"; then
+  kit_die "learners/setup.md copies from '$(grep -o 'rsync -avP [^ ]*' "$KIT_GEN/setup/02-rsync.sh")', but STAGED is $STAGED.
+Update learners/setup.md (or re-send the kit from the laptop), run: python3 $KIT_DIR/build_kit.py, then retry."
+fi
 kit_init_run "$RUN"
 export RUN
 kit_load_run   # exports SCRATCH and RCAC_SCRATCH = $RUN/scratch (the test learner's scratch)
