@@ -45,7 +45,7 @@ The workflow follows the same general pattern as Episode 05 (genome-based), but 
 
 1. **Input data**: We use the `txi` object from tximport rather than raw counts from featureCounts.
 2. **Count handling**: Kallisto estimates are model-based (not integer counts), and DESeq2 handles this appropriately via `DESeqDataSetFromTximport()`.
-3. **Bootstrap support**: Kallisto's uncertainty estimates (from bootstraps) can be used with sleuth for transcript-level DE.
+3. **Bootstrap support**: if you run Kallisto with bootstraps (`-b`), the uncertainty estimates can be used with sleuth for transcript-level DE. DESeq2 does not use them, which is why Episode 04b runs with `-b 0`.
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
@@ -83,11 +83,7 @@ WT_Bcell_IR_rep3,WT_IR
 WT_Bcell_IR_rep4,WT_IR
 ```
 
-Create a results directory:
-
-```bash
-mkdir -p results/deseq2_kallisto
-```
+The R code below creates the `results/deseq2_kallisto` directory for the output.
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -97,7 +93,6 @@ Start your RStudio session via Open OnDemand as described in Episode 05, then lo
 
 ```r
 library(DESeq2)
-library(tximportData)
 library(ggplot2)
 library(reshape2)
 library(pheatmap)
@@ -108,6 +103,8 @@ library(dplyr)
 # Construct the path dynamically
 work_dir <- file.path("/scratch/negishi", Sys.getenv("USER"), "rnaseq-workshop")
 setwd(work_dir)
+# output directory for this episode
+dir.create("results/deseq2_kallisto", recursive = TRUE, showWarnings = FALSE)
 ```
 
 Load the tximport object created in Episode 04b:
@@ -122,29 +119,18 @@ Examine the structure of the tximport object:
 names(txi)
 ```
 
-```
-[1] "abundance"           "counts"              "infReps"             "length"              "countsFromAbundance"
+<!-- NEGISHI:05b-out-names-txi -->
+```text
+TBD
 ```
 
 ```r
 head(txi$counts)
 ```
 
+<!-- NEGISHI:05b-out-txi-head -->
 ```text
-                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4 WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3
-ENSMUSG00000000001.5         387.39815         329.4356     737.97311964        654.17550           687.1189          620.35065          661.35411
-ENSMUSG00000000003.16          0.00000           1.0000       0.00000000          0.00000             0.0000            0.00000            0.00000
-ENSMUSG00000000028.16         32.81579          20.0000      36.63144821         29.71743            53.5750           36.92104           39.00000
-ENSMUSG00000000031.20          0.00000           0.0000       0.09733145          0.00000             0.0000            0.00000            0.00000
-ENSMUSG00000000037.18          2.00000           3.0000       1.28018005          8.00000             1.0000            0.00000            1.58711
-ENSMUSG00000000049.12          0.00000           0.0000       0.00000000          0.00000             0.0000            0.00000            0.00000
-                      WT_Bcell_mock_rep4
-ENSMUSG00000000001.5            704.8851
-ENSMUSG00000000003.16             0.0000
-ENSMUSG00000000028.16            36.0000
-ENSMUSG00000000031.20             0.0000
-ENSMUSG00000000037.18             0.0000
-ENSMUSG00000000049.12             0.0000
+TBD
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
@@ -172,11 +158,14 @@ coldata <- read.csv(
     stringsAsFactors = TRUE
 )
 coldata$condition <- as.factor(coldata$condition)
+# make WT_mock the reference (denominator) level, as in Episode 05
+coldata$condition <- relevel(coldata$condition, ref = "WT_mock")
 coldata <- coldata[colnames(txi$counts), , drop = FALSE]
 coldata
 ```
 
-```
+<!-- NEGISHI:05b-out-coldata -->
+```text
                    condition
 WT_Bcell_IR_rep1       WT_IR
 WT_Bcell_IR_rep2       WT_IR
@@ -194,7 +183,8 @@ Verify that sample names match between tximport and metadata:
 all(colnames(txi$counts) == rownames(coldata))
 ```
 
-```
+<!-- NEGISHI:05b-out-names-match -->
+```text
 [1] TRUE
 ```
 
@@ -236,8 +226,9 @@ dds <- dds[keep, ]
 dim(dds)
 ```
 
-```
-[1] 18924     8
+<!-- NEGISHI:05b-out-dim-dds -->
+```text
+[1] TBD     8
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
@@ -262,24 +253,11 @@ Estimate size factors:
 ```r
 dds <- estimateSizeFactors(dds)
 head(normalizationFactors(dds))
-
 ```
 
-```
-                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4 WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3
-ENSMUSG00000000001.5         0.8578693        0.8520842         1.099577        1.0524525           1.059461          0.9946634          0.9552297
-ENSMUSG00000000028.16        0.9455555        0.7479666         1.149805        0.9882356           1.071439          1.0191038          0.9154327
-ENSMUSG00000000056.8         0.8580737        0.8528464         1.101744        1.0540656           1.058546          0.9930345          0.9540278
-ENSMUSG00000000078.8         0.8580503        0.8527592         1.101496        1.0538811           1.058650          0.9932207          0.9541651
-ENSMUSG00000000085.17        0.7941016        0.7697798         1.199288        1.0181546           1.163680          0.9580967          1.0675296
-ENSMUSG00000000088.8         0.8537054        0.8364591         1.055812        1.0199231           1.078562          1.0286198          0.9803416
-                      WT_Bcell_mock_rep4
-ENSMUSG00000000001.5            1.174355
-ENSMUSG00000000028.16           1.244899
-ENSMUSG00000000056.8            1.173333
-ENSMUSG00000000078.8            1.173450
-ENSMUSG00000000085.17           1.125634
-ENSMUSG00000000088.8            1.195682
+<!-- NEGISHI:05b-out-normfactors -->
+```text
+TBD
 ```
 
 ## Step 3: Exploratory data analysis
@@ -406,7 +384,7 @@ Using the distance heatmap and PCA plot:
 
 ::::::::::::::::::::::::::::::::::: solution
 
-Example interpretation:
+Interpretation <!-- NEGISHI:05b-sol-exploratory -->:
 
 1. Samples should cluster by condition (WT_mock vs WT_IR) in both the heatmap and PCA.
 2. If all replicates cluster together, there are no obvious outliers.
@@ -424,7 +402,8 @@ Run the full DESeq2 pipeline:
 dds <- DESeq(dds)
 ```
 
-```
+<!-- NEGISHI:05b-out-deseq-messages -->
+```text
 estimating size factors
 estimating dispersions
 gene-wise dispersion estimates
@@ -439,7 +418,7 @@ Inspect dispersion estimates:
 plotDispEsts(dds)
 ```
 
-```{r, fig.cap="Volcano plot of differential expression results", echo=FALSE, message=FALSE}
+```{r, fig.cap="Dispersion estimates from DESeq2 (Kallisto pathway)", echo=FALSE, message=FALSE}
 knitr::include_graphics("fig/05_deseq/plotdispests-k.png")
 ```
 
@@ -457,25 +436,26 @@ A good fit shows the red line passing through the center of the black cloud, wit
 
 :::::::::::::::::::::::::::::::::::::::
 
-Extract results for the contrast of interest:
+Extract results for the contrast of interest, naming the numerator (`WT_IR`) and denominator (`WT_mock`) explicitly so that positive log2 fold changes mean higher after IR (see "Name your contrast" in Episode 05):
 
 ```r
 res <- results(
     dds,
-    contrast = c("condition", "WT_mock", "WT_IR")
+    contrast = c("condition", "WT_IR", "WT_mock")
 )
 
 summary(res)
 ```
 
-```
-out of 19693 with nonzero total read count
+<!-- NEGISHI:05b-out-summary-res -->
+```text
+out of TBD with nonzero total read count
 adjusted p-value < 0.1
-LFC > 0 (up)       : 3482, 18%
-LFC < 0 (down)     : 3675, 19%
-outliers [1]       : 10, 0.051%
-low counts [2]     : 0, 0%
-(mean count < 6)
+LFC > 0 (up)       : TBD
+LFC < 0 (down)     : TBD
+outliers [1]       : TBD
+low counts [2]     : TBD
+(mean count < TBD)
 [1] see 'cooksCutoff' argument of ?results
 [2] see 'independentFiltering' argument of ?results
 ```
@@ -489,6 +469,7 @@ head(res_ordered)
 
 Output:
 
+<!-- NEGISHI:05b-out-top-res -->
 ```text
 log2 fold change (MLE): condition WT_IR vs WT_mock 
 Wald test p-value: condition WT_IR vs WT_mock 
@@ -513,8 +494,9 @@ First, check the available coefficients:
 resultsNames(dds)
 ```
 
-```
-[1] "Intercept"        "condition_WT_mock_vs_WT_IR"
+<!-- NEGISHI:05b-out-resultsnames -->
+```text
+TBD
 ```
 
 Apply shrinkage using `apeglm` (recommended for standard contrasts):
@@ -522,7 +504,7 @@ Apply shrinkage using `apeglm` (recommended for standard contrasts):
 ```r
 res_shrunk <- lfcShrink(
     dds,
-    coef = "condition_WT_mock_vs_WT_IR",
+    coef = "condition_WT_IR_vs_WT_mock",
     type = "apeglm"
 )
 ```
@@ -558,7 +540,7 @@ Create a summary table:
 log2fc_cut <- log2(1.5)
 
 res_df <- as.data.frame(res_shrunk)
-res_df$gene_id <- rownames(res_df)
+res_df$ensembl_gene_id_version <- rownames(res_df)
 
 summary_table <- tibble(
     total_genes = nrow(res_df),
@@ -571,14 +553,15 @@ print(summary_table)
 ```
 output:
 
+<!-- NEGISHI:05b-out-summary-table -->
 ```text
 # A tibble: 1 × 4
   total_genes   sig    up  down
         <int> <int> <int> <int>
-1       19693  6078  2296  2448
+1         TBD   TBD   TBD   TBD
 ```
 
-We will attach annotations so that results are interpretable. Load gene annotation data (from Episode 02):
+We will attach annotations so that results are interpretable. Load the gene annotation tables copied with the workshop data (the same files as in Episode 05; its "How were these data prepared?" spoiler shows how they were made):
 
 
 ```r
@@ -597,12 +580,7 @@ annot <-
   )
 ```
 
-```r
-res_df <- as.data.frame(res)
-res_df$ensembl_gene_id_version <- rownames(res_df)
-```
-
-Join DE results, normalized counts, and annotation:
+Join the shrunken DE results (`res_df`, built above) with the annotation:
 
 ```r
 res_annot <- res_df %>%
@@ -610,8 +588,8 @@ res_annot <- res_df %>%
                    by = "ensembl_gene_id_version")
 ```
 
-Joining normalized counts and annotation makes the output biologically interpretable.
-The final table becomes a comprehensive results object containing:
+Joining the annotation makes the output biologically interpretable.
+The final table contains:
 
 - `gene identifiers`
 - `gene symbols`
@@ -698,7 +676,7 @@ If you also ran Episode 05 (genome-based workflow):
 
 ::::::::::::::::::::::::::::::::::: solution
 
-Expected observations:
+Expected observations <!-- NEGISHI:05b-sol-compare-tracks -->:
 
 1. The number of DE genes should be broadly similar, though not identical.
 2. Most top DE genes should overlap between methods.
@@ -716,15 +694,17 @@ Save the full results table:
 
 ```r
 write_tsv(
-    res_df,
+    res_annot,
     "results/deseq2_kallisto/DESeq2_kallisto_results.tsv"
 )
 ```
 
+Episode 06 can start from this file instead of the Episode 05 table; it has the same `ensembl_gene_id_version`, `log2FoldChange`, `pvalue`, and `padj` columns.
+
 Save significant genes only:
 
 ```r
-sig_res <- res_df %>%
+sig_res <- res_annot %>%
     filter(
         padj <= 0.05,
         abs(log2FoldChange) >= log2fc_cut

@@ -1,0 +1,76 @@
+--- episodes/05-deseq2-expression-analyses.Rmd	2026-01-21 18:39:59.023012646 -0600
++++ episodes/05-deseq2-expression-analyses.Rmd	2026-10-01 22:42:20.362137319 -0500
+@@ -122,6 +122,8 @@
+     stringsAsFactors = TRUE
+   )
+ coldata$condition <- as.factor(coldata$condition)
++# make WT_mock the reference level so log2 fold changes are IR vs mock
++coldata$condition <- relevel(coldata$condition, ref = "WT_mock")
+ 
+ cts <- as.matrix(read.delim(countsFile, row.names = 1, header = TRUE))
+ ```
+@@ -684,7 +686,7 @@
+ ```
+ 
+ ```
+-[1] "Intercept"                  "condition_WT_mock_vs_WT_IR"
++[1] "Intercept"                  "condition_WT_IR_vs_WT_mock"
+ ```
+ 
+ Apply shrinkage using `apeglm` (recommended for standard two-group comparisons):
+@@ -692,7 +694,7 @@
+ ```r
+ res_shrunk <- lfcShrink(
+     dds,
+-    coef = "condition_WT_mock_vs_WT_IR",
++    coef = "condition_WT_IR_vs_WT_mock",
+     type = "apeglm"
+ )
+ 
+@@ -901,7 +903,7 @@
+ Save the DESeq2 object for downstream analysis:
+ 
+ ```r
+-saveRDS(dds, "results/deseq2_results/dds_featurecounts.rds")
++saveRDS(dds, "results/deseq2/dds_featurecounts.rds")
+ ```
+ 
+ 
+--- episodes/05b-deseq2-expression-analyses-kallisto.Rmd	2026-01-16 20:02:09.479583002 -0600
++++ episodes/05b-deseq2-expression-analyses-kallisto.Rmd	2026-10-01 22:42:20.362137319 -0500
+@@ -172,6 +172,8 @@
+     stringsAsFactors = TRUE
+ )
+ coldata$condition <- as.factor(coldata$condition)
++# make WT_mock the reference level so log2 fold changes are IR vs mock
++coldata$condition <- relevel(coldata$condition, ref = "WT_mock")
+ coldata <- coldata[colnames(txi$counts), , drop = FALSE]
+ coldata
+ ```
+@@ -462,7 +464,7 @@
+ ```r
+ res <- results(
+     dds,
+-    contrast = c("condition", "WT_mock", "WT_IR")
++    contrast = c("condition", "WT_IR", "WT_mock")
+ )
+ 
+ summary(res)
+@@ -514,7 +516,7 @@
+ ```
+ 
+ ```
+-[1] "Intercept"        "condition_WT_mock_vs_WT_IR"
++[1] "Intercept"        "condition_WT_IR_vs_WT_mock"
+ ```
+ 
+ Apply shrinkage using `apeglm` (recommended for standard contrasts):
+@@ -522,7 +524,7 @@
+ ```r
+ res_shrunk <- lfcShrink(
+     dds,
+-    coef = "condition_WT_mock_vs_WT_IR",
++    coef = "condition_WT_IR_vs_WT_mock",
+     type = "apeglm"
+ )
+ ```

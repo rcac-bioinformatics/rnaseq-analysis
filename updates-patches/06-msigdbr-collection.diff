@@ -1,0 +1,22 @@
+--- episodes/06-gene-set-enrichment-analyses.Rmd	2026-01-16 21:02:10.637681387 -0600
++++ episodes/06-gene-set-enrichment-analyses.Rmd	2026-10-01 22:58:37.637811709 -0500
+@@ -618,7 +618,7 @@
+ ### Load Hallmark gene sets
+ 
+ ```r
+-hallmark <- msigdbr(species = "Mus musculus", category = "H")
++hallmark <- msigdbr(species = "Mus musculus", collection = "H")
+ head(hallmark)
+ ```
+ Output:
+@@ -642,8 +642,8 @@
+ 
+ ```r
+ hallmark_list <- hallmark %>%
+-    dplyr::select(gs_name, entrez_gene) %>%
+-    dplyr::rename(term = gs_name, gene = entrez_gene)
++    dplyr::select(gs_name, ncbi_gene) %>%
++    dplyr::rename(term = gs_name, gene = ncbi_gene)
+ ```
+ 
+ ### Run Hallmark enrichment

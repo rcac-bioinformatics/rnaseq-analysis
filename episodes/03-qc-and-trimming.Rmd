@@ -70,7 +70,10 @@ module load fastqc
 fastqc data/*.fastq.gz --outdir results/qc_fastq/ --threads 4
 ```
 
-```bash
+FastQC writes one HTML report and one zip archive per FASTQ file:
+
+<!-- NEGISHI:03-out-fastqc-ls -->
+```text
 results/qc_fastq/
 ├── WT_Bcell_mock_rep1_R1_fastqc.html
 ├── WT_Bcell_mock_rep1_R1_fastqc.zip
@@ -235,7 +238,6 @@ FastQC generates a separate HTML file per sample. MultiQC consolidates all repor
 Generate a single combined report using MultiQC.
 
 ```bash
-cd rnaseq-workshop
 module load biocontainers
 module load multiqc
 
@@ -293,12 +295,13 @@ Using the MultiQC HTML report, answer:
 
 ::::::::::::::::::::::::::::::::::: solution
 
-Typical interpretation for this dataset (students should compare with their own):
+Interpretation for this dataset (compare with your own report):
 
-- All replicates show high, stable sequence quality.
-- Adapter signal appears only at the extreme ends of reads for selected samples and is less than 4 percent.
-- No samples show concerning patterns or biases.
-- Trimming is therefore unnecessary for this dataset.
+1. Quality is high for most of the read, then drops toward the 3' end. FastQC flags per base sequence quality as failed in TBD of 16 files <!-- NEGISHI:03-sol-perbase-fail -->, because the lower quartile falls sharply in the last cycles. Per tile quality and per base N content also fail in some files (TBD and TBD of 16 <!-- NEGISHI:03-sol-tile-n-fail -->), which points to a few problem tiles and cycles on the 2015 HiSeq run, not to failed libraries. The mean quality stays high, and STAR soft clips poor read ends.
+2. No. Adapter content passes in TBD of 16 files <!-- NEGISHI:03-sol-adapter-pass -->; adapter signal is negligible with 51 bp reads.
+3. Duplication differs between samples: TBD <!-- NEGISHI:03-sol-duplication --> This is worth noting in your records (it may reflect a different sequencing run or library complexity), but it is not a reason to drop a sample at this stage. Per sequence GC content fails in TBD of 16 files <!-- NEGISHI:03-sol-gc-fail -->, which is common for RNA-seq, as explained above.
+
+Trimming is not needed for this dataset: adapters are absent and the aligner handles low quality read ends.
 
 :::::::::::::::::::::::::::::::::::
 

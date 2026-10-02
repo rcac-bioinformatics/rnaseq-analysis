@@ -22,7 +22,7 @@ Here are selected method-specific references covering the major components of RN
 
 1. **DESeq2**
    Love MI, Huber W, Anders S. *Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2.* Genome Biology, 2014.
-   [https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8)
+   [https://link.springer.com/article/10.1186/s13059-014-0550-8](https://link.springer.com/article/10.1186/s13059-014-0550-8)
 
 2. **edgeR**
    Robinson MD, McCarthy DJ, Smyth GK. *edgeR: a Bioconductor package for differential expression analysis of digital gene expression data.* Bioinformatics, 2010.
@@ -30,7 +30,7 @@ Here are selected method-specific references covering the major components of RN
 
 3. **limma-voom**
    Law CW, Chen Y, Shi W, Smyth GK. *voom: precision weights unlock linear model analysis tools for RNA-seq read counts.* Genome Biology, 2014.
-   [https://genomebiology.biomedcentral.com/articles/10.1186/gb-2014-15-2-r29](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2014-15-2-r29)
+   [https://link.springer.com/article/10.1186/gb-2014-15-2-r29](https://link.springer.com/article/10.1186/gb-2014-15-2-r29)
 
 4. **Sleuth (for Salmon/Kallisto quantification)**
    Pimentel H, Bray NL, Puente S, Melsted P, Pachter L. *Differential analysis of RNA-seq incorporating quantification uncertainty.* Nature Methods, 2017.
@@ -51,7 +51,7 @@ Here are selected method-specific references covering the major components of RN
 
 3. **TopHat2 (historical, not recommended now but still cited)**
    Kim D et al. *TopHat2: accurate alignment of transcriptomes in the presence of insertions, deletions and gene fusions.* Genome Biology, 2013.
-   [https://genomebiology.biomedcentral.com/articles/10.1186/gb-2013-14-4-r36](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2013-14-4-r36)
+   [https://link.springer.com/article/10.1186/gb-2013-14-4-r36](https://link.springer.com/article/10.1186/gb-2013-14-4-r36)
 
 
 ---
@@ -68,7 +68,7 @@ Here are selected method-specific references covering the major components of RN
 
 3. **RSEM (alignment-based quantification)**
    Li B, Dewey CN. *RSEM: accurate transcript quantification from RNA-seq data with or without a reference genome.* BMC Bioinformatics, 2011.
-   [https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-12-323](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-12-323)
+   [https://link.springer.com/article/10.1186/1471-2105-12-323](https://link.springer.com/article/10.1186/1471-2105-12-323)
 
 ---
 
@@ -97,11 +97,11 @@ Here are selected method-specific references covering the major components of RN
 
 1. **GOseq (for GO analysis accounting for transcript length bias)**
    Young MD, Wakefield MJ, Smyth GK, Oshlack A. *Gene ontology analysis for RNA-seq: accounting for selection bias.* Genome Biology, 2010.
-   [https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-2-r14](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-2-r14)
+   [https://link.springer.com/article/10.1186/gb-2010-11-2-r14](https://link.springer.com/article/10.1186/gb-2010-11-2-r14)
 
 2. **clusterProfiler (widely used for GO/KEGG)**
    Yu G, Wang LG, Han Y, He QY. *clusterProfiler: an R package for comparing biological themes among gene clusters.* OMICS, 2012.
-   [https://www.liebertpub.com/doi/10.1089/omi.2011.0118](https://www.liebertpub.com/doi/10.1089/omi.2011.0118)
+   [https://journals.sagepub.com/doi/10.1089/omi.2011.0118](https://journals.sagepub.com/doi/10.1089/omi.2011.0118)
 
 3. **fgsea (fast GSEA)**
    Korotkevich G, Sukhov V, Sergushichev A. *Fast gene set enrichment analysis.* bioRxiv, 2016.
@@ -122,11 +122,11 @@ Here are selected method-specific references covering the major components of RN
 
 2. **SUPPA2 (isoform-level splicing changes)**
    Trincado JL et al. *SUPPA2 provides fast, accurate, and uncertainty-aware differential splicing analysis.* Genome Biology, 2018.
-   [https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1417-1](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1417-1)
+   [https://link.springer.com/article/10.1186/s13059-018-1417-1](https://link.springer.com/article/10.1186/s13059-018-1417-1)
 
 3. **StringTie2 (transcript assembly and quantification)**
    Kovaka S et al. *Transcriptome assembly from long-read RNA-seq alignments with StringTie2.* Genome Biology, 2019.
-   [https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1910-1](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1910-1)
+   [https://link.springer.com/article/10.1186/s13059-019-1910-1](https://link.springer.com/article/10.1186/s13059-019-1910-1)
 
 ---
 

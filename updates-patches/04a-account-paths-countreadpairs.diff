@@ -1,0 +1,37 @@
+--- episodes/04a-genome-based-quantification.Rmd	2026-01-21 18:42:04.970801081 -0600
++++ episodes/04a-genome-based-quantification.Rmd	2026-10-01 23:08:00.731838965 -0500
+@@ -61,7 +61,7 @@
+ We run Salmon with `-l A`, which tells it to explore all library types.
+ 
+ ```bash
+-sinteractive -A rcac-workshop -q standby -p cpu -N 1 -n 4 --time=1:00:00
++sinteractive -A rcac-rnaseq -q standby -p cpu -N 1 -n 4 --time=1:00:00
+ 
+ cd $SCRATCH/rnaseq-workshop
+ mkdir -p results/strand_check
+@@ -190,7 +190,7 @@
+ 
+ ### Indexing the Genome with STAR
+ 
+-Below is a minimal SLURM job script for building the STAR genome index. Create a file named `index_genome.sh` in `$SCRATCH/rcac_rnaseq/scripts` with this content:
++Below is a minimal SLURM job script for building the STAR genome index. Create a file named `index_genome.sh` in `$SCRATCH/rnaseq-workshop/scripts` with this content:
+ 
+ ```bash
+ #!/bin/bash
+@@ -235,7 +235,7 @@
+ ## What will the output look like?
+ 
+ The index directory is now ready for use in mapping and should have contents like this:
+-Location: `$SCRATCH/rcac_rnaseq/data`
++Location: `$SCRATCH/rnaseq-workshop/data`
+ Contents of `star_index/`:
+ 
+ ```bash
+@@ -505,6 +505,7 @@
+ featureCounts \
+   -T ${SLURM_CPUS_PER_TASK} \
+   -p \
++  --countReadPairs \
+   -s 0 \
+   -t exon \
+   -g gene_id \

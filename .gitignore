@@ -54,3 +54,6 @@ renv/sandbox # OPTIONAL
 instructor-notes/
 CLAUDE.md
 new-prompts/
+local-test/
+negishi-run/
+

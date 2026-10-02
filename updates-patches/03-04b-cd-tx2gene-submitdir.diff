@@ -1,0 +1,51 @@
+--- episodes/03-qc-and-trimming.Rmd	2026-01-21 18:40:22.758973132 -0600
++++ episodes/03-qc-and-trimming.Rmd	2026-10-02 01:25:42.181011491 -0500
+@@ -235,7 +235,6 @@
+ Generate a single combined report using MultiQC.
+ 
+ ```bash
+-cd rnaseq-workshop
+ module load biocontainers
+ module load multiqc
+ 
+--- episodes/04b-transcript-based-quantification.Rmd	2026-01-21 18:42:24.334768167 -0600
++++ episodes/04b-transcript-based-quantification.Rmd	2026-10-02 01:25:42.181011491 -0500
+@@ -178,7 +178,7 @@
+ ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' > $SCRATCH/rnaseq-workshop/scripts/samples.txt
+ ```
+ 
+-Array job:
++Array job. Save it as `$SCRATCH/rnaseq-workshop/scripts/quant_kallisto.sh` (the script reads `samples.txt` from the directory you submit from):
+ 
+ ```bash
+ #!/bin/bash
+@@ -216,9 +216,10 @@
+     $R1 $R2 &> $OUT/$SAMPLE/${SAMPLE}.log
+ ```
+ 
+-Submit:
++Submit from the `scripts` directory:
+ 
+ ```bash
++cd $SCRATCH/rnaseq-workshop/scripts
+ sbatch quant_kallisto.sh
+ ```
+ 
+@@ -288,15 +289,11 @@
+ 
+ ### Prepare tx2gene mapping
+ 
+-We need a mapping file that links transcript IDs to gene IDs. The GTF annotation file contains this information.
++We need a mapping file that links transcript IDs to gene IDs. It must cover every transcript in the Kallisto index, so we build it from the headers of the same transcript FASTA (field 1 is the transcript ID, field 2 the gene ID). The basic GTF lists only about half of these transcripts; tximport would silently drop the rest and with them about 12% of the quantified reads.
+ 
+ ```bash
+ cd $SCRATCH/rnaseq-workshop/data
+-awk -F'\t' '$3=="transcript" {
+-    match($9, /transcript_id "([^"]+)"/, tx);
+-    match($9, /gene_id "([^"]+)"/, gene);
+-    print tx[1] "\t" gene[1]
+-}' gencode.vM38.primary_assembly.basic.annotation.gtf > tx2gene.tsv
++grep ">" gencode.vM38.transcripts.fa | cut -c2- | cut -d "|" -f 1,2 | tr "|" "\t" > tx2gene.tsv
+ ```
+ 
+ Next, we process this mapping in R. Load the modules and start the R session:

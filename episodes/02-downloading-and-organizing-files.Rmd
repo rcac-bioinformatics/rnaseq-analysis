@@ -46,7 +46,7 @@ Many library preparation protocols introduce adapter sequences at the ends of re
 ## Should I trim adapters for RNA seq analysis?
 
 In most cases, no. Aligners such as HISAT2 and STAR soft clip adapter sequences. Overly aggressive trimming can reduce mapping rates or distort read length distributions. Trimming is needed only for specific applications such as transcript assembly where uniform read lengths are important.  
-More information: <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4766705/>
+More information: <https://pmc.ncbi.nlm.nih.gov/articles/PMC4766705/>
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -116,7 +116,7 @@ Before downloading files, we create a reproducible directory layout for raw data
 
 ## Create the directories needed for this episode
 
-Create a working directory for the workshop (e.g., `rnaseq-workshop`). Inside it, create four subdirectories:
+Create a working directory for the workshop (e.g., `rnaseq-workshop`). Inside it, create three subdirectories:
 
 - `data` : raw FASTQ files, reference genome, annotation  
 - `scripts` : custom scripts, SLURM job files  
@@ -133,13 +133,10 @@ mkdir -p rnaseq-workshop/{data,scripts,results}
 
 The resulting directory structure should look like this:
 
-```bash
-aseethar@scholar-fe03:[aseethar] $ pwd
-/scratch/scholar/aseethar
-aseethar@scholar-fe03:[aseethar] $ tree rnaseq-workshop/
+```text
 rnaseq-workshop/
-├── results
 ├── data
+├── results
 └── scripts
 ```
 :::::::::::::::::::::::::::::::::::
@@ -250,6 +247,14 @@ knitr::include_graphics("fig/01_fq2counts/gencode-transcripts.png")
 
 ### Downloading all reference files
 
+::::::::::::::::::::::::::::::::::::::: callout
+
+## Already done if you copied the workshop data
+
+The workshop copy you made in [Setup](../learners/setup.md#data-setup) already contains these reference files, uncompressed, in `data/`. If you run this block in that directory, `gunzip` stops with "already exists; not overwritten" because the `.fa` and `.gtf` files are present. Read the commands here; run them only when you set up a project from scratch.
+
+:::::::::::::::::::::::::::::::::::::::
+
 ```bash
 cd ${SCRATCH}/rnaseq-workshop
 
@@ -351,7 +356,7 @@ mv SRR2121789_2.fastq.gz WT_Bcell_IR_rep4_R2.fastq.gz
 
 ## Workshop data is subsampled
 
-The FASTQ files provided for this workshop have been **subsampled to 20 million reads per sample**. The original samples contain 100+ million reads each, and running the full pipeline would take many hours—far exceeding our workshop session time.
+The FASTQ files provided for this workshop have been **subsampled to 20 million read pairs per sample**. The original samples contain 75 to 137 million read pairs each, and running the full pipeline would take many hours—far exceeding our workshop session time.
 
 **Never subsample your real experimental data.** This is done exclusively for workshop time constraints. Subsampling reduces statistical power and may affect differential expression results.
 
@@ -363,36 +368,32 @@ The FASTQ files provided for this workshop have been **subsampled to 20 million 
 
 For reference, here is how the workshop data was prepared. **You do not need to run this**—the pre-downloaded data is already subsampled.
 
-The original samples from SRA contain 80-100+ million paired-end reads each. To enable completion of the full analysis pipeline within a single workshop day, we subsample to 20 million read pairs per sample using `seqtk`.
+The original samples from SRA contain 75 to 137 million read pairs each (SRA run info for SRR2121778-81 and SRR2121786-89). To enable completion of the full analysis pipeline within a single workshop day, we subsample to 20 million read pairs per sample using `seqtk`.
 
 ```bash
 # Subsample reads to 20 million per sample (WORKSHOP ONLY - do not do this with real data!)
 module load biocontainers
 module load seqtk
 
+mkdir -p subsampled
 for sample in WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4 \
               WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4; do
     # Use same seed for R1 and R2 to maintain pairing
-    seqtk sample -s 42 ${sample}_R1.fastq.gz 20000000 | gzip > ${sample}_sub_R1.fastq.gz
-    seqtk sample -s 42 ${sample}_R2.fastq.gz 20000000 | gzip > ${sample}_sub_R2.fastq.gz
+    seqtk sample -s 42 ${sample}_R1.fastq.gz 20000000 | gzip > subsampled/${sample}_R1.fastq.gz
+    seqtk sample -s 42 ${sample}_R2.fastq.gz 20000000 | gzip > subsampled/${sample}_R2.fastq.gz
 done
 
-# Archive original files
+# Archive original files, then move the subsampled files into place
 mkdir -p original_reads
 mv *_R1.fastq.gz *_R2.fastq.gz original_reads/
-
-# Rename subsampled files to original names for pipeline compatibility
-for sample in WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4 \
-              WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4; do
-    mv ${sample}_sub_R1.fastq.gz ${sample}_R1.fastq.gz
-    mv ${sample}_sub_R2.fastq.gz ${sample}_R2.fastq.gz
-done
+mv subsampled/*.fastq.gz .
+rmdir subsampled
 ```
 
 **Why 20 million reads?**
 
 - Sufficient depth for differential expression analysis of moderately expressed genes
-- Reduces alignment time from ~30 minutes to ~5-10 minutes per sample
+- Reduces STAR alignment time to TBD minutes per sample on 20 cores <!-- NEGISHI:02-time-star-map-per-sample -->
 - Allows completion of the full workshop pipeline in a single day
 - Still produces biologically meaningful results for well-expressed p53 target genes
 
@@ -409,7 +410,8 @@ For your own research, always use the full sequencing depth. Modern RNA-seq expe
 
 The directory, after downloading, should look like this:
 
-```bash
+<!-- NEGISHI:02-out-data-tree -->
+```text
 data
 ├── gencode.vM38.primary_assembly.basic.annotation.gtf
 ├── gencode.vM38.transcripts.fa

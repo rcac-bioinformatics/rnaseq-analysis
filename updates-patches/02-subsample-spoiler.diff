@@ -1,0 +1,32 @@
+--- episodes/02-downloading-and-organizing-files.Rmd	2026-01-21 18:40:24.698969895 -0600
++++ episodes/02-downloading-and-organizing-files.Rmd	2026-10-01 20:41:01.253437032 -0500
+@@ -370,23 +370,19 @@
+ module load biocontainers
+ module load seqtk
+ 
++mkdir -p subsampled
+ for sample in WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4 \
+               WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4; do
+     # Use same seed for R1 and R2 to maintain pairing
+-    seqtk sample -s 42 ${sample}_R1.fastq.gz 20000000 | gzip > ${sample}_sub_R1.fastq.gz
+-    seqtk sample -s 42 ${sample}_R2.fastq.gz 20000000 | gzip > ${sample}_sub_R2.fastq.gz
++    seqtk sample -s 42 ${sample}_R1.fastq.gz 20000000 | gzip > subsampled/${sample}_R1.fastq.gz
++    seqtk sample -s 42 ${sample}_R2.fastq.gz 20000000 | gzip > subsampled/${sample}_R2.fastq.gz
+ done
+ 
+-# Archive original files
++# Archive original files, then move the subsampled files into place
+ mkdir -p original_reads
+ mv *_R1.fastq.gz *_R2.fastq.gz original_reads/
+-
+-# Rename subsampled files to original names for pipeline compatibility
+-for sample in WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4 \
+-              WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4; do
+-    mv ${sample}_sub_R1.fastq.gz ${sample}_R1.fastq.gz
+-    mv ${sample}_sub_R2.fastq.gz ${sample}_R2.fastq.gz
+-done
++mv subsampled/*.fastq.gz .
++rmdir subsampled
+ ```
+ 
+ **Why 20 million reads?**

@@ -43,9 +43,9 @@ This workflow is faster, uses less storage, and models transcript-level uncertai
 
 Kallisto uses pseudo-alignment to rapidly quantify transcript abundances without traditional read mapping. Key advantages include:
 
-- **Speed**: Kallisto is extremely fast, typically completing in 2-3 minutes per sample.
+- **Speed**: Kallisto is fast; on this dataset one sample takes about TBD minutes on 16 cores <!-- NEGISHI:04b-time-quant-intro -->.
 - **Accuracy**: Comparable accuracy to alignment-based methods for quantification.
-- **Bootstrap support**: Native support for uncertainty estimation via bootstraps (useful for sleuth).
+- **Bootstrap support**: Optional uncertainty estimation via bootstraps (needed for sleuth, not for DESeq2).
 - **Low resource usage**: No large BAM files generated, minimal storage requirements.
 
 Kallisto is ideal when you do not need alignment files, want fast quantification, or plan to use sleuth for differential transcript analysis.
@@ -84,9 +84,11 @@ Missing or incorrect transcripts → biased TPM estimates.
 
 ### Building the Kallisto index
 
-The Kallisto index is lightweight and quick to build:
+Building the index is too heavy for a login node, so start an interactive job first:
 
 ```bash
+sinteractive -A rcac-rnaseq -q standby -p cpu -N 1 -n 4 --time=1:00:00
+
 cd $SCRATCH/rnaseq-workshop
 mkdir -p data/kallisto_index
 
@@ -98,7 +100,7 @@ kallisto index \
     data/gencode.vM38.transcripts-clean.fa
 ```
 
-This creates an index file that Kallisto uses for pseudo-alignment. Index building typically takes 2-3 minutes for a mammalian transcriptome.
+This creates an index file that Kallisto uses for pseudo-alignment. Building it for the GENCODE mouse transcriptome takes about TBD minutes and TBD GB of memory <!-- NEGISHI:04b-time-index -->. Stay in this interactive session for the next steps.
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
@@ -127,8 +129,8 @@ Example command:
 kallisto quant \
     -i data/kallisto_index/transcripts.idx \
     -o results/kallisto_quant/WT_Bcell_mock_rep1 \
-    -b 100 \
-    -t 16 \
+    -b 0 \
+    -t 4 \
     data/WT_Bcell_mock_rep1_R1.fastq.gz \
     data/WT_Bcell_mock_rep1_R2.fastq.gz
 ```
@@ -137,8 +139,8 @@ Important flags:
 
 * `-i` → path to the Kallisto index
 * `-o` → output directory for this sample
-* `-b 100` → number of bootstrap samples (useful for uncertainty estimation and sleuth)
-* `-t 16` → number of threads to use
+* `-b 0` → number of bootstrap samples (none here; see the callout below)
+* `-t 4` → number of threads to use (match the cores of your interactive job)
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
@@ -149,21 +151,20 @@ For **strand-specific** libraries, add the appropriate flag:
 - `--rf-stranded` for reverse-stranded libraries (e.g., Illumina TruSeq stranded)
 - `--fr-stranded` for forward-stranded libraries
 
-Our dataset is **unstranded** (detected as `IU` in Step 0), so we omit these flags.
+Our dataset is **unstranded** (Salmon reported `IU` in Episode 04a), so we omit these flags.
 
 :::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
-## Bootstrap samples
+## Do you need bootstraps?
 
-The `-b 100` flag generates 100 bootstrap samples. These are useful for:
+`-b N` makes Kallisto repeat the quantification on N resampled versions of the reads. The spread of the N estimates measures how uncertain each transcript's abundance is, which matters mostly when reads are shared between similar isoforms.
 
-- Estimating uncertainty in transcript abundance
-- Required if you plan to use **sleuth** for differential expression
-- Can be omitted if you only use DESeq2/edgeR (for faster runtime)
+- **Needed** for sleuth, which uses the bootstrap variance in its model of transcript-level differential expression, and for other tools that model quantification uncertainty (for example fishpond/swish).
+- **Not needed** for tximport plus DESeq2, as in this lesson. tximport sums transcripts to genes, where isoform ambiguity largely cancels out, and DESeq2 estimates variability from biological replicates and ignores bootstraps.
 
-For DESeq2 analysis only, you can use `-b 0` or omit the flag entirely.
+Each bootstrap round repeats the expectation-maximization step, so `-b 100` makes every sample several times slower and can push a job past its time limit on `standby`. We use `-b 0`. Use `-b 30` to `-b 100` if you plan a sleuth analysis.
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -178,13 +179,14 @@ cd $SCRATCH/rnaseq-workshop/data
 ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' > $SCRATCH/rnaseq-workshop/scripts/samples.txt
 ```
 
-Array job:
+Save the array job below as `$SCRATCH/rnaseq-workshop/scripts/quant_kallisto.sh`. Like `map_reads.sh` in Episode 04a, it reads `samples.txt` from the directory you submit from.
 
 ```bash
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
+#SBATCH --mem=16G
 #SBATCH --account=rcac-rnaseq
 #SBATCH --qos=standby
 #SBATCH --partition=cpu
@@ -211,18 +213,19 @@ R2=${DATA}/${SAMPLE}_R2.fastq.gz
 kallisto quant \
     -i $INDEX \
     -o $OUT/$SAMPLE \
-    -b 100 \
+    -b 0 \
     -t ${SLURM_CPUS_ON_NODE} \
     $R1 $R2 &> $OUT/$SAMPLE/${SAMPLE}.log
 ```
 
-Submit:
+Submit from the `scripts` directory:
 
 ```bash
+cd $SCRATCH/rnaseq-workshop/scripts
 sbatch quant_kallisto.sh
 ```
 
-The typical run time is ~2-3 minutes per sample (faster than Salmon).
+Each sample takes about TBD minutes on 16 cores <!-- NEGISHI:04b-time-quant -->.
 
 ::::::::::::::::::::::::::::::::::::::: discussion
 
@@ -234,12 +237,13 @@ Kallisto runs very quickly and produces small output. The advantage of array job
 
 ### Inspect results
 
-After Kallisto finishes, each sample directory contains a small set of output files:
+After Kallisto finishes, each sample directory contains a small set of output files (plus the `.log` file that our array script writes):
 
-```
+<!-- NEGISHI:04b-out-kallisto-dir -->
+```text
 WT_Bcell_mock_rep1/
 ├── abundance.tsv          # IMPORTANT: transcript-level TPM, counts, effective lengths
-├── abundance.h5           # IMPORTANT: HDF5 format with bootstrap data (for sleuth)
+├── abundance.h5           # IMPORTANT: the same estimates in HDF5 format (plus bootstraps if -b > 0)
 └── run_info.json          # IMPORTANT: run parameters and mapping statistics
 ```
 
@@ -255,6 +259,7 @@ This file contains the transcript-level quantification results:
 
 Example:
 
+<!-- NEGISHI:04b-out-abundance -->
 ```text
 target_id                  length  eff_length  est_counts  tpm
 ENSMUST00000193812.2       1070    775.000     0.000       0.000000
@@ -288,20 +293,23 @@ Most differential expression tools (DESeq2, edgeR) require **gene-level** counts
 
 ### Prepare tx2gene mapping
 
-We need a mapping file that links transcript IDs to gene IDs. The GTF annotation file contains this information.
+We need a mapping file that links transcript IDs to gene IDs. It must cover every transcript in the Kallisto index, so we build it from the headers of the same transcript FASTA: field 1 is the transcript ID and field 2 the gene ID. The basic GTF lists only TBD of these TBD transcripts <!-- NEGISHI:04b-txt-tx2gene-coverage --> (the transcript FASTA is the comprehensive set, with extra isoforms); with a GTF-based map, tximport would silently drop the rest, together with the reads Kallisto assigned to them.
 
 ```bash
 cd $SCRATCH/rnaseq-workshop/data
-awk -F'\t' '$3=="transcript" {
-    match($9, /transcript_id "([^"]+)"/, tx);
-    match($9, /gene_id "([^"]+)"/, gene);
-    print tx[1] "\t" gene[1]
-}' gencode.vM38.primary_assembly.basic.annotation.gtf > tx2gene.tsv
+grep ">" gencode.vM38.transcripts.fa | cut -c2- | cut -d "|" -f 1,2 | tr "|" "\t" > tx2gene.tsv
+head -3 tx2gene.tsv
 ```
 
-Next, we process this mapping in R. Load the modules and start the R session:
+<!-- NEGISHI:04b-out-tx2gene-head -->
+```text
+TBD
+```
+
+Next, we process this mapping in R. If you left the interactive session from Step 1, start a new one; then load the modules and start R:
 
 ```bash
+sinteractive -A rcac-rnaseq -q standby -p cpu -N 1 -n 4 --time=1:00:00
 module load biocontainers
 module load r-rnaseq
 R
@@ -328,21 +336,12 @@ saveRDS(txi, file = "results/kallisto_quant/txi.rds")
 `txi$counts` now contains gene-level counts suitable for DESeq2.
 
 ```r
-> head(txi$counts)
-                      WT_Bcell_mock_rep1 WT_Bcell_mock_rep2 WT_Bcell_mock_rep3 WT_Bcell_mock_rep4
-ENSMUSG00000000001.5          473.4426         553.7849         826.9969         676.9101
-ENSMUSG00000000003.16           0.0000           0.0000           0.0000           0.0000
-ENSMUSG00000000028.16          40.5783          33.9665          55.3055          97.8451
-ENSMUSG00000000031.20           0.0000           0.0000           0.0000           0.0000
-ENSMUSG00000000037.18          19.2220           9.5997          16.9515          20.2265
-ENSMUSG00000000049.12           0.0000           5.0221           1.9846           1.0164
-                      WT_Bcell_IR_rep1 WT_Bcell_IR_rep2 WT_Bcell_IR_rep3 WT_Bcell_IR_rep4
-ENSMUSG00000000001.5        724.1176        813.8484        689.2341        752.1567
-ENSMUSG00000000003.16         0.0000          0.0000          0.0000          0.0000
-ENSMUSG00000000028.16        41.6915         63.8123         48.3421         55.7892
-ENSMUSG00000000031.20         0.0000          0.0000          0.0000          0.0000
-ENSMUSG00000000037.18        19.6807         18.9451         22.3456         17.8923
-ENSMUSG00000000049.12         0.9937          9.1869          2.3456          4.5678
+head(txi$counts)
+```
+
+<!-- NEGISHI:04b-out-txi-head -->
+```text
+TBD
 ```
 
 ::::::::::::::::::::::::::::::::::::::: callout
@@ -366,7 +365,7 @@ tximport can read either format:
 - **abundance.h5**: HDF5 format, includes bootstrap information, faster to read
 - **abundance.tsv**: Plain text, easier to inspect manually
 
-We use the `.h5` files here because they load faster and preserve bootstrap data for potential sleuth analysis. If you didn't generate bootstraps, you can use `.tsv` files instead.
+We use the `.h5` files here because they load faster. Reading them requires the `rhdf5` package, which the `r-rnaseq` module provides. With `-b 0` the `.h5` and `.tsv` files hold the same estimates, so either works.
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -401,12 +400,12 @@ Using your MultiQC summary and Kallisto outputs:
 
 ::::::::::::::::::::::::::::::::::::::: solution
 
-Example interpretation for this dataset:
+Interpretation for this dataset:
 
-1. All samples show about 85 to 90 percent pseudoaligned. No sample is an outlier and the range is narrow.
-2. Pseudoalignment rates are consistent across all samples.
-3. Fragment length distributions should be nearly identical across samples.
-4. The `run_info.json` should show the index path, number of bootstraps, and thread count used.
+1. Pseudoalignment rates range from TBD to TBD percent <!-- NEGISHI:04b-sol-pseudo-range -->. That is lower than the 80 to 90 percent often quoted for well-annotated transcriptomes: Kallisto only counts reads compatible with annotated mature transcripts, so reads from introns (pre-mRNA), intergenic regions, and rRNA not in the transcript FASTA are not pseudoaligned. Compare with the STAR unique mapping rates from Episode 04a, which include intronic reads.
+2. TBD <!-- NEGISHI:04b-sol-pseudo-consistency -->
+3. TBD <!-- NEGISHI:04b-sol-fraglen -->
+4. `run_info.json` records the Kallisto and index versions, `n_bootstraps` (0 here), `n_processed`, `n_pseudoaligned`, `p_pseudoaligned`, and the exact command line in `call`.
 
 :::::::::::::::::::::::::::::::::::
 
