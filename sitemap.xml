@@ -76,7 +76,13 @@
     <loc>https://rcac_rnaseq_workshop.github.io/NA/fig/From-RNA-to-FASTQ.html</loc>
   </url>
   <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/fig/From-counts-to-insight.html</loc>
+  </url>
+  <url>
     <loc>https://rcac_rnaseq_workshop.github.io/NA/fig/From-reads-to-a-count-matrix.html</loc>
+  </url>
+  <url>
+    <loc>https://rcac_rnaseq_workshop.github.io/NA/fig/Stranded-vs-unstranded-RNA-seq.html</loc>
   </url>
   <url>
     <loc>https://rcac_rnaseq_workshop.github.io/NA/images.html</loc>

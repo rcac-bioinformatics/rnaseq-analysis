@@ -342,7 +342,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>A. Genome-based quantification (STAR + featureCounts)</h1>
-        <p>Last updated on 2026-10-02 |
+        <p>Last updated on 2026-10-03 |
 
         <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04a-genome-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -412,13 +412,28 @@ or Kallisto) will be covered in Episode 4B.</p>
 <li>stranded reverse</li>
 </ul><p>Stranded protocols are common in modern kits, but old GEO and SRA
 datasets are often unstranded.<br>
-featureCounts must be given the correct strand setting. If the wrong
-setting is used, most reads will be counted against incorrect genes.</p>
+featureCounts must be given the correct strand setting. If a stranded
+library is counted with the wrong direction, most reads land on the
+strand opposite their gene and are left unassigned (or counted to an
+antisense gene), so the assignment rate collapses. Counting a stranded
+library as unstranded loses less, but reads where genes on opposite
+strands overlap can no longer be assigned.</p>
 <p>STAR does not infer strandness automatically, so we must determine it
 <strong>before</strong> alignment.</p>
 </div>
 </div>
 </div>
+<iframe src="fig/Stranded-vs-unstranded-RNA-seq.html" title="Animation, 80 seconds: two overlapping genes on opposite strands, and why a stranded (dUTP) library keeps their reads and counts apart while an unstranded library cannot" loading="lazy" style="width:100%;aspect-ratio:16/11;border:0;">
+</iframe>
+<p><em>Animation (80 seconds): stranded vs unstranded RNA-seq. In a dUTP
+library, read 2 matches the RNA strand; Salmon reports this as
+<code>ISR</code> and featureCounts calls it <code>-s 2</code>. Our
+dataset turns out to be unstranded, so we count with <code>-s 0</code>,
+and reads where genes on opposite strands overlap end up among the
+<code>Unassigned_Ambiguity</code> reads in the featureCounts
+summary.</em> Press <strong>Play</strong> to start, or
+<a href="fig/Stranded-vs-unstranded-RNA-seq.html?autoplay=1" target="_blank" rel="noopener">open
+it in a new tab</a>.</p>
 <div class="section level3">
 <h3 id="detecting-strandness-with-salmon">Detecting strandness with Salmon<a class="anchor" aria-label="anchor" href="#detecting-strandness-with-salmon"></a></h3>
 <p>Salmon can infer strandness directly from raw FASTQ files without any
@@ -656,7 +671,7 @@ instead of your own:</p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a><span class="fu">ln</span> <span class="at">-s</span> /scratch/negishi/aseethar/rnaseq-workshop_results/data/star_index <span class="va">$SCRATCH</span>/rnaseq-workshop/data/star_index</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a><span class="fu">ln</span> <span class="at">-s</span> /depot/workshop/data/rnaseq-workshop_results/data/star_index <span class="va">$SCRATCH</span>/rnaseq-workshop/data/star_index</span></code></pre>
 </div>
 <p>Run this only if
 <code>$SCRATCH/rnaseq-workshop/data/star_index</code> does not exist yet
@@ -1214,8 +1229,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/04a-genome-based-quantification.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/04a-genome-based-quantification.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-10-02",
-  "datePublished": "2026-10-02"
+  "dateModified": "2026-10-03",
+  "datePublished": "2026-10-03"
 }
 
   </script><script>

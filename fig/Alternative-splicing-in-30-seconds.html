@@ -68,7 +68,7 @@ input[type=range]{ flex:1; accent-color:#8B7BFF; height:24px; }
       <p class="sub" id="capSub"></p>
     </div>
     <div class="controls">
-      <button id="play" type="button">Pause</button>
+      <button id="play" type="button">Play</button>
       <input id="scrub" type="range" min="0" max="3000" value="0" aria-label="Timeline position">
       <span class="time" id="time">0.0 / 30 s</span>
     </div>
@@ -400,7 +400,7 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 playBtn.addEventListener("click",function(){
-  if(t>=DUR){t=0;}
+  if(t>=DUR||poster){t=0;poster=false;}
   playing=!playing;
   last=performance.now();
   dirty=true;
@@ -410,8 +410,9 @@ scrub.addEventListener("input",function(){
   playing=false;
   dirty=true;
 });
+var poster=false;
 var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-if(reduce){t=DUR;playing=false;}else{playing=true;}
+if(reduce){t=DUR;playing=false;}else{playing=/[?&]autoplay=1/.test(location.search);if(!playing){t=DUR-0.01;poster=true;}}
 last=performance.now();
 requestAnimationFrame(frame);
 })();

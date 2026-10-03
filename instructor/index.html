@@ -851,20 +851,23 @@ afterwards.</p>
 <div class="section level3">
 <h3 id="completed-results-backup">Completed results (backup)<a class="anchor" aria-label="anchor" href="#completed-results-backup"></a></h3>
 <p>A completed version of the workshop directory is available at:</p>
-<pre><code>/scratch/negishi/aseethar/rnaseq-workshop_results</code></pre>
-<p>You can copy it to your scratch space using:</p>
+<pre><code>/depot/workshop/data/rnaseq-workshop_results</code></pre>
+<p>It has the same layout as your
+<code>${RCAC_SCRATCH}/rnaseq-workshop</code> directory, without the
+FASTQ and reference files you already have. Use it <strong>only if you
+are unable to complete the exercises during the workshop</strong>. Do
+not copy the whole directory; copy only the file you need into the
+matching location in your own directory. For example, to start Episode
+05 without finishing Episode 04a:</p>
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1" aria-label="code-block-8-1"></a><span class="fu">rsync</span> <span class="at">-avP</span> /scratch/negishi/aseethar/rnaseq-workshop_results <span class="va">${RCAC_SCRATCH}</span>/</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1" aria-label="code-block-8-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">${RCAC_SCRATCH}</span>/rnaseq-workshop/results/counts</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1" aria-label="code-block-8-2"></a><span class="fu">cp</span> /depot/workshop/data/rnaseq-workshop_results/results/counts/gene_counts_clean.txt <span class="dt">\</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1" aria-label="code-block-8-3"></a>   <span class="va">${RCAC_SCRATCH}</span>/rnaseq-workshop/results/counts/</span></code></pre>
 </div>
-<p>Use this folder <strong>only if you are unable to complete the
-exercises during the workshop</strong>. It is copied to
-<code>${RCAC_SCRATCH}/rnaseq-workshop_results</code>, so it does not
-overwrite your own work. To continue from it, copy the specific files
-you need (for example <code>results/counts/gene_counts_clean.txt</code>
-for Episode 05) into the matching location under
-<code>${RCAC_SCRATCH}/rnaseq-workshop</code>.</p>
+<p>List what is available with
+<code>ls /depot/workshop/data/rnaseq-workshop_results/results</code>.</p>
 </div>
 </section><section><h2 class="section-heading" id="starting-rstudio-on-open-ondemand">Starting RStudio on Open OnDemand<a class="anchor" aria-label="anchor" href="#starting-rstudio-on-open-ondemand"></a></h2>
 <hr class="half-width"><p>Episodes 05, 05b, and 06 run in RStudio through Negishi’s Open
@@ -1103,8 +1106,8 @@ any links that you are not going to use.
   "url": "https://rcac_rnaseq_workshop.github.io/NA/instructor/index.html",
   "identifier": "https://rcac_rnaseq_workshop.github.io/NA/instructor/index.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-10-02",
-  "datePublished": "2026-10-02"
+  "dateModified": "2026-10-03",
+  "datePublished": "2026-10-03"
 }
 
   </script><script>
