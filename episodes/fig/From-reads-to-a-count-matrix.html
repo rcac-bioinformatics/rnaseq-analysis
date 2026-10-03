@@ -28,10 +28,10 @@ input[type=range]{flex:1;accent-color:#2DD4BF;height:24px;}
 </head>
 <body>
 <div class="wrap">
-<header><h1>From reads to a count matrix</h1><p>Bioinformatics steps of bulk RNA-seq: alignment, counting reads per gene, and the count matrix. 72 seconds, 1920x1080.</p></header>
+<header><h1>From reads to a count matrix</h1><p>Bioinformatics steps of bulk RNA-seq: alignment, counting reads per gene, and the count matrix. 72 seconds.</p></header>
 <div class="card">
 <div class="stage" id="stage"><canvas id="cv" role="img" aria-label="Animated explainer: sequencing reads align to a reference genome, are counted per gene, and are collected into a count matrix of genes by samples."></canvas></div>
-<div class="controls"><button id="play" type="button">Pause</button><input id="scrub" type="range" min="0" max="7200" value="0" aria-label="Timeline position"><span class="time" id="time">0:00 / 1:12</span></div>
+<div class="controls"><button id="play" type="button">Play</button><input id="scrub" type="range" min="0" max="7200" value="0" aria-label="Timeline position"><span class="time" id="time">0:00 / 1:12</span></div>
 </div>
 </div>
 <script>
@@ -386,14 +386,15 @@ function resize(){var r=stageEl.getBoundingClientRect(),d=Math.min(window.device
 function fmt(x){var m=Math.floor(x/60),s=Math.floor(x%60);return m+":"+(s<10?"0":"")+s;}
 function ui(){scrub.value=Math.round(t*100);timeEl.textContent=fmt(t)+" / "+fmt(DUR);playBtn.textContent=t>=DUR?"Replay":(playing?"Pause":"Play");}
 function frame(now){if(playing){t=Math.min(DUR,t+(now-last)/1000);if(t>=DUR){playing=false;}dirty=true;}last=now;if(dirty){render(t);ui();dirty=false;}requestAnimationFrame(frame);}
-playBtn.addEventListener("click",function(){if(t>=DUR){t=0;}playing=!playing;last=performance.now();dirty=true;});
+playBtn.addEventListener("click",function(){if(t>=DUR||poster){t=0;poster=false;}playing=!playing;last=performance.now();dirty=true;});
 scrub.addEventListener("input",function(){t=clamp(parseInt(scrub.value,10)/100,0,DUR);playing=false;dirty=true;});
 document.addEventListener("keydown",function(e){if(e.code==="Space"&&e.target===document.body){e.preventDefault();playBtn.click();}});
 window.addEventListener("resize",resize);
 if(window.ResizeObserver){new ResizeObserver(resize).observe(stageEl);}
+var poster=false;
 var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 resize();
-if(reduce){t=70;playing=false;}else{playing=true;}
+if(reduce){t=70;playing=false;}else{playing=/[?&]autoplay=1/.test(location.search);if(!playing){t=70;poster=true;}}
 last=performance.now();requestAnimationFrame(frame);
 
 })();

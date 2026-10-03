@@ -265,7 +265,7 @@ SUBMIT_TIME = {
 }
 SUBMIT_BLOCK = {"04a-index": b04a_sub_index, "04a-map": b04a_sub_map, "04a-count": b04a_sub_count}
 # --prebuilt-index: the 04a callout's ln -s instead of building the STAR index
-b04a_prebuilt = find("04a", "ln -s /scratch/negishi/aseethar/rnaseq-workshop_results/data/star_index", "bash")
+b04a_prebuilt = find("04a", "ln -s /depot/workshop/data/rnaseq-workshop_results/data/star_index", "bash")
 
 # 04b
 b04b_sub_index = find("04b", "sbatch index_kallisto.sh", "bash")

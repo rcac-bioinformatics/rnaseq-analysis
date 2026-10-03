@@ -5,7 +5,8 @@
 #       runs 01_learner_setup.sh and submit_all.sh (both tracks) as run regen-<date>
 #   bash regen_results.sh --finalize [--date YYYY-MM-DD]
 #       after every step passed: copies the finished learner directory into a NEW directory
-#       <dirname of STAGED_RESULTS>/rnaseq-workshop_results.<date> and diffs its file list
+#       <dirname of STAGED_RESULTS>/rnaseq-workshop_results.<date>, leaving out the FASTQ and
+#       reference files learners already have from the staged copy, and diffs its file list
 #       against the current STAGED_RESULTS. The current copy is never touched; swapping
 #       the new one into place is a separate manual step (README.md).
 set -euo pipefail
@@ -41,7 +42,7 @@ kit_load_run
 bad=""
 while IFS=$'\t' read -r step _; do
   [ "$step" = step ] && continue
-  kit_is_done "$step" || bad="$bad $step"
+  kit_step_passed "$step" || bad="$bad $step"
 done < "$KIT_GEN/steps.tsv"
 [ -z "$bad" ] || kit_die "not every step passed:$bad. Fix and rerun with submit_all.sh --run $RUN_ID --from <step>"
 
@@ -58,7 +59,10 @@ done
 
 kit_log "copying $W -> $DEST"
 mkdir "$DEST"
-rsync -a "$W/" "$DEST/"
+# FASTQ and references are in the staged copy already (about 20 GB); learners copy single files from here
+rsync -a --exclude='/data/*.fastq.gz' --exclude=/data/GRCm39.primary_assembly.genome.fa \
+  --exclude=/data/gencode.vM38.primary_assembly.basic.annotation.gtf \
+  --exclude=/data/gencode.vM38.transcripts.fa --exclude=/data/gencode.vM38.transcripts-clean.fa "$W/" "$DEST/"
 # the transcript-track enrichment ran in its own directory; keep it next to the genome one
 if [ -d "$W_T/results/enrichment" ]; then rsync -a "$W_T/results/enrichment/" "$DEST/results/enrichment_kallisto/"; fi
 

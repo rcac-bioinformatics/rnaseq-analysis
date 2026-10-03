@@ -172,6 +172,10 @@ if [ -d "$STAGED_RESULTS" ]; then
   nb=$(find "$STAGED_RESULTS/results/mapping" -maxdepth 1 -name '*.bam' 2>/dev/null | wc -l)
   if [ "$nb" = 8 ]; then row PASS "results mapping BAMs" "8"; else row WARN "results mapping BAMs" "$nb of 8"; fi
   [ -e "$STAGED_RESULTS/data/star_index/SA" ] || row WARN "04a callout prebuilt index" "episode 04a tells learners to ln -s $STAGED_RESULTS/data/star_index; it is missing"
+  if [ "$STAGED_PERM" = group ]; then unread=$(find "$STAGED_RESULTS" ! -perm -g+r 2>/dev/null | head -5 | tr '\n' ' ')
+  else unread=$(find "$STAGED_RESULTS" ! -perm -o+r 2>/dev/null | head -5 | tr '\n' ' '); fi
+  if [ -z "$unread" ]; then row PASS "results readable by $STAGED_PERM" ""
+  else row WARN "results unreadable by $STAGED_PERM" "$unread (learners copy single files and ln -s the STAR index)"; fi
 else
   row WARN "completed results directory" "missing; setup.md and episode 04a point learners to it"
 fi

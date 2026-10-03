@@ -15,7 +15,7 @@ STAGED=${STAGED:-/depot/workshop/data/rnaseq-workshop}
 STAGED_PERM=${STAGED_PERM:-group}
 # Previous staging location, the default source for restage.sh
 STAGED_OLD=${STAGED_OLD:-/scratch/negishi/aseethar/rnaseq-workshop}
-STAGED_RESULTS=${STAGED_RESULTS:-/scratch/negishi/aseethar/rnaseq-workshop_results}
+STAGED_RESULTS=${STAGED_RESULTS:-/depot/workshop/data/rnaseq-workshop_results}
 
 # Open OnDemand RStudio (bioconductor) app, R 4.4.0
 OOD_SIF=${OOD_SIF:-/depot/itap/aseethar/images/rstudio_bioc_ood_rocky8_r4.4.0_s2025.05.0-496_tex.sif}

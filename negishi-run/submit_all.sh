@@ -59,22 +59,8 @@ if [ -f "$KIT_SCRATCH_BASE/state/prebuilt.sh" ]; then
   source "$KIT_SCRATCH_BASE/state/prebuilt.sh"
 fi
 
-# ---- done predicates for steps whose jobs are the learner's own scripts.
-# Only outputs written after this run started count (copied files keep older mtimes).
-fresh() { [ -e "$1" ] && [ "$1" -nt "$RUN/kit.env" ]; }
-outputs_done() {
-  case $1 in
-    04a-index) fresh "$W/data/star_index/SA" && fresh "$W/data/star_index/Genome";;
-    04a-map) [ "$(find "$W/results/mapping" -maxdepth 1 -name '*Log.final.out' -newer "$RUN/kit.env" -exec grep -l 'Uniquely mapped reads %' {} + 2>/dev/null | wc -l)" = 8 ] &&
-             [ "$(find "$W/results/mapping" -maxdepth 1 -name '*Aligned.sortedByCoord.out.bam' -size +1M -newer "$RUN/kit.env" 2>/dev/null | wc -l)" = 8 ];;
-    04a-count) fresh "$W/results/counts/gene_counts.txt.summary";;
-    04b-index) fresh "$W/data/kallisto_index/transcripts.idx";;
-    04b-quant) [ "$(find "$W/results/kallisto_quant" -mindepth 2 -maxdepth 2 -name run_info.json -newer "$RUN/kit.env" 2>/dev/null | wc -l)" = 8 ];;
-    *) return 1;;
-  esac
-}
 # metrics only summarizes other steps' outputs and is cheap, so it is never treated as done
-step_done() { [ $FORCE = 1 ] && return 1; [ "$1" = metrics ] && return 1; kit_is_done "$1" || outputs_done "$1"; }
+step_done() { [ $FORCE = 1 ] && return 1; [ "$1" = metrics ] && return 1; kit_step_passed "$1"; }
 step_track() { awk -F'\t' -v s="$1" '$1 == s { print $3 }' "$KIT_GEN/steps.tsv"; }
 in_track() { local t; t=$(step_track "$1"); [ "$TRACK" = both ] || [ "$t" = common ] || [ "$t" = "$TRACK" ]; }
 

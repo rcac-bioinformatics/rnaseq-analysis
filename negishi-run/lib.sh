@@ -68,6 +68,23 @@ kit_marker() { printf '%s %s\n' "$2" "$(kit_ts)" > "$RUN/markers/$1.done"; }
 # done = marker says PASS or WARN (a step that is running or failed says RUNNING)
 kit_is_done() { [ -f "$RUN/markers/$1.done" ] && grep -qE '^(PASS|WARN) ' "$RUN/markers/$1.done"; }
 
+# Done predicates for steps whose jobs are the learner's own scripts, which write no marker.
+# Only outputs written after this run started count (copied files keep older mtimes).
+fresh() { [ -e "$1" ] && [ "$1" -nt "$RUN/kit.env" ]; }
+outputs_done() {
+  case $1 in
+    04a-index) fresh "$W/data/star_index/SA" && fresh "$W/data/star_index/Genome";;
+    04a-map) [ "$(find "$W/results/mapping" -maxdepth 1 -name '*Log.final.out' -newer "$RUN/kit.env" -exec grep -l 'Uniquely mapped reads %' {} + 2>/dev/null | wc -l)" = 8 ] &&
+             [ "$(find "$W/results/mapping" -maxdepth 1 -name '*Aligned.sortedByCoord.out.bam' -size +1M -newer "$RUN/kit.env" 2>/dev/null | wc -l)" = 8 ];;
+    04a-count) fresh "$W/results/counts/gene_counts.txt.summary";;
+    04b-index) fresh "$W/data/kallisto_index/transcripts.idx";;
+    04b-quant) [ "$(find "$W/results/kallisto_quant" -mindepth 2 -maxdepth 2 -name run_info.json -newer "$RUN/kit.env" 2>/dev/null | wc -l)" = 8 ];;
+    *) return 1;;
+  esac
+}
+# A step passed: its marker says PASS or WARN, or (learner steps) its outputs are fresh
+kit_step_passed() { kit_is_done "$1" || outputs_done "$1"; }
+
 kit_on_exit() {
   local rc=$?
   if [ "$rc" -ne 0 ] && [ -n "${KIT_STEP:-}" ] && [ -n "${RUN:-}" ]; then

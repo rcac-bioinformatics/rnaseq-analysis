@@ -232,16 +232,18 @@ Negishi scratch is not backed up, and files that are not accessed for a while ar
 A completed version of the workshop directory is available at:
 
 ```
-/scratch/negishi/aseethar/rnaseq-workshop_results
+/depot/workshop/data/rnaseq-workshop_results
 ```
 
-You can copy it to your scratch space using:
+It has the same layout as your `${RCAC_SCRATCH}/rnaseq-workshop` directory, without the FASTQ and reference files you already have. Use it **only if you are unable to complete the exercises during the workshop**. Do not copy the whole directory; copy only the file you need into the matching location in your own directory. For example, to start Episode 05 without finishing Episode 04a:
 
 ```bash
-rsync -avP /scratch/negishi/aseethar/rnaseq-workshop_results ${RCAC_SCRATCH}/
+mkdir -p ${RCAC_SCRATCH}/rnaseq-workshop/results/counts
+cp /depot/workshop/data/rnaseq-workshop_results/results/counts/gene_counts_clean.txt \
+   ${RCAC_SCRATCH}/rnaseq-workshop/results/counts/
 ```
 
-Use this folder **only if you are unable to complete the exercises during the workshop**. It is copied to `${RCAC_SCRATCH}/rnaseq-workshop_results`, so it does not overwrite your own work. To continue from it, copy the specific files you need (for example `results/counts/gene_counts_clean.txt` for Episode 05) into the matching location under `${RCAC_SCRATCH}/rnaseq-workshop`.
+List what is available with `ls /depot/workshop/data/rnaseq-workshop_results/results`.
 
 ## Starting RStudio on Open OnDemand
 

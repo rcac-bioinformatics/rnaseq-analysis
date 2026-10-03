@@ -70,14 +70,14 @@ bash ~/rnaseq-analysis/negishi-run/collect.sh --run regen-2026-10-03           #
 bash ~/rnaseq-analysis/negishi-run/regen_results.sh --finalize --date 2026-10-03
 ```
 
-`--finalize` refuses unless every step passed, checks that everything `instructor-notes/README.md` lists is present, copies the finished learner directory to a new `/scratch/negishi/aseethar/rnaseq-workshop_results.2026-10-03` (plus the transcript-track enrichment as `results/enrichment_kallisto/`), and writes the file-list diff against the current copy to `runs/regen-2026-10-03/records/regen-filelist-diff.txt`. It does not change the current `rnaseq-workshop_results` and does not change permissions.
+`--finalize` refuses unless every step passed, checks that everything `instructor-notes/README.md` lists is present, copies the finished learner directory to a new `/depot/workshop/data/rnaseq-workshop_results.2026-10-03` (plus the transcript-track enrichment as `results/enrichment_kallisto/`), leaving out `data/*.fastq.gz` and the four reference files (genome FASTA, GTF, transcript FASTA and its cleaned copy), which learners already have from the staged copy,, and writes the file-list diff against the current copy to `runs/regen-2026-10-03/records/regen-filelist-diff.txt`. It does not change the current `rnaseq-workshop_results` and does not change permissions.
 
 ### Swapping in the regenerated results (manual, after you have checked them)
 
 ```bash
-cd /scratch/negishi/aseethar
-chmod -R o+rX rnaseq-workshop_results.2026-10-03          # learners must be able to read it
-mv rnaseq-workshop_results rnaseq-workshop_results.retired-2026-10-03
+cd /depot/workshop/data
+chmod -R g+rX rnaseq-workshop_results.2026-10-03          # learners (group members) must be able to read it
+mv rnaseq-workshop_results rnaseq-workshop_results.retired-2026-10-03   # skip if there is no current copy yet
 mv rnaseq-workshop_results.2026-10-03 rnaseq-workshop_results
 ls -l rnaseq-workshop_results/data/star_index/SA rnaseq-workshop_results/results/counts/gene_counts_clean.txt
 ```
@@ -85,7 +85,7 @@ ls -l rnaseq-workshop_results/data/star_index/SA rnaseq-workshop_results/results
 Rollback:
 
 ```bash
-cd /scratch/negishi/aseethar
+cd /depot/workshop/data
 mv rnaseq-workshop_results rnaseq-workshop_results.2026-10-03
 mv rnaseq-workshop_results.retired-2026-10-03 rnaseq-workshop_results
 ```
