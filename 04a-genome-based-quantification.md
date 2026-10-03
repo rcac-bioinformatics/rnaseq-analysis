@@ -49,11 +49,15 @@ RNA-seq libraries can be:
 - stranded reverse  
 
 Stranded protocols are common in modern kits, but old GEO and SRA datasets are often unstranded.  
-featureCounts must be given the correct strand setting. If the wrong setting is used, most reads will be counted against incorrect genes.
+featureCounts must be given the correct strand setting. If a stranded library is counted with the wrong direction, most reads land on the strand opposite their gene and are left unassigned (or counted to an antisense gene), so the assignment rate collapses. Counting a stranded library as unstranded loses less, but reads where genes on opposite strands overlap can no longer be assigned.
 
 STAR does not infer strandness automatically, so we must determine it **before** alignment.
 
 :::::::::::::::::::::::::::::::::::::::
+
+<iframe src="fig/Stranded-vs-unstranded-RNA-seq.html" title="Animation, 80 seconds: two overlapping genes on opposite strands, and why a stranded (dUTP) library keeps their reads and counts apart while an unstranded library cannot" loading="lazy" style="width:100%;aspect-ratio:16/11;border:0;"></iframe>
+
+*Animation (80 seconds): stranded vs unstranded RNA-seq. In a dUTP library, read 2 matches the RNA strand; Salmon reports this as `ISR` and featureCounts calls it `-s 2`. Our dataset turns out to be unstranded, so we count with `-s 0`, and reads where genes on opposite strands overlap end up among the `Unassigned_Ambiguity` reads in the featureCounts summary.* Press **Play** to start, or <a href="fig/Stranded-vs-unstranded-RNA-seq.html?autoplay=1" target="_blank" rel="noopener">open it in a new tab</a>.
 
 ### Detecting strandness with Salmon
 
@@ -237,7 +241,7 @@ Indexing takes about 15 minutes and needs about 30 GB of memory. On Negishi, mem
 If your index job is still waiting in the queue when we reach the mapping step, use the prebuilt index from the completed results copy instead of your own:
 
 ```bash
-ln -s /scratch/negishi/aseethar/rnaseq-workshop_results/data/star_index $SCRATCH/rnaseq-workshop/data/star_index
+ln -s /depot/workshop/data/rnaseq-workshop_results/data/star_index $SCRATCH/rnaseq-workshop/data/star_index
 ```
 
 Run this only if `$SCRATCH/rnaseq-workshop/data/star_index` does not exist yet (cancel your index job first with `scancel <jobid>`). The mapping script below works the same with either index.
