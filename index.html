@@ -243,7 +243,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="04a-genome-based-quantification.html">4. A. Genome-based quantification (STAR + featureCounts)</a>
+        <a href="04a-genome-based-quantification.html">4A. Genome-based quantification (STAR + featureCounts)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -252,7 +252,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="04b-transcript-based-quantification.html">5. B. Transcript-based quantification (Kallisto)</a>
+        <a href="04b-transcript-based-quantification.html">4B. Transcript-based quantification (Kallisto)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -261,7 +261,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="05-deseq2-expression-analyses.html">6. Gene-level QC and differential expression (DESeq2)</a>
+        <a href="05-deseq2-expression-analyses.html">5A. Gene-level QC and differential expression (DESeq2)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -270,7 +270,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="05b-deseq2-expression-analyses-kallisto.html">7. B. Differential expression using DESeq2 (Kallisto pathway)</a>
+        <a href="05b-deseq2-expression-analyses-kallisto.html">5B. Differential expression using DESeq2 (Kallisto pathway)</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -279,7 +279,7 @@
 <div class="accordion accordion-flush" id="accordionFlush9">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading9">
-        <a href="06-gene-set-enrichment-analyses.html">8. Gene set enrichment analysis</a>
+        <a href="06-gene-set-enrichment-analyses.html">6. Gene set enrichment analysis</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -331,7 +331,7 @@
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link float-end" href="01-intro-to-rnaseq.html" rel="next">Next: Introduction to RNA-seq... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="01-intro-to-rnaseq.html" rel="next">Next: 1. Introduction to RNA-seq... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <hr></nav><main id="main-content" class="main-content"><h1 class="schedule-heading">Summary and Setup</h1>
       
@@ -364,29 +364,29 @@ workshops in the High-Performance Computing domain.</p></li>
 <td>Arrival &amp; Setup</td>
 </tr><tr><td align="left"><strong>9:00 AM</strong></td>
 <td>
-<strong>Introduction to RNA-seq Analysis (Episode 01):</strong> What
+<strong>Introduction to RNA-seq Analysis (Episode 1):</strong> What
 RNA-seq measures, experimental design and biological replicates,
 quantification strategies, and an overview of the workflow (QC →
 alignment → quantification → DE)</td>
 </tr><tr><td align="left"><strong>9:45 AM</strong></td>
 <td>
 <strong>Data Preparation &amp; Quality Control (Episodes
-02-03):</strong> Project layout, reference genome, annotation and FASTQ
+2-3):</strong> Project layout, reference genome, annotation and FASTQ
 files, running FastQC and MultiQC, and deciding whether trimming is
 needed (fastp shown for reference only)</td>
 </tr><tr><td align="left"><strong>10:30 AM</strong></td>
 <td><strong>Break</strong></td>
 </tr><tr><td align="left"><strong>10:45 AM</strong></td>
 <td>
-<strong>Read Alignment &amp; Quantification (Episode 04a):</strong>
+<strong>Read Alignment &amp; Quantification (Episode 4A):</strong>
 Checking strandedness with Salmon, building a STAR index, mapping with a
 SLURM array job, and generating gene-level counts with featureCounts
-(Episode 04b, Kallisto, covered conceptually only)</td>
+(Episode 4B, Kallisto, covered conceptually only)</td>
 </tr><tr><td align="left"><strong>12:00 PM</strong></td>
 <td><strong>Lunch Break</strong></td>
 </tr><tr><td align="left"><strong>1:00 PM</strong></td>
 <td>
-<strong>Differential Expression Analysis (Episode 05):</strong>
+<strong>Differential Expression Analysis (Episode 5A):</strong>
 Importing counts into R, normalization, exploratory plots (VST, distance
 heatmaps, PCA), and identifying significantly differentially expressed
 genes</td>
@@ -394,18 +394,18 @@ genes</td>
 <td><strong>Break</strong></td>
 </tr><tr><td align="left"><strong>2:30 PM</strong></td>
 <td>
-<strong>Visualization &amp; Interpretation (Episodes
-05-06):</strong> Volcano plots, summary tables, and exporting annotated
-results. Introduction to gene set enrichment methods (ORA/GSEA) with
-pointers to explore independently.</td>
+<strong>Visualization &amp; Interpretation (Episodes 5A-6):</strong>
+Volcano plots, summary tables, and exporting annotated results.
+Introduction to gene set enrichment methods (ORA/GSEA) with pointers to
+explore independently.</td>
 </tr><tr><td align="left"><strong>3:30 PM</strong></td>
 <td>
 <strong>Wrap-Up &amp; Discussion:</strong> Review of workflow,
 troubleshooting common issues, recommended next steps</td>
 </tr><tr><td align="left"><strong>4:00 PM</strong></td>
 <td>End of Workshop</td>
-</tr></tbody></table><p>The full lesson is longer than one day. Episodes 04b (Kallisto), 05b
-(DESeq2 on Kallisto output), and the remainder of Episode 06 are
+</tr></tbody></table><p>The full lesson is longer than one day. Episodes 4B (Kallisto), 5B
+(DESeq2 on Kallisto output), and the remainder of Episode 6 are
 self-paced: they are published on this site and use the same data and
 setup as the live sessions.</p>
 </section><section><h2 class="section-heading" id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a></h2>
@@ -432,7 +432,7 @@ specific dataset and toolset:</p>
 <ul><li>
 <strong>Platform and library type:</strong> Illumina HiSeq 2000,
 paired-end 51 bp reads. The library is <strong>unstranded</strong>:
-Salmon reports library type <code>IU</code> in Episode 04a, so
+Salmon reports library type <code>IU</code> in Episode 4A, so
 featureCounts runs with <code>-s 0</code> and Kallisto runs without a
 strand flag.</li>
 <li>
@@ -457,34 +457,34 @@ finishes within the workshop.</li>
 <code>wget</code>, SRA Toolkit
 (<code>fasterq-dump</code>, shown but not run)</td>
 <td align="left">Negishi shell</td>
-<td align="left">02</td>
+<td align="left">2</td>
 </tr><tr><td align="left">Read quality control</td>
 <td align="left">FastQC, MultiQC (fastp shown for reference)</td>
 <td align="left">Negishi, interactive job</td>
-<td align="left">03</td>
+<td align="left">3</td>
 </tr><tr><td align="left">Strandedness check</td>
 <td align="left">Salmon (<code>--libType A</code>)</td>
 <td align="left">Negishi, interactive job</td>
-<td align="left">04a</td>
+<td align="left">4A</td>
 </tr><tr><td align="left">Genome-based quantification</td>
 <td align="left">STAR, featureCounts (Subread), MultiQC</td>
 <td align="left">Negishi, SLURM batch jobs</td>
-<td align="left">04a</td>
+<td align="left">4A</td>
 </tr><tr><td align="left">Transcript-based quantification</td>
 <td align="left">Kallisto, tximport</td>
 <td align="left">Negishi, SLURM batch jobs and R (<code>r-rnaseq</code>
 module)</td>
-<td align="left">04b</td>
+<td align="left">4B</td>
 </tr><tr><td align="left">Differential expression</td>
 <td align="left">DESeq2 (with apeglm shrinkage), vsn, pheatmap,
 ggplot2</td>
 <td align="left">RStudio on Open OnDemand</td>
-<td align="left">05, 05b</td>
+<td align="left">5A, 5B</td>
 </tr><tr><td align="left">Gene set enrichment</td>
 <td align="left">clusterProfiler, enrichplot, org.Mm.eg.db, msigdbr (GO,
 KEGG, MSigDB Hallmark, GSEA)</td>
 <td align="left">RStudio on Open OnDemand</td>
-<td align="left">06</td>
+<td align="left">6</td>
 </tr></tbody></table><p>Command-line tools are loaded as modules with
 <code>module load biocontainers</code> followed by the tool module (for
 example <code>module load star</code>).</p>
@@ -492,19 +492,19 @@ example <code>module load star</code>).</p>
 </div>
 <div class="section level3">
 <h3 id="two-quantification-tracks">Two quantification tracks<a class="anchor" aria-label="anchor" href="#two-quantification-tracks"></a></h3>
-<p>Episodes 01-03 and 06 are shared. After QC the lesson splits into two
+<p>Episodes 1-3 and 6 are shared. After QC the lesson splits into two
 parallel tracks that both end in a DESeq2 analysis:</p>
 <table class="table"><colgroup><col width="21%"><col width="31%"><col width="46%"></colgroup><thead><tr><th align="left">Track</th>
 <th align="left">Episodes</th>
 <th align="left">On 10/06/2026</th>
 </tr></thead><tbody><tr><td align="left">Genome-based: STAR + featureCounts, then DESeq2</td>
-<td align="left">04a, 05</td>
+<td align="left">4A, 5A</td>
 <td align="left">Taught live, hands-on</td>
 </tr><tr><td align="left">Transcript-based: Kallisto + tximport, then DESeq2</td>
-<td align="left">04b, 05b</td>
-<td align="left">04b introduced conceptually; 04b and 05b are
+<td align="left">4B, 5B</td>
+<td align="left">4B introduced conceptually; 4B and 5B are
 self-paced</td>
-</tr></tbody></table><p>Episode 06 runs on the DESeq2 results from either track.</p>
+</tr></tbody></table><p>Episode 6 runs on the DESeq2 results from either track.</p>
 </div>
 <div class="section level3">
 <h3 id="what-you-will-be-able-to-do">What you will be able to do<a class="anchor" aria-label="anchor" href="#what-you-will-be-able-to-do"></a></h3>
@@ -537,8 +537,8 @@ iDEP)</li>
 resources on these topics.</p>
 </section><section><h2 class="section-heading" id="ssh-setup">SSH Setup<a class="anchor" aria-label="anchor" href="#ssh-setup"></a></h2>
 <hr class="half-width"><p>You need SSH access to Negishi to copy the workshop data and to run
-the command-line steps in Episodes 02 to 04b. Follow the instructions
-for your operating system below.</p>
+the command-line steps in Episodes 2 to 4B. Follow the instructions for
+your operating system below.</p>
 <div id="connecting-to-the-cluster" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
@@ -700,8 +700,8 @@ with simplified headers, used by Salmon and Kallisto</li>
 <code>SRR_Acc_List.txt</code>: the 8 SRA run accessions</li>
 <li>
 <code>mart.tsv</code> and <code>annot.tsv</code>: Ensembl gene
-annotation (symbols, biotypes, descriptions) loaded in Episodes 05 and
-05b</li>
+annotation (symbols, biotypes, descriptions) loaded in Episodes 5A and
+5B</li>
 </ul></li>
 </ul><p>You will create <code>scripts/</code>, <code>results/</code>, the
 indexes, and all analysis outputs yourself as you work through the
@@ -747,7 +747,7 @@ FASTQ and reference files you already have. Use it <strong>only if you
 are unable to complete the exercises during the workshop</strong>. Do
 not copy the whole directory; copy only the file you need into the
 matching location in your own directory. For example, to start Episode
-05 without finishing Episode 04a:</p>
+5A without finishing Episode 4A:</p>
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -759,8 +759,8 @@ matching location in your own directory. For example, to start Episode
 <code>ls /depot/workshop/data/rnaseq-workshop_results/results</code>.</p>
 </div>
 </section><section><h2 class="section-heading" id="starting-rstudio-on-open-ondemand">Starting RStudio on Open OnDemand<a class="anchor" aria-label="anchor" href="#starting-rstudio-on-open-ondemand"></a></h2>
-<hr class="half-width"><p>Episodes 05, 05b, and 06 run in RStudio through Negishi’s Open
-OnDemand (OOD) web portal.</p>
+<hr class="half-width"><p>Episodes 5A, 5B, and 6 run in RStudio through Negishi’s Open OnDemand
+(OOD) web portal.</p>
 <div class="section level3">
 <h3 id="step-1-log-in-to-open-ondemand">Step 1: Log in to Open OnDemand<a class="anchor" aria-label="anchor" href="#step-1-log-in-to-open-ondemand"></a></h3>
 <p>Open your browser and go to <a href="https://gateway.negishi.rcac.purdue.edu/" class="external-link">gateway.negishi.rcac.purdue.edu</a>.
@@ -783,8 +783,8 @@ authentication.</p>
 <p>Select <strong>RStudio (bioconductor)</strong> under
 <strong>Bioinformatics Apps</strong>, <em>not</em> <strong>RStudio
 Server</strong> under the <strong>GUIs</strong> section. The
-Bioconductor app provides the packages used in Episodes 05, 05b, and
-06.</p>
+Bioconductor app provides the packages used in Episodes 5A, 5B, and
+6.</p>
 <figure><img src="fig/ood_rstudio_dropdown.png" alt="Negishi Open OnDemand Interactive Apps menu with RStudio (bioconductor) highlighted under Bioinformatics Apps and RStudio Server under GUIs marked as the wrong choice" width="800px" class="figure mx-auto d-block"></figure></div>
 </div>
 </div>
@@ -810,8 +810,7 @@ Bioconductor app provides the packages used in Episodes 05, 05b, and
 </tr></tbody></table><figure><img src="fig/ood_rstudio_resources.png" alt="Open OnDemand resource request form filled in with the workshop settings" width="800px" class="figure mx-auto d-block"></figure><p>Why these values:</p>
 <ul><li>
 <strong>Account, partition, and QoS</strong> match the SLURM jobs in
-Episodes 02 to 04b, so all your work runs under the same
-allocation.</li>
+Episodes 2 to 4B, so all your work runs under the same allocation.</li>
 <li>
 <strong>4 hours</strong> is the longest wall time the
 <code>standby</code> QoS allows on the <code>cpu</code> partition, and
@@ -821,8 +820,8 @@ when one expires.</li>
 <strong>4 cores</strong> gives about 8 GB of memory (the form
 allocates roughly 2 GB per core), which is enough for DESeq2 on 8
 samples, tximport on 8 Kallisto runs, and the enrichment analyses in
-Episode 06. If R reports that it cannot allocate memory (most likely
-during <code>simplify()</code> or <code>gseGO()</code> in Episode 06),
+Episode 6. If R reports that it cannot allocate memory (most likely
+during <code>simplify()</code> or <code>gseGO()</code> in Episode 6),
 relaunch with 8 cores (about 16 GB).</li>
 </ul><p>After the workshop, if you no longer have access to
 <code>rcac-rnaseq</code>, use your own group’s account.</p>
@@ -854,26 +853,26 @@ Bioconductor 3.20).</p>
 <span></span>
 <span><span class="co"># CRAN packages</span></span>
 <span><span class="fu">install.packages</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span></span>
-<span>    <span class="st">"tidyverse"</span>,     <span class="co"># readr, dplyr, ggplot2, tibble (Episodes 04b, 05, 05b, 06)</span></span>
-<span>    <span class="st">"RColorBrewer"</span>,  <span class="co"># heatmap colors (05, 05b)</span></span>
-<span>    <span class="st">"pheatmap"</span>,      <span class="co"># sample distance heatmaps (05, 05b)</span></span>
-<span>    <span class="st">"ggrepel"</span>,       <span class="co"># labels on PCA and volcano plots (05, 05b)</span></span>
-<span>    <span class="st">"reshape2"</span>,      <span class="co"># reshaping counts for plotting (05b)</span></span>
-<span>    <span class="st">"hexbin"</span>,        <span class="co"># meanSdPlot() in vsn (05)</span></span>
-<span>    <span class="st">"msigdbr"</span>        <span class="co"># MSigDB Hallmark gene sets (06)</span></span>
+<span>    <span class="st">"tidyverse"</span>,     <span class="co"># readr, dplyr, ggplot2, tibble (Episodes 4B, 5A, 5B, 6)</span></span>
+<span>    <span class="st">"RColorBrewer"</span>,  <span class="co"># heatmap colors (5A, 5B)</span></span>
+<span>    <span class="st">"pheatmap"</span>,      <span class="co"># sample distance heatmaps (5A, 5B)</span></span>
+<span>    <span class="st">"ggrepel"</span>,       <span class="co"># labels on PCA and volcano plots (5A, 5B)</span></span>
+<span>    <span class="st">"reshape2"</span>,      <span class="co"># reshaping counts for plotting (5B)</span></span>
+<span>    <span class="st">"hexbin"</span>,        <span class="co"># meanSdPlot() in vsn (5A)</span></span>
+<span>    <span class="st">"msigdbr"</span>        <span class="co"># MSigDB Hallmark gene sets (6)</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Bioconductor packages</span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span></span>
-<span>    <span class="co"># Transcript-level import (04b)</span></span>
+<span>    <span class="co"># Transcript-level import (4B)</span></span>
 <span>    <span class="st">"tximport"</span>,</span>
-<span>    <span class="co"># Reading Kallisto abundance.h5 files with tximport (04b)</span></span>
+<span>    <span class="co"># Reading Kallisto abundance.h5 files with tximport (4B)</span></span>
 <span>    <span class="st">"rhdf5"</span>,</span>
-<span>    <span class="co"># Differential expression and QC plots (05, 05b)</span></span>
+<span>    <span class="co"># Differential expression and QC plots (5A, 5B)</span></span>
 <span>    <span class="st">"DESeq2"</span>, <span class="st">"apeglm"</span>, <span class="st">"vsn"</span>,</span>
 <span>    <span class="co"># Gene annotation (05, optional biomaRt spoiler)</span></span>
 <span>    <span class="st">"biomaRt"</span>,</span>
-<span>    <span class="co"># Enrichment analysis (06)</span></span>
+<span>    <span class="co"># Enrichment analysis (6)</span></span>
 <span>    <span class="st">"clusterProfiler"</span>, <span class="st">"enrichplot"</span>, <span class="st">"org.Mm.eg.db"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -898,7 +897,7 @@ Bioconductor 3.20).</p>
 <h3 class="callout-title">Version notes</h3>
 <div class="callout-content">
 <ul><li>
-<strong>msigdbr</strong>: Episode 06 uses the current interface,
+<strong>msigdbr</strong>: Episode 6 uses the current interface,
 <code>msigdbr(species = "Mus musculus", collection = "H")</code> and the
 <code>ncbi_gene</code> column, which needs msigdbr 10 or later (the OOD
 app has 26.1.1). Older tutorials use <code>category = "H"</code> and
@@ -906,8 +905,8 @@ app has 26.1.1). Older tutorials use <code>category = "H"</code> and
 time it runs, so it needs internet access.</li>
 <li>
 <strong>KEGG and biomaRt</strong> query online services
-(<code>enrichKEGG()</code> in Episode 06, the annotation spoiler in
-Episode 05), so those steps need internet access from wherever R is
+(<code>enrichKEGG()</code> in Episode 6, the annotation spoiler in
+Episode 5A), so those steps need internet access from wherever R is
 running.</li>
 </ul></div>
 </div>
@@ -928,11 +927,11 @@ them. Install them only if you want to explore those topics.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Shiny app for the experimental design challenge in Episode 01 (GitHub only)</span></span>
+<code class="sourceCode R"><span><span class="co"># Shiny app for the experimental design challenge in Episode 1 (GitHub only)</span></span>
 <span><span class="fu">install.packages</span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"csoneson/ConfoundingExplorer"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Alternatives and follow-ups mentioned in Episodes 01, 04b, and 05</span></span>
+<span><span class="co"># Alternatives and follow-ups mentioned in Episodes 1, 4B, and 5A</span></span>
 <span><span class="fu">install.packages</span><span class="op">(</span><span class="st">"ashr"</span><span class="op">)</span>                                <span class="co"># lfcShrink(type = "ashr")</span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="st">"Biostrings"</span>, <span class="st">"sva"</span>, <span class="st">"edgeR"</span><span class="op">)</span><span class="op">)</span>   <span class="co"># readDNAStringSet(), ComBat-seq, edgeR</span></span></code></pre>
 </div>
@@ -949,7 +948,7 @@ any links that you are not going to use.
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link float-end" href="01-intro-to-rnaseq.html" rel="next">Next: Introduction to RNA-seq... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="01-intro-to-rnaseq.html" rel="next">Next: 1. Introduction to RNA-seq... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
     </nav></div>
 <!-- END  : inst/pkgdown/templates/content-syllabus.html -->
@@ -959,11 +958,11 @@ any links that you are not going to use.
         <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
 
-        <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/index.md" class="external-link">Edit on GitHub</a>
+        <a href="https://github.com/rcac-bioinformatics/rnaseq-analysis/edit/main/index.md" class="external-link">Edit on GitHub</a>
 
 	
-        | <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
-        | <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/" class="external-link">Source</a></p>
+        | <a href="https://github.com/rcac-bioinformatics/rnaseq-analysis/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
+        | <a href="https://github.com/rcac-bioinformatics/rnaseq-analysis/" class="external-link">Source</a></p>
         <p>
         <a href="citation.html">Cite</a>
         | <a href="mailto:aseethar@purdue.edu">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
@@ -985,18 +984,18 @@ any links that you are not going to use.
     {
   "@context": "https://schema.org",
   "@type": "LearningResource",
-  "@id": "https://rcac_rnaseq_workshop.github.io/NA/index.html",
+  "@id": "https://rcac-bioinformatics.github.io/rnaseq-analysis/index.html",
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "software, data, lesson, RNA-seq, Bioconductor, R, HPC, RCAC",
   "name": "RNA-seq in practice: Hands-on workshop on RCAC systems",
   "creativeWorkStatus": "active",
-  "url": "https://rcac_rnaseq_workshop.github.io/NA/index.html",
-  "identifier": "https://rcac_rnaseq_workshop.github.io/NA/index.html",
+  "url": "https://rcac-bioinformatics.github.io/rnaseq-analysis/index.html",
+  "identifier": "https://rcac-bioinformatics.github.io/rnaseq-analysis/index.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-10-03",
-  "datePublished": "2026-10-03"
+  "dateModified": "2026-10-05",
+  "datePublished": "2026-10-05"
 }
 
   </script><script>

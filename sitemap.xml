@@ -1,198 +1,198 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/01-intro-to-rnaseq.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/01-intro-to-rnaseq.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/01a-from-reads-to-counts.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/01a-from-reads-to-counts.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/01b-mapping-reads.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/01b-mapping-reads.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/01c-count-features.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/01c-count-features.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/02-downloading-and-organizing-files.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/02-downloading-and-organizing-files.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/02-setup.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/02-setup.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/03-import-annotate.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/03-import-annotate.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/03-qc-and-trimming.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/03-qc-and-trimming.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/04-exploratory-qc.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/04-exploratory-qc.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/04a-genome-based-quantification.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/04a-genome-based-quantification.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/04b-transcript-based-quantification.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/04b-transcript-based-quantification.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/05-deseq2-expression-analyses.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/05-deseq2-expression-analyses.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/05-differential-expression.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/05-differential-expression.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/05b-deseq2-expression-analyses-kallisto.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/05b-deseq2-expression-analyses-kallisto.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/06-extra-design.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/06-extra-design.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/06-gene-set-enrichment-analyses.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/06-gene-set-enrichment-analyses.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/07-gene-set-analysis.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/07-gene-set-analysis.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/08-next-steps.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/08-next-steps.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/404.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/404.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/CODE_OF_CONDUCT.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/LICENSE.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/aio.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/aio.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/citation.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/citation.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/fig/Alternative-splicing-in-30-seconds.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/fig/Alternative-splicing-in-30-seconds.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/fig/From-RNA-to-FASTQ.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/fig/From-RNA-to-FASTQ.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/fig/From-counts-to-insight.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/fig/From-counts-to-insight.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/fig/From-reads-to-a-count-matrix.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/fig/From-reads-to-a-count-matrix.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/fig/Stranded-vs-unstranded-RNA-seq.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/fig/Stranded-vs-unstranded-RNA-seq.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/images.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/images.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/index.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/index.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/01-intro-to-rnaseq.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/01-intro-to-rnaseq.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/01a-from-reads-to-counts.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/01a-from-reads-to-counts.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/01b-mapping-reads.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/01b-mapping-reads.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/01c-count-features.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/01c-count-features.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/02-downloading-and-organizing-files.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/02-downloading-and-organizing-files.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/02-setup.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/02-setup.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/03-import-annotate.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/03-import-annotate.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/03-qc-and-trimming.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/03-qc-and-trimming.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/04-exploratory-qc.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/04-exploratory-qc.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/04a-genome-based-quantification.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/04a-genome-based-quantification.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/04b-transcript-based-quantification.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/04b-transcript-based-quantification.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/05-deseq2-expression-analyses.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/05-deseq2-expression-analyses.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/05-differential-expression.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/05-differential-expression.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/05b-deseq2-expression-analyses-kallisto.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/05b-deseq2-expression-analyses-kallisto.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/06-extra-design.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/06-extra-design.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/06-gene-set-enrichment-analyses.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/06-gene-set-enrichment-analyses.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/07-gene-set-analysis.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/07-gene-set-analysis.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/08-next-steps.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/08-next-steps.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/404.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/404.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/CODE_OF_CONDUCT.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/LICENSE.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/aio.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/aio.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/citation.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/citation.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/images.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/images.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/index.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/index.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/instructor-notes.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/instructor-notes.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/introduction.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/introduction.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/key-points.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/key-points.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/profiles.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/profiles.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor/reference.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor/reference.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/instructor-notes.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/instructor-notes.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/introduction.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/introduction.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/key-points.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/key-points.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/profiles.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/profiles.html</loc>
   </url>
   <url>
-    <loc>https://rcac_rnaseq_workshop.github.io/NA/reference.html</loc>
+    <loc>https://rcac-bioinformatics.github.io/rnaseq-analysis/reference.html</loc>
   </url>
 </urlset>

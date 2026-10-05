@@ -271,7 +271,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="04a-genome-based-quantification.html">4. A. Genome-based quantification (STAR + featureCounts)</a>
+        <a href="04a-genome-based-quantification.html">4A. Genome-based quantification (STAR + featureCounts)</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -283,7 +283,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="04b-transcript-based-quantification.html">5. B. Transcript-based quantification (Kallisto)</a>
+        <a href="04b-transcript-based-quantification.html">4B. Transcript-based quantification (Kallisto)</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -295,7 +295,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="05-deseq2-expression-analyses.html">6. Gene-level QC and differential expression (DESeq2)</a>
+        <a href="05-deseq2-expression-analyses.html">5A. Gene-level QC and differential expression (DESeq2)</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -307,7 +307,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="05b-deseq2-expression-analyses-kallisto.html">7. B. Differential expression using DESeq2 (Kallisto pathway)</a>
+        <a href="05b-deseq2-expression-analyses-kallisto.html">5B. Differential expression using DESeq2 (Kallisto pathway)</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -319,7 +319,7 @@
 <div class="accordion accordion-flush" id="accordionFlush9">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading9">
-        <a href="06-gene-set-enrichment-analyses.html">8. Gene set enrichment analysis</a>
+        <a href="06-gene-set-enrichment-analyses.html">6. Gene set enrichment analysis</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -382,11 +382,11 @@
     <main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>All in One View</h1>
         
-<section id="aio-01-intro-to-rnaseq"><p>Content from <a href="01-intro-to-rnaseq.html">Introduction to RNA-seq</a></p>
+<section id="aio-01-intro-to-rnaseq"><p>Content from <a href="01-intro-to-rnaseq.html">1. Introduction to RNA-seq</a></p>
 <hr>
-<p>Last updated on 2026-10-03 |
+<p>Last updated on 2026-10-05 |
 
-        <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/01-intro-to-rnaseq.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/rcac-bioinformatics/rnaseq-analysis/edit/main/episodes/01-intro-to-rnaseq.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
@@ -447,7 +447,7 @@ it in a new tab</a>.</p>
 <p><em>Animation (2 minutes): from RNA to FASTQ. It follows a typical
 current protocol, a stranded (dUTP), poly(A)-selected, paired-end
 library on a recent Illumina instrument. The workshop data is older and
-differs in two ways you will meet later: it is unstranded (Episode 04a
+differs in two ways you will meet later: it is unstranded (Episode 4A
 checks this), and it was sequenced as 2 x 51 bp reads on an Illumina
 HiSeq 2000.</em> Press <strong>Play</strong> to start, or
 <a href="fig/From-RNA-to-FASTQ.html?autoplay=1" target="_blank" rel="noopener">open
@@ -589,7 +589,7 @@ batch effect or not?</li>
 </iframe>
 <p><em>Animation (72 seconds): the genome-based route, approach 1 below:
 align reads to the genome, count reads per gene, and assemble the count
-matrix. Episode 04a does this with STAR and featureCounts.</em> Press
+matrix. Episode 4A does this with STAR and featureCounts.</em> Press
 <strong>Play</strong> to start, or
 <a href="fig/From-reads-to-a-count-matrix.html?autoplay=1" target="_blank" rel="noopener">open
 it in a new tab</a>.</p>
@@ -770,11 +770,11 @@ sources, including Ensembl, UCSC and GENCODE.</li>
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
-</div></section><section id="aio-02-downloading-and-organizing-files"><p>Content from <a href="02-downloading-and-organizing-files.html">Downloading and organizing files</a></p>
+</div></section><section id="aio-02-downloading-and-organizing-files"><p>Content from <a href="02-downloading-and-organizing-files.html">2. Downloading and organizing files</a></p>
 <hr>
-<p>Last updated on 2026-10-03 |
+<p>Last updated on 2026-10-05 |
 
-        <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/02-downloading-and-organizing-files.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/rcac-bioinformatics/rnaseq-analysis/edit/main/episodes/02-downloading-and-organizing-files.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
@@ -1281,7 +1281,7 @@ signaling</li>
 that go up after IR, on both analysis tracks):</p>
 <ul>
 <li>p53 signaling: the KEGG p53 signaling pathway and the MSigDB
-Hallmark p53 pathway (Episode 06, over-representation analysis)</li>
+Hallmark p53 pathway (Episode 6, over-representation analysis)</li>
 <li>DNA damage response: GO terms for DNA damage signal transduction by
 p53 (over-representation of upregulated genes and GSEA)</li>
 <li>Apoptosis: GO intrinsic apoptotic signaling in response to DNA
@@ -1825,11 +1825,11 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
 </div>
-</section></section><section id="aio-03-qc-and-trimming"><p>Content from <a href="03-qc-and-trimming.html">Quality control of RNA-seq reads</a></p>
+</section></section><section id="aio-03-qc-and-trimming"><p>Content from <a href="03-qc-and-trimming.html">3. Quality control of RNA-seq reads</a></p>
 <hr>
-<p>Last updated on 2026-10-03 |
+<p>Last updated on 2026-10-05 |
 
-        <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/03-qc-and-trimming.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/rcac-bioinformatics/rnaseq-analysis/edit/main/episodes/03-qc-and-trimming.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
@@ -2277,7 +2277,7 @@ number of reads, quality, duplication, or GC percentage?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Interpretation for this dataset (compare with your own report):</p>
 <ol style="list-style-type: decimal">
@@ -2292,7 +2292,7 @@ per base sequence quality in 12 of 16 files, per tile sequence quality
 in 12 of 16, and per base N content in 7 of 16. These five samples were
 sequenced on one flowcell (C1PF5ACXX, visible in the read names) and the
 clean three on two others, so these are problems of that sequencing run,
-not of the libraries. They show up again in Episode 04a: the three clean
+not of the libraries. They show up again in Episode 4A: the three clean
 samples have the highest STAR mapping rates.</li>
 <li>No. Adapter content passes in all 16 files; with 51 bp reads, very
 few inserts are shorter than the read.</li>
@@ -2314,7 +2314,7 @@ aligner handles low quality read ends.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What if trimming is required? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p><em>Optional reference: how to trim adapters with <code>fastp</code>
 (not part of the hands-on)</em></p>
@@ -2402,11 +2402,11 @@ alignment based RNA-seq.</li>
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
-</section></section><section id="aio-04a-genome-based-quantification"><p>Content from <a href="04a-genome-based-quantification.html">A. Genome-based quantification (STAR + featureCounts)</a></p>
+</section></section><section id="aio-04a-genome-based-quantification"><p>Content from <a href="04a-genome-based-quantification.html">4A. Genome-based quantification (STAR + featureCounts)</a></p>
 <hr>
-<p>Last updated on 2026-10-03 |
+<p>Last updated on 2026-10-05 |
 
-        <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04a-genome-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/rcac-bioinformatics/rnaseq-analysis/edit/main/episodes/04a-genome-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
@@ -2541,7 +2541,7 @@ on 4 cores. The important output is in
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What does this file look like? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">JSON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -2687,7 +2687,7 @@ manual</a></p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Key options:</p>
 <ul>
@@ -2792,7 +2792,7 @@ The mapping script below works the same with either index.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> What will the output look like? </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <p>The index directory is now ready for use in mapping and should have
 contents like this: Location: <code>$SCRATCH/rnaseq-workshop/data</code>
@@ -2867,7 +2867,7 @@ paired FASTQ files.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3052,7 +3052,7 @@ contamination issues</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>Interpretation for this dataset:</p>
 <ol style="list-style-type: decimal">
@@ -3060,16 +3060,16 @@ contamination issues</li>
 has the highest (83 percent).</li>
 <li>IR_rep1 and IR_rep2 are lowest (62 and 64 percent), and IR_rep3,
 IR_rep4, and mock_rep4 highest (77 to 83 percent): the same split as the
-read quality groups in Episode 03. The two conditions map about equally
+read quality groups in Episode 3. The two conditions map about equally
 well on average (70 percent for IR, 73 percent for mock). These rates
 are within the 60 to 90 percent range given above, so no sample fails,
 but the spread is worth recording. When one condition maps
 systematically worse, check whether the difference also shows up in the
-PCA in Episode 05.</li>
+PCA in Episode 5A.</li>
 <li>Most unmapped reads are classified as “too short” (1.4 to 4.6
 million pairs per sample): STAR could align only part of the read pair.
 With 51 bp reads this usually reflects low quality read ends (see the
-FastQC report in Episode 03), rRNA or other sequence absent from the
+FastQC report in Episode 3), rRNA or other sequence absent from the
 primary assembly, and reads spanning unannotated junctions.</li>
 </ol>
 </div>
@@ -3261,7 +3261,7 @@ expression?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <p>Interpretation for this dataset. Assigned fragments are about 32 to
 40 percent of the total. This looks low, but the total in the
@@ -3326,11 +3326,11 @@ analysis.</li>
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
-</section></section><section id="aio-04b-transcript-based-quantification"><p>Content from <a href="04b-transcript-based-quantification.html">B. Transcript-based quantification (Kallisto)</a></p>
+</section></section><section id="aio-04b-transcript-based-quantification"><p>Content from <a href="04b-transcript-based-quantification.html">4B. Transcript-based quantification (Kallisto)</a></p>
 <hr>
-<p>Last updated on 2026-10-03 |
+<p>Last updated on 2026-10-05 |
 
-        <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/04b-transcript-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/rcac-bioinformatics/rnaseq-analysis/edit/main/episodes/04b-transcript-based-quantification.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
@@ -3462,7 +3462,7 @@ estimates.</p>
 </h3>
 <p>Building the index for the mouse transcriptome needs more memory than
 a small job provides, so we run it as a batch job, like the STAR index
-in Episode 04a. This version of Kallisto builds the index with a single
+in Episode 4A. This version of Kallisto builds the index with a single
 thread, but on Negishi memory comes with the cores you request, so the
 script asks for 48 cores. Save it as
 <code>$SCRATCH/rnaseq-workshop/scripts/index_kallisto.sh</code>:</p>
@@ -3579,7 +3579,7 @@ Illumina TruSeq stranded)</li>
 <code>--fr-stranded</code> for forward-stranded libraries</li>
 </ul>
 <p>Our dataset is <strong>unstranded</strong> (Salmon reported
-<code>IU</code> in Episode 04a), so we omit these flags.</p>
+<code>IU</code> in Episode 4A), so we omit these flags.</p>
 </div>
 </div>
 </div>
@@ -3628,7 +3628,7 @@ plan a sleuth analysis.</p>
 </div>
 <p>Save the array job below as
 <code>$SCRATCH/rnaseq-workshop/scripts/quant_kallisto.sh</code>. Like
-<code>map_reads.sh</code> in Episode 04a, it reads
+<code>map_reads.sh</code> in Episode 4A, it reads
 <code>samples.txt</code> from the directory you submit from.</p>
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3856,7 +3856,7 @@ ENSMUSG00000000049.12             0.0000            1.00000</code></pre>
 setting?</h3>
 <div class="callout-content">
 <p>We use the default <code>countsFromAbundance = "no"</code> because
-<code>DESeqDataSetFromTximport()</code> (used in Episode 05b)
+<code>DESeqDataSetFromTximport()</code> (used in Episode 5B)
 automatically incorporates the <code>txi$length</code> matrix to correct
 for transcript length bias.</p>
 <p>Using <code>"lengthScaledTPM"</code> would apply length correction
@@ -3951,7 +3951,7 @@ well-annotated transcriptomes: Kallisto only counts reads compatible
 with annotated mature transcripts, so reads from introns (pre-mRNA),
 intergenic regions, and rRNA not in the transcript FASTA are not
 pseudoaligned. Compare with the STAR unique mapping rates from Episode
-04a, which include intronic reads.</li>
+4A, which include intronic reads.</li>
 <li>Reasonably consistent: they span about 14 percentage points
 (standard deviation about 5), from mock_rep2 (51 percent) to IR_rep3 and
 IR_rep4 (64 percent). Every sample had 20 million read pairs
@@ -4004,11 +4004,11 @@ counts with <code>type = "kallisto"</code>.</li>
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
-</section></section><section id="aio-05-deseq2-expression-analyses"><p>Content from <a href="05-deseq2-expression-analyses.html">Gene-level QC and differential expression (DESeq2)</a></p>
+</section></section><section id="aio-05-deseq2-expression-analyses"><p>Content from <a href="05-deseq2-expression-analyses.html">5A. Gene-level QC and differential expression (DESeq2)</a></p>
 <hr>
-<p>Last updated on 2026-10-03 |
+<p>Last updated on 2026-10-05 |
 
-        <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/05-deseq2-expression-analyses.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/rcac-bioinformatics/rnaseq-analysis/edit/main/episodes/05-deseq2-expression-analyses.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
@@ -4178,7 +4178,7 @@ with biomaRt.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> How were these data prepared? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>Since the gene IDs in the count matrix are Ensembl IDs, it will be
 hard to interpret the results without annotation. We query Ensembl
@@ -4503,8 +4503,7 @@ Average counts vs variance before transformation
 <code>`aes_string()` was deprecated in ggplot2 3.0.0</code>. It comes
 from code inside the vsn package, not from your commands, and does not
 change the plot. You will see similar warnings from enrichplot in
-Episode 06. Warnings are worth reading, but this kind can be
-ignored.</p>
+Episode 6. Warnings are worth reading, but this kind can be ignored.</p>
 </div>
 </div>
 </div>
@@ -4677,7 +4676,7 @@ non-biological factors)?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Interpretation for this dataset:</p>
 <ol style="list-style-type: decimal">
@@ -4693,7 +4692,7 @@ label.</li>
 group there is a small, consistent pattern: IR_rep3 and IR_rep4 pair up
 apart from IR_rep1 and IR_rep2, and mock_rep4 sits apart from the other
 mock samples on PC2 (under 2 percent of the variance). These are the
-samples with the cleanest reads in Episode 03, so this is a technical
+samples with the cleanest reads in Episode 3, so this is a technical
 effect of read quality. It is small next to the treatment effect and
 does not need correction in this analysis, but it is worth
 recording.</li>
@@ -4734,7 +4733,7 @@ thousands of barely expressed noncoding features.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Single command to run the DESeq2 pipeline </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <p>Above three steps can be run together using the <code>DESeq</code>
 function:</p>
@@ -5142,7 +5141,7 @@ genes.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Interpretation for this dataset:</p>
 <ul>
@@ -5206,11 +5205,11 @@ and adjusted p values.</li>
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
-</section></section><section id="aio-05b-deseq2-expression-analyses-kallisto"><p>Content from <a href="05b-deseq2-expression-analyses-kallisto.html">B. Differential expression using DESeq2 (Kallisto pathway)</a></p>
+</section></section><section id="aio-05b-deseq2-expression-analyses-kallisto"><p>Content from <a href="05b-deseq2-expression-analyses-kallisto.html">5B. Differential expression using DESeq2 (Kallisto pathway)</a></p>
 <hr>
-<p>Last updated on 2026-10-03 |
+<p>Last updated on 2026-10-05 |
 
-        <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/05b-deseq2-expression-analyses-kallisto.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/rcac-bioinformatics/rnaseq-analysis/edit/main/episodes/05b-deseq2-expression-analyses-kallisto.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
@@ -5267,12 +5266,12 @@ Wiki</strong>: <a href="https://cgsb.miraheze.org/wiki/Main_Page" class="externa
 </section><section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <hr class="half-width">
-<p>In Episode 04b, we quantified transcript expression using
+<p>In Episode 4B, we quantified transcript expression using
 <strong>Kallisto</strong> and summarized the results to gene-level
 counts using <strong>tximport</strong>. In this episode, we use those
 gene-level estimates for differential expression analysis with
 <strong>DESeq2</strong>.</p>
-<p>The workflow follows the same general pattern as Episode 05
+<p>The workflow follows the same general pattern as Episode 5A
 (genome-based), but with important differences:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -5286,7 +5285,7 @@ tximport rather than raw counts from featureCounts.</li>
 <strong>Bootstrap support</strong>: if you run Kallisto with
 bootstraps (<code>-b</code>), the uncertainty estimates can be used with
 sleuth for transcript-level DE. DESeq2 does not use them, which is why
-Episode 04b runs with <code>-b 0</code>.</li>
+Episode 4B runs with <code>-b 0</code>.</li>
 </ol>
 <div id="when-to-use-this-pathway" class="callout">
 <div class="callout-square">
@@ -5302,7 +5301,7 @@ Episode 04b runs with <code>-b 0</code>.</li>
 <li>You want to leverage transcript-level bias corrections.</li>
 <li>You did not generate BAM files and cannot use featureCounts.</li>
 </ul>
-<p>The genome-based workflow (Episode 05) is preferred when you have BAM
+<p>The genome-based workflow (Episode 5A) is preferred when you have BAM
 files and need splice junction information or plan to visualize
 alignments.</p>
 </div>
@@ -5318,8 +5317,7 @@ alignments.</p>
 <div class="callout-content">
 <ul>
 <li>
-<code>txi.rds</code> file generated from tximport in Episode
-04b</li>
+<code>txi.rds</code> file generated from tximport in Episode 4B</li>
 <li>A <code>samples.csv</code> file describing the experimental
 groups</li>
 <li>RStudio session via Open OnDemand</li>
@@ -5344,7 +5342,7 @@ directory for the output.</p>
 </h2>
 <hr class="half-width">
 <p>Start your RStudio session via Open OnDemand as described in Episode
-05, then load the required packages:</p>
+5A, then load the required packages:</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -5363,7 +5361,7 @@ directory for the output.</p>
 <span><span class="co"># output directory for this episode</span></span>
 <span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"results/deseq2_kallisto"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Load the tximport object created in Episode 04b:</p>
+<p>Load the tximport object created in Episode 4B:</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -5432,7 +5430,7 @@ for length bias correction).</li>
 <p>When using <code>DESeqDataSetFromTximport()</code>, the
 <code>length</code> matrix is automatically used to correct for
 gene-length bias during normalization. This is why we use the default
-<code>countsFromAbundance = "no"</code> in Episode 04b—DESeq2 handles
+<code>countsFromAbundance = "no"</code> in Episode 4B—DESeq2 handles
 length correction internally, so pre-scaling counts would apply the
 correction twice.</p>
 </div>
@@ -5450,7 +5448,7 @@ correction twice.</p>
 <span>    stringsAsFactors <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">coldata</span><span class="op">$</span><span class="va">condition</span> <span class="op">&lt;-</span> <span class="fu">as.factor</span><span class="op">(</span><span class="va">coldata</span><span class="op">$</span><span class="va">condition</span><span class="op">)</span></span>
-<span><span class="co"># make WT_mock the reference (denominator) level, as in Episode 05</span></span>
+<span><span class="co"># make WT_mock the reference (denominator) level, as in Episode 5A</span></span>
 <span><span class="va">coldata</span><span class="op">$</span><span class="va">condition</span> <span class="op">&lt;-</span> <span class="fu">relevel</span><span class="op">(</span><span class="va">coldata</span><span class="op">$</span><span class="va">condition</span>, ref <span class="op">=</span> <span class="st">"WT_mock"</span><span class="op">)</span></span>
 <span><span class="va">coldata</span> <span class="op">&lt;-</span> <span class="va">coldata</span><span class="op">[</span><span class="fu">colnames</span><span class="op">(</span><span class="va">txi</span><span class="op">$</span><span class="va">counts</span><span class="op">)</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
 <span><span class="va">coldata</span></span></code></pre>
@@ -5509,10 +5507,10 @@ would lose this information.</p>
 </div>
 </div>
 </div>
-<p>Keep protein-coding genes, as in Episode 05, so that both tracks test
+<p>Keep protein-coding genes, as in Episode 5A, so that both tracks test
 the same kind of genes and their results can be compared directly. Load
 the gene annotation tables copied with the workshop data (the same files
-as in Episode 05; its “How were these data prepared?” spoiler shows how
+as in Episode 5A; its “How were these data prepared?” spoiler shows how
 they were made):</p>
 <div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -5753,7 +5751,7 @@ biologically?</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Interpretation for this dataset:</p>
 <ol style="list-style-type: decimal">
@@ -5761,7 +5759,7 @@ biologically?</li>
 samples.</li>
 <li>No. Each sample groups with its own condition. Within the IR group,
 IR_rep3 and IR_rep4 sit apart from IR_rep1 and IR_rep2 on PC2 (3 percent
-of the variance), the same read-quality pattern seen in Episode 05.</li>
+of the variance), the same read-quality pattern seen in Episode 5A.</li>
 <li>PC1 explains 90 percent of the variance and separates IR from mock:
 the radiation response is by far the largest signal in the data.</li>
 </ol>
@@ -5823,7 +5821,7 @@ dots.</p>
 <p>Extract results for the contrast of interest, naming the numerator
 (<code>WT_IR</code>) and denominator (<code>WT_mock</code>) explicitly
 so that positive log2 fold changes mean higher after IR (see “Name your
-contrast” in Episode 05):</p>
+contrast” in Episode 5A):</p>
 <div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -6076,7 +6074,7 @@ significance thresholds.</li>
 <h3 class="callout-title">Exercise: Compare with genome-based
 results</h3>
 <div class="callout-content">
-<p>If you also ran Episode 05 (genome-based workflow):</p>
+<p>If you also ran Episode 5A (genome-based workflow):</p>
 <ol style="list-style-type: decimal">
 <li>Are the number of DE genes similar between the two approaches?</li>
 <li>Do the top DE genes overlap?</li>
@@ -6090,7 +6088,7 @@ results</h3>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Observations for this dataset (padj at most 0.05 and fold change at
 least 1.5):</p>
@@ -6125,7 +6123,7 @@ confidence in the results.</p>
 <span>    <span class="st">"results/deseq2_kallisto/DESeq2_kallisto_results.tsv"</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
-<p>Episode 06 can start from this file instead of the Episode 05 table;
+<p>Episode 6 can start from this file instead of the Episode 5A table;
 it has the same <code>ensembl_gene_id_version</code>,
 <code>log2FoldChange</code>, <code>pvalue</code>, and <code>padj</code>
 columns.</p>
@@ -6164,8 +6162,8 @@ choose?</h3>
 <table class="table">
 <thead><tr>
 <th>Aspect</th>
-<th>Genome-based (Ep 05)</th>
-<th>Transcript-based (Ep 05b)</th>
+<th>Genome-based (Ep 5A)</th>
+<th>Transcript-based (Ep 5B)</th>
 </tr></thead>
 <tbody>
 <tr>
@@ -6237,11 +6235,11 @@ broadly concordant.</li>
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
-</section></section><section id="aio-06-gene-set-enrichment-analyses"><p>Content from <a href="06-gene-set-enrichment-analyses.html">Gene set enrichment analysis</a></p>
+</section></section><section id="aio-06-gene-set-enrichment-analyses"><p>Content from <a href="06-gene-set-enrichment-analyses.html">6. Gene set enrichment analysis</a></p>
 <hr>
-<p>Last updated on 2026-10-03 |
+<p>Last updated on 2026-10-05 |
 
-        <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/episodes/06-gene-set-enrichment-analyses.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/rcac-bioinformatics/rnaseq-analysis/edit/main/episodes/06-gene-set-enrichment-analyses.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
@@ -6309,8 +6307,8 @@ results.</p>
 <h3 class="callout-title">What you need for this episode</h3>
 <div class="callout-content">
 <ul>
-<li>DE results from Episode 05
-(<code>results/deseq2/DESeq2_results_joined.tsv</code>) or Episode 05b
+<li>DE results from Episode 5A
+(<code>results/deseq2/DESeq2_results_joined.tsv</code>) or Episode 5B
 (<code>results/deseq2_kallisto/DESeq2_kallisto_results.tsv</code>)</li>
 <li>RStudio session via Open OnDemand</li>
 <li>Internet access from the RStudio session: <code>enrichKEGG()</code>
@@ -6496,7 +6494,7 @@ signals</strong> across them.</p>
 </h2>
 <hr class="half-width">
 <p>Start your RStudio session via Open OnDemand as described in Episode
-05, then load the required packages:</p>
+5A, then load the required packages:</p>
 <p>Load packages:</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -6514,16 +6512,16 @@ signals</strong> across them.</p>
 <span><span class="va">work_dir</span> <span class="op">&lt;-</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"/scratch/negishi"</span>, <span class="fu">Sys.getenv</span><span class="op">(</span><span class="st">"USER"</span><span class="op">)</span>, <span class="st">"rnaseq-workshop"</span><span class="op">)</span></span>
 <span><span class="fu">setwd</span><span class="op">(</span><span class="va">work_dir</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Load DESeq2 results from Episode 05. If you followed the Kallisto
-track (Episodes 04b and 05b), read the Episode 05b table instead, using
-the commented line; everything after this step is the same for both
+<p>Load DESeq2 results from Episode 5A. If you followed the Kallisto
+track (Episodes 4B and 5B), read the Episode 5B table instead, using the
+commented line; everything after this step is the same for both
 tracks.</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">read_tsv</span><span class="op">(</span><span class="st">"results/deseq2/DESeq2_results_joined.tsv"</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co"># Kallisto track (Episode 05b): use this line instead of the one above</span></span>
+<span><span class="co"># Kallisto track (Episode 5B): use this line instead of the one above</span></span>
 <span><span class="co"># res &lt;- read_tsv("results/deseq2_kallisto/DESeq2_kallisto_results.tsv", show_col_types = FALSE)</span></span>
 <span><span class="fu">head</span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre>
 </div>
@@ -8035,11 +8033,11 @@ any links that you are not going to use.
         <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
 
-        <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/edit/main/README.md" class="external-link">Edit on GitHub</a>
+        <a href="https://github.com/rcac-bioinformatics/rnaseq-analysis/edit/main/README.md" class="external-link">Edit on GitHub</a>
 
 	
-        | <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
-        | <a href="https://aseetharam.github.io/rcac_rnaseq_workshop/" class="external-link">Source</a></p>
+        | <a href="https://github.com/rcac-bioinformatics/rnaseq-analysis/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
+        | <a href="https://github.com/rcac-bioinformatics/rnaseq-analysis/" class="external-link">Source</a></p>
         <p>
         <a href="citation.html">Cite</a>
         | <a href="mailto:aseethar@purdue.edu">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
@@ -8062,18 +8060,18 @@ any links that you are not going to use.
     {
   "@context": "https://schema.org",
   "@type": "LearningResource",
-  "@id": "https://rcac_rnaseq_workshop.github.io/NA/aio.html",
+  "@id": "https://rcac-bioinformatics.github.io/rnaseq-analysis/aio.html",
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "software, data, lesson, RNA-seq, Bioconductor, R, HPC, RCAC",
   "name": "All in One View",
   "creativeWorkStatus": "active",
-  "url": "https://rcac_rnaseq_workshop.github.io/NA/aio.html",
-  "identifier": "https://rcac_rnaseq_workshop.github.io/NA/aio.html",
+  "url": "https://rcac-bioinformatics.github.io/rnaseq-analysis/aio.html",
+  "identifier": "https://rcac-bioinformatics.github.io/rnaseq-analysis/aio.html",
   "dateCreated": "2025-11-12",
-  "dateModified": "2026-10-03",
-  "datePublished": "2026-10-03"
+  "dateModified": "2026-10-05",
+  "datePublished": "2026-10-05"
 }
 
   </script><script>
