@@ -4,7 +4,7 @@ This file guides Claude Code (claude.ai/code) when working in this repository.
 
 ## What this is
 
-A Carpentries Workbench (sandpaper) lesson: "RNA-seq in practice: Hands-on workshop on RCAC systems". It is course material, not software. Learners run the shell steps on Purdue RCAC Negishi (SLURM, `module load biocontainers` then the tool module; 04b's tximport uses the `r-rnaseq` module) and the R steps (05, 05b, 06) in the Open OnDemand app RStudio (bioconductor), R 4.4.0 with Bioconductor 3.20. That app runs `/depot/itap/aseethar/images/rstudio_bioc_ood_rocky8_r4.4.0_s2025.05.0-496_tex.sif` with the host library `/apps/biocontainers/extras/r-ood/r4.4.0_s2025.05.0-496` bound at `/opt/R/host-site-library`. Canonical repo: `rcac-bioinformatics/rnaseq-analysis`, branch `main`, site built from `gh-pages`. Known issue: `config.yaml` `source:` still points to the retired `aseetharam.github.io/rcac_rnaseq_workshop` URL (tracked in `maintenance/log/updates.md`).
+A Carpentries Workbench (sandpaper) lesson: "RNA-seq in practice: Hands-on workshop on RCAC systems". It is course material, not software. Learners run the shell steps on Purdue RCAC Negishi (SLURM, `module load biocontainers` then the tool module; 04b's tximport uses the `r-rnaseq` module) and the R steps (05, 05b, 06) in the Open OnDemand app RStudio (bioconductor), R 4.4.0 with Bioconductor 3.20. That app runs `/depot/itap/aseethar/images/rstudio_bioc_ood_rocky8_r4.4.0_s2025.05.0-496_tex.sif` with the host library `/apps/biocontainers/extras/r-ood/r4.4.0_s2025.05.0-496` bound at `/opt/R/host-site-library`. Canonical repo: `rcac-bioinformatics/rnaseq-analysis`, branch `main`, site built from `gh-pages`.
 
 ## Dataset and validation anchors
 

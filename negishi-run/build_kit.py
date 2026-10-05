@@ -307,12 +307,12 @@ B05_BIOMART = [find("05", "library(RColorBrewer)", "r").nn, find("05", 'read.del
 B05_BIOMART = sorted(set(B05_BIOMART))
 # 06 transcript track: swap the two read_tsv lines, exactly as the episode tells 05b learners
 SWAP_FROM = ('res <- read_tsv("results/deseq2/DESeq2_results_joined.tsv", show_col_types = FALSE)\n'
-             '# Kallisto track (Episode 05b): use this line instead of the one above\n'
+             '# Kallisto track (Episode 5B): use this line instead of the one above\n'
              '# res <- read_tsv("results/deseq2_kallisto/DESeq2_kallisto_results.tsv", show_col_types = FALSE)\n')
 SWAP_TO = ('# res <- read_tsv("results/deseq2/DESeq2_results_joined.tsv", show_col_types = FALSE)\n'
-           '# Kallisto track (Episode 05b): use this line instead of the one above\n'
+           '# Kallisto track (Episode 5B): use this line instead of the one above\n'
            'res <- read_tsv("results/deseq2_kallisto/DESeq2_kallisto_results.tsv", show_col_types = FALSE)\n')
-b06_swap = find("06", "# Kallisto track (Episode 05b): use this line instead", "r")
+b06_swap = find("06", "# Kallisto track (Episode 5B): use this line instead", "r")
 if SWAP_FROM not in b06_swap.text:
     sys.exit("build_kit: 06 track-switch lines changed; update SWAP_FROM")
 

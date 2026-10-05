@@ -1,6 +1,6 @@
 ---
 source: Rmd
-title: "A. Genome-based quantification (STAR + featureCounts)"
+title: "4A. Genome-based quantification (STAR + featureCounts)"
 teaching: 30
 exercises: 40
 ---
@@ -459,8 +459,8 @@ Using your MultiQC alignment report:
 Interpretation for this dataset:
 
 1. Uniquely mapped reads range from about 62 to 83 percent; mock_rep4 has the highest (83 percent).
-2. IR_rep1 and IR_rep2 are lowest (62 and 64 percent), and IR_rep3, IR_rep4, and mock_rep4 highest (77 to 83 percent): the same split as the read quality groups in Episode 03. The two conditions map about equally well on average (70 percent for IR, 73 percent for mock). These rates are within the 60 to 90 percent range given above, so no sample fails, but the spread is worth recording. When one condition maps systematically worse, check whether the difference also shows up in the PCA in Episode 05.
-3. Most unmapped reads are classified as "too short" (1.4 to 4.6 million pairs per sample): STAR could align only part of the read pair. With 51 bp reads this usually reflects low quality read ends (see the FastQC report in Episode 03), rRNA or other sequence absent from the primary assembly, and reads spanning unannotated junctions.
+2. IR_rep1 and IR_rep2 are lowest (62 and 64 percent), and IR_rep3, IR_rep4, and mock_rep4 highest (77 to 83 percent): the same split as the read quality groups in Episode 3. The two conditions map about equally well on average (70 percent for IR, 73 percent for mock). These rates are within the 60 to 90 percent range given above, so no sample fails, but the spread is worth recording. When one condition maps systematically worse, check whether the difference also shows up in the PCA in Episode 5A.
+3. Most unmapped reads are classified as "too short" (1.4 to 4.6 million pairs per sample): STAR could align only part of the read pair. With 51 bp reads this usually reflects low quality read ends (see the FastQC report in Episode 3), rRNA or other sequence absent from the primary assembly, and reads spanning unannotated junctions.
 
 :::::::::::::::::::::::::::::::::::
 

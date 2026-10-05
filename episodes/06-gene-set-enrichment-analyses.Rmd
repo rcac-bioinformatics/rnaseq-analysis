@@ -1,6 +1,6 @@
 ---
 source: Rmd
-title: "Gene set enrichment analysis"
+title: '6\. Gene set enrichment analysis'
 teaching: 45
 exercises: 50
 ---
@@ -37,7 +37,7 @@ This episode covers **over-representation analysis (ORA)**, the most common appr
 
 ## What you need for this episode
 
-- DE results from Episode 05 (`results/deseq2/DESeq2_results_joined.tsv`) or Episode 05b (`results/deseq2_kallisto/DESeq2_kallisto_results.tsv`)
+- DE results from Episode 5A (`results/deseq2/DESeq2_results_joined.tsv`) or Episode 5B (`results/deseq2_kallisto/DESeq2_kallisto_results.tsv`)
 - RStudio session via Open OnDemand
 - Internet access from the RStudio session: `enrichKEGG()` queries the KEGG REST service, and `msigdbr()` downloads the MSigDB gene sets the first time it runs
 
@@ -137,7 +137,7 @@ Best practice: Run multiple databases and look for **convergent signals** across
 
 ## Step 1: Load DE results and prepare gene lists
 
-Start your RStudio session via Open OnDemand as described in Episode 05, then load the required packages:
+Start your RStudio session via Open OnDemand as described in Episode 5A, then load the required packages:
 
 Load packages:
 
@@ -155,11 +155,11 @@ work_dir <- file.path("/scratch/negishi", Sys.getenv("USER"), "rnaseq-workshop")
 setwd(work_dir)
 ```
 
-Load DESeq2 results from Episode 05. If you followed the Kallisto track (Episodes 04b and 05b), read the Episode 05b table instead, using the commented line; everything after this step is the same for both tracks.
+Load DESeq2 results from Episode 5A. If you followed the Kallisto track (Episodes 4B and 5B), read the Episode 5B table instead, using the commented line; everything after this step is the same for both tracks.
 
 ```r
 res <- read_tsv("results/deseq2/DESeq2_results_joined.tsv", show_col_types = FALSE)
-# Kallisto track (Episode 05b): use this line instead of the one above
+# Kallisto track (Episode 5B): use this line instead of the one above
 # res <- read_tsv("results/deseq2_kallisto/DESeq2_kallisto_results.tsv", show_col_types = FALSE)
 head(res)
 ```

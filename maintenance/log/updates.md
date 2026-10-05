@@ -24,7 +24,7 @@ This mirrors the 2026-01-22 schedule in `learners/setup.md`. Adjust after the ti
 ### Static review, 2026-09-25
 
 - `[should-fix]` `learners/setup.md`: schedule heading still says 01/22/2026. Update to 10/06/2026 and confirm the instructor list (Tomas Ratkus, Rose Wilfong) for October.
-- `[should-fix]` `config.yaml` `source:` points to `https://aseetharam.github.io/rcac_rnaseq_workshop`; the repo now lives at `rcac-bioinformatics/rnaseq-analysis`. Point to the canonical repo or the published site.
+- `[should-fix, fixed 2026-10-05]` `config.yaml` `source:` points to `https://aseetharam.github.io/rcac_rnaseq_workshop`; the repo now lives at `rcac-bioinformatics/rnaseq-analysis`. Point to the canonical repo or the published site.
 - `[nice]` `index.md` is the stock Workbench placeholder text. Replace with a short landing blurb: what the workshop is, audience, prerequisites, link to setup.
 - `[nice]` `README.md` is one line. Add title, site link, license, delivery history.
 - `[nice]` `instructor-notes/README.md` timing table lists episode 02 as 37 min; front matter says 20 + 15 = 35. Align.
@@ -310,6 +310,20 @@ For your choice; none applied.
 - `[nice, fixed]` Episode 04a: `fig/Stranded-vs-unstranded-RNA-seq.html` (80 s) embedded right after the "Why strandness matters" callout. Caption ties it to the lesson: dUTP read 2 = Salmon `ISR` = featureCounts `-s 2`; this dataset is unstranded (`-s 0`), so opposite-strand overlap reads end up in `Unassigned_Ambiguity` (270 to 390 k reads per sample in the 2026-10-02 regen run; the episode command has no `-O`).
 - `[should-fix, fixed]` 04a callout claimed that with the wrong strand setting "most reads will be counted against incorrect genes". With the wrong direction on a stranded library most reads go unassigned (or to an antisense gene) and the assignment rate collapses; counting stranded data as unstranded only loses opposite-strand overlaps. Sentence corrected.
 - Both animations got the same edits as the first three: start paused on a poster frame (the author's reduced-motion frame), Play label, `?autoplay=1`, "1920x1080" dropped. Narration: 01 now mentions all four 01 animations (as optional in a condensed delivery) and the corrected list of plots; 04a has a DEMO and SAY for the stranded animation. No `coaching/` files exist yet, so none to regenerate.
+
+### Coaching generation, 2026-10-02
+
+- Coaching text generated in `coaching/` (gitignored), files 00 to 08, from the current episodes and the Negishi numbers.
+- `[check]` 04a "Short on time" callout: `ln -s .../star_index $SCRATCH/rnaseq-workshop/data/star_index` after `scancel`. If the cancelled STAR job already created `data/star_index` (STAR writes into `--genomeDir` early), `ln -s` puts the link inside that directory instead of replacing it, and mapping then fails on a partial index. The callout says to run it only if the directory does not exist, but does not say what to do when it does. Verify on Negishi whether a cancelled index job leaves the directory; if so, add "rename or remove the partial `star_index` first". Coaching file 04 tells instructors to check and rename.
+- `[nice]` Possible pacing change for the live day, used in the coaching: submit `index_genome.sh` at the end of the 02-03 block (about 10:25) so the index is built during the break, and request the OOD RStudio session just before lunch. Consider adding both to `learners/setup.md` or the 04a/05 episodes after the delivery.
+
+### Episode numbering and footer links, 2026-10-05
+
+- `[should-fix, fixed]` Sidebar numbered the episodes 1-8 (and showed "4. A.", "5. B.", "7. B."), hiding the two-track structure. `config.yaml` now sets `disable_sidebar_numbering: true` (sandpaper 0.17.1) and each title carries its number: 1, 2, 3, 4A, 4B, 5A, 5B, 6. Titles that start with a bare digit escape the period (`'1\. Introduction to RNA-seq'`, single-quoted YAML); unescaped, sandpaper parses the title as an ordered list and `build_lesson()` fails with `StartTag: invalid element name`. File names and URLs are unchanged.
+- In-text references renamed to match (Episode 01 -> 1, 04a -> 4A, 05 -> 5A, 05b -> 5B, 06 -> 6, also in `learners/setup.md` tables and comments). Two R code comments changed (05b relevel comment, 06 track switch); `negishi-run/build_kit.py` SWAP anchor and `negishi-run/docs/ood_manual_check.md` updated, kit rebuilt and `--check` clean. No code behavior changed.
+- `[should-fix, fixed]` `config.yaml` `source:` now `https://github.com/rcac-bioinformatics/rnaseq-analysis`, so Source, Edit on GitHub, and the contributing link in the footer point to the canonical repo.
+- `[check]` `instructor-notes/` and `coaching/` (local only) still use the old numbering (Episode 04a, 05, ...). Rename when they are next touched.
+- `[nice]` Local builds render `local-test/*.md` (REPORT, findings, ADAPTATIONS) as site pages. Not published (gitignored), but they appear under `serve()`.
 
 ## Runtime record
 

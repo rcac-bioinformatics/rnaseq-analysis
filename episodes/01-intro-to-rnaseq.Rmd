@@ -1,6 +1,6 @@
 ---
 source: Rmd
-title: Introduction to RNA-seq
+title: '1\. Introduction to RNA-seq'
 teaching: 65
 exercises: 35
 ---
@@ -43,7 +43,7 @@ Subsequently, intronic regions are spliced out, and exonic regions are combined 
 
 <iframe src="fig/From-RNA-to-FASTQ.html" title="Animation, 2 minutes: how bulk RNA-seq data is generated, from RNA isolation and poly(A) capture through library preparation and cluster generation to base calls in a FASTQ file" loading="lazy" style="width:100%;aspect-ratio:16/11;border:0;"></iframe>
 
-*Animation (2 minutes): from RNA to FASTQ. It follows a typical current protocol, a stranded (dUTP), poly(A)-selected, paired-end library on a recent Illumina instrument. The workshop data is older and differs in two ways you will meet later: it is unstranded (Episode 04a checks this), and it was sequenced as 2 x 51 bp reads on an Illumina HiSeq 2000.* Press **Play** to start, or <a href="fig/From-RNA-to-FASTQ.html?autoplay=1" target="_blank" rel="noopener">open it in a new tab</a>.
+*Animation (2 minutes): from RNA to FASTQ. It follows a typical current protocol, a stranded (dUTP), poly(A)-selected, paired-end library on a recent Illumina instrument. The workshop data is older and differs in two ways you will meet later: it is unstranded (Episode 4A checks this), and it was sequenced as 2 x 51 bp reads on an Illumina HiSeq 2000.* Press **Play** to start, or <a href="fig/From-RNA-to-FASTQ.html?autoplay=1" target="_blank" rel="noopener">open it in a new tab</a>.
 
 In a typical RNA-seq experiment, RNA molecules are first collected from a sample of interest.
 After a potential enrichment for molecules with polyA tails (predominantly mRNA), or depletion of otherwise highly abundant ribosomal RNA, the remaining molecules are fragmented into smaller pieces (there are also long-read protocols where entire molecules are considered, but those are not the focus of this lesson).
@@ -123,7 +123,7 @@ Launch the ConfoundingExplorer application and familiarize yourself with the int
 
 <iframe src="fig/From-reads-to-a-count-matrix.html" title="Animation, 72 seconds: reads are aligned to a reference genome, multi-mapping reads are flagged, reads are counted per gene, and the counts form a genes by samples matrix" loading="lazy" style="width:100%;aspect-ratio:16/11;border:0;"></iframe>
 
-*Animation (72 seconds): the genome-based route, approach 1 below: align reads to the genome, count reads per gene, and assemble the count matrix. Episode 04a does this with STAR and featureCounts.* Press **Play** to start, or <a href="fig/From-reads-to-a-count-matrix.html?autoplay=1" target="_blank" rel="noopener">open it in a new tab</a>.
+*Animation (72 seconds): the genome-based route, approach 1 below: align reads to the genome, count reads per gene, and assemble the count matrix. Episode 4A does this with STAR and featureCounts.* Press **Play** to start, or <a href="fig/From-reads-to-a-count-matrix.html?autoplay=1" target="_blank" rel="noopener">open it in a new tab</a>.
 
 
 The read sequences contained in the FASTQ files from the sequencer are typically not directly useful as they are, since we do not have the information about which gene or transcript they originate from. 

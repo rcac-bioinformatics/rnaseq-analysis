@@ -1,6 +1,6 @@
 ---
 source: Rmd
-title: Quality control of RNA-seq reads
+title: '3\. Quality control of RNA-seq reads'
 teaching: 20
 exercises: 15
 ---
@@ -353,7 +353,7 @@ Using the MultiQC HTML report, answer:
 
 Interpretation for this dataset (compare with your own report):
 
-1. No. The samples fall into two groups. IR_rep3, IR_rep4, and mock_rep4 have good quality along most of the read (mean about Q33 to Q35), apart from one cycle in IR_rep4 R2 that is about half N bases and a weak last cycle in mock_rep4 R1. The other five samples are lower (mean about Q26 to Q31), their last cycle collapses (the lower quartile drops to Q2 at position 51, with 38 to 44 percent N bases in R1), and their R2 files have 13 to 22 percent N at one early cycle. FastQC fails per base sequence quality in 12 of 16 files, per tile sequence quality in 12 of 16, and per base N content in 7 of 16. These five samples were sequenced on one flowcell (C1PF5ACXX, visible in the read names) and the clean three on two others, so these are problems of that sequencing run, not of the libraries. They show up again in Episode 04a: the three clean samples have the highest STAR mapping rates.
+1. No. The samples fall into two groups. IR_rep3, IR_rep4, and mock_rep4 have good quality along most of the read (mean about Q33 to Q35), apart from one cycle in IR_rep4 R2 that is about half N bases and a weak last cycle in mock_rep4 R1. The other five samples are lower (mean about Q26 to Q31), their last cycle collapses (the lower quartile drops to Q2 at position 51, with 38 to 44 percent N bases in R1), and their R2 files have 13 to 22 percent N at one early cycle. FastQC fails per base sequence quality in 12 of 16 files, per tile sequence quality in 12 of 16, and per base N content in 7 of 16. These five samples were sequenced on one flowcell (C1PF5ACXX, visible in the read names) and the clean three on two others, so these are problems of that sequencing run, not of the libraries. They show up again in Episode 4A: the three clean samples have the highest STAR mapping rates.
 2. No. Adapter content passes in all 16 files; with 51 bp reads, very few inserts are shorter than the read.
 3. Besides the quality groups, duplication differs: IR_rep2 and mock_rep3 are about 96 percent unique (FastQC "deduplicated percentage"), the other samples 53 to 79 percent. This is worth recording, but it is not a reason to drop a sample at this stage. Per sequence GC content fails in 8 of 16 files, which is common for RNA-seq, as explained above.
 

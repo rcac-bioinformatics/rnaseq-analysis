@@ -60,3 +60,4 @@ negishi-run/staged-data/
 negishi-run/*.tar.gz
 !negishi-run/docs/
 
+coaching/

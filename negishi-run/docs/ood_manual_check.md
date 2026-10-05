@@ -26,7 +26,7 @@ source("~/rnaseq-analysis/negishi-run/tools/workshop_smoke_test.R")
 - [ ] KEGG REST, Ensembl BioMart, MSigDB lines show `200`: ________
 - [ ] Number of "package 'X' was built under R version ..." warnings when packages load: ______ (learners will see these)
 
-## 3. Episode 05 interactively, up to the first plot
+## 3. Episode 5A interactively, up to the first plot
 
 The episode builds its working directory as `/scratch/negishi/$USER/rnaseq-workshop`. For `aseethar` that is the **staged source data**, so point it at the kit run's learner copy first. Run this line before any episode code (replace `<RUN_ID>`):
 
@@ -35,7 +35,7 @@ Sys.setenv(USER = "aseethar/rnaseq-kit/runs/<RUN_ID>/scratch")
 file.path("/scratch/negishi", Sys.getenv("USER"), "rnaseq-workshop")   # must print the kit run path
 ```
 
-Then open Episode 05 on the published site (or `episodes/05-deseq2-expression-analyses.Rmd`) and paste its R blocks into the console in order, starting at "Setup: load packages and data", skipping the biomaRt spoiler, until the gene biotype bar plot appears.
+Then open Episode 5A on the published site (or `episodes/05-deseq2-expression-analyses.Rmd`) and paste its R blocks into the console in order, starting at "Setup: load packages and data", skipping the biomaRt spoiler, until the gene biotype bar plot appears.
 
 - [ ] Started pasting at ________ ; first plot (gene biotypes) shown at ________ : ______ min.
 - [ ] Any error before the plot? Text: ________
