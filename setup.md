@@ -17,18 +17,18 @@ title: Setup
 | **Time**     | **Session**                                                                                                                                                                                          |
 |:---|-------------|
 | **8:30 AM**  | Arrival & Setup                                                                                                                                                                                      |
-| **9:00 AM**  | **Introduction to RNA-seq Analysis (Episode 01):** What RNA-seq measures, experimental design and biological replicates, quantification strategies, and an overview of the workflow (QC → alignment → quantification → DE) |
-| **9:45 AM**  | **Data Preparation & Quality Control (Episodes 02-03):** Project layout, reference genome, annotation and FASTQ files, running FastQC and MultiQC, and deciding whether trimming is needed (fastp shown for reference only) |
+| **9:00 AM**  | **Introduction to RNA-seq Analysis (Episode 1):** What RNA-seq measures, experimental design and biological replicates, quantification strategies, and an overview of the workflow (QC → alignment → quantification → DE) |
+| **9:45 AM**  | **Data Preparation & Quality Control (Episodes 2-3):** Project layout, reference genome, annotation and FASTQ files, running FastQC and MultiQC, and deciding whether trimming is needed (fastp shown for reference only) |
 | **10:30 AM** | **Break**                                                                                                                                                                                            |
-| **10:45 AM** | **Read Alignment & Quantification (Episode 04a):** Checking strandedness with Salmon, building a STAR index, mapping with a SLURM array job, and generating gene-level counts with featureCounts (Episode 04b, Kallisto, covered conceptually only) |
+| **10:45 AM** | **Read Alignment & Quantification (Episode 4A):** Checking strandedness with Salmon, building a STAR index, mapping with a SLURM array job, and generating gene-level counts with featureCounts (Episode 4B, Kallisto, covered conceptually only) |
 | **12:00 PM** | **Lunch Break**                                                                                                                                                                                      |
-| **1:00 PM**  | **Differential Expression Analysis (Episode 05):** Importing counts into R, normalization, exploratory plots (VST, distance heatmaps, PCA), and identifying significantly differentially expressed genes |
+| **1:00 PM**  | **Differential Expression Analysis (Episode 5A):** Importing counts into R, normalization, exploratory plots (VST, distance heatmaps, PCA), and identifying significantly differentially expressed genes |
 | **2:15 PM**  | **Break**                                                                                                                                                                                            |
-| **2:30 PM**  | **Visualization & Interpretation (Episodes 05-06):** Volcano plots, summary tables, and exporting annotated results. Introduction to gene set enrichment methods (ORA/GSEA) with pointers to explore independently. |
+| **2:30 PM**  | **Visualization & Interpretation (Episodes 5A-6):** Volcano plots, summary tables, and exporting annotated results. Introduction to gene set enrichment methods (ORA/GSEA) with pointers to explore independently. |
 | **3:30 PM**  | **Wrap-Up & Discussion:** Review of workflow, troubleshooting common issues, recommended next steps                                                                                                  |
 | **4:00 PM**  | End of Workshop                                                                                                                                                                                      |
 
-The full lesson is longer than one day. Episodes 04b (Kallisto), 05b (DESeq2 on Kallisto output), and the remainder of Episode 06 are self-paced: they are published on this site and use the same data and setup as the live sessions.
+The full lesson is longer than one day. Episodes 4B (Kallisto), 5B (DESeq2 on Kallisto output), and the remainder of Episode 6 are self-paced: they are published on this site and use the same data and setup as the live sessions.
 
 ## Prerequisites
 
@@ -48,7 +48,7 @@ No prior RNA-seq analysis experience is required.
 
 This workshop teaches a standard bulk RNA-seq workflow, from raw reads to differentially expressed genes and enriched pathways, using a specific dataset and toolset:
 
-- **Platform and library type:** Illumina HiSeq 2000, paired-end 51 bp reads. The library is **unstranded**: Salmon reports library type `IU` in Episode 04a, so featureCounts runs with `-s 0` and Kallisto runs without a strand flag.
+- **Platform and library type:** Illumina HiSeq 2000, paired-end 51 bp reads. The library is **unstranded**: Salmon reports library type `IU` in Episode 4A, so featureCounts runs with `-s 0` and Kallisto runs without a strand flag.
 - **Organism and reference:** Mouse (*Mus musculus*, C57BL/6). GRCm39 primary assembly genome, GENCODE vM38 basic gene annotation (GTF), and GENCODE vM38 transcript sequences.
 - **Dataset:** GEO [GSE71176](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71176), the p53-mediated response to ionizing radiation in mouse B cells ([Tonelli et al. 2015](https://doi.org/10.18632/oncotarget.5232)). We use 8 wild-type samples: 4 mock (SRR2121778-81) and 4 irradiated, 7 Gy and harvested 4 hours later (SRR2121786-89). Each sample is subsampled to 20 million read pairs so that every step finishes within the workshop.
 
@@ -56,13 +56,13 @@ This workshop teaches a standard bulk RNA-seq workflow, from raw reads to differ
 
 | Step | Tools | Where it runs | Episode |
 |:-----|:------|:--------------|:--------|
-| Download reference and reads | `wget`, SRA Toolkit (`fasterq-dump`, shown but not run) | Negishi shell | 02 |
-| Read quality control | FastQC, MultiQC (fastp shown for reference) | Negishi, interactive job | 03 |
-| Strandedness check | Salmon (`--libType A`) | Negishi, interactive job | 04a |
-| Genome-based quantification | STAR, featureCounts (Subread), MultiQC | Negishi, SLURM batch jobs | 04a |
-| Transcript-based quantification | Kallisto, tximport | Negishi, SLURM batch jobs and R (`r-rnaseq` module) | 04b |
-| Differential expression | DESeq2 (with apeglm shrinkage), vsn, pheatmap, ggplot2 | RStudio on Open OnDemand | 05, 05b |
-| Gene set enrichment | clusterProfiler, enrichplot, org.Mm.eg.db, msigdbr (GO, KEGG, MSigDB Hallmark, GSEA) | RStudio on Open OnDemand | 06 |
+| Download reference and reads | `wget`, SRA Toolkit (`fasterq-dump`, shown but not run) | Negishi shell | 2 |
+| Read quality control | FastQC, MultiQC (fastp shown for reference) | Negishi, interactive job | 3 |
+| Strandedness check | Salmon (`--libType A`) | Negishi, interactive job | 4A |
+| Genome-based quantification | STAR, featureCounts (Subread), MultiQC | Negishi, SLURM batch jobs | 4A |
+| Transcript-based quantification | Kallisto, tximport | Negishi, SLURM batch jobs and R (`r-rnaseq` module) | 4B |
+| Differential expression | DESeq2 (with apeglm shrinkage), vsn, pheatmap, ggplot2 | RStudio on Open OnDemand | 5A, 5B |
+| Gene set enrichment | clusterProfiler, enrichplot, org.Mm.eg.db, msigdbr (GO, KEGG, MSigDB Hallmark, GSEA) | RStudio on Open OnDemand | 6 |
 
 Command-line tools are loaded as modules with `module load biocontainers` followed by the tool module (for example `module load star`).
 
@@ -70,14 +70,14 @@ Command-line tools are loaded as modules with `module load biocontainers` follow
 
 ### Two quantification tracks
 
-Episodes 01-03 and 06 are shared. After QC the lesson splits into two parallel tracks that both end in a DESeq2 analysis:
+Episodes 1-3 and 6 are shared. After QC the lesson splits into two parallel tracks that both end in a DESeq2 analysis:
 
 | Track | Episodes | On 10/06/2026 |
 |:------|:---------|:--------------|
-| Genome-based: STAR + featureCounts, then DESeq2 | 04a, 05 | Taught live, hands-on |
-| Transcript-based: Kallisto + tximport, then DESeq2 | 04b, 05b | 04b introduced conceptually; 04b and 05b are self-paced |
+| Genome-based: STAR + featureCounts, then DESeq2 | 4A, 5A | Taught live, hands-on |
+| Transcript-based: Kallisto + tximport, then DESeq2 | 4B, 5B | 4B introduced conceptually; 4B and 5B are self-paced |
 
-Episode 06 runs on the DESeq2 results from either track.
+Episode 6 runs on the DESeq2 results from either track.
 
 ### What you will be able to do
 
@@ -102,7 +102,7 @@ See the [Reference](reference.md) page for papers and resources on these topics.
 
 ## SSH Setup
 
-You need SSH access to Negishi to copy the workshop data and to run the command-line steps in Episodes 02 to 04b. Follow the instructions for your operating system below.
+You need SSH access to Negishi to copy the workshop data and to run the command-line steps in Episodes 2 to 4B. Follow the instructions for your operating system below.
 
 ::::::::::::::::::::::::::::::::::::::: discussion
 
@@ -202,7 +202,7 @@ This creates `${RCAC_SCRATCH}/rnaseq-workshop`, the working directory every epis
   - `gencode.vM38.transcripts-clean.fa`: transcript sequences with simplified headers, used by Salmon and Kallisto
 - **`data/`, sample and annotation tables**:
   - `SRR_Acc_List.txt`: the 8 SRA run accessions
-  - `mart.tsv` and `annot.tsv`: Ensembl gene annotation (symbols, biotypes, descriptions) loaded in Episodes 05 and 05b
+  - `mart.tsv` and `annot.tsv`: Ensembl gene annotation (symbols, biotypes, descriptions) loaded in Episodes 5A and 5B
 
 You will create `scripts/`, `results/`, the indexes, and all analysis outputs yourself as you work through the episodes.
 
@@ -235,7 +235,7 @@ A completed version of the workshop directory is available at:
 /depot/workshop/data/rnaseq-workshop_results
 ```
 
-It has the same layout as your `${RCAC_SCRATCH}/rnaseq-workshop` directory, without the FASTQ and reference files you already have. Use it **only if you are unable to complete the exercises during the workshop**. Do not copy the whole directory; copy only the file you need into the matching location in your own directory. For example, to start Episode 05 without finishing Episode 04a:
+It has the same layout as your `${RCAC_SCRATCH}/rnaseq-workshop` directory, without the FASTQ and reference files you already have. Use it **only if you are unable to complete the exercises during the workshop**. Do not copy the whole directory; copy only the file you need into the matching location in your own directory. For example, to start Episode 5A without finishing Episode 4A:
 
 ```bash
 mkdir -p ${RCAC_SCRATCH}/rnaseq-workshop/results/counts
@@ -247,7 +247,7 @@ List what is available with `ls /depot/workshop/data/rnaseq-workshop_results/res
 
 ## Starting RStudio on Open OnDemand
 
-Episodes 05, 05b, and 06 run in RStudio through Negishi's Open OnDemand (OOD) web portal.
+Episodes 5A, 5B, and 6 run in RStudio through Negishi's Open OnDemand (OOD) web portal.
 
 ### Step 1: Log in to Open OnDemand
 
@@ -261,7 +261,7 @@ From the top menu bar, click **Interactive Apps**. Under **Bioinformatics Apps**
 
 ## Choose the correct app
 
-Select **RStudio (bioconductor)** under **Bioinformatics Apps**, *not* **RStudio Server** under the **GUIs** section. The Bioconductor app provides the packages used in Episodes 05, 05b, and 06.
+Select **RStudio (bioconductor)** under **Bioinformatics Apps**, *not* **RStudio Server** under the **GUIs** section. The Bioconductor app provides the packages used in Episodes 5A, 5B, and 6.
 
 <img src="fig/ood_rstudio_dropdown.png" alt="Negishi Open OnDemand Interactive Apps menu with RStudio (bioconductor) highlighted under Bioinformatics Apps and RStudio Server under GUIs marked as the wrong choice" width="800px" />
 
@@ -284,9 +284,9 @@ Select **RStudio (bioconductor)** under **Bioinformatics Apps**, *not* **RStudio
 
 Why these values:
 
-- **Account, partition, and QoS** match the SLURM jobs in Episodes 02 to 04b, so all your work runs under the same allocation.
+- **Account, partition, and QoS** match the SLURM jobs in Episodes 2 to 4B, so all your work runs under the same allocation.
 - **4 hours** is the longest wall time the `standby` QoS allows on the `cpu` partition, and covers the afternoon session. For self-paced work, start a new session when one expires.
-- **4 cores** gives about 8 GB of memory (the form allocates roughly 2 GB per core), which is enough for DESeq2 on 8 samples, tximport on 8 Kallisto runs, and the enrichment analyses in Episode 06. If R reports that it cannot allocate memory (most likely during `simplify()` or `gseGO()` in Episode 06), relaunch with 8 cores (about 16 GB).
+- **4 cores** gives about 8 GB of memory (the form allocates roughly 2 GB per core), which is enough for DESeq2 on 8 samples, tximport on 8 Kallisto runs, and the enrichment analyses in Episode 6. If R reports that it cannot allocate memory (most likely during `simplify()` or `gseGO()` in Episode 6), relaunch with 8 cores (about 16 GB).
 
 After the workshop, if you no longer have access to `rcac-rnaseq`, use your own group's account.
 
@@ -307,26 +307,26 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 
 # CRAN packages
 install.packages(c(
-    "tidyverse",     # readr, dplyr, ggplot2, tibble (Episodes 04b, 05, 05b, 06)
-    "RColorBrewer",  # heatmap colors (05, 05b)
-    "pheatmap",      # sample distance heatmaps (05, 05b)
-    "ggrepel",       # labels on PCA and volcano plots (05, 05b)
-    "reshape2",      # reshaping counts for plotting (05b)
-    "hexbin",        # meanSdPlot() in vsn (05)
-    "msigdbr"        # MSigDB Hallmark gene sets (06)
+    "tidyverse",     # readr, dplyr, ggplot2, tibble (Episodes 4B, 5A, 5B, 6)
+    "RColorBrewer",  # heatmap colors (5A, 5B)
+    "pheatmap",      # sample distance heatmaps (5A, 5B)
+    "ggrepel",       # labels on PCA and volcano plots (5A, 5B)
+    "reshape2",      # reshaping counts for plotting (5B)
+    "hexbin",        # meanSdPlot() in vsn (5A)
+    "msigdbr"        # MSigDB Hallmark gene sets (6)
 ))
 
 # Bioconductor packages
 BiocManager::install(c(
-    # Transcript-level import (04b)
+    # Transcript-level import (4B)
     "tximport",
-    # Reading Kallisto abundance.h5 files with tximport (04b)
+    # Reading Kallisto abundance.h5 files with tximport (4B)
     "rhdf5",
-    # Differential expression and QC plots (05, 05b)
+    # Differential expression and QC plots (5A, 5B)
     "DESeq2", "apeglm", "vsn",
     # Gene annotation (05, optional biomaRt spoiler)
     "biomaRt",
-    # Enrichment analysis (06)
+    # Enrichment analysis (6)
     "clusterProfiler", "enrichplot", "org.Mm.eg.db"
 ))
 
@@ -346,8 +346,8 @@ All packages load
 
 ## Version notes
 
-- **msigdbr**: Episode 06 uses the current interface, `msigdbr(species = "Mus musculus", collection = "H")` and the `ncbi_gene` column, which needs msigdbr 10 or later (the OOD app has 26.1.1). Older tutorials use `category = "H"` and `entrez_gene`. msigdbr downloads the gene set data the first time it runs, so it needs internet access.
-- **KEGG and biomaRt** query online services (`enrichKEGG()` in Episode 06, the annotation spoiler in Episode 05), so those steps need internet access from wherever R is running.
+- **msigdbr**: Episode 6 uses the current interface, `msigdbr(species = "Mus musculus", collection = "H")` and the `ncbi_gene` column, which needs msigdbr 10 or later (the OOD app has 26.1.1). Older tutorials use `category = "H"` and `entrez_gene`. msigdbr downloads the gene set data the first time it runs, so it needs internet access.
+- **KEGG and biomaRt** query online services (`enrichKEGG()` in Episode 6, the annotation spoiler in Episode 5A), so those steps need internet access from wherever R is running.
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -358,11 +358,11 @@ All packages load
 These packages appear in the episode text but no episode code calls them. Install them only if you want to explore those topics.
 
 ```r
-# Shiny app for the experimental design challenge in Episode 01 (GitHub only)
+# Shiny app for the experimental design challenge in Episode 1 (GitHub only)
 install.packages("remotes")
 remotes::install_github("csoneson/ConfoundingExplorer")
 
-# Alternatives and follow-ups mentioned in Episodes 01, 04b, and 05
+# Alternatives and follow-ups mentioned in Episodes 1, 4B, and 5A
 install.packages("ashr")                                # lfcShrink(type = "ashr")
 BiocManager::install(c("Biostrings", "sva", "edgeR"))   # readDNAStringSet(), ComBat-seq, edgeR
 ```

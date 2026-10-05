@@ -1,6 +1,6 @@
 ---
 source: Rmd
-title: "Gene-level QC and differential expression (DESeq2)"
+title: "5A. Gene-level QC and differential expression (DESeq2)"
 teaching: 40
 exercises: 45
 ---
@@ -414,7 +414,7 @@ meanSdPlot(assay(dds), ranks = FALSE)
 
 ## Deprecation warnings from packages
 
-`meanSdPlot()` may print a warning such as `` `aes_string()` was deprecated in ggplot2 3.0.0 ``. It comes from code inside the vsn package, not from your commands, and does not change the plot. You will see similar warnings from enrichplot in Episode 06. Warnings are worth reading, but this kind can be ignored.
+`meanSdPlot()` may print a warning such as `` `aes_string()` was deprecated in ggplot2 3.0.0 ``. It comes from code inside the vsn package, not from your commands, and does not change the plot. You will see similar warnings from enrichplot in Episode 6. Warnings are worth reading, but this kind can be ignored.
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -559,7 +559,7 @@ Interpretation for this dataset:
 1. No. Library sizes (assigned read pairs on protein-coding genes) range from 3.4 to 5.1 million, and the size factors from 0.78 to 1.19, so no sample has abnormally low depth.
 2. Yes. The distance heatmap splits the samples into a mock and an IR cluster, and PC1, which explains 95 percent of the variance, separates the two conditions.
 3. No. Every sample is closest to the other samples with its own label.
-4. Not one that matters here. The condition dominates, but within each group there is a small, consistent pattern: IR_rep3 and IR_rep4 pair up apart from IR_rep1 and IR_rep2, and mock_rep4 sits apart from the other mock samples on PC2 (under 2 percent of the variance). These are the samples with the cleanest reads in Episode 03, so this is a technical effect of read quality. It is small next to the treatment effect and does not need correction in this analysis, but it is worth recording.
+4. Not one that matters here. The condition dominates, but within each group there is a small, consistent pattern: IR_rep3 and IR_rep4 pair up apart from IR_rep1 and IR_rep2, and mock_rep4 sits apart from the other mock samples on PC2 (under 2 percent of the variance). These are the samples with the cleanest reads in Episode 3, so this is a technical effect of read quality. It is small next to the treatment effect and does not need correction in this analysis, but it is worth recording.
 
 :::::::::::::::::::::::::::::::::::
 

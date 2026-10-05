@@ -1,6 +1,6 @@
 ---
 source: Rmd
-title: "B. Transcript-based quantification (Kallisto)"
+title: "4B. Transcript-based quantification (Kallisto)"
 teaching: 30
 exercises: 30
 ---
@@ -84,7 +84,7 @@ Missing or incorrect transcripts → biased TPM estimates.
 
 ### Building the Kallisto index
 
-Building the index for the mouse transcriptome needs more memory than a small job provides, so we run it as a batch job, like the STAR index in Episode 04a. This version of Kallisto builds the index with a single thread, but on Negishi memory comes with the cores you request, so the script asks for 48 cores. Save it as `$SCRATCH/rnaseq-workshop/scripts/index_kallisto.sh`:
+Building the index for the mouse transcriptome needs more memory than a small job provides, so we run it as a batch job, like the STAR index in Episode 4A. This version of Kallisto builds the index with a single thread, but on Negishi memory comes with the cores you request, so the script asks for 48 cores. Save it as `$SCRATCH/rnaseq-workshop/scripts/index_kallisto.sh`:
 
 ```bash
 #!/bin/bash
@@ -168,7 +168,7 @@ For **strand-specific** libraries, add the appropriate flag:
 - `--rf-stranded` for reverse-stranded libraries (e.g., Illumina TruSeq stranded)
 - `--fr-stranded` for forward-stranded libraries
 
-Our dataset is **unstranded** (Salmon reported `IU` in Episode 04a), so we omit these flags.
+Our dataset is **unstranded** (Salmon reported `IU` in Episode 4A), so we omit these flags.
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -196,7 +196,7 @@ cd $SCRATCH/rnaseq-workshop/data
 ls *_R1.fastq.gz | sed 's/_R1.fastq.gz//' > $SCRATCH/rnaseq-workshop/scripts/samples.txt
 ```
 
-Save the array job below as `$SCRATCH/rnaseq-workshop/scripts/quant_kallisto.sh`. Like `map_reads.sh` in Episode 04a, it reads `samples.txt` from the directory you submit from.
+Save the array job below as `$SCRATCH/rnaseq-workshop/scripts/quant_kallisto.sh`. Like `map_reads.sh` in Episode 4A, it reads `samples.txt` from the directory you submit from.
 
 ```bash
 #!/bin/bash
@@ -382,7 +382,7 @@ ENSMUSG00000000049.12             0.0000            1.00000
 
 ## Why use the default countsFromAbundance setting?
 
-We use the default `countsFromAbundance = "no"` because `DESeqDataSetFromTximport()` (used in Episode 05b) automatically incorporates the `txi$length` matrix to correct for transcript length bias.
+We use the default `countsFromAbundance = "no"` because `DESeqDataSetFromTximport()` (used in Episode 5B) automatically incorporates the `txi$length` matrix to correct for transcript length bias.
 
 Using `"lengthScaledTPM"` would apply length correction twice—once in tximport and again in DESeq2—potentially introducing bias. The default preserves Kallisto's original estimated counts while letting DESeq2 handle length normalization correctly.
 
@@ -436,7 +436,7 @@ Using your MultiQC summary and Kallisto outputs:
 
 Interpretation for this dataset:
 
-1. Pseudoalignment rates range from about 51 to 64 percent; none is an outlier. That is lower than the 80 to 90 percent often quoted for well-annotated transcriptomes: Kallisto only counts reads compatible with annotated mature transcripts, so reads from introns (pre-mRNA), intergenic regions, and rRNA not in the transcript FASTA are not pseudoaligned. Compare with the STAR unique mapping rates from Episode 04a, which include intronic reads.
+1. Pseudoalignment rates range from about 51 to 64 percent; none is an outlier. That is lower than the 80 to 90 percent often quoted for well-annotated transcriptomes: Kallisto only counts reads compatible with annotated mature transcripts, so reads from introns (pre-mRNA), intergenic regions, and rRNA not in the transcript FASTA are not pseudoaligned. Compare with the STAR unique mapping rates from Episode 4A, which include intronic reads.
 2. Reasonably consistent: they span about 14 percentage points (standard deviation about 5), from mock_rep2 (51 percent) to IR_rep3 and IR_rep4 (64 percent). Every sample had 20 million read pairs processed.
 3. The estimated mean fragment length is 159 to 168 bp in the mock samples and 181 to 201 bp in the IR samples. Within a group the samples agree, but the groups differ. This may reflect library preparation done in separate batches. Note such differences: when they line up with the experimental groups, their effect cannot be separated from the treatment.
 4. `run_info.json` records the Kallisto and index versions, `n_bootstraps` (0 here), `n_processed`, `n_pseudoaligned`, `p_pseudoaligned`, and the exact command line in `call`.

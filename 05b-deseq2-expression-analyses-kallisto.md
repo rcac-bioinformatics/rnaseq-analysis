@@ -1,6 +1,6 @@
 ---
 source: Rmd
-title: "B. Differential expression using DESeq2 (Kallisto pathway)"
+title: "5B. Differential expression using DESeq2 (Kallisto pathway)"
 teaching: 40
 exercises: 45
 author:
@@ -39,13 +39,13 @@ Original and related materials are available via the **CGSB Wiki**:
 
 ## Introduction
 
-In Episode 04b, we quantified transcript expression using **Kallisto** and summarized the results to gene-level counts using **tximport**. In this episode, we use those gene-level estimates for differential expression analysis with **DESeq2**.
+In Episode 4B, we quantified transcript expression using **Kallisto** and summarized the results to gene-level counts using **tximport**. In this episode, we use those gene-level estimates for differential expression analysis with **DESeq2**.
 
-The workflow follows the same general pattern as Episode 05 (genome-based), but with important differences:
+The workflow follows the same general pattern as Episode 5A (genome-based), but with important differences:
 
 1. **Input data**: We use the `txi` object from tximport rather than raw counts from featureCounts.
 2. **Count handling**: Kallisto estimates are model-based (not integer counts), and DESeq2 handles this appropriately via `DESeqDataSetFromTximport()`.
-3. **Bootstrap support**: if you run Kallisto with bootstraps (`-b`), the uncertainty estimates can be used with sleuth for transcript-level DE. DESeq2 does not use them, which is why Episode 04b runs with `-b 0`.
+3. **Bootstrap support**: if you run Kallisto with bootstraps (`-b`), the uncertainty estimates can be used with sleuth for transcript-level DE. DESeq2 does not use them, which is why Episode 4B runs with `-b 0`.
 
 ::::::::::::::::::::::::::::::::::::::: callout
 
@@ -57,7 +57,7 @@ Use this transcript-based workflow when:
 - You want to leverage transcript-level bias corrections.
 - You did not generate BAM files and cannot use featureCounts.
 
-The genome-based workflow (Episode 05) is preferred when you have BAM files and need splice junction information or plan to visualize alignments.
+The genome-based workflow (Episode 5A) is preferred when you have BAM files and need splice junction information or plan to visualize alignments.
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -65,7 +65,7 @@ The genome-based workflow (Episode 05) is preferred when you have BAM files and 
 
 ## What you need for this episode
 
-- `txi.rds` file generated from tximport in Episode 04b
+- `txi.rds` file generated from tximport in Episode 4B
 - A `samples.csv` file describing the experimental groups
 - RStudio session via Open OnDemand
 
@@ -89,7 +89,7 @@ The R code below creates the `results/deseq2_kallisto` directory for the output.
 
 ## Step 1: Load packages and data
 
-Start your RStudio session via Open OnDemand as described in Episode 05, then load the required packages:
+Start your RStudio session via Open OnDemand as described in Episode 5A, then load the required packages:
 
 ```r
 library(DESeq2)
@@ -107,7 +107,7 @@ setwd(work_dir)
 dir.create("results/deseq2_kallisto", recursive = TRUE, showWarnings = FALSE)
 ```
 
-Load the tximport object created in Episode 04b:
+Load the tximport object created in Episode 4B:
 
 ```r
 txi <- readRDS("results/kallisto_quant/txi.rds")
@@ -163,7 +163,7 @@ The `txi` object contains several components:
 - **length**: Average transcript length per gene (used for length bias correction).
 - **countsFromAbundance**: Method used to generate counts (default: `"no"`).
 
-When using `DESeqDataSetFromTximport()`, the `length` matrix is automatically used to correct for gene-length bias during normalization. This is why we use the default `countsFromAbundance = "no"` in Episode 04b—DESeq2 handles length correction internally, so pre-scaling counts would apply the correction twice.
+When using `DESeqDataSetFromTximport()`, the `length` matrix is automatically used to correct for gene-length bias during normalization. This is why we use the default `countsFromAbundance = "no"` in Episode 4B—DESeq2 handles length correction internally, so pre-scaling counts would apply the correction twice.
 
 :::::::::::::::::::::::::::::::::::::::
 
@@ -177,7 +177,7 @@ coldata <- read.csv(
     stringsAsFactors = TRUE
 )
 coldata$condition <- as.factor(coldata$condition)
-# make WT_mock the reference (denominator) level, as in Episode 05
+# make WT_mock the reference (denominator) level, as in Episode 5A
 coldata$condition <- relevel(coldata$condition, ref = "WT_mock")
 coldata <- coldata[colnames(txi$counts), , drop = FALSE]
 coldata
@@ -231,7 +231,7 @@ Using `DESeqDataSetFromMatrix()` with tximport counts would lose this informatio
 
 :::::::::::::::::::::::::::::::::::::::
 
-Keep protein-coding genes, as in Episode 05, so that both tracks test the same kind of genes and their results can be compared directly. Load the gene annotation tables copied with the workshop data (the same files as in Episode 05; its "How were these data prepared?" spoiler shows how they were made):
+Keep protein-coding genes, as in Episode 5A, so that both tracks test the same kind of genes and their results can be compared directly. Load the gene annotation tables copied with the workshop data (the same files as in Episode 5A; its "How were these data prepared?" spoiler shows how they were made):
 
 ```r
 mart <-
@@ -448,7 +448,7 @@ Using the distance heatmap and PCA plot:
 Interpretation for this dataset:
 
 1. Yes. The heatmap and the PCA both separate the mock and IR samples.
-2. No. Each sample groups with its own condition. Within the IR group, IR_rep3 and IR_rep4 sit apart from IR_rep1 and IR_rep2 on PC2 (3 percent of the variance), the same read-quality pattern seen in Episode 05.
+2. No. Each sample groups with its own condition. Within the IR group, IR_rep3 and IR_rep4 sit apart from IR_rep1 and IR_rep2 on PC2 (3 percent of the variance), the same read-quality pattern seen in Episode 5A.
 3. PC1 explains 90 percent of the variance and separates IR from mock: the radiation response is by far the largest signal in the data.
 
 :::::::::::::::::::::::::::::::::::
@@ -499,7 +499,7 @@ A good fit shows the red line passing through the center of the black cloud, wit
 
 :::::::::::::::::::::::::::::::::::::::
 
-Extract results for the contrast of interest, naming the numerator (`WT_IR`) and denominator (`WT_mock`) explicitly so that positive log2 fold changes mean higher after IR (see "Name your contrast" in Episode 05):
+Extract results for the contrast of interest, naming the numerator (`WT_IR`) and denominator (`WT_mock`) explicitly so that positive log2 fold changes mean higher after IR (see "Name your contrast" in Episode 5A):
 
 ```r
 res <- results(
@@ -717,7 +717,7 @@ ggplot(
 
 ## Exercise: Compare with genome-based results
 
-If you also ran Episode 05 (genome-based workflow):
+If you also ran Episode 5A (genome-based workflow):
 
 1. Are the number of DE genes similar between the two approaches?
 2. Do the top DE genes overlap?
@@ -748,7 +748,7 @@ write_tsv(
 )
 ```
 
-Episode 06 can start from this file instead of the Episode 05 table; it has the same `ensembl_gene_id_version`, `log2FoldChange`, `pvalue`, and `padj` columns.
+Episode 6 can start from this file instead of the Episode 5A table; it has the same `ensembl_gene_id_version`, `log2FoldChange`, `pvalue`, and `padj` columns.
 
 Save significant genes only:
 
@@ -775,7 +775,7 @@ saveRDS(dds, "results/deseq2_kallisto/dds_kallisto.rds")
 
 ## Genome-based vs. transcript-based: Which to choose?
 
-| Aspect | Genome-based (Ep 05) | Transcript-based (Ep 05b) |
+| Aspect | Genome-based (Ep 5A) | Transcript-based (Ep 5B) |
 |--------|---------------------|--------------------------|
 | Input | BAM files | FASTQ files |
 | Speed | Slower (alignment + counting) | Faster (pseudo-alignment) |

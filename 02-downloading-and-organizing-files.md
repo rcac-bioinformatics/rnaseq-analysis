@@ -1,6 +1,6 @@
 ---
 source: Rmd
-title: Downloading and organizing files
+title: '2\. Downloading and organizing files'
 teaching: 20
 exercises: 15
 ---
@@ -154,7 +154,7 @@ Because p53 is a transcription factor activated by DNA damage, we expect to see 
 
 **Pathways expected to be enriched** (all among genes that go up after IR, on both analysis tracks):
 
-- p53 signaling: the KEGG p53 signaling pathway and the MSigDB Hallmark p53 pathway (Episode 06, over-representation analysis)
+- p53 signaling: the KEGG p53 signaling pathway and the MSigDB Hallmark p53 pathway (Episode 6, over-representation analysis)
 - DNA damage response: GO terms for DNA damage signal transduction by p53 (over-representation of upregulated genes and GSEA)
 - Apoptosis: GO intrinsic apoptotic signaling in response to DNA damage (GSEA)
 - Cell cycle: GO DNA damage and mitotic cell cycle checkpoint signaling (GSEA)
